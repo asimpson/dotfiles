@@ -1,0 +1,38 @@
+#!/bin/bash
+#All my custom BASH functions
+
+#custom dig function, accepts url as argument
+function digg(){
+  local url=$1
+  dig "$url" +nostats +nocomments +nocmd
+}
+
+function take {
+  mkdir $1
+  cd $1
+}
+
+function ht {
+  cd /Applications/MAMP/htdocs/$1
+}
+
+function parse_git_branch {
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \[\1\]/'
+}
+function proml {
+
+  local        BLUE="\[\033[0;34m\]"
+  local     DEFAULT="\[\033[0m\]"
+  local		CYAN="\e[36m"
+  local		RED="\e[31m"
+  local 	 BLACK="\e[30m"
+  local    GREEN="\e[32m"
+  local    YELLOW="\e[33m"
+  local    BLUE="\e[34m"
+  local    MAGENTA="\e[35m"
+  local    WHITE="\e[37m"
+
+PS1="$WHITE\u: $WHITE\w $YELLOW\$(parse_git_branch) \n\e[36m➔ $DEFAULT"
+}
+proml
+#⇒ ➥ ⇾ ⇀ ➤ ❖ ★ ➔
