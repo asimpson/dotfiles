@@ -16,9 +16,14 @@ function ht {
   cd /Applications/MAMP/htdocs/$1
 }
 
+function reload {
+  ~/.dotfiles/osx/watch.rb $1 localhost
+}
+
 function parse_git_branch {
   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \[\1\]/'
 }
+
 function proml {
 
   local        BLUE="\[\033[0;34m\]"
@@ -32,7 +37,8 @@ function proml {
   local    MAGENTA="\e[35m"
   local    WHITE="\e[37m"
 
-PS1="$WHITE\u: $WHITE\w $YELLOW\$(parse_git_branch) \n\e[36m➔ $DEFAULT"
+PS1="$WHITE\u: $WHITE\w $YELLOW\$(parse_git_branch) \n\[\e[36m\]➔ $DEFAULT"
 }
 proml
+
 #⇒ ➥ ⇾ ⇀ ➤ ❖ ★ ➔

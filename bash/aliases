@@ -8,7 +8,6 @@ alias phpmamp='/Applications/MAMP/bin/php/php5.4.4/bin/php'
 alias pubkey='more ~/.ssh/id_rsa.pub | pbcopy | echo '\''=> Public key copied to pasteboard.'\'''
 alias server='open http://localhost:8000 && python -m SimpleHTTPServer'
 alias hp='git push heroku master'
-alias htdoc='cd /Applications/MAMP/htdocs'
 
 #Pulled from https://github.com/livando/dotfiles/blob/master/bash/aliases
 
@@ -26,8 +25,6 @@ alias gl='git pull --rebase'
 alias gk='gitk --all&'
 alias gx='gitx --all'
 alias gpb='git publish-branch'
-alias got='git '
-alias get='git '
 
 alias h='history'
 alias c='clear'
