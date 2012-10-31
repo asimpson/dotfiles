@@ -8,7 +8,6 @@ alias phpmamp='/Applications/MAMP/bin/php/php5.4.4/bin/php'
 alias pubkey='more ~/.ssh/id_rsa.pub | pbcopy | echo '\''=> Public key copied to pasteboard.'\'''
 alias server='open http://localhost:8000 && python -m SimpleHTTPServer'
 alias hp='git push heroku master'
-alias vhost='sudo ~/.dotfiles/osx/mamp_vh.sh'
 alias restart_apache='/Applications/MAMP/bin/apache2/bin/apachectl restart'
 
 #Pulled from https://github.com/livando/dotfiles/blob/master/bash/aliases
