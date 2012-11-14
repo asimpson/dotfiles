@@ -36,7 +36,7 @@ if [ "$1" = "create" ] || [ "$1" = "add" ]; then
   # Restart MAMP
   /Applications/MAMP/bin/apache2/bin/apachectl restart;
 
-  echo "Visit $domain:port to view your site";
+  echo "Visit $domain:$port to view your site";
 fi
 
 if [ "$1" = "remove" ] || [ "$1" = "delete" ]; then

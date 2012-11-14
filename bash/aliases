@@ -13,9 +13,6 @@ alias restart_apache='/Applications/MAMP/bin/apache2/bin/apachectl restart'
 #Pulled from https://github.com/livando/dotfiles/blob/master/bash/aliases
 
 #[GIT]
-#alias git=/usr/local/git/bin/git
-#alias g='cat ~/.gitconfig'
-#alias gp='cat ~/bin/dotfiles/bash/aliases'
 alias gs='git status '
 alias ga='git add '
 alias gb='git branch '
@@ -26,6 +23,8 @@ alias gl='git pull --rebase'
 alias gk='gitk --all&'
 alias gx='gitx --all'
 alias gpb='git publish-branch'
+alias blist='git branch -l'
+alias stash='git stash'
 
 alias h='history'
 alias c='clear'
