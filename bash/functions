@@ -29,6 +29,10 @@ function ht {
   cd /Applications/MAMP/htdocs/$dir
 }
 
+function hg {
+  history | grep --color=auto $1
+}
+
 function reload {
   ~/.dotfiles/osx/watch.rb $1 $2
 }
