@@ -12,14 +12,19 @@ function vhost {
 }
 
 function ht {
-  echo "Projects:"
+  local BLUE="\033[0;34m"
+  local RED="\033[0;31m"
+  local WHITE="\033[0;37m"
+  local NC="\033[0m"
+
+  echo -e "${BLUE}Projects:${WHITE}"
     for file in /Applications/MAMP/htdocs/*
     do
       if [ -d "$file" ];then
        echo ${file##/*/}
       fi
     done
-  echo "Which Project?"
+  echo -e "${RED}Which Project?${NC}"
   read dir;
   cd /Applications/MAMP/htdocs/$dir
 }
