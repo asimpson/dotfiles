@@ -1,7 +1,4 @@
 #!/bin/bash
-# Add " Include vhosts/httpd-vhosts.conf " to the end of the httpd.conf file located at /Applications/MAMP/conf/apache/httpd.conf
-#1; bold
-# \[\033[44m\]\[\033[1;31m\] background - text color
 
 RED="\033[0;31m"
 YELLOW="\033[33m"
@@ -44,7 +41,8 @@ if [ "$1" = "create" ] || [ "$1" = "add" ]; then
   # Restart MAMP
   /Applications/MAMP/bin/apache2/bin/apachectl restart;
 
-  echo -e "Visit ${REDBG}${WHITE}$domain:$port${NC} to view your site";
+  echo -e "Finished. ${REDBG}${WHITE}$domain:$port${NC} has been copied to your clipboard.";
+  echo "$domain:$port" | pbcopy;
 fi
 
 if [ "$1" = "remove" ] || [ "$1" = "delete" ]; then
