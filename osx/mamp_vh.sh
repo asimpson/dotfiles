@@ -18,14 +18,10 @@ if [ "$1" = "create" ] || [ "$1" = "add" ]; then
   echo -e "${RED}Enter local domain: (eg. local.com):${NC}";
   read domain;
 
-   # Ask for domain name
-  echo -e "${RED}Enter MAMP Port Nubmer:${NC}";
-  read port;
-
   # Add vhost
   touch /Applications/MAMP/Library/vhosts/domains/$domain;
 
-  echo "<VirtualHost *:$port>
+  echo "<VirtualHost *:9001>
     DocumentRoot "/Applications/MAMP/htdocs/$documentRoot"
     ServerName $domain
     <Directory "/Applications/MAMP/htdocs/$documentRoot">
@@ -41,8 +37,8 @@ if [ "$1" = "create" ] || [ "$1" = "add" ]; then
   # Restart MAMP
   /Applications/MAMP/bin/apache2/bin/apachectl restart;
 
-  echo -e "Finished. ${REDBG}${WHITE}$domain:$port${NC} has been copied to your clipboard.";
-  echo "$domain:$port" | pbcopy;
+  echo -e "Finished. ${REDBG}${WHITE}$domain:9001${NC} has been copied to your clipboard.";
+  echo "$domain:9001" | pbcopy;
 fi
 
 if [ "$1" = "remove" ] || [ "$1" = "delete" ]; then

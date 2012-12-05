@@ -9,6 +9,9 @@ alias pubkey='more ~/.ssh/id_rsa.pub | pbcopy | echo '\''=> Public key copied to
 alias server='open http://localhost:8000 && python -m SimpleHTTPServer'
 alias hp='git push heroku master'
 alias restart_apache='/Applications/MAMP/bin/apache2/bin/apachectl restart'
+alias restart='source ~/.bash_profile'
+alias ip='ifconfig | grep inet'
+alias glist='alias | grep "git" | cut -c 7-'
 
 #Pulled from https://github.com/livando/dotfiles/blob/master/bash/aliases
 
