@@ -14,7 +14,7 @@ alias phpmamp='/Applications/MAMP/bin/php/php5.4.4/bin/php'
 alias pubkey='more ~/.ssh/id_rsa.pub | pbcopy | echo '\''=> Public key copied to pasteboard.'\'''
 alias server='open http://localhost:8000 && python -m SimpleHTTPServer'
 alias restart_apache='/Applications/MAMP/bin/apache2/bin/apachectl restart'
-alias restart='source ~/.bash_profile'
+alias r='source ~/.bash_profile'
 
 #Pulled from https://github.com/livando/dotfiles/blob/master/bash/aliases
 
