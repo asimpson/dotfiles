@@ -7,6 +7,16 @@ function digg(){
   dig "$url" +nostats +nocomments +nocmd
 }
 
+function gfind {
+  awk '/\#GIT/,/\#END/ { print }' ~/.dotfiles/bash/aliases
+}
+
+function ip {
+  IP=$(ifconfig | grep 'inet 1' | cut -c 6- | awk 'NR==2 {print $1}')
+  echo $IP
+  echo $IP | pbcopy
+}
+
 function vhost {
   sudo ~/.dotfiles/osx/mamp_vh.sh $1
 }
