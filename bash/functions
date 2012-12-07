@@ -22,6 +22,10 @@ function vhost {
   sudo ~/.dotfiles/osx/mamp_vh.sh $1
 }
 
+function al {
+ awk "/#\[$1\]/,/#\[end\]/ { print }" ~/.dotfiles/bash/aliases | cut -c 7-
+}
+
 function ht {
   local BLUE="\033[0;34m"
   local RED="\033[0;31m"

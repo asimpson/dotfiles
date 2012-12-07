@@ -1,6 +1,5 @@
 #!/bin/bash
 #All my custom BASH aliases
-
 alias l='ls -Gla'
 alias lsd='ls -l | grep "^d"'
 alias phpmamp='/Applications/MAMP/bin/php/php5.4.4/bin/php'
@@ -15,10 +14,11 @@ alias pubkey='more ~/.ssh/id_rsa.pub | pbcopy | echo '\''=> Public key copied to
 alias server='open http://localhost:8000 && python -m SimpleHTTPServer'
 alias restart_apache='/Applications/MAMP/bin/apache2/bin/apachectl restart'
 alias r='source ~/.bash_profile'
+alias g='grunt '
 
 #Pulled from https://github.com/livando/dotfiles/blob/master/bash/aliases
 
-#GIT
+#[git]
 alias glist='alias | grep "git" | cut -c 7-'
 alias glog='git log --format='\''%Cgreen%h%Creset %C(cyan)%an%Creset - %s'\'' --graph'
 alias hp='git push heroku master'
@@ -37,7 +37,7 @@ alias stash='git stash'
 alias switch='git checkout'
 alias who='git shortlog -n -s --no-merges'
 alias cleanup='remote prune origin && git gc && git clean -dfx && git stash clear'
-#END
+#[end]
 
 alias h='history'
 alias c='clear'
