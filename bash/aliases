@@ -15,6 +15,7 @@ alias server='open http://localhost:8000 && python -m SimpleHTTPServer'
 alias restart_apache='/Applications/MAMP/bin/apache2/bin/apachectl restart'
 alias r='source ~/.bash_profile'
 alias g='grunt '
+alias rebuild='/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user'
 
 #Pulled from https://github.com/livando/dotfiles/blob/master/bash/aliases
 
