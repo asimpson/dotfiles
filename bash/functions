@@ -8,7 +8,7 @@ function digg(){
 }
 
 function gfind {
-  awk '/\#GIT/,/\#END/ { print }' ~/.dotfiles/bash/aliases
+  awk '/\[#git]/,/\[#end]/ { print }' ~/.dotfiles/bash/aliases
 }
 
 function ip {
@@ -24,6 +24,15 @@ function vhost {
 
 function al {
  awk "/#\[$1\]/,/#\[end\]/ { print }" ~/.dotfiles/bash/aliases | cut -c 7-
+}
+
+function hack {
+  for file in /Applications/MAMP/Library/vhosts/domains/*
+  do
+    if [ -f "$file" ];then
+     echo -e "${YELLOW}${file##/*/}${NC}"
+    fi
+  done
 }
 
 function ht {
