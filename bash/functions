@@ -8,7 +8,7 @@ function digg(){
 }
 
 function gfind {
-  awk '/\[#git]/,/\[#end]/ { print }' ~/.dotfiles/bash/aliases
+  awk "/#\[$1-start\]/,/#\[$1-end\]/ { print }" ~/.dotfiles/bash/aliases
 }
 
 function ip {

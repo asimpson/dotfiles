@@ -1,12 +1,6 @@
 #!/bin/bash
 #All my custom BASH aliases
-alias l='ls -Gla'
-alias lsd='ls -l | grep "^d"'
-alias phpmamp='/Applications/MAMP/bin/php/php5.4.4/bin/php'
-alias pubkey='more ~/.ssh/id_rsa.pub | pbcopy | echo '\''=> Public key copied to pasteboard.'\'''
-alias server='open http://localhost:8000 && python -m SimpleHTTPServer'
-alias restart_apache='/Applications/MAMP/bin/apache2/bin/apachectl restart'
-alias restart='source ~/.bash_profile'
+#[misc-start]
 alias l='ls -Gla'
 alias lsd='ls -l | grep "^d"'
 alias phpmamp='/Applications/MAMP/bin/php/php5.4.4/bin/php'
@@ -15,11 +9,12 @@ alias server='open http://localhost:8000 && python -m SimpleHTTPServer'
 alias restart_apache='/Applications/MAMP/bin/apache2/bin/apachectl restart'
 alias r='source ~/.bash_profile'
 alias g='grunt '
+alias restart='source ~/.bash_profile'
 alias rebuild='/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user'
-
+#[misc-end]
 #Pulled from https://github.com/livando/dotfiles/blob/master/bash/aliases
 
-#[git]
+#[git-start]
 alias glist='alias | grep "git" | cut -c 7-'
 alias glog='git log --format='\''%Cgreen%h%Creset %C(cyan)%an%Creset - %s'\'' --graph'
 alias hp='git push heroku master'
@@ -39,7 +34,7 @@ alias switch='git checkout'
 alias who='git shortlog -n -s --no-merges'
 alias fbase='git fetch origin && git rebase origin/master'
 alias cleanup='remote prune origin && git gc && git clean -dfx && git stash clear'
-#[end]
+#[git-end]
 
 alias h='history'
 alias c='clear'
