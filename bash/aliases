@@ -38,3 +38,5 @@ alias cleanup='remote prune origin && git gc && git clean -dfx && git stash clea
 
 alias h='history'
 alias c='clear'
+
+alias psd='open -a /Applications/Adobe\ Photoshop\ CS6/Adobe\ Photoshop\ CS6.app'

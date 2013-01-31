@@ -41,7 +41,7 @@ function ht {
   local WHITE="\033[0;37m"
   local NC="\033[0m"
 
-  echo -e "${BLUE}Projects:${WHITE}"
+  echo -e "${BLUE}Projects:${NC}"
     for file in /Applications/MAMP/htdocs/*
     do
       if [ -d "$file" ];then
@@ -57,16 +57,11 @@ function hg {
   history | grep --color=auto $1
 }
 
-function reload {
-  ~/.dotfiles/osx/watch.rb $1 $2
-}
-
 function parse_git_branch {
   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \[\1\]/'
 }
 
 function proml {
-
   local        BLUE="\[\033[0;34m\]"
   local     DEFAULT="\[\033[0m\]"
   local		CYAN="\e[36m"
@@ -78,8 +73,34 @@ function proml {
   local    MAGENTA="\e[35m"
   local    WHITE="\e[37m"
 
-PS1="$WHITE\u: $WHITE\w $YELLOW\$(parse_git_branch) \n\[\e[36m\]➔ $DEFAULT"
+PS1="$DEFAULT\u: $DEFAULT\w $YELLOW\$(parse_git_branch) \n⚡ $DEFAULT"
 }
 proml
 
-#⇒ ➥ ⇾ ⇀ ➤ ❖ ★ ➔
+#⇒ ➥ ⇾ ⇀ ➤ ❖ ★ ➔ 🔅💩🚀⚡
+
+function sb_init {
+  local RED="\033[0;31m"
+  local NC="\033[0m"
+
+  if [ ! $# == 1 ]; then
+    echo -e "${RED}Please specify a project name.${NC}"
+    echo -e "Usage: init project-name\n"
+  else
+    echo -e "${RED}Downloading project-init${NC} 🚀\n"
+    curl -s -S -O -L http://github.com/sparkbox/project-init/archive/master.zip;
+    echo -e "${RED}Download finished.${NC}\n"
+    echo -e "${RED}Setting up project config files.${NC}\n"
+    unzip -qq master.zip;
+    rm master.zip;
+    mv project-init-master $1
+    sed -i.bak "s/Project-Name/$1/g" $1/package.json;
+    rm $1/package.json.bak;
+    sed -i.bak "s/Project-Name/$1/g" $1/.rvmrc;
+    rm $1/.rvmrc.bak;
+    cd $1
+    npm install;
+    bundle;
+    echo -e "${RED}Your project is all ready to go. Enjoy${NC}\n"
+  fi
+}
