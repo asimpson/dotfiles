@@ -18,6 +18,18 @@ function ip {
   echo $IP | pbcopy
 }
 
+function move_dock {
+  if [ "$1" = "left" ]; then
+    defaults write com.apple.dock pinning -string start && killall Dock
+  fi
+  if [ "$1" = "right" ]; then
+    defaults write com.apple.dock pinning -string end && killall Dock
+  fi
+  if [ "$1" = "middle" ]; then
+    defaults write com.apple.dock pinning -string middle && killall Dock
+  fi
+}
+
 function vhost {
   sudo ~/.dotfiles/osx/mamp_vh.sh $1
 }
