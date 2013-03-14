@@ -98,12 +98,15 @@ function sb_init {
   if [ ! $# == 1 ]; then
     echo -e "${RED}Please specify a project name, or action (update, revert).${NC}"
     echo -e "Usage: init project-name / action\n"
-  elif [ "$1" = "update" ]; then
+  elif [ "$1" == "--update"]; then
+    local name=$(node -e "console.log(require('./package.json').name)");
     mv package.json package.bak.json;
     mv node_modules node_modules_bak;
     curl -sSOL http://raw.github.com/sparkbox/project-init/master/package.json;
+    sed -i.tmp "s/Project-Name/$name/g" package.json;
+    rm package.json.tmp;
     npm install;
-  elif [ "$1" = "revert" ]; then
+  elif [ "$1" == "--revert"]; then
     if [ -e node_modules_bak -a -e package.bak.json ]; then
       rm -r node_modules;
       rm package.json;

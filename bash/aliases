@@ -36,8 +36,8 @@ alias gx='gitx --all'
 alias gpb='git publish-branch'
 alias blist='git branch -l'
 alias stash='git stash'
-alias switch='git checkout'
 alias who='git shortlog -n -s --no-merges'
 alias fbase='git fetch origin master && git rebase origin/master'
 alias cleanup='remote prune origin && git gc && git clean -dfx && git stash clear'
 #[git-end]
+__git_complete go _git_branch
