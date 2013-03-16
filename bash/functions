@@ -1,12 +1,6 @@
 #!/bin/bash
 #All my custom BASH functions
 
-#custom dig function, accepts url as argument
-function digg(){
-  local url=$1
-  dig "$url" +nostats +nocomments +nocmd
-}
-
 function gfind {
   awk "/#\[$1-start\]/,/#\[$1-end\]/ { print }" ~/.dotfiles/bash/aliases
 }
@@ -47,49 +41,31 @@ function hack {
   done
 }
 
-function ht {
-  local BLUE="\033[0;34m"
-  local RED="\033[0;31m"
-  local WHITE="\033[0;37m"
-  local NC="\033[0m"
-
-  echo -e "${BLUE}Projects:${NC}"
-    for file in /Applications/MAMP/htdocs/*
-    do
-      if [ -d "$file" ];then
-       echo ${file##/*/}
-      fi
-    done
-  echo -e "${RED}Which Project?${NC}"
-  read dir;
-  cd /Applications/MAMP/htdocs/$dir
-}
-
 function hg {
   history | grep --color=auto $1
 }
 
-function parse_git_branch {
-  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \[\1\]/'
-}
+# function parse_git_branch {
+#   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \[\1\]/'
+# }
 
-function proml {
-  local        BLUE="\[\033[0;34m\]"
-  local     DEFAULT="\[\033[0m\]"
-  local		CYAN="\e[36m"
-  local		RED="\e[31m"
-  local 	 BLACK="\e[30m"
-  local    GREEN="\e[32m"
-  local    YELLOW="\e[33m"
-  local    BLUE="\e[34m"
-  local    MAGENTA="\e[35m"
-  local    WHITE="\e[37m"
+# function proml {
+#   local        BLUE="\[\033[0;34m\]"
+#   local     DEFAULT="\[\033[0m\]"
+#   local		CYAN="\e[36m"
+#   local		RED="\e[31m"
+#   local 	 BLACK="\e[30m"
+#   local    GREEN="\e[32m"
+#   local    YELLOW="\e[33m"
+#   local    BLUE="\e[34m"
+#   local    MAGENTA="\e[35m"
+#   local    WHITE="\e[37m"
 
-PS1="$DEFAULT\u: $DEFAULT\w $YELLOW\$(parse_git_branch) \n⚡ $DEFAULT"
-}
-proml
+# PS1="$DEFAULT\u: $DEFAULT\w $YELLOW\$(parse_git_branch) \n⚡ $DEFAULT"
+# }
+# proml
 
-#⇒ ➥ ⇾ ⇀ ➤ ❖ ★ ➔ 🔅💩🚀⚡
+# #⇒ ➥ ⇾ ⇀ ➤ ❖ ★ ➔ 🔅💩🚀⚡
 
 function sb_init {
   local RED="\033[0;31m"
