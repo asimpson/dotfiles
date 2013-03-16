@@ -2,7 +2,7 @@
 #All my custom BASH aliases
 
 #[misc-start]
-alias l='ls -Gla'
+alias l='ls -lxGa'
 alias lsd='ls -l | grep "^d"'
 alias phpmamp='/Applications/MAMP/bin/php/php5.4.4/bin/php'
 alias pubkey='more ~/.ssh/id_rsa.pub | pbcopy | echo '\''=> Public key copied to pasteboard.'\'''
@@ -15,7 +15,7 @@ alias h='history'
 alias c='clear'
 alias psd='open -a /Applications/Adobe\ Photoshop\ CS6/Adobe\ Photoshop\ CS6.app'
 alias rlink="rdio link | pbcopy"
-alias rmt="trash"
+alias rmt='trash'
 #[misc-end]
 
 #[git-start]
