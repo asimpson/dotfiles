@@ -41,4 +41,4 @@ source ~/.dotfiles/bash/functions
 source ~/.dotfiles/bash/aliases
 
 # Customize to your needs...
-export PATH=/usr/local/bin:/usr/local/bin:$HOME/.rvm/gems/1.9.3-p194/bin:$HOME/.rvm/gems/1.9.3-p194@global/bin:$HOME/.rvm/rubies/1.9.3-p194/bin:$HOME/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin/git-tf:$HOME/.rvm/bin:/usr/bin/git-tf:/usr/bin/git-tf:$HOME/.rvm/bin:/usr/bin/git-tf
+export PATH=/usr/local/bin:/usr/local/bin:$HOME/.rvm/gems/1.9.3-p194/bin:$HOME/.rvm/gems/1.9.3-p194@global/bin:$HOME/.rvm/rubies/1.9.3-p194/bin:$HOME/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:$HOME/.rvm/bin:$HOME/.rvm/bin

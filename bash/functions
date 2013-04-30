@@ -5,11 +5,23 @@ function gfind {
   awk "/#\[$1-start\]/,/#\[$1-end\]/ { print }" ~/.dotfiles/bash/aliases
 }
 
+function grab {
+  git checkout $1 -- $2
+}
+
+function filepath {
+  git log -p --follow -- $1
+}
+
 function ip {
   YELLOW="\033[33m"
   IP=$(ifconfig | grep 'inet 1' | cut -c 6- | awk 'NR==2 {print $1}')
   echo -e ${YELLOW}$IP
   echo $IP | pbcopy
+}
+
+function logs {
+  git log -p --grep $1
 }
 
 function move_dock {

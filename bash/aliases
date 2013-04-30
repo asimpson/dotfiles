@@ -16,6 +16,7 @@ alias c='clear'
 alias psd='open -a /Applications/Adobe\ Photoshop\ CS6/Adobe\ Photoshop\ CS6.app'
 alias rlink="rdio link | pbcopy"
 alias rmt='trash'
+alias zipAll='for i in */; do zip -r "${i%/}.zip" "$i"; done'
 #[misc-end]
 
 #[git-start]
@@ -26,7 +27,7 @@ alias gs='git status '
 alias ga='git add '
 alias gb='git branch '
 alias gc='git commit'
-alias gca='git commit -a -m'
+alias gca='git commit -a'
 alias gd='git diff'
 alias gl='git pull --rebase'
 alias gk='gitk --all&'
