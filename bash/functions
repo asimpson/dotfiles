@@ -1,6 +1,8 @@
 #!/bin/bash
 #All my custom BASH functions
-
+function man {
+  open dash://man:$1
+}
 function gfind {
   awk "/#\[$1-start\]/,/#\[$1-end\]/ { print }" ~/.dotfiles/bash/aliases
 }

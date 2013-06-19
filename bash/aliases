@@ -2,7 +2,7 @@
 #All my custom BASH aliases
 
 #[misc-start]
-alias l='ls -lxGa'
+alias l='ls -lGa'
 alias lsd='ls -l | grep "^d"'
 alias phpmamp='/Applications/MAMP/bin/php/php5.4.4/bin/php'
 alias pubkey='more ~/.ssh/id_rsa.pub | pbcopy | echo '\''=> Public key copied to pasteboard.'\'''
@@ -21,6 +21,10 @@ alias zipAll='for i in */; do zip -r "${i%/}.zip" "$i"; done'
 
 #[git-start]
 alias glist='alias | grep "git" | cut -c 7-'
+alias assume='git update-index --assume-unchanged'
+alias unassume='git update-index --no-assume-unchanged'
+alias assumed="!git ls-files -v | grep ^h | cut -c 3-"
+alias gdiff='git diff --patience'
 alias glog='git log --format='\''%Cgreen%h%Creset %C(cyan)%an%Creset - %s'\'' --graph'
 alias hp='git push heroku master'
 alias gs='git status '
