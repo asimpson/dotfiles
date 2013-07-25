@@ -1,5 +1,12 @@
 #!/bin/bash
 #All my custom BASH functions
+
+# encode a given image file as base64 and output css background property to clipboard
+function 64enc() {
+  openssl base64 -in $1 | awk -v ext="${1#*.}" '{ str1=str1 $0 }END{ print "background:url(data:image/"ext";base64,"str1");" }'|pbcopy
+  echo "$1 encoded to clipboard"
+}
+
 function man {
   open dash://man:$1
 }
@@ -35,6 +42,15 @@ function move_dock {
   fi
   if [ "$1" = "middle" ]; then
     defaults write com.apple.dock pinning -string middle && killall Dock
+  fi
+}
+
+function dashboard_toggle {
+  if [ "$1" = "kill" ]; then
+    defaults write com.apple.dashboard mcx-disabled -boolean YES && killall Dock
+  fi
+  if [ "$1" = "show" ]; then
+    defaults write com.apple.dashboard mcx-disabled -boolean NO && killall Dock
   fi
 }
 

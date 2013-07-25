@@ -2,6 +2,7 @@
 #All my custom BASH aliases
 
 #[misc-start]
+alias rnginx='sudo nginx -s stop && sudo nginx'
 alias l='ls -lGa'
 alias lsd='ls -l | grep "^d"'
 alias phpmamp='/Applications/MAMP/bin/php/php5.4.4/bin/php'

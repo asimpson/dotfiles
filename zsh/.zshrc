@@ -29,6 +29,9 @@ DISABLE_AUTO_TITLE="true"
 # Uncomment following line if you want red dots to be displayed while waiting for completion
 COMPLETION_WAITING_DOTS="true"
 
+HISTFILE=$HOME/.zsh_history
+HISTSIZE=SAVEHIST=1000
+
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
@@ -41,7 +44,7 @@ source ~/.dotfiles/bash/functions
 source ~/.dotfiles/bash/aliases
 
 # Customize to your needs...
-export PATH=/usr/local/bin:/usr/local/bin:$HOME/.rvm/gems/1.9.3-p194/bin:$HOME/.rvm/gems/1.9.3-p194@global/bin:$HOME/.rvm/rubies/1.9.3-p194/bin:$HOME/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:$HOME/.rvm/bin:$HOME/.rvm/bin:$PATH
+export PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:$HOME/.rvm/gems/1.9.3-p194/bin:$HOME/.rvm/gems/1.9.3-p194@global/bin:$HOME/.rvm/rubies/1.9.3-p194/bin:$HOME/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:$HOME/.rvm/bin:$HOME/.rvm/bin:$PATH
 
 # Credits to npm's. Awesome completion utility.
 #
@@ -98,3 +101,4 @@ elif type compctl &>/dev/null; then
   compctl -K _bower_completion bower
 fi
 ###-end-bower-completion-###
+eval "$(hub alias -s)"
