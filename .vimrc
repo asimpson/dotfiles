@@ -1,4 +1,5 @@
 set ai                  " auto indenting
+let mapleader = ","
 set history=100         " keep 100 lines of history
 set ruler               " show the cursor position
 set hlsearch            " highlight the last searched term
@@ -12,14 +13,27 @@ imap <Tab>, <C-y>,
 "Keymap for zencoding
 imap <Tab>p <C-p>
 
+"Leader keymapping for :Tabmerge
+nnoremap <leader>m :Tabmerge left
+
+"Leader keymapping for tab management
+nnoremap <leader>n :tabnew
+
+"Leader keymapping for next tab
+nnoremap <leader>t :tabn
+
 autocmd Filetype gitcommit setlocal spell textwidth=72
 set nocompatible
+set ignorecase
 set nobackup
+set nowb
+set noswapfile
 set nowritebackup
 set showcmd
 set incsearch  
 set laststatus=2
 set tabstop=2
+set number
 set shiftwidth=2
 set expandtab
 set rtp+=~/.vim/bundle/vundle/
@@ -38,6 +52,9 @@ Bundle 'git://github.com/nono/vim-handlebars.git'
 Bundle 'christoomey/vim-tmux-navigator'
 Bundle 'git://github.com/mattn/zencoding-vim.git'
 Bundle 'desert-warm-256'
+Bundle 'git://github.com/vim-scripts/Tabmerge.git'
+Bundle 'airblade/vim-gitgutter'
+Bundle 'gregsexton/MatchTag'
 
 filetype off      " use the file type plugins
 syntax on
