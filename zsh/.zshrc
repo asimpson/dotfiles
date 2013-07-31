@@ -101,4 +101,3 @@ elif type compctl &>/dev/null; then
   compctl -K _bower_completion bower
 fi
 ###-end-bower-completion-###
-eval "$(hub alias -s)"

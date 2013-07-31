@@ -18,6 +18,7 @@ alias psd='open -a /Applications/Adobe\ Photoshop\ CS6/Adobe\ Photoshop\ CS6.app
 alias rlink="rdio link | pbcopy"
 alias rmt='trash'
 alias zipAll='for i in */; do zip -r "${i%/}.zip" "$i"; done'
+alias vim="vim -p "
 #[misc-end]
 
 #[git-start]
@@ -41,6 +42,6 @@ alias gpb='git publish-branch'
 alias blist='git branch -l'
 alias stash='git stash'
 alias who='git shortlog -n -s --no-merges'
-alias fbase='git fetch origin master && git rebase origin/master'
+alias fbase='git fetch && git rebase origin/master'
 alias cleanup='remote prune origin && git gc && git clean -dfx && git stash clear'
 #[git-end]

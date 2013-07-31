@@ -7,6 +7,16 @@ function 64enc() {
   echo "$1 encoded to clipboard"
 }
 
+# Install a grunt plugin and save to devDependencies
+function gi() {
+  npm install --save-dev grunt-"$@"
+}
+
+# Install a grunt-contrib plugin and save to devDependencies
+function gci() {
+  npm install --save-dev grunt-contrib-"$@"
+}
+
 function man {
   open dash://man:$1
 }
