@@ -19,6 +19,8 @@ alias rlink="rdio link | pbcopy"
 alias rmt='trash'
 alias zipAll='for i in */; do zip -r "${i%/}.zip" "$i"; done'
 alias vim="vim -p "
+alias sess="tmux new -s "
+alias attach="tmux attach -t "
 #[misc-end]
 
 #[git-start]
