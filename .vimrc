@@ -1,8 +1,20 @@
 set ai                  " auto indenting
+set nowrap 
+set complete=.,b,u,]
 let mapleader = ","
 set history=100         " keep 100 lines of history
 set ruler               " show the cursor position
 set hlsearch            " highlight the last searched term
+
+"resize pane
+nnoremap <leader>d :vertical resize -10
+nnoremap <leader>u :vertical resize +10
+
+noremap  <buffer> <silent> k gk
+noremap  <buffer> <silent> j gj
+
+"tab complete map
+inoremap <Tab> <c-r>=InsertTabWrapper()<cr>
 
 "map esc to j k
 :imap jk <Esc>
@@ -55,7 +67,14 @@ Bundle 'desert-warm-256'
 Bundle 'git://github.com/vim-scripts/Tabmerge.git'
 Bundle 'airblade/vim-gitgutter'
 Bundle 'gregsexton/MatchTag'
+Bundle 'rking/ag.vim'
+Bundle 'mattn/webapi-vim'
+Bundle 'mattn/gist-vim'
 
+let g:gist_post_private = 1
+let g:gist_clip_command = 'pbcopy'
+
+set clipboard+=unnamed " Yanks go on clipboard instead.
 filetype off      " use the file type plugins
 syntax on
 set background=dark
@@ -78,3 +97,33 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 
 "highlight StatusLine ctermfg=black ctermbg=White cterm=bold
 highlight StatusLine cterm=reverse ctermfg=136  ctermbg=white
+
+" Tab completion
+" will insert tab at beginning of line,
+" will use completion if not at beginning
+set wildmode=list:longest,list:full
+set complete=.,w,t
+function! InsertTabWrapper()
+   let col = col('.') - 1
+   if !col || getline('.')[col - 1] !~ '\k'
+     return "\<tab>"
+   else
+     return "\<c-p>"
+   endif
+endfunction
+
+set mouse=a    " Mouse in all modes
+
+" Reset the listchars
+set listchars=""
+" make tabs visible
+set listchars=tab:▸▸
+" show trailing spaces as dots
+set listchars+=trail:.
+" The character to show in the last column when wrap is off and the line
+" continues beyond the right of the screen
+set listchars+=extends:>
+" The character to show in the last column when wrap is off and the line
+" continues beyond the right of the screen
+set listchars+=precedes:<
+
