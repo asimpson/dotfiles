@@ -2,6 +2,7 @@
 #All my custom BASH aliases
 
 #[misc-start]
+alias arq='/Applications/Arq.app/Contents/MacOS/Arq'
 alias rnginx='sudo nginx -s stop && sudo nginx'
 alias l='ls -lGa'
 alias lsd='ls -l | grep "^d"'

@@ -53,13 +53,10 @@ call vundle#rc()
 
 Bundle 'gmarik/vundle'
 Bundle 'L9'
-Bundle 'FuzzyFinder'
-Bundle 'git://git.wincent.com/command-t.git'
 Bundle 'git://github.com/altercation/vim-colors-solarized.git'
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'kien/ctrlp.vim'
 Bundle 'tsaleh/vim-matchit'
-Bundle 'vim-scripts/ctags.vim'
 Bundle 'git://github.com/nono/vim-handlebars.git'
 Bundle 'christoomey/vim-tmux-navigator'
 Bundle 'git://github.com/mattn/zencoding-vim.git'
