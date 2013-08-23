@@ -7,10 +7,6 @@ function 64enc() {
   echo "$1 encoded to clipboard"
 }
 
-function sess() {
-  tmux new -s $1 && tmux set-option default-path $(PWD);
-}
-
 # Install a grunt plugin and save to devDependencies
 function gi() {
   npm install --save-dev grunt-"$@"

@@ -7,8 +7,10 @@ set ruler               " show the cursor position
 set hlsearch            " highlight the last searched term
 
 "resize pane
-nnoremap <leader>d :vertical resize -10
-nnoremap <leader>u :vertical resize +10
+nnoremap <leader>d :vertical resize -10<cr>
+nnoremap <leader>u :vertical resize +10<cr>
+nnoremap <leader>U :res +5<cr>
+nnoremap <leader>D :res -5<cr>
 
 noremap  <buffer> <silent> k gk
 noremap  <buffer> <silent> j gj
@@ -26,13 +28,13 @@ imap <Tab>, <C-y>,
 imap <Tab>p <C-p>
 
 "Leader keymapping for :Tabmerge
-nnoremap <leader>m :Tabmerge left
+nnoremap <leader>m :Tabmerge left<cr>
 
 "Leader keymapping for tab management
-nnoremap <leader>n :tabnew
+nnoremap <leader>n :tabnew<cr>
 
 "Leader keymapping for next tab
-nnoremap <leader>t :tabn
+nnoremap <leader>t :tabn<cr>
 
 autocmd Filetype gitcommit setlocal spell textwidth=72
 set nocompatible
@@ -67,7 +69,10 @@ Bundle 'gregsexton/MatchTag'
 Bundle 'rking/ag.vim'
 Bundle 'mattn/webapi-vim'
 Bundle 'mattn/gist-vim'
+Bundle 'vim-scripts/CursorLineCurrentWindow'
+Bundle 'vim-scripts/tComment'
 
+set cursorline
 let g:gist_post_private = 1
 let g:gist_clip_command = 'pbcopy'
 
