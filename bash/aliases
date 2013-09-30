@@ -4,6 +4,7 @@
 #[misc-start]
 alias arq='/Applications/Arq.app/Contents/MacOS/Arq'
 alias rnginx='sudo nginx -s stop && sudo nginx'
+alias timer='pomojs -t -q 25 5 '
 alias l='ls -lGa'
 alias lsd='ls -l | grep "^d"'
 alias phpmamp='/Applications/MAMP/bin/php/php5.4.4/bin/php'
@@ -20,6 +21,9 @@ alias rlink="rdio link | pbcopy"
 alias rmt='trash'
 alias zipAll='for i in */; do zip -r "${i%/}.zip" "$i"; done'
 alias attach="tmux attach -t "
+alias pg-start="pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start"
+alias pg-end="pg_ctl -D /usr/local/var/postgres stop -s -m fast"
+alias pg-status="pg_ctl -D /usr/local/var/postgres status"
 #[misc-end]
 
 #[git-start]

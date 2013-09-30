@@ -12,6 +12,8 @@ nnoremap <leader>u :vertical resize +10<cr>
 nnoremap <leader>U :res +5<cr>
 nnoremap <leader>D :res -5<cr>
 
+nnoremap <leader>r :so $MYVIMRC<cr>
+
 noremap  <buffer> <silent> k gk
 noremap  <buffer> <silent> j gj
 
@@ -62,7 +64,6 @@ Bundle 'tsaleh/vim-matchit'
 Bundle 'git://github.com/nono/vim-handlebars.git'
 Bundle 'christoomey/vim-tmux-navigator'
 Bundle 'git://github.com/mattn/zencoding-vim.git'
-Bundle 'desert-warm-256'
 Bundle 'git://github.com/vim-scripts/Tabmerge.git'
 Bundle 'airblade/vim-gitgutter'
 Bundle 'gregsexton/MatchTag'
@@ -71,17 +72,21 @@ Bundle 'mattn/webapi-vim'
 Bundle 'mattn/gist-vim'
 Bundle 'vim-scripts/CursorLineCurrentWindow'
 Bundle 'vim-scripts/tComment'
+Bundle 'flazz/vim-colorschemes'
+Bundle 'noahfrederick/Hemisu'
+Bundle 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
 
 set cursorline
 let g:gist_post_private = 1
 let g:gist_clip_command = 'pbcopy'
 
+let g:ctrlp_show_hidden = 1
+
 set clipboard+=unnamed " Yanks go on clipboard instead.
 filetype off      " use the file type plugins
 syntax on
 set background=dark
-"colorscheme solarized
-colorscheme desert-warm-256
+colorscheme Tomorrow-Night-Bright
 filetype plugin indent on
 
 if executable('ag')
@@ -98,7 +103,7 @@ let g:ctrlp_cmd = 'CtrlP'
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 
 "highlight StatusLine ctermfg=black ctermbg=White cterm=bold
-highlight StatusLine cterm=reverse ctermfg=136  ctermbg=white
+highlight StatusLine cterm=reverse ctermfg=red  ctermbg=white
 
 " Tab completion
 " will insert tab at beginning of line,
@@ -128,4 +133,3 @@ set listchars+=extends:>
 " The character to show in the last column when wrap is off and the line
 " continues beyond the right of the screen
 set listchars+=precedes:<
-
