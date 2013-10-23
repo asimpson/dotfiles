@@ -75,6 +75,7 @@ Bundle 'vim-scripts/tComment'
 Bundle 'flazz/vim-colorschemes'
 Bundle 'noahfrederick/Hemisu'
 Bundle 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
+Bundle 'elzr/vim-json'
 
 set cursorline
 let g:gist_post_private = 1

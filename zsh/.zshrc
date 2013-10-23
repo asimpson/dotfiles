@@ -46,7 +46,7 @@ setopt HIST_FIND_NO_DUPS
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git ht git-aliases brew npm osx rvm urltools)
+plugins=(git ht git-aliases brew npm osx rvm urltools )
 setopt complete_aliases
 
 source $ZSH/oh-my-zsh.sh

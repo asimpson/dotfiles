@@ -4,6 +4,7 @@
 #[misc-start]
 alias arq='/Applications/Arq.app/Contents/MacOS/Arq'
 alias rnginx='sudo nginx -s stop && sudo nginx'
+alias fphp='php-fpm -g /usr/local/var/run/php-fpm.pid'
 alias timer='pomojs -t -q 25 5 '
 alias l='ls -lGa'
 alias lsd='ls -l | grep "^d"'
@@ -28,6 +29,7 @@ alias pg-status="pg_ctl -D /usr/local/var/postgres status"
 
 #[git-start]
 alias glist='alias | grep "git" | cut -c 7-'
+alias github="open \`git remote -v | grep github.com | grep fetch | head -1 | field 2 | sed 's/git:/http:/g'\`"
 alias assume='git update-index --assume-unchanged'
 alias unassume='git update-index --no-assume-unchanged'
 alias assumed="!git ls-files -v | grep ^h | cut -c 3-"
