@@ -22,13 +22,14 @@ inoremap <Tab> <c-r>=InsertTabWrapper()<cr>
 
 "map esc to j k
 :imap jk <Esc>
+"
+"Keymap for zencoding
+imap hh <c-y>,
+" imap <Tab>, <C-y>,
 
 "Keymap for zencoding
-imap <Tab>, <C-y>,
-
-"Keymap for zencoding
-imap <Tab>p <C-p>
-
+" imap <Tab>p <C-p>
+"
 "Leader keymapping for :Tabmerge
 nnoremap <leader>m :Tabmerge left<cr>
 
@@ -63,7 +64,6 @@ Bundle 'kien/ctrlp.vim'
 Bundle 'tsaleh/vim-matchit'
 Bundle 'git://github.com/nono/vim-handlebars.git'
 Bundle 'christoomey/vim-tmux-navigator'
-Bundle 'git://github.com/mattn/zencoding-vim.git'
 Bundle 'git://github.com/vim-scripts/Tabmerge.git'
 Bundle 'airblade/vim-gitgutter'
 Bundle 'gregsexton/MatchTag'
@@ -76,6 +76,7 @@ Bundle 'flazz/vim-colorschemes'
 Bundle 'noahfrederick/Hemisu'
 Bundle 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
 Bundle 'elzr/vim-json'
+Bundle 'mattn/emmet-vim'
 
 set cursorline
 let g:gist_post_private = 1

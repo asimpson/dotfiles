@@ -1,3 +1,3 @@
-ht() { cd /Applications/MAMP/htdocs/$1; }
-_ht() { _files -W /Applications/MAMP/htdocs -/; }
+ht() { cd ~/Projects/$1; }
+_ht() { _files -W ~/Projects -/; }
 compdef _ht ht

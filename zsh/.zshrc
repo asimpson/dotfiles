@@ -51,11 +51,17 @@ setopt complete_aliases
 
 source $ZSH/oh-my-zsh.sh
 
-source ~/.dotfiles/bash/functions
-source ~/.dotfiles/bash/aliases
+if [ -f ~/.dotfiles/bash/functions ]; then
+  source ~/.dotfiles/bash/functions
+fi
 
-# Customize to your needs...
-export PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:$HOME/.rvm/gems/1.9.3-p194/bin:$HOME/.rvm/gems/1.9.3-p194@global/bin:$HOME/.rvm/rubies/1.9.3-p194/bin:$HOME/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:$HOME/.rvm/bin:$HOME/.rvm/bin:$PATH
+if [ -f ~/.dotfiles/bash/aliases ]; then
+  source ~/.dotfiles/bash/aliases
+fi
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+PATH=$PATH:/usr/local/share/npm/bin
+PATH=/usr/local/bin:$PATH
 
 # Credits to npm's. Awesome completion utility.
 #
