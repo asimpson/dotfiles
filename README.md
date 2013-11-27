@@ -9,7 +9,7 @@
 
 * Symlink plugins `~/.dotfiles/zsh/plugins` to `~/.oh-my-zsh/custom`
 
-* Download the theme from the releases section of the Github repo.
+* [Download the theme from the releases section of the Github repo](https://github.com/asimpson/dotfiles/releases).
 
 ## Launchd daemons
 * Symlink the `.plist` files in `.dotfiles/launch-scripts/` into `~/Library/LaunchAgents`
