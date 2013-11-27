@@ -2,7 +2,7 @@
 ZSH=$HOME/.oh-my-zsh
 
 if [ -x /usr/local/bin/mvim ]; then
-    alias vim="mvim -v"
+    alias v="mvim -v"
 fi
 
 # Set name of the theme to load.
