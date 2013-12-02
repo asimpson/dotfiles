@@ -12,6 +12,10 @@
     <dict>
       <key>Weekday</key>
       <integer>1</integer>
+      <key>Hour</key>
+      <integer>08</integer>
+      <key>Minute</key>
+      <integer>00</integer>
     </dict>
 </dict>
 </plist>
