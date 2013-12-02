@@ -2,6 +2,7 @@
 function moveDownloads {
   mkdir -p /Users/asimpson/Desktop/old-downloads
   /usr/local/bin/tag --set Red /Users/asimpson/Desktop/old-downloads
+  shopt -s nullglob
   for file in /Users/asimpson/Downloads/*
   do
     if [ "$file" ];then
