@@ -77,7 +77,7 @@ Bundle 'noahfrederick/Hemisu'
 Bundle 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
 Bundle 'elzr/vim-json'
 Bundle 'mattn/emmet-vim'
-
+Bundle 'henrik/vim-qargs'
 set cursorline
 let g:gist_post_private = 1
 let g:gist_clip_command = 'pbcopy'
