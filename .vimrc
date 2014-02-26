@@ -17,6 +17,8 @@ nnoremap <leader>r :so $MYVIMRC<cr>
 noremap  <buffer> <silent> k gk
 noremap  <buffer> <silent> j gj
 
+nnoremap <leader>f :Ag! -Q 
+
 "tab complete map
 inoremap <Tab> <c-r>=InsertTabWrapper()<cr>
 
@@ -57,6 +59,8 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 Bundle 'gmarik/vundle'
+Bundle 'mklabs/grunt.vim'
+Bundle 'tpope/vim-fugitive'
 Bundle 'L9'
 Bundle 'git://github.com/altercation/vim-colors-solarized.git'
 Bundle 'kchmck/vim-coffee-script'
@@ -78,6 +82,7 @@ Bundle 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
 Bundle 'elzr/vim-json'
 Bundle 'mattn/emmet-vim'
 Bundle 'henrik/vim-qargs'
+
 set cursorline
 let g:gist_post_private = 1
 let g:gist_clip_command = 'pbcopy'
