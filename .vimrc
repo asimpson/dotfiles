@@ -11,12 +11,9 @@ nnoremap <leader>d :vertical resize -10<cr>
 nnoremap <leader>u :vertical resize +10<cr>
 nnoremap <leader>U :res +5<cr>
 nnoremap <leader>D :res -5<cr>
-
 nnoremap <leader>r :so $MYVIMRC<cr>
-
 noremap  <buffer> <silent> k gk
 noremap  <buffer> <silent> j gj
-
 nnoremap <leader>f :Ag! -Q 
 
 "tab complete map
@@ -24,14 +21,18 @@ inoremap <Tab> <c-r>=InsertTabWrapper()<cr>
 
 "map esc to j k
 :imap jk <Esc>
-"
+
+" remap capital Q to rerun last macro
+:nmap Q @@
+
 "Keymap for zencoding
 imap hh <c-y>,
+
 " imap <Tab>, <C-y>,
 
 "Keymap for zencoding
 " imap <Tab>p <C-p>
-"
+
 "Leader keymapping for :Tabmerge
 nnoremap <leader>m :Tabmerge left<cr>
 
@@ -59,10 +60,10 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 Bundle 'gmarik/vundle'
+Bundle 'chriskempson/base16-vim'
 Bundle 'mklabs/grunt.vim'
 Bundle 'tpope/vim-fugitive'
 Bundle 'L9'
-Bundle 'git://github.com/altercation/vim-colors-solarized.git'
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'kien/ctrlp.vim'
 Bundle 'tsaleh/vim-matchit'
@@ -76,9 +77,7 @@ Bundle 'mattn/webapi-vim'
 Bundle 'mattn/gist-vim'
 Bundle 'vim-scripts/CursorLineCurrentWindow'
 Bundle 'vim-scripts/tComment'
-Bundle 'flazz/vim-colorschemes'
 Bundle 'noahfrederick/Hemisu'
-Bundle 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
 Bundle 'elzr/vim-json'
 Bundle 'mattn/emmet-vim'
 Bundle 'henrik/vim-qargs'
@@ -93,7 +92,7 @@ set clipboard+=unnamed " Yanks go on clipboard instead.
 filetype off      " use the file type plugins
 syntax on
 set background=dark
-colorscheme Tomorrow-Night-Bright
+colorscheme base16-ocean
 filetype plugin indent on
 
 if executable('ag')
@@ -110,7 +109,9 @@ let g:ctrlp_cmd = 'CtrlP'
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 
 "highlight StatusLine ctermfg=black ctermbg=White cterm=bold
-highlight StatusLine cterm=reverse ctermfg=red  ctermbg=white
+highlight StatusLine cterm=reverse ctermfg=yellow  ctermbg=white
+" file path [line number] [encoding] [filetype]
+set statusline=%F%m%r%h%w\%=\ [line\ %l\/%L]\ [%{strlen(&fenc)?&fenc:&enc}]\ [%{&filetype}]
 
 " Tab completion
 " will insert tab at beginning of line,
