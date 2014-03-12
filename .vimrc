@@ -15,6 +15,8 @@ nnoremap <leader>r :so $MYVIMRC<cr>
 noremap  <buffer> <silent> k gk
 noremap  <buffer> <silent> j gj
 nnoremap <leader>f :Ag! -Q 
+nnoremap <leader>ss :set wrap<cr>
+nnoremap <leader>sm :set wm=2<cr>
 
 "tab complete map
 inoremap <Tab> <c-r>=InsertTabWrapper()<cr>
@@ -104,6 +106,7 @@ set splitbelow
 set splitright
 
 au BufRead,BufNewFile *.handlebars,*.hbs set ft=html syntax=handlebars
+au BufRead,BufNewFile *.txt set ft=md syntax=markdown
 "CtrlP setup
 let g:ctrlp_cmd = 'CtrlP'
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
@@ -111,7 +114,7 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 "highlight StatusLine ctermfg=black ctermbg=White cterm=bold
 highlight StatusLine cterm=reverse ctermfg=yellow  ctermbg=white
 " file path [line number] [encoding] [filetype]
-set statusline=%F%m%r%h%w\%=\ [line\ %l\/%L]\ [%{strlen(&fenc)?&fenc:&enc}]\ [%{&filetype}]
+set statusline=%F%m%r%h%w\ [%n]\%=\ [line\ %l\/%L]\ [%{strlen(&fenc)?&fenc:&enc}]\ [%{&filetype}]
 
 " Tab completion
 " will insert tab at beginning of line,
@@ -141,3 +144,8 @@ set listchars+=extends:>
 " The character to show in the last column when wrap is off and the line
 " continues beyond the right of the screen
 set listchars+=precedes:<
+
+set undodir=~/.vim/undodir
+set undofile
+set undolevels=1000 "maximum number of changes that can be undone
+set undoreload=10000 "maximum number lines to save for undo on a buffer reload
