@@ -7,6 +7,17 @@ function 64enc() {
   echo "$1 encoded to clipboard"
 }
 
+function muxdef {
+  tmux send-keys "v" C-m;
+  tmux split-window -v;
+  tmux split-window -h;
+  tmux send-keys "gitsh" C-m;
+}
+
+function marked {
+  open -a Marked.app $@
+}
+
 # Install a grunt plugin and save to devDependencies
 function gi() {
   npm install --save-dev grunt-"$@"

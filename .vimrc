@@ -15,8 +15,18 @@ nnoremap <leader>r :so $MYVIMRC<cr>
 noremap  <buffer> <silent> k gk
 noremap  <buffer> <silent> j gj
 nnoremap <leader>f :Ag! -Q 
+nnoremap <leader>c :noh<cr> 
 nnoremap <leader>ss :set wrap<cr>
 nnoremap <leader>sm :set wm=2<cr>
+
+if (&tildeop)
+  nmap gcc guu~l
+else
+  nmap gcc guu~h
+endif
+
+" bind K to grep word under cursor
+nnoremap K :grep! "\b<C-R><C-W>\b"<cr>:cw<cr>:wincmd J<cr>
 
 "tab complete map
 inoremap <Tab> <c-r>=InsertTabWrapper()<cr>
@@ -62,6 +72,7 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 Bundle 'gmarik/vundle'
+Bundle 'yssl/QFEnter'
 Bundle 'chriskempson/base16-vim'
 Bundle 'mklabs/grunt.vim'
 Bundle 'tpope/vim-fugitive'
@@ -72,7 +83,8 @@ Bundle 'tsaleh/vim-matchit'
 Bundle 'git://github.com/nono/vim-handlebars.git'
 Bundle 'christoomey/vim-tmux-navigator'
 Bundle 'git://github.com/vim-scripts/Tabmerge.git'
-Bundle 'airblade/vim-gitgutter'
+Bundle 'mhinz/vim-signify'
+Bundle 'mhinz/vim-startify'
 Bundle 'gregsexton/MatchTag'
 Bundle 'rking/ag.vim'
 Bundle 'mattn/webapi-vim'
@@ -100,6 +112,10 @@ filetype plugin indent on
 if executable('ag')
 	set grepprg=ag\ --nogroup\ --nocolor
 	let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
 endif
 
 set splitbelow
@@ -149,3 +165,5 @@ set undodir=~/.vim/undodir
 set undofile
 set undolevels=1000 "maximum number of changes that can be undone
 set undoreload=10000 "maximum number lines to save for undo on a buffer reload
+
+set guifont=Source\ Code\ Pro:h12

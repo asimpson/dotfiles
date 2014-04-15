@@ -18,7 +18,7 @@ if [ "$1" = "create" ] || [ "$1" = "add" ]; then
   # Add vhost
   touch ~/Projects/vhosts/$domain;
 
-  echo "<VirtualHost *:80>
+  echo "<VirtualHost 0.0.0.0:80>
     DocumentRoot "/Users/asimpson/Projects/$documentRoot"
     ServerName $domain
 </VirtualHost>" >> ~/Projects/vhosts/$domain;
