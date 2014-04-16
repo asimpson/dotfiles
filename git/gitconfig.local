@@ -1,0 +1,35 @@
+#[user]
+	#name = John Doe
+	#email = email
+#[commit]
+	#template = path/to/commit/template
+#[core]
+	#excludesfile = path/to/excludes/file
+	#editor = foo
+#[credential]
+	#helper = foo
+#[github]
+	#user = username
+#[include]
+    #path = path/to/additional/config
+[color]
+	ui = true
+[color "branch"]
+  local = yellow
+  remote = red
+[mergetool]
+	keepBackup = true
+[push]
+	default = matching
+[filter "media"]
+	clean = git-media-clean %f
+	smudge = git-media-smudge %f
+[alias]
+  go = checkout
+  diff = diff --patience
+  ga = add -A :/
+  gb = branch
+  gc = commit
+  blist = branch -l
+  fbase = fetch && rebase origin/master
+
