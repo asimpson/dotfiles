@@ -60,6 +60,13 @@
       template = /Users/asimpson/.gitmessage.txt
 ```
 
+* Also add any local modifications to `.gitconfig` like so:
+
+```
+    [include]
+        path = path/to/local/config/gitconfig.local
+```
+
 ## Other Dependencies
 
 * [Homebrew](http://brew.sh)
