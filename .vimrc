@@ -72,18 +72,18 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 Bundle 'gmarik/vundle'
+Bundle 'mustache/vim-mustache-handlebars'
 Bundle 'yssl/QFEnter'
 Bundle 'chriskempson/base16-vim'
-Bundle 'mklabs/grunt.vim'
+Bundle 'cakebaker/scss-syntax.vim'
 Bundle 'tpope/vim-fugitive'
 Bundle 'L9'
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'kien/ctrlp.vim'
 Bundle 'tmhedberg/matchit'
-Bundle 'git://github.com/nono/vim-handlebars.git'
 Bundle 'christoomey/vim-tmux-navigator'
 Bundle 'git://github.com/vim-scripts/Tabmerge.git'
-Bundle 'mhinz/vim-signify'
+Bundle 'airblade/vim-gitgutter'
 Bundle 'mhinz/vim-startify'
 Bundle 'gregsexton/MatchTag'
 Bundle 'rking/ag.vim'
@@ -95,6 +95,7 @@ Bundle 'noahfrederick/Hemisu'
 Bundle 'elzr/vim-json'
 Bundle 'mattn/emmet-vim'
 Bundle 'henrik/vim-qargs'
+Bundle 'mikewest/vimroom'
 
 set cursorline
 let g:gist_post_private = 1
@@ -121,7 +122,6 @@ endif
 set splitbelow
 set splitright
 
-au BufRead,BufNewFile *.handlebars,*.hbs set ft=html syntax=handlebars
 au BufRead,BufNewFile *.txt set ft=md syntax=markdown
 "CtrlP setup
 let g:ctrlp_cmd = 'CtrlP'
@@ -167,3 +167,5 @@ set undolevels=1000 "maximum number of changes that can be undone
 set undoreload=10000 "maximum number lines to save for undo on a buffer reload
 
 set guifont=Source\ Code\ Pro:h12
+
+command! -nargs=* Wrap set wrap linebreak nolist
