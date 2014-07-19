@@ -11,7 +11,7 @@ function muxdef {
   tmux send-keys "v" C-m;
   tmux split-window -v;
   tmux split-window -h;
-  tmux send-keys "gitsh" C-m;
+  tmux send-keys "gitsh --git hub" C-m;
 }
 
 function marked {

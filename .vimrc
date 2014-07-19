@@ -72,6 +72,7 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 Bundle 'gmarik/vundle'
+Bundle 'pangloss/vim-javascript'
 Bundle 'mustache/vim-mustache-handlebars'
 Bundle 'yssl/QFEnter'
 Bundle 'chriskempson/base16-vim'

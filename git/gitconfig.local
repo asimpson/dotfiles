@@ -33,4 +33,5 @@
   blist = branch -l
   fbase = fetch && rebase origin/master
   xc = !clear
+  sl = log --name-only --oneline
 
