@@ -28,9 +28,13 @@ alias thelp="tmux lscm"
 alias pg-start="pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start"
 alias pg-end="pg_ctl -D /usr/local/var/postgres stop -s -m fast"
 alias pg-status="pg_ctl -D /usr/local/var/postgres status"
+alias showfiles="defaults write com.apple.finder AppleShowAllFiles YES && killall Finder"
+alias hidefiles="defaults write com.apple.finder AppleShowAllFiles NO && killall Finder"
 #[misc-end]
 
 #[git-start]
+alias gre='git rebase origin/master'
+alias gpm='git pull origin master'
 alias glist='alias | grep "git" | cut -c 7-'
 alias github="open \`git remote -v | grep github.com | grep fetch | head -1 | field 2 | sed 's/git:/http:/g'\`"
 alias assume='git update-index --assume-unchanged'

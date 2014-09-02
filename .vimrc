@@ -16,8 +16,10 @@ noremap  <buffer> <silent> k gk
 noremap  <buffer> <silent> j gj
 nnoremap <leader>f :Ag! -Q 
 nnoremap <leader>c :noh<cr> 
+nnoremap <leader>T :NERDTreeToggle<cr> 
 nnoremap <leader>ss :set wrap<cr>
 nnoremap <leader>sm :set wm=2<cr>
+nnoremap <leader>h :set wm=2<cr>
 
 if (&tildeop)
   nmap gcc guu~l
@@ -72,6 +74,8 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 Bundle 'gmarik/vundle'
+Bundle 'itspriddle/vim-marked'
+Bundle 'scrooloose/nerdtree'
 Bundle 'pangloss/vim-javascript'
 Bundle 'mustache/vim-mustache-handlebars'
 Bundle 'yssl/QFEnter'
@@ -99,6 +103,7 @@ Bundle 'henrik/vim-qargs'
 Bundle 'mikewest/vimroom'
 
 set cursorline
+let g:marked_app = "Marked"
 let g:gist_post_private = 1
 let g:gist_clip_command = 'pbcopy'
 
@@ -170,3 +175,4 @@ set undoreload=10000 "maximum number lines to save for undo on a buffer reload
 set guifont=Source\ Code\ Pro:h12
 
 command! -nargs=* Wrap set wrap linebreak nolist
+
