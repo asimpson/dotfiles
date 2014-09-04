@@ -70,37 +70,43 @@ set tabstop=2
 set number
 set shiftwidth=2
 set expandtab
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
 
-Bundle 'gmarik/vundle'
-Bundle 'itspriddle/vim-marked'
-Bundle 'scrooloose/nerdtree'
-Bundle 'pangloss/vim-javascript'
-Bundle 'mustache/vim-mustache-handlebars'
-Bundle 'yssl/QFEnter'
-Bundle 'chriskempson/base16-vim'
-Bundle 'cakebaker/scss-syntax.vim'
-Bundle 'tpope/vim-fugitive'
-Bundle 'L9'
-Bundle 'kchmck/vim-coffee-script'
-Bundle 'kien/ctrlp.vim'
-Bundle 'tmhedberg/matchit'
-Bundle 'christoomey/vim-tmux-navigator'
-Bundle 'git://github.com/vim-scripts/Tabmerge.git'
-Bundle 'airblade/vim-gitgutter'
-Bundle 'mhinz/vim-startify'
-Bundle 'gregsexton/MatchTag'
-Bundle 'rking/ag.vim'
-Bundle 'mattn/webapi-vim'
-Bundle 'mattn/gist-vim'
-Bundle 'vim-scripts/CursorLineCurrentWindow'
-Bundle 'vim-scripts/tComment'
-Bundle 'noahfrederick/Hemisu'
-Bundle 'elzr/vim-json'
-Bundle 'mattn/emmet-vim'
-Bundle 'henrik/vim-qargs'
-Bundle 'mikewest/vimroom'
+filetype off      " use the file type plugins
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Plugin 'gmarik/Vundle.vim'
+Plugin 'itspriddle/vim-marked'
+Plugin 'scrooloose/nerdtree'
+Plugin 'pangloss/vim-javascript'
+Plugin 'mustache/vim-mustache-handlebars'
+Plugin 'yssl/QFEnter'
+Plugin 'chriskempson/base16-vim'
+Plugin 'cakebaker/scss-syntax.vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'L9'
+Plugin 'kchmck/vim-coffee-script'
+Plugin 'kien/ctrlp.vim'
+Plugin 'tmhedberg/matchit'
+Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'git://github.com/vim-scripts/Tabmerge.git'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'mhinz/vim-startify'
+Plugin 'gregsexton/MatchTag'
+Plugin 'rking/ag.vim'
+Plugin 'mattn/webapi-vim'
+Plugin 'mattn/gist-vim'
+Plugin 'vim-scripts/CursorLineCurrentWindow'
+Plugin 'vim-scripts/tComment'
+Plugin 'noahfrederick/Hemisu'
+Plugin 'elzr/vim-json'
+Plugin 'mattn/emmet-vim'
+Plugin 'henrik/vim-qargs'
+Plugin 'mikewest/vimroom'
+
+call vundle#end()            " required
+filetype plugin indent on  
 
 set cursorline
 let g:marked_app = "Marked"
@@ -110,11 +116,9 @@ let g:gist_clip_command = 'pbcopy'
 let g:ctrlp_show_hidden = 1
 
 set clipboard+=unnamed " Yanks go on clipboard instead.
-filetype off      " use the file type plugins
 syntax on
 set background=dark
 colorscheme base16-ocean
-filetype plugin indent on
 
 if executable('ag')
 	set grepprg=ag\ --nogroup\ --nocolor

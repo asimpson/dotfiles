@@ -7,15 +7,15 @@ oldDownloads = "/Users/asimpson/Desktop/old-downloads/"
 dest = "/Users/asimpson/Inbox/"
  
 Dir.foreach(desktop) do |file|
-  next if file == '.' or file == '..' or file == 'old-downloads'
+  next if File.fnmatch?('.*', file, File::FNM_DOTMATCH)
  
   Dir.chdir(desktop)
   fileTime = File.atime(file)
   timeNow = Time.now
  
   if fileTime < (timeNow - 14400)
-    filePath = "/Users/arthursimpson/Desktop/#{file}"
-    `/usr/local/bin/tag -a inbox #{filePath}`
-    FileUtils.mv(filePath, dest, {:verbose => true})
+    filePath = '/Users/arthursimpson/Desktop/#{file}'
+    `/usr/local/bin/tag -a inbox '#{file}'`
+    FileUtils.mv(file, dest, {:verbose => true})
   end
 end

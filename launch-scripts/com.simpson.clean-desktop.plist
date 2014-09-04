@@ -6,7 +6,7 @@
     <string>com.simpson.clean-desktop</string>
     <key>ProgramArguments</key>
     <array>
-      <string>ruby /Users/asimpson/.dotfiles/launch-scripts/cleanDesktop.rb</string>
+      <string>/Users/asimpson/.dotfiles/launch-scripts/cleanDesktop.rb</string>
     </array>
     <key>StartInterval</key>
     <integer>3600</integer>
