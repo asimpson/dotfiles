@@ -21,6 +21,7 @@ if [ "$1" = "create" ] || [ "$1" = "add" ]; then
   echo "<VirtualHost 0.0.0.0:80>
     DocumentRoot "/Users/asimpson/Projects/$documentRoot"
     ServerName $domain
+    ServerAlias "$domain.*.xip.io"
 </VirtualHost>" >> ~/Projects/vhosts/$domain;
 
   echo "127.0.0.1 $domain" >> /etc/hosts;
