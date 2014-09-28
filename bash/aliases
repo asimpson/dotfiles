@@ -59,3 +59,6 @@ alias who='git shortlog -n -s --no-merges'
 alias fbase='git fetch && git rebase origin/master'
 alias cleanup='remote prune origin && git gc && git clean -dfx && git stash clear'
 #[git-end]
+
+alias vpnc_start='sudo /usr/local/sbin/vpnc --natt-mode cisco-udp sb.conf'
+alias vpnc_end='sudo /usr/local/sbin/vpnc-disconnect'
