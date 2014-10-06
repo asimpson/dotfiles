@@ -77,7 +77,6 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'gmarik/Vundle.vim'
-Plugin 'itspriddle/vim-marked'
 Plugin 'scrooloose/nerdtree'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mustache/vim-mustache-handlebars'
@@ -104,12 +103,12 @@ Plugin 'elzr/vim-json'
 Plugin 'mattn/emmet-vim'
 Plugin 'henrik/vim-qargs'
 Plugin 'mikewest/vimroom'
+Plugin 'itspriddle/vim-marked'
 
 call vundle#end()            " required
 filetype plugin indent on  
 
 set cursorline
-let g:marked_app = "Marked"
 let g:gist_post_private = 1
 let g:gist_clip_command = 'pbcopy'
 
@@ -132,7 +131,10 @@ endif
 set splitbelow
 set splitright
 
-au BufRead,BufNewFile *.txt set ft=md syntax=markdown
+let g:marked_app = "Marked"
+au BufRead,BufNewFile *.txt set ft=markdown syntax=markdown
+au BufRead,BufNewFile *.md set ft=markdown syntax=markdown
+
 "CtrlP setup
 let g:ctrlp_cmd = 'CtrlP'
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
