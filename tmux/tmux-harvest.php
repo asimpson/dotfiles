@@ -28,6 +28,7 @@
   } else {
     curl_close($ch);
     $today = $data["day_entries"];
+    $timer_running = false;
 
     if ( empty($today) ) {
       echo "No timer running";
@@ -38,11 +39,14 @@
       $formattedProject = (strlen($project) > 15) ? substr($project,0,15).'[...]' : $project;
 
       if ( array_key_exists("timer_started_at", $entry) ) {
+        $timer_running = true;
         $hour = $entry["hours"];
         echo "$formattedProject - $hour";
-      } else {
-        echo "No timer running";
-      }
+      } 
+    }
+
+    if ( $timer_running == false ) {
+      echo "No timer running";
     }
   }
 ?>
