@@ -32,6 +32,7 @@
 
     if ( empty($today) ) {
       echo "No timer running";
+      return;
     }
 
     foreach($data["day_entries"] as $entry) {
