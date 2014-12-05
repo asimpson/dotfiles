@@ -181,4 +181,3 @@ set undoreload=10000 "maximum number lines to save for undo on a buffer reload
 set guifont=Source\ Code\ Pro:h12
 
 command! -nargs=* Wrap set wrap linebreak nolist
-

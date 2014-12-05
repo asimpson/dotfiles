@@ -9,7 +9,9 @@ fi
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="adamsimpson"
+ZSH_THEME="pure"
+autoload -U promptinit && promptinit
+# prompt pure
 
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
