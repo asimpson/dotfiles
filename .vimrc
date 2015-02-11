@@ -55,6 +55,7 @@ nnoremap <leader>n :tabnew<cr>
 
 "Leader keymapping for next tab
 nnoremap <leader>t :tabn<cr>
+nnoremap <leader>y :tabp<cr>
 
 autocmd Filetype gitcommit setlocal spell textwidth=72
 set nocompatible
@@ -123,26 +124,27 @@ if executable('ag')
 	set grepprg=ag\ --nogroup\ --nocolor
 	let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
   " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-  " ag is fast enough that CtrlP doesn't need to cache
   let g:ctrlp_use_caching = 0
 endif
 
 set splitbelow
 set splitright
 
-let g:marked_app = "Marked"
+let g:marked_app = "Marked 2"
 au BufRead,BufNewFile *.txt set ft=markdown syntax=markdown
 au BufRead,BufNewFile *.md set ft=markdown syntax=markdown
 
 "CtrlP setup
 let g:ctrlp_cmd = 'CtrlP'
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+" position, order, min height, max height, num of results
+let g:ctrlp_match_window = 'bottom,order:btt,min:20,max:20,results:20'
 
 "highlight StatusLine ctermfg=black ctermbg=White cterm=bold
 highlight StatusLine cterm=reverse ctermfg=yellow  ctermbg=white
 " file path [line number] [encoding] [filetype]
-set statusline=%F%m%r%h%w\ [%n]\%=\ [line\ %l\/%L]\ [%{strlen(&fenc)?&fenc:&enc}]\ [%{&filetype}]
+"[%{strlen(&fenc)?&fenc:&enc}]\
+set statusline=%F%m%r%h%w\ [%n]\%=\ [line\ %l\/%L]\ [%{&filetype}]
 
 " Tab completion
 " will insert tab at beginning of line,
@@ -181,3 +183,4 @@ set undoreload=10000 "maximum number lines to save for undo on a buffer reload
 set guifont=Source\ Code\ Pro:h12
 
 command! -nargs=* Wrap set wrap linebreak nolist
+autocmd QuickFixCmdPost *grep* cwindow

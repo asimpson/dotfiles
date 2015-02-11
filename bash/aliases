@@ -33,6 +33,10 @@ alias pg-end="pg_ctl -D /usr/local/var/postgres stop -s -m fast"
 alias pg-status="pg_ctl -D /usr/local/var/postgres status"
 alias showfiles="defaults write com.apple.finder AppleShowAllFiles YES && killall Finder"
 alias hidefiles="defaults write com.apple.finder AppleShowAllFiles NO && killall Finder"
+alias ss='svn status'
+alias sr='svn revert '
+alias su='svn update'
+alias sdiff='svn diff '
 #[misc-end]
 
 #[git-start]
@@ -63,5 +67,5 @@ alias fbase='git fetch && git rebase origin/master'
 alias cleanup='remote prune origin && git gc && git clean -dfx && git stash clear'
 #[git-end]
 
-alias vpnc_start='sudo /usr/local/sbin/vpnc --natt-mode cisco-udp sb.conf'
+alias vpnc_start='sudo /usr/local/sbin/vpnc'
 alias vpnc_end='sudo /usr/local/sbin/vpnc-disconnect'
