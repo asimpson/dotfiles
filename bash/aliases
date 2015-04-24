@@ -5,7 +5,7 @@
 alias arq='/Applications/Arq.app/Contents/MacOS/Arq'
 alias stream='t stream timeline -l -d -c | cut -d , -f 1,3,4'
 alias tweet='t update '
-alias tunnel='ssh -D 8080 -f -q -N vpn && watch -n60 ./.dotfiles/tmux/tunnel-status.sh'
+alias tunnel='ssh -D 8080 -f -q -N vpn'
 alias rnginx='sudo nginx -s stop && sudo nginx'
 alias fphp='php-fpm -g /usr/local/var/run/php-fpm.pid'
 alias timer='pomojs -t -q 25 5 '

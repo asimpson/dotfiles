@@ -5,5 +5,5 @@ if [ -z "$ACTIVITY" ]
 then
   echo ""
 else
-  echo '⇅ | '
+  echo '⚡️'
 fi

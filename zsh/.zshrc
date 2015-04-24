@@ -61,7 +61,6 @@ if [ -f ~/.dotfiles/bash/aliases ]; then
   source ~/.dotfiles/bash/aliases
 fi
 
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 PATH=$PATH:/usr/local/share/npm/bin
 PATH=/usr/local/bin:$PATH
 
@@ -121,3 +120,4 @@ elif type compctl &>/dev/null; then
 fi
 ###-end-bower-completion-###
 
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting

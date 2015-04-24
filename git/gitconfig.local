@@ -36,4 +36,8 @@
   fbase = fetch && rebase origin/master
   xc = !clear
   sl = log --name-only --oneline
+  merged = branch --merged master
+  nomerged = branch --no-merged master
+  development = !divshot push development
+  updated = show --name-only --oneline
 
