@@ -180,7 +180,7 @@ set undofile
 set undolevels=1000 "maximum number of changes that can be undone
 set undoreload=10000 "maximum number lines to save for undo on a buffer reload
 
-set guifont=Source\ Code\ Pro:h12
+set guifont=Source\ Code\ Pro:h11
 
 command! -nargs=* Wrap set wrap linebreak nolist
 autocmd QuickFixCmdPost *grep* cwindow

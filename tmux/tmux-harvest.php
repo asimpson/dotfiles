@@ -37,7 +37,7 @@
 
     foreach($data["day_entries"] as $entry) {
       $project = $entry["project"];
-      $formattedProject = (strlen($project) > 15) ? substr($project,0,15).'[...]' : $project;
+      $formattedProject = (strlen($project) > 15) ? substr($project,0,15).'' : $project;
 
       if ( array_key_exists("timer_started_at", $entry) ) {
         $timer_running = true;

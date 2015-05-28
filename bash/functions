@@ -100,3 +100,5 @@ function nb() {
   name=$1;
   git checkout -b ${name} origin/${name};
 }
+
+alias fuck='$(thefuck $(fc -ln -1))'
