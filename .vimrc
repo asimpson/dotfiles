@@ -20,6 +20,8 @@ nnoremap <leader>T :NERDTreeToggle<cr>
 nnoremap <leader>ss :set wrap<cr>
 nnoremap <leader>sm :set wm=2<cr>
 nnoremap <leader>h :set wm=2<cr>
+"http://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
+nnoremap <CR> G
 
 if (&tildeop)
   nmap gcc guu~l
@@ -92,7 +94,6 @@ Plugin 'tmhedberg/matchit'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'git://github.com/vim-scripts/Tabmerge.git'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'mhinz/vim-startify'
 Plugin 'gregsexton/MatchTag'
 Plugin 'rking/ag.vim'
 Plugin 'mattn/webapi-vim'
@@ -184,3 +185,9 @@ set guifont=Source\ Code\ Pro:h11
 
 command! -nargs=* Wrap set wrap linebreak nolist
 autocmd QuickFixCmdPost *grep* cwindow
+let NERDTreeHijackNetrw=1
+
+"http://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
+vnoremap <silent> s //e<C-r>=&selection=='exclusive'?'+1':''<CR><CR>
+    \:<C-u>call histdel('search',-1)<Bar>let @/=histget('search',-1)<CR>gv
+omap s :normal vs<CR>
