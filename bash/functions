@@ -7,6 +7,15 @@ function 64enc() {
   echo "$1 encoded to clipboard"
 }
 
+function tunnel_off {
+  PID="$(ps aux | grep $1 | grep -v grep | awk '{print $2}')";
+  kill ${PID} && networksetup -setsocksfirewallproxystate Wi-Fi off;
+}
+
+function tunnel {
+  ssh -D 8080 -f -q -N $1 && networksetup -setsocksfirewallproxystate Wi-Fi on
+}
+
 function muxdef {
   tmux send-keys "v" C-m;
   tmux split-window -v;
@@ -15,7 +24,7 @@ function muxdef {
 }
 
 function marked {
-  open -a Marked.app $@
+  open -a Marked\ 2.app $@
 }
 
 # Install a grunt plugin and save to devDependencies

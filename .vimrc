@@ -81,7 +81,7 @@ call vundle#begin()
 
 Plugin 'gmarik/Vundle.vim'
 Plugin 'scrooloose/nerdtree'
-Plugin 'pangloss/vim-javascript'
+Plugin 'othree/yajs.vim'
 Plugin 'mustache/vim-mustache-handlebars'
 Plugin 'yssl/QFEnter'
 Plugin 'chriskempson/base16-vim'
