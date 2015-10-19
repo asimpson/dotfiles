@@ -106,6 +106,7 @@ Plugin 'mattn/emmet-vim'
 Plugin 'henrik/vim-qargs'
 Plugin 'mikewest/vimroom'
 Plugin 'itspriddle/vim-marked'
+Plugin 'justbrettjones/vim-swigjs'
 
 call vundle#end()            " required
 filetype plugin indent on  
@@ -181,7 +182,8 @@ set undofile
 set undolevels=1000 "maximum number of changes that can be undone
 set undoreload=10000 "maximum number lines to save for undo on a buffer reload
 
-set guifont=Source\ Code\ Pro:h11
+set guifont=Hack:h10
+set exrc
 
 command! -nargs=* Wrap set wrap linebreak nolist
 autocmd QuickFixCmdPost *grep* cwindow

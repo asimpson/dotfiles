@@ -1,10 +1,6 @@
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
 
-if [ -x /usr/local/bin/mvim ]; then
-    alias v="mvim -v"
-fi
-
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
@@ -48,7 +44,7 @@ setopt HIST_FIND_NO_DUPS
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git ht git-aliases brew npm osx rvm urltools )
+plugins=(git ht git-aliases brew npm osx rvm urltools)
 setopt complete_aliases
 
 source $ZSH/oh-my-zsh.sh
@@ -62,65 +58,11 @@ if [ -f ~/.dotfiles/bash/aliases ]; then
 fi
 
 PATH=$PATH:/usr/local/share/npm/bin
-PATH=/usr/local/bin:$PATH
-
-# Credits to npm's. Awesome completion utility.
-#
-# Bower completion script, based on npm completion script.
-
-###-begin-bower-completion-###
-#
-# Installation: bower completion >> ~/.bashrc  (or ~/.zshrc)
-# Or, maybe: bower completion > /usr/local/etc/bash_completion.d/npm
-#
-
-COMP_WORDBREAKS=${COMP_WORDBREAKS/=/}
-COMP_WORDBREAKS=${COMP_WORDBREAKS/@/}
-export COMP_WORDBREAKS
-
-if type complete &>/dev/null; then
-  _bower_completion () {
-    local si="$IFS"
-    IFS=$'\n' COMPREPLY=($(COMP_CWORD="$COMP_CWORD" \
-                           COMP_LINE="$COMP_LINE" \
-                           COMP_POINT="$COMP_POINT" \
-                           bower completion -- "${COMP_WORDS[@]}" \
-                           2>/dev/null)) || return $?
-    IFS="$si"
-  }
-  complete -F _bower_completion bower
-elif type compdef &>/dev/null; then
-  _bower_completion() {
-    si=$IFS
-    compadd -- $(COMP_CWORD=$((CURRENT-1)) \
-                 COMP_LINE=$BUFFER \
-                 COMP_POINT=0 \
-                 bower completion -- "${words[@]}" \
-                 2>/dev/null)
-    IFS=$si
-  }
-  compdef _bower_completion bower
-elif type compctl &>/dev/null; then
-  _bower_completion () {
-    local cword line point words si
-    read -Ac words
-    read -cn cword
-    let cword-=1
-    read -l line
-    read -ln point
-    si="$IFS"
-    IFS=$'\n' reply=($(COMP_CWORD="$cword" \
-                       COMP_LINE="$line" \
-                       COMP_POINT="$point" \
-                       bower completion -- "${words[@]}" \
-                       2>/dev/null)) || return $?
-    IFS="$si"
-  }
-  compctl -K _bower_completion bower
-fi
-###-end-bower-completion-###
-
+PATH=$PATH:/usr/local/lib/node_modules
+PATH=/usr/local/opt/coreutils/libexec/gnubin:$PATH
+PATH=/usr/local/sbin:$PATH
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+PATH=/usr/local/bin:$PATH
 
 export DOCKER_CERT_PATH=/Users/asimpson/.boot2docker/certs/boot2docker-vm
 export DOCKER_TLS_VERIFY=1

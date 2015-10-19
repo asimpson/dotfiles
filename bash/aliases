@@ -68,3 +68,8 @@ alias cleanup='remote prune origin && git gc && git clean -dfx && git stash clea
 
 alias vpnc_start='sudo /usr/local/sbin/vpnc'
 alias vpnc_end='sudo /usr/local/sbin/vpnc-disconnect'
+
+if [ -x /usr/local/bin/mvim ]; then
+  alias v="mvim -v"
+fi
+
