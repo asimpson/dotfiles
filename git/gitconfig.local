@@ -1,17 +1,13 @@
-#[user]
-	#name = John Doe
-	#email = email
-#[commit]
-	#template = path/to/commit/template
-#[core]
-	#excludesfile = path/to/excludes/file
-	#editor = foo
-#[credential]
-	#helper = foo
-#[github]
-	#user = username
-#[include]
-    #path = path/to/additional/config
+[core]
+  excludesfile = /Users/asimpson/.master_git_ignore
+	editor = vim
+[user]
+	email = adam@heysparkbox.com
+	name = Adam Simpson
+[commit]
+  template = /Users/asimpson/.gitmessage.txt
+[github]
+	user = asimpson
 [color]
 	ui = true
 [color "branch"]
@@ -40,4 +36,6 @@
   nomerged = branch --no-merged master
   development = !divshot push development
   updated = show --name-only --oneline
+[init]
+	templatedir = ~/.git-templates
 

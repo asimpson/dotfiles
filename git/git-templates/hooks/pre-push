@@ -1,0 +1,20 @@
+#!/bin/sh
+# Called by "git push" after it has checked the remote status, but before anything has been
+# pushed.  If this script exits with a non-zero status nothing will be pushed.
+source ~/.git_words.sh
+
+IS_CLEAN=true
+
+for i in "${words[@]}"
+do
+    RESULTS=$(git grep -l "$i");
+
+    if [[ ! -z "$RESULTS" ]]; then
+        IS_CLEAN=false;
+        echo "Found $i in file:\n$RESULTS\n";
+    fi
+done
+
+if [[ "$IS_CLEAN" = false ]]; then
+    exit 1;
+fi
