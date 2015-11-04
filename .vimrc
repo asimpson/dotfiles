@@ -22,6 +22,8 @@ nnoremap <leader>sm :set wm=2<cr>
 nnoremap <leader>h :set wm=2<cr>
 "http://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
 nnoremap <CR> G
+map <Leader>vm :VimuxPromptCommand<CR>
+map <Leader>rvm :VimuxRunLastCommand<CR>
 
 if (&tildeop)
   nmap gcc guu~l
@@ -107,6 +109,7 @@ Plugin 'henrik/vim-qargs'
 Plugin 'mikewest/vimroom'
 Plugin 'itspriddle/vim-marked'
 Plugin 'justbrettjones/vim-swigjs'
+Plugin 'benmills/vimux'
 
 call vundle#end()            " required
 filetype plugin indent on  
