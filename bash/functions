@@ -27,21 +27,8 @@ function marked {
   open -a Marked\ 2.app $@
 }
 
-# Install a grunt plugin and save to devDependencies
-function gi() {
-  npm install --save-dev grunt-"$@"
-}
-
-# Install a grunt-contrib plugin and save to devDependencies
-function gci() {
-  npm install --save-dev grunt-contrib-"$@"
-}
-
 function man {
   open dash://man:$1
-}
-function gfind {
-  awk "/#\[$1-start\]/,/#\[$1-end\]/ { print }" ~/.dotfiles/bash/aliases
 }
 
 function grab {

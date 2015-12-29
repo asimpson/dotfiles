@@ -59,7 +59,7 @@ fi
 
 PATH=$PATH:/usr/local/share/npm/bin
 PATH=$PATH:/usr/local/lib/node_modules
-PATH=/usr/local/opt/coreutils/libexec/gnubin:$PATH
+# PATH=/usr/local/opt/coreutils/libexec/gnubin:$PATH
 PATH=/usr/local/sbin:$PATH
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 PATH=/usr/local/bin:$PATH

@@ -36,6 +36,6 @@
   nomerged = branch --no-merged master
   development = !divshot push development
   updated = show --name-only --oneline
+  gpno = push --no-verify
 [init]
 	templatedir = ~/.git-templates
-

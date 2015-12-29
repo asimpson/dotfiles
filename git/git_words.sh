@@ -1,6 +1,6 @@
 #!/bin/sh
 words=(
-    console
-    crap
+    console.log
+    debugger
     butts 
 );
