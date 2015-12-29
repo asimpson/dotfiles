@@ -17,10 +17,10 @@ function tunnel {
 }
 
 function muxdef {
-  tmux send-keys "v" C-m;
   tmux split-window -v;
-  tmux split-window -h;
-  tmux send-keys "gitsh" C-m;
+  tmux split-window -t 1 -h;
+  tmux send-keys -t 0 "v" C-m;
+  tmux send-keys -t 2 "gitsh" C-m;
 }
 
 function marked {
