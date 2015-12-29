@@ -24,7 +24,6 @@ alias rlink="rdio link | pbcopy"
 alias rmt='trash'
 alias zipAll='for i in */; do zip -r "${i%/}.zip" "$i"; done'
 alias attach="tmux attach-session -t "
-alias tnew="tmux new -s "
 alias tls="tmux ls "
 alias thelp="tmux lscm"
 alias pg-start="pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start"

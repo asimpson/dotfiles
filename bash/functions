@@ -23,6 +23,15 @@ function muxdef {
   tmux send-keys -t 2 "gitsh" C-m;
 }
 
+function tnew {
+  tmux new-session -d -s $1;
+  tmux split-window -v;
+  tmux split-window -t 1 -h;
+  tmux send-keys -t 0 "v" C-m;
+  tmux send-keys -t 2 "gitsh" C-m;
+  tmux attach-session -t $1;
+}
+
 function marked {
   open -a Marked\ 2.app $@
 }
