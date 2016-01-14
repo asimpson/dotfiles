@@ -7,6 +7,24 @@ function 64enc() {
   echo "$1 encoded to clipboard"
 }
 
+function alert() {
+  file="/Users/asimpson/.sendgrid-key";
+
+  if [ -f "$file" ]; then
+    source "$file";
+    curl -F "to=$email" \
+    -F "toname=Boxcar" \
+    -F "subject=$1" \
+    -F "text= " \
+    -F "from=adam@adamsimpson.net" \
+    -F "api_user=a_simpson" \
+    -F "api_key=$key" \
+    https://api.sendgrid.com/api/mail.send.json;
+  else
+    echo "$file not found";
+  fi
+}
+
 function tunnel_off {
   PID="$(ps aux | grep $1 | grep -v grep | awk '{print $2}')";
   kill ${PID} && networksetup -setsocksfirewallproxystate Wi-Fi off;
