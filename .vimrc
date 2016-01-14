@@ -24,6 +24,9 @@ nnoremap <leader>h :set wm=2<cr>
 nnoremap <CR> G
 map <Leader>vm :VimuxPromptCommand<CR>
 map <Leader>rvm :VimuxRunLastCommand<CR>
+" Due to internal representation, Vim has problems with long lines in general.
+" https://github.com/mhinz/vim-galore#editing-small-files-is-slow
+set synmaxcol=200
 
 if (&tildeop)
   nmap gcc guu~l
@@ -196,3 +199,17 @@ let NERDTreeHijackNetrw=1
 vnoremap <silent> s //e<C-r>=&selection=='exclusive'?'+1':''<CR><CR>
     \:<C-u>call histdel('search',-1)<Bar>let @/=histget('search',-1)<CR>gv
 omap s :normal vs<CR>
+
+function! ToggleColumn()
+    let test = &g:colorcolumn
+
+    if test == 80
+      set colorcolumn&
+      echo "turning column off"
+    else
+      set cc=80
+      echo "turning colummn on"
+    endif
+endfunction
+
+nmap <silent><leader>l  :call ToggleColumn()<CR>
