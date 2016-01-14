@@ -35,6 +35,7 @@ alias ss='svn status'
 alias sr='svn revert '
 alias su='svn update'
 alias sdiff='svn diff '
+alias makemkv='/Applications/MakeMKV.app/Contents/MacOS/makemkvcon '
 #[misc-end]
 
 #[git-start]
