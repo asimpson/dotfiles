@@ -9,6 +9,14 @@ ZSH_THEME="pure"
 autoload -U promptinit && promptinit
 # prompt pure
 
+if [ -n "$INSIDE_EMACS" ]; then
+    export TERM=xterm-256color
+    # export LANG='en_US.UTF-8'
+    # export LC_ALL="en_US.UTF-8"
+    export ZSH_THEME="minimal"
+    export PROMPT_COMMAND=""
+fi
+
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
@@ -32,8 +40,6 @@ DISABLE_AUTO_TITLE="true"
 COMPLETION_WAITING_DOTS="true"
 
 HISTFILE=$HOME/.zsh_history
-HISTSIZE=1000
-SAVEHIST=1000
 setopt APPEND_HISTORY
 setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_ALL_DUPS
@@ -49,20 +55,9 @@ setopt complete_aliases
 
 source $ZSH/oh-my-zsh.sh
 
-if [ -f ~/.dotfiles/bash/functions ]; then
-  source ~/.dotfiles/bash/functions
+if [ -f ~/.bash_profile ]; then
+  source ~/.bash_profile
 fi
-
-if [ -f ~/.dotfiles/bash/aliases ]; then
-  source ~/.dotfiles/bash/aliases
-fi
-
-PATH=$PATH:/usr/local/share/npm/bin
-PATH=$PATH:/usr/local/lib/node_modules
-# PATH=/usr/local/opt/coreutils/libexec/gnubin:$PATH
-PATH=/usr/local/sbin:$PATH
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-PATH=/usr/local/bin:$PATH
 
 export DOCKER_CERT_PATH=/Users/asimpson/.boot2docker/certs/boot2docker-vm
 export DOCKER_TLS_VERIFY=1

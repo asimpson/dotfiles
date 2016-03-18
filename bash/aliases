@@ -36,6 +36,7 @@ alias sr='svn revert '
 alias su='svn update'
 alias sdiff='svn diff '
 alias makemkv='/Applications/MakeMKV.app/Contents/MacOS/makemkvcon '
+alias history='history -f'
 #[misc-end]
 
 #[git-start]
