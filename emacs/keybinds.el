@@ -64,3 +64,32 @@
 (key-chord-define-global "//" 'comment-region)
 ;uncomment line/region
 (key-chord-define-global "??" 'uncomment-region)
+
+(global-set-key (kbd "s-=") 'text-scale-increase)
+(global-set-key (kbd "s--") 'text-scale-decrease)
+
+(setq escreen-prefix-char (kbd "S-SPC s"))
+(global-set-key escreen-prefix-char 'escreen-prefix)
+
+(defun save-windows ()
+  "saves windows position"
+  (interactive)
+  (message "window saved")
+  (window-configuration-to-register 0)
+  (delete-other-windows))
+
+(defun restore-windows ()
+  "restores windows position"
+  (interactive)
+  (jump-to-register 0))
+
+(global-set-key (kbd "S-SPC z") 'save-windows)
+(global-set-key (kbd "S-SPC Z") 'restore-windows)
+
+;; (defun print-path ()
+;;   "Print out current buffer path"
+;;   (interactive)
+;;   (message (buffer-file-name)))
+
+;(global-set-key (kbd "S-SPC p") 'print-path)
+(global-set-key (kbd "S-SPC S") 'escreen-menu)

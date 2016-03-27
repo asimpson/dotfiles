@@ -151,3 +151,24 @@
 
 ;Every time when the neotree window is opened, let it find current file and jump to node.
 (setq neo-smart-open t)
+
+;open txt or md files in Marked 2
+(setq markdown-open-command "/usr/local/bin/marked")
+
+;load escreen
+(load "escreen")
+(escreen-install)
+
+;http://whattheemacsd.com/appearance.el-01.html
+(defmacro rename-modeline (package-name mode new-name)
+  `(eval-after-load ,package-name
+     '(defadvice ,mode (after rename-modeline activate)
+        (setq mode-name ,new-name))))
+
+(rename-modeline "js2-mode" js2-mode "JS")
+
+(setq-default header-line-format
+  (list
+    '(:eval (concat " ▼ " (buffer-file-name)))
+  )
+)
