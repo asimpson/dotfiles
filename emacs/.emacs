@@ -3,8 +3,6 @@
 (package-initialize)
 (require 'evil)
 (evil-mode 1)
-(load "~/.emacs.d/keybinds.el")
-(load "~/.emacs.d/settings.el")
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -63,3 +61,6 @@ depending on it."
 
 ;prevent new frame
 (defun switch-to-buffer-other-frame ())
+
+(load "~/.emacs.d/settings.el")
+(load "~/.emacs.d/keybinds.el")
