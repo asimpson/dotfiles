@@ -95,6 +95,13 @@
 (setq org-todo-keywords
       '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
 
+;capture template http://blog.aaronbieber.com/2016/01/30/dig-into-org-mode.html
+(setq org-capture-templates
+      '(("a" "My TODO task format." entry
+         (file "~/Dropbox (Personal)/org/tasks.org")
+         "* TODO %?
+:CREATED: %T")))
+
 ;set up multiterm as login shell
 (setq multi-term-program "/bin/zsh")
 (setq multi-term-program-switches "--login")
@@ -166,9 +173,12 @@
         (setq mode-name ,new-name))))
 
 (rename-modeline "js2-mode" js2-mode "JS")
+(setq js2-basic-offset 2)
 
 (setq-default header-line-format
   (list
     '(:eval (concat " ▼ " (buffer-file-name)))
   )
 )
+
+(require 'evil-magit)

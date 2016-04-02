@@ -25,6 +25,7 @@
 (define-key evil-normal-state-map "\C-p" 'helm-projectile-find-file)
 ;helm + projectile do ag search
 (evil-leader/set-key "f" 'helm-projectile-ag)
+(evil-leader/set-key "F" 'helm-do-ag)
 
 ;git-gutter navigate hunks
 (global-set-key (kbd "C-x p") 'git-gutter:previous-hunk)
@@ -32,7 +33,7 @@
 
 ;magit status key
 (global-set-key (kbd "C-SPC") nil)
-(global-set-key (kbd "C-SPC") 'magit-status)
+(global-set-key (kbd "C-SPC g") 'magit-status)
 
 ;toggle emmet
 (global-set-key (kbd "C-c e") 'emmet-expand-line)
@@ -68,7 +69,7 @@
 (global-set-key (kbd "s-=") 'text-scale-increase)
 (global-set-key (kbd "s--") 'text-scale-decrease)
 
-(setq escreen-prefix-char (kbd "S-SPC s"))
+(setq escreen-prefix-char (kbd "C-SPC s"))
 (global-set-key escreen-prefix-char 'escreen-prefix)
 
 (defun save-windows ()
@@ -83,8 +84,8 @@
   (interactive)
   (jump-to-register 0))
 
-(global-set-key (kbd "S-SPC z") 'save-windows)
-(global-set-key (kbd "S-SPC Z") 'restore-windows)
+(global-set-key (kbd "C-SPC z") 'save-windows)
+(global-set-key (kbd "C-SPC Z") 'restore-windows)
 
 ;; (defun print-path ()
 ;;   "Print out current buffer path"
@@ -92,4 +93,14 @@
 ;;   (message (buffer-file-name)))
 
 ;(global-set-key (kbd "S-SPC p") 'print-path)
-(global-set-key (kbd "S-SPC S") 'escreen-menu)
+(global-set-key (kbd "C-SPC S") 'escreen-menu)
+
+;http://blog.aaronbieber.com/2016/01/30/dig-into-org-mode.html
+(defun simpson-org-task-capture ()
+  "Capture a task with my default template."
+  (interactive)
+  (org-capture nil "a"))
+
+(define-key global-map (kbd "C-SPC c") 'simpson-org-task-capture)
+
+(define-key global-map (kbd "C-SPC t") 'org-agenda)
