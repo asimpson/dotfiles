@@ -182,3 +182,28 @@
 )
 
 (require 'evil-magit)
+(setenv "GPG_AGENT" "/usr/local/bin/gpg-agent")
+;;read gpg-agent environment
+;;https://gist.github.com/jupp0r/08ca64b7c14c6093bba2
+(defun read-env-line (line)
+  "read a env line and post to environment"
+  (let ((key-value-pair (split-string line "=" t)))
+    ;car returns first value in list, last return last value
+    (setenv (car key-value-pair) (car (last key-value-pair))))
+  )
+(defvar gpg-agent-info-file)
+(setq gpg-agent-info-file (concat (getenv "HOME") "/.gpg-agent-info"))
+(when
+    ;this is the condition for when
+    (file-exists-p gpg-agent-info-file)
+  (with-temp-buffer
+    ;create a temp buffer and evalute the BODY of the function
+    (progn
+      ;insert the gpg-agent-info file as a string to the temp buffer
+      (insert-file-contents gpg-agent-info-file)
+      ;mapc is like map but doesn't accumulate the results
+      ;buffer-string is now our temp-buffer which is filled with our gpg file.
+      ;split at new lines
+      (mapc 'read-env-line (split-string (buffer-string) "\n" t)))
+))
+(setq epg-gpg-program "/usr/local/bin/gpg")

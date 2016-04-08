@@ -14,3 +14,9 @@ PATH="$PATH:/usr/local/lib/node_modules"
 PATH="/usr/local/sbin:$PATH"
 PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 PATH="/usr/local/bin:$PATH"
+
+############################
+# gpg-agent
+############################
+GPG_AGENT="/usr/local/bin/gpg-agent"
+export GPG_TTY=$(tty)
