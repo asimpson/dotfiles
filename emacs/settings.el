@@ -37,7 +37,8 @@
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.php?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.js?\\'" . js2-mode))
-(add-to-list 'auto-mode-alist '("\\.scss\\'" . scss-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx?\\'" . js2-mode))
+(add-to-list 'auto-mode-alist '("\\.scss\\'" . css-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 (autoload 'markdown-mode "markdown-mode"
    "Major mode for editing Markdown files" t)
@@ -54,12 +55,6 @@
 (projectile-global-mode)
 ;projectile no-cache (enable if on a big project)
 (setq projectile-enable-caching nil)
-
-;scss settings
-;scss not css
-(autoload 'scss-mode "scss-mode")
-;dont compile on save
-(setq scss-compile-at-save nil)
 
 ;powerline default themej
 (powerline-default-theme)
@@ -175,6 +170,9 @@
 (rename-modeline "js2-mode" js2-mode "JS")
 (setq js2-basic-offset 2)
 
+;hide minor modes
+;(setq minor-mode-alist "")
+
 (setq-default header-line-format
   (list
     '(:eval (concat " ▼ " (buffer-file-name)))
@@ -182,6 +180,10 @@
 )
 
 (require 'evil-magit)
+
+;; To load at the start up
+(require 'reveal-in-osx-finder)
+
 (setenv "GPG_AGENT" "/usr/local/bin/gpg-agent")
 ;;read gpg-agent environment
 ;;https://gist.github.com/jupp0r/08ca64b7c14c6093bba2
@@ -207,3 +209,6 @@
       (mapc 'read-env-line (split-string (buffer-string) "\n" t)))
 ))
 (setq epg-gpg-program "/usr/local/bin/gpg")
+;y over yes
+;http://pages.sachachua.com/.emacs.d/Sacha.html#orgheadline15
+(fset 'yes-or-no-p 'y-or-n-p)
