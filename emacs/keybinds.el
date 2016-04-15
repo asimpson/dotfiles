@@ -19,8 +19,6 @@
 (global-set-key (kbd "M-x") 'helm-M-x)
 ;helm buffers list
 (global-set-key (kbd "C-=") 'helm-buffers-list)
-;helm find files
-(global-set-key (kbd "C-SPC f") 'helm-find-files)
 ;helm + projectfile find files
 (define-key evil-normal-state-map "\C-p" 'helm-projectile-find-file)
 ;helm + projectile do ag search
@@ -105,3 +103,5 @@
 
 (define-key global-map (kbd "C-SPC t") 'org-agenda)
 (global-set-key "\M-h" 'help-command)
+;helm find files
+(define-key global-map (kbd "C-SPC f") 'helm-find-files)
