@@ -20,3 +20,7 @@ PATH="/usr/local/bin:$PATH"
 ############################
 GPG_AGENT="/usr/local/bin/gpg-agent"
 export GPG_TTY=$(tty)
+
+if [ -f ${GPG_AGENT} ]; then
+  . ~/.bash_gpg
+fi
