@@ -101,7 +101,11 @@
 
 (define-key global-map (kbd "C-SPC c") 'simpson-org-task-capture)
 
-(define-key global-map (kbd "C-SPC t") 'org-agenda)
+;(define-key global-map (kbd "C-SPC t") 'org-agenda)
+(define-key global-map (kbd "C-SPC t") 'org-todo-list)
+
+(define-key global-map (kbd "C-SPC T") 'org-tags-view)
+
 (setq minor-mode-perm-list (copy-alist minor-mode-alist))
 
 (setq minor-mode-alist (list))

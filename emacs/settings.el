@@ -84,8 +84,11 @@
 (setq org-capture-templates
       '(("a" "My TODO task format." entry
          (file "~/Dropbox (Personal)/org/tasks.org")
-         "* TODO %?
+         "* TODO %? %^g
 :CREATED: %T")))
+
+;restore windows after org-todo-list closes
+(setq org-agenda-restore-windows-after-quit t)
 
 ;set up multiterm as login shell
 (setq multi-term-program "/bin/zsh")
