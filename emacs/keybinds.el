@@ -102,6 +102,18 @@
 (define-key global-map (kbd "C-SPC c") 'simpson-org-task-capture)
 
 (define-key global-map (kbd "C-SPC t") 'org-agenda)
+(setq minor-mode-perm-list (copy-alist minor-mode-alist))
+
+(setq minor-mode-alist (list))
+
+(defun simpson-toggle-minors ()
+  "toggle minor modes on and off"
+  (interactive)
+  (if (equal minor-mode-alist minor-mode-perm-list)
+      (setq minor-mode-alist (list))
+    (setq minor-mode-alist (copy-alist minor-mode-perm-list))))
+
+(define-key global-map (kbd "C-SPC m") 'simpson-toggle-minors)
 (global-set-key "\M-h" 'help-command)
 ;helm find files
 (define-key global-map (kbd "C-SPC f") 'helm-find-files)

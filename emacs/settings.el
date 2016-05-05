@@ -56,16 +56,6 @@
 ;projectile no-cache (enable if on a big project)
 (setq projectile-enable-caching nil)
 
-;powerline default themej
-(powerline-default-theme)
-;https://github.com/milkypostman/powerline/issues/54
-(setq ns-use-srgb-colorspace nil)
-;slant variation of powerline
-(setq powerline-default-separator 'slant)
-;spacemacs color
-(require 'spaceline-config)
-(spaceline-spacemacs-theme)
-
 ;backups suck, use Git
 (setq make-backup-files nil) ; stop creating backup~ files
 ;backups suck, use Git
@@ -170,9 +160,6 @@
 (rename-modeline "js2-mode" js2-mode "JS")
 (setq js2-basic-offset 2)
 
-;hide minor modes
-;(setq minor-mode-alist "")
-
 (setq-default header-line-format
   (list
     '(:eval (concat " ▼ " (buffer-file-name)))
@@ -209,6 +196,21 @@
       (mapc 'read-env-line (split-string (buffer-string) "\n" t)))
 ))
 (setq epg-gpg-program "/usr/local/bin/gpg")
+
 ;y over yes
 ;http://pages.sachachua.com/.emacs.d/Sacha.html#orgheadline15
 (fset 'yes-or-no-p 'y-or-n-p)
+
+(setq-default mode-line-format (list
+  mode-line-modified 
+  evil-mode-line-tag
+  " "
+  mode-line-buffer-identification
+  " "
+  mode-line-position
+  '(vc-mode vc-mode)
+  " "
+  mode-line-modes
+  mode-line-misc-info
+  (format-time-string "%I:%M - %m/%d")
+))
