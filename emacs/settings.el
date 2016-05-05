@@ -162,6 +162,10 @@
 
 (rename-modeline "js2-mode" js2-mode "JS")
 (setq js2-basic-offset 2)
+;all that syntax
+(setq js2-highlight-level 3)
+(setq js2-bounce-indent-p t)
+(electric-indent-mode -1)
 
 (setq-default header-line-format
   (list

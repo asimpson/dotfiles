@@ -118,6 +118,15 @@
     (setq minor-mode-alist (copy-alist minor-mode-perm-list))))
 
 (define-key global-map (kbd "C-SPC m") 'simpson-toggle-minors)
+
+;revert buffer to last-commit
+(define-key global-map (kbd "C-SPC r") 'vc-revert)
+
 (global-set-key "\M-h" 'help-command)
+
 ;helm find files
 (define-key global-map (kbd "C-SPC f") 'helm-find-files)
+
+;write buffer to fil0
+(define-key global-map (kbd "C-SPC w") 'write-file)
+
