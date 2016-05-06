@@ -65,7 +65,10 @@
 (global-git-gutter-mode t)
 ;git-gutter play nice with line numbers
 (git-gutter:linum-setup)
+(setq git-gutter:ask-p nil)
 ;try to stay up to date git-gutter, please?
+(setq git-gutter:update-interval 1)
+(git-gutter:start-update-timer)
 (add-hook 'git-gutter:update-hooks 'magit-after-revert-hook)
 (add-hook 'git-gutter:update-hooks 'magit-not-reverted-hook)
 
