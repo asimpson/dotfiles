@@ -170,11 +170,27 @@
 (setq js2-bounce-indent-p t)
 (electric-indent-mode -1)
 
-(setq-default header-line-format
-  (list
-    '(:eval (concat " ▼ " (buffer-file-name)))
+(defun simpson-header ()
+  (setq-default header-line-format
+    (list
+      ;16 characters = /Users/asimpson/
+      (if (stringp (buffer-file-name))
+        '(:eval (concat " ▼ ../" (substring (buffer-file-name) 16 nil)))
+      "¯\_(ツ)_/¯"
+      )
+    )
   )
 )
+
+;set the header intially
+(simpson-header)
+
+;update the header whenever the buffer-list changes
+(add-hook 'buffer-list-update-hook 'simpson-header)
+
+;change header line color to match ocean dark
+(set-face-attribute 'header-line nil
+    :foreground "#a3adb5")
 
 (require 'evil-magit)
 
@@ -215,12 +231,15 @@
   mode-line-modified 
   evil-mode-line-tag
   " "
-  mode-line-buffer-identification
-  " "
   mode-line-position
   '(vc-mode vc-mode)
   " "
   mode-line-modes
   mode-line-misc-info
-  (format-time-string "%I:%M - %m/%d")
 ))
+
+;colors are set for ocean dark
+(set-face-attribute 'mode-line nil
+    :box '(:line-width 4 :color "#4f5b66" :style nil))
+(set-face-attribute 'mode-line-inactive nil
+    :box '(:line-width 4 :color "#343d46" :style nil))
