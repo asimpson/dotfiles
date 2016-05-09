@@ -171,16 +171,17 @@
 (electric-indent-mode -1)
 
 (defun simpson-header ()
-  (setq-default header-line-format
+  (setq header-line-format
     (list
       ;16 characters = /Users/asimpson/
       (if (stringp (buffer-file-name))
-        '(:eval (concat " ▼ ../" (substring (buffer-file-name) 16 nil)))
+        (eval (concat " ▼ ../" (substring (buffer-file-name) 16 nil)))
       "¯\_(ツ)_/¯"
       )
-    )
-  )
+  ))
 )
+)
+
 
 ;set the header intially
 (simpson-header)
@@ -189,8 +190,7 @@
 (add-hook 'buffer-list-update-hook 'simpson-header)
 
 ;change header line color to match ocean dark
-(set-face-attribute 'header-line nil
-    :foreground "#a3adb5")
+(set-face-foreground 'header-line "#a3adb5")
 
 (require 'evil-magit)
 
@@ -227,19 +227,53 @@
 ;http://pages.sachachua.com/.emacs.d/Sacha.html#orgheadline15
 (fset 'yes-or-no-p 'y-or-n-p)
 
+(defvar simpson-project-name()
+  (:eval (when (ignore-errors (projectile-project-root))
+    (concat " / " (projectile-project-name))))
+)
+
 (setq-default mode-line-format (list
-  mode-line-modified 
-  evil-mode-line-tag
+  ;mode-line-modified
+  " "
+  '(:eval (if (buffer-modified-p)
+      (propertize "✖" 'face '(:foreground "#cf6a4c"))
+    (propertize "✔" 'face '(:foreground "#8f9d6a"))
+  ))
+  " "
+  '(:eval (propertize evil-mode-line-tag 'face '(:foreground "#ebcb8b")))
   " "
   mode-line-position
+  " ["
   '(vc-mode vc-mode)
-  " "
+  " ] "
   mode-line-modes
   mode-line-misc-info
 ))
 
 ;colors are set for ocean dark
 (set-face-attribute 'mode-line nil
-    :box '(:line-width 4 :color "#4f5b66" :style nil))
+    :box '(:line-width 3 :color "#4f5b66" :style nil))
 (set-face-attribute 'mode-line-inactive nil
-    :box '(:line-width 4 :color "#343d46" :style nil))
+    :box '(:line-width 3 :color "#343d46" :style nil))
+
+(set-face-foreground 'vertical-border "#4f5b66")
+(set-face-background 'fringe "#2b303b")
+(set-face-background 'linum "#2b303b")
+
+
+;magit theme changes for ocean 16
+(set-face-foreground 'magit-blame-date "#ebcb8b")
+(set-face-foreground 'magit-blame-hash "#ebcb8b")
+(set-face-foreground 'magit-blame-heading "#ebcb8b")
+(set-face-foreground 'magit-blame-name "#ebcb8b")
+(set-face-foreground 'magit-blame-summary "#ebcb8b")
+(set-face-foreground 'magit-sequence-onto "#ebcb8b")
+(set-face-foreground 'magit-sequence-done "#ebcb8b")
+
+(set-face-foreground 'magit-hash "#96b5b4")
+(set-face-background 'magit-section-highlight "#343d46")
+
+;org theme changes for ocean 16
+(set-face-foreground 'org-link "#a3be8c")
+(set-face-foreground 'org-tag "#ebcb8b")
+(set-face-foreground 'org-agenda-structure "#65737e")
