@@ -2,6 +2,7 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (package-initialize)
 (require 'evil)
+(require 'org)
 (evil-mode 1)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

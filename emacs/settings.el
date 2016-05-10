@@ -171,8 +171,6 @@
       )
   ))
 )
-)
-
 
 ;set the header intially
 (simpson-header)
