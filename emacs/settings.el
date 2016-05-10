@@ -61,16 +61,7 @@
 ;backups suck, use Git
 (setq auto-save-default nil)
 
-;git-gutter on
-(global-git-gutter-mode t)
-;git-gutter play nice with line numbers
-(git-gutter:linum-setup)
-(setq git-gutter:ask-p nil)
-;try to stay up to date git-gutter, please?
-(setq git-gutter:update-interval 1)
-(git-gutter:start-update-timer)
-(add-hook 'git-gutter:update-hooks 'magit-after-revert-hook)
-(add-hook 'git-gutter:update-hooks 'magit-not-reverted-hook)
+(add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
 
 ;splash screen is gross
 (setq inhibit-splash-screen t)
@@ -277,3 +268,8 @@
 (set-face-foreground 'org-link "#a3be8c")
 (set-face-foreground 'org-tag "#ebcb8b")
 (set-face-foreground 'org-agenda-structure "#65737e")
+
+;diff-hl changes for ocean 16
+(set-face-background 'diff-hl-change "#96b5b4")
+(set-face-background 'diff-hl-insert "#a3be8c")
+(set-face-background 'diff-hl-delete "#d08770")

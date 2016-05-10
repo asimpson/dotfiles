@@ -34,10 +34,7 @@ depending on it."
 (require 'projectile)
 (require 'helm-projectile)
 (helm-projectile-on)
-(require 'powerline)
-(require 'powerline-evil)
-;; (require 'spaceline-config)
-(require 'git-gutter)
+(global-diff-hl-mode)
 ;(setq exec-path-from-shell-arguments "-l");remove -i
 ;causes error in shell
 (when (memq window-system '(mac ns))

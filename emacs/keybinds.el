@@ -25,9 +25,9 @@
 (evil-leader/set-key "f" 'helm-projectile-ag)
 (evil-leader/set-key "F" 'helm-do-ag)
 
-;git-gutter navigate hunks
-(global-set-key (kbd "C-x p") 'git-gutter:previous-hunk)
-(global-set-key (kbd "C-x n") 'git-gutter:next-hunk)
+;diff-hl navigate hunks
+(global-set-key (kbd "C-x p") 'diff-hl-previous-hunk)
+(global-set-key (kbd "C-x n") 'diff-hl-next-hunk)
 
 ;magit status key
 (global-set-key (kbd "C-SPC") nil)
