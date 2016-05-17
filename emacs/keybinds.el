@@ -122,7 +122,8 @@
 (define-key global-map (kbd "C-SPC m") 'simpson-toggle-minors)
 
 ;revert buffer to last-commit
-(define-key global-map (kbd "C-SPC r") 'vc-revert)
+(define-key global-map (kbd "C-SPC R") 'vc-revert)
+(define-key global-map (kbd "C-SPC r") 'diff-hl-revert-hunk)
 
 (global-set-key "\M-h" 'help-command)
 

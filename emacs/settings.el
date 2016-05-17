@@ -280,3 +280,9 @@
 
 ;; use eslint with web-mode for jsx files
 (flycheck-add-mode 'javascript-eslint 'web-mode)
+
+(set-face-background 'helm-ff-dotted-directory "#2b303b")
+(set-face-background 'helm-ff-dotted-symlink-directory "#2b303b")
+(set-face-foreground 'helm-ff-dotted-directory "#65737e")
+(set-face-foreground 'helm-ff-dotted-symlink-directory "#65737e")
+
