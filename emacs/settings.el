@@ -273,3 +273,10 @@
 (set-face-background 'diff-hl-change "#96b5b4")
 (set-face-background 'diff-hl-insert "#a3be8c")
 (set-face-background 'diff-hl-delete "#d08770")
+
+;; turn on flychecking globally
+(add-hook 'after-init-hook #'global-flycheck-mode)
+(setq-default flycheck-disabled-checkers (list 'javascript-jshint 'emacs-lisp-checkdoc 'emacs-lisp 'json-jsonlist))    
+
+;; use eslint with web-mode for jsx files
+(flycheck-add-mode 'javascript-eslint 'web-mode)

@@ -3,6 +3,7 @@
 (package-initialize)
 (require 'evil)
 (require 'org)
+(require 'flycheck)
 (evil-mode 1)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
