@@ -169,7 +169,7 @@
       ;16 characters = /Users/asimpson/
       (if (stringp (buffer-file-name))
         (eval (concat " ▼ ../" (substring (buffer-file-name) 16 nil)))
-      "¯\_(ツ)_/¯"
+      "¯\\_(ツ)_/¯"
       )
   ))
 )
