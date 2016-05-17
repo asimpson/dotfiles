@@ -104,6 +104,8 @@
 ;(define-key global-map (kbd "C-SPC t") 'org-agenda)
 (define-key global-map (kbd "C-SPC t") 'org-todo-list)
 
+(define-key global-map (kbd "C-SPC a") 'org-agenda)
+
 (define-key global-map (kbd "C-SPC T") 'org-tags-view)
 
 (setq minor-mode-perm-list (copy-alist minor-mode-alist))

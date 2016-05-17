@@ -70,6 +70,8 @@
 (setq org-agenda-files '("~/Dropbox (Personal)/org"))
 ;log when done
 (setq org-log-done t)
+;set deadline warning
+(setq org-deadline-warning-days 3)
 ;org mode keywords
 (setq org-todo-keywords
       '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
