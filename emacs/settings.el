@@ -181,6 +181,10 @@
 
 ;change header line color to match ocean dark
 (set-face-foreground 'header-line "#a3adb5")
+(set-face-background 'header-line "#4f5b66")
+
+(set-face-attribute 'header-line nil
+    :box '(:line-width 3 :color "#4f5b66" :style nil))
 
 (require 'evil-magit)
 
@@ -230,7 +234,7 @@
     (propertize "✔" 'face '(:foreground "#8f9d6a"))
   ))
   " "
-  '(:eval (propertize evil-mode-line-tag 'face '(:foreground "#ebcb8b")))
+  '(:eval (propertize evil-mode-line-tag 'face '(:foreground "#bf616a")))
   " "
   mode-line-position
   " ["
@@ -242,7 +246,9 @@
 
 ;colors are set for ocean dark
 (set-face-attribute 'mode-line nil
-    :box '(:line-width 3 :color "#4f5b66" :style nil))
+    :background "#dfe1e8"
+    :foreground "#343d46"
+    :box '(:line-width 3 :color "#dfe1e8" :style nil))
 (set-face-attribute 'mode-line-inactive nil
     :box '(:line-width 3 :color "#343d46" :style nil))
 
