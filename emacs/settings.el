@@ -78,7 +78,9 @@
       '(("a" "My TODO task format." entry
          (file "~/Dropbox (Personal)/org/tasks.org")
          "* TODO %? %^g
-:CREATED: %T")))
+:PROPERTIES:
+:CREATED: %T
+:END:")))
 
 ;restore windows after org-todo-list closes
 (setq org-agenda-restore-windows-after-quit t)
