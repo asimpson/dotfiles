@@ -133,3 +133,4 @@
 ;write buffer to fil0
 (define-key global-map (kbd "C-SPC w") 'write-file)
 
+(define-key global-map (kbd "C-SPC l") 'nlinum-relative-toggle)

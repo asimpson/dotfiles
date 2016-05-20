@@ -14,10 +14,7 @@
 ;no scrollbars, what is this a GUI?!
 (scroll-bar-mode -1)
 
-;linum (line numbers mode)
-;disable in neo-tree
-(global-linum-mode t)
-(add-hook 'neotree-mode-hook (lambda () (linum-mode -1)))
+(global-nlinum-mode t)
 
 ;indents! so brutal, each mode can have their own, e.g. css
 ;spaces
@@ -289,3 +286,11 @@
 (set-face-foreground 'helm-ff-dotted-symlink-directory "#65737e")
 
 (setq confirm-kill-emacs 'yes-or-no-p)
+;turn on relative line numbers by default
+(nlinum-relative-on)
+(setq nlinum-relative-redisplay-delay 0.2)
+
+;show current line instead of 0 for relative numbers
+(setq nlinum-relative-current-symbol "")
+(set-face-background 'nlinum-relative-current-face "#2b303b")
+(set-face-foreground 'nlinum-relative-current-face "#d08770")
