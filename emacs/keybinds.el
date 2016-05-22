@@ -136,3 +136,5 @@
 (define-key global-map (kbd "C-SPC l") 'relative-line-numbers-mode)
 (define-key global-map (kbd "C-SPC L") 'linum-mode)
 
+(define-key global-map (kbd "C-SPC j") 'avy-goto-word-1)
+(define-key global-map (kbd "C-SPC J") 'avy-goto-char)

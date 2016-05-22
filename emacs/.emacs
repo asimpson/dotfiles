@@ -45,6 +45,7 @@ depending on it."
 (require 'fill-column-indicator)
 (require 'command-log-mode)
 (require 'relative-line-numbers)
+(require 'avy)
 ;http://emacs.stackexchange.com/questions/7372/stray-trailing-4m-before-prompt-with-zsh-in-m-x-ansi-term
 ;also good to know to 'send-eof' in helm
 

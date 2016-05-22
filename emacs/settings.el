@@ -291,3 +291,7 @@
 (global-relative-line-numbers-mode)
 (set-face-foreground 'relative-line-numbers-current-line "#d08770")
 
+(set-face-background 'avy-lead-face  "#bf616a")
+(set-face-background 'avy-lead-face-0  "#96b5b4")
+(set-face-background 'avy-lead-face-1  "#c0c5ce")
+(set-face-background 'avy-lead-face-2  "#b48ead")
