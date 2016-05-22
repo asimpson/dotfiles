@@ -133,4 +133,6 @@
 ;write buffer to fil0
 (define-key global-map (kbd "C-SPC w") 'write-file)
 
-(define-key global-map (kbd "C-SPC l") 'nlinum-relative-toggle)
+(define-key global-map (kbd "C-SPC l") 'relative-line-numbers-mode)
+(define-key global-map (kbd "C-SPC L") 'linum-mode)
+

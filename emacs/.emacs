@@ -44,7 +44,7 @@ depending on it."
 (require 'multi-term)
 (require 'fill-column-indicator)
 (require 'command-log-mode)
-(require 'nlinum-relative)
+(require 'relative-line-numbers)
 ;http://emacs.stackexchange.com/questions/7372/stray-trailing-4m-before-prompt-with-zsh-in-m-x-ansi-term
 ;also good to know to 'send-eof' in helm
 

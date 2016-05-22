@@ -14,8 +14,6 @@
 ;no scrollbars, what is this a GUI?!
 (scroll-bar-mode -1)
 
-(global-nlinum-mode t)
-
 ;indents! so brutal, each mode can have their own, e.g. css
 ;spaces
 (setq-default indent-tabs-mode nil)
@@ -107,9 +105,6 @@
 ;https://github.com/joostkremers/visual-fill-column/blob/master/visual-fill-column.el
 (add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
 (setq-default visual-fill-column-width 160)
-
-;prevent line numbers from getting out of hand
-(set-face-attribute 'linum nil :height 100)
 
 ;http://cha1tanya.com/2014/07/20/emacs-plus-mac-plus-ispell.html
 ;brew install aspell
@@ -254,8 +249,6 @@
 
 (set-face-foreground 'vertical-border "#4f5b66")
 (set-face-background 'fringe "#2b303b")
-(set-face-background 'linum "#2b303b")
-
 
 ;magit theme changes for ocean 16
 (set-face-foreground 'magit-blame-date "#ebcb8b")
@@ -294,11 +287,7 @@
 (set-face-foreground 'helm-ff-dotted-symlink-directory "#65737e")
 
 (setq confirm-kill-emacs 'yes-or-no-p)
-;turn on relative line numbers by default
-(nlinum-relative-on)
-(setq nlinum-relative-redisplay-delay 0.2)
 
-;show current line instead of 0 for relative numbers
-(setq nlinum-relative-current-symbol "")
-(set-face-background 'nlinum-relative-current-face "#2b303b")
-(set-face-foreground 'nlinum-relative-current-face "#d08770")
+(global-relative-line-numbers-mode)
+(set-face-foreground 'relative-line-numbers-current-line "#d08770")
+
