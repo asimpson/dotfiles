@@ -106,10 +106,10 @@
 (add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
 (setq-default visual-fill-column-width 160)
 
-;http://cha1tanya.com/2014/07/20/emacs-plus-mac-plus-ispell.html
-;brew install aspell
-(setq ispell-program-name "aspell")
-(setq ispell-program-name "/usr/local/bin/aspell")
+;https://joelkuiper.eu/spellcheck_emacs
+;brew install hunspell
+(setq ispell-program-name "hunspell")
+(setq ispell-program-name "/usr/local/bin/hunspell")
 
 ;;====emmet config====;;
 (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
