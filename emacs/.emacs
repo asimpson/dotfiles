@@ -46,6 +46,7 @@ depending on it."
 (require 'command-log-mode)
 (require 'relative-line-numbers)
 (require 'avy)
+(require 'which-key)
 (add-to-list 'load-path
               "~/.emacs.d/elpa/yasnippet")
 (require 'yasnippet)
