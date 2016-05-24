@@ -123,6 +123,11 @@
 ;expand class to className in js-mode
 (add-hook 'js2-mode-hook 'jsxEmmet)
 ;;====end emmet config====;;
+(add-hook 'js2-mode-hook 'relative-line-numbers-mode)
+(add-hook 'css-mode-hook 'relative-line-numbers-mode)
+(add-hook 'web-mode-hook 'relative-line-numbers-mode)
+(add-hook 'emacs-lisp-mode-hook 'relative-line-numbers-mode)
+
 (yas-reload-all)
 (add-hook 'js2-mode-hook #'yas-minor-mode)
 
@@ -290,7 +295,6 @@
 
 (setq confirm-kill-emacs 'yes-or-no-p)
 
-(global-relative-line-numbers-mode)
 (set-face-foreground 'relative-line-numbers-current-line "#d08770")
 
 (set-face-background 'avy-lead-face  "#bf616a")
