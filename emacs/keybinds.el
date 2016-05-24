@@ -140,3 +140,5 @@
 (define-key global-map (kbd "C-SPC J") 'avy-goto-char)
 
 (define-key global-map (kbd "C-SPC C") 'ispell-word)
+
+(define-key global-map (kbd "C-SPC e") 'yas-expand)

@@ -46,6 +46,9 @@ depending on it."
 (require 'command-log-mode)
 (require 'relative-line-numbers)
 (require 'avy)
+(add-to-list 'load-path
+              "~/.emacs.d/elpa/yasnippet")
+(require 'yasnippet)
 ;http://emacs.stackexchange.com/questions/7372/stray-trailing-4m-before-prompt-with-zsh-in-m-x-ansi-term
 ;also good to know to 'send-eof' in helm
 

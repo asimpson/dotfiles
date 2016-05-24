@@ -123,6 +123,8 @@
 ;expand class to className in js-mode
 (add-hook 'js2-mode-hook 'jsxEmmet)
 ;;====end emmet config====;;
+(yas-reload-all)
+(add-hook 'js2-mode-hook #'yas-minor-mode)
 
 ;treat new buffers as modified files
 ;http://stackoverflow.com/a/2592558/2344737
