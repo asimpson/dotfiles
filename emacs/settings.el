@@ -127,6 +127,7 @@
 (add-hook 'css-mode-hook 'relative-line-numbers-mode)
 (add-hook 'web-mode-hook 'relative-line-numbers-mode)
 (add-hook 'emacs-lisp-mode-hook 'relative-line-numbers-mode)
+(add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
 
 (yas-reload-all)
 (add-hook 'js2-mode-hook #'yas-minor-mode)
