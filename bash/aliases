@@ -37,6 +37,8 @@ alias su='svn update'
 alias sdiff='svn diff '
 alias makemkv='/Applications/MakeMKV.app/Contents/MacOS/makemkvcon '
 alias history='history -f'
+#show processes running on a certain port
+alias wtp='lsof -i '
 #[misc-end]
 
 #[git-start]
@@ -73,4 +75,3 @@ alias vpnc_end='sudo /usr/local/sbin/vpnc-disconnect'
 if [ -x /usr/local/bin/mvim ]; then
   alias v="mvim -v"
 fi
-
