@@ -141,9 +141,6 @@
 ;set width of fill column rule
 (setq fci-rule-column 80)
 
-;Every time when the neotree window is opened, let it find current file and jump to node.
-(setq neo-smart-open t)
-
 ;open txt or md files in Marked 2
 (setq markdown-open-command "/usr/local/bin/marked")
 

@@ -39,19 +39,6 @@
 ;fill-column-line
 (evil-leader/set-key "c" 'fci-mode)
 
-;===neotree===;
-(require 'neotree)
-(global-set-key [f8] 'neotree-toggle)
-(evil-leader/set-key "\S-t" 'neotree-toggle)
-
-;redefine things to work with evil mode
-(add-hook 'neotree-mode-hook
-  (lambda ()
-    (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
-    (define-key evil-normal-state-local-map (kbd "SPC") 'neotree-enter)
-    (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
-    (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)))
-
 ;===keychord===;
 ;;Exit insert mode by pressing j and then k quickly
 (require 'key-chord)
