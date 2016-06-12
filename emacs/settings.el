@@ -98,6 +98,7 @@
 (add-hook 'markdown-mode-hook 'visual-line-mode)
 ;toggle on spell-check for writing
 (add-hook 'markdown-mode-hook (lambda () (flyspell-mode 1)))
+(add-hook 'org-mode-hook (lambda () (flyspell-mode 1)))
 ;¯\_(ツ)_/¯
 (setq flyspell-issue-message-flag nil)
 
@@ -108,8 +109,6 @@
 
 ;https://joelkuiper.eu/spellcheck_emacs
 ;brew install hunspell
-(setq ispell-program-name "hunspell")
-(setq ispell-program-name "/usr/local/bin/hunspell")
 
 ;;====emmet config====;;
 (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
@@ -188,11 +187,6 @@
 
 (set-face-attribute 'header-line nil
     :box '(:line-width 3 :color "#4f5b66" :style nil))
-
-(require 'evil-magit)
-
-;; To load at the start up
-(require 'reveal-in-osx-finder)
 
 (setenv "GPG_AGENT" "/usr/local/bin/gpg-agent")
 ;;read gpg-agent environment
@@ -282,7 +276,7 @@
 
 ;; turn on flychecking globally
 (add-hook 'after-init-hook #'global-flycheck-mode)
-(setq-default flycheck-disabled-checkers (list 'javascript-jshint 'emacs-lisp-checkdoc 'emacs-lisp 'json-jsonlist))    
+(setq-default flycheck-disabled-checkers (list 'javascript-jshint 'emacs-lisp-checkdoc 'emacs-lisp 'json-jsonlist))
 
 ;; use eslint with web-mode for jsx files
 (flycheck-add-mode 'javascript-eslint 'web-mode)
@@ -302,5 +296,25 @@
 (set-face-background 'avy-lead-face-0  "#96b5b4")
 (set-face-background 'avy-lead-face-1  "#c0c5ce")
 (set-face-background 'avy-lead-face-2  "#b48ead")
+(add-hook 'css-mode-hook '(lambda() (setq show-trailing-whitespace t)))
+(add-hook 'js2-mode-hook '(lambda() (setq show-trailing-whitespace t)))
+(set-face-background 'trailing-whitespace "#ab7967")
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (which-key-mode)
+
+(setq tramp-default-method "ssh")
+(setq org-html-head "
+  <style>
+    body {
+      width: 800px;
+      margin: 0 auto;
+      font-family: sans-serif;
+    }
+    img {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+    }
+  </style>
+")

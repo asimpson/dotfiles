@@ -56,7 +56,8 @@
 ;;Exit insert mode by pressing j and then k quickly
 (require 'key-chord)
 (key-chord-mode 1)
-(setq key-chord-two-keys-delay 0.5)
+(setq key-chord-two-keys-delay 0.1)
+
 ;evil-key
 (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
 ;comment line/region
@@ -70,20 +71,45 @@
 (setq escreen-prefix-char (kbd "C-SPC s"))
 (global-set-key escreen-prefix-char 'escreen-prefix)
 
+(setq window-saved "nothing")
+
+(defun gen-multi-term ()
+  (interactive)
+  (switch-to-buffer-other-window nil)
+  (multi-term)
+)
+
+(global-set-key (kbd "C-SPC k e") 'eval-region)
+(global-set-key (kbd "C-SPC k t") 'gen-multi-term)
+(global-set-key (kbd "C-SPC k j") 'js2-mode-hide-warnings-and-errors)
+(global-set-key (kbd "C-SPC k r") 'revert-buffer)
+(global-set-key (kbd "C-SPC k c") 'clone-indirect-buffer-other-window)
+(global-set-key (kbd "C-SPC k v") 'visual-line-mode)
+(global-set-key (kbd "C-SPC k i") 'erc-select)
+(global-set-key (kbd "C-SPC k f") 'org-footnote-new)
+(global-set-key (kbd "C-SPC k l") 'org-toggle-link-display)
+
+(global-set-key (kbd "C-SPC z s") 'save-windows)
+(global-set-key (kbd "C-SPC z l") 'restore-windows)
+
+;narrow region
+(global-set-key (kbd "C-SPC n") 'narrow-to-region)
+;widen
+(global-set-key (kbd "C-SPC N") 'widen)
+
 (defun save-windows ()
   "saves windows position"
   (interactive)
   (message "window saved")
+  (setq window-saved "saved")
   (window-configuration-to-register 0)
   (delete-other-windows))
 
 (defun restore-windows ()
   "restores windows position"
   (interactive)
+  (setq window-saved "nothing")
   (jump-to-register 0))
-
-(global-set-key (kbd "C-SPC z") 'save-windows)
-(global-set-key (kbd "C-SPC Z") 'restore-windows)
 
 ;; (defun print-path ()
 ;;   "Print out current buffer path"
@@ -132,6 +158,7 @@
 
 ;write buffer to fil0
 (define-key global-map (kbd "C-SPC w") 'write-file)
+(define-key global-map (kbd "s-s") 'write-file)
 
 (define-key global-map (kbd "C-SPC l") 'relative-line-numbers-mode)
 (define-key global-map (kbd "C-SPC L") 'linum-mode)
@@ -139,6 +166,9 @@
 (define-key global-map (kbd "C-SPC j") 'avy-goto-word-1)
 (define-key global-map (kbd "C-SPC J") 'avy-goto-char)
 
-(define-key global-map (kbd "C-SPC C") 'ispell-word)
+(define-key global-map (kbd "C-SPC C") 'helm-flyspell-correct)
+
+(define-key yas-minor-mode-map (kbd "<tab>") nil)
+(define-key yas-minor-mode-map (kbd "TAB") nil)
 
 (define-key global-map (kbd "C-SPC e") 'yas-expand)
