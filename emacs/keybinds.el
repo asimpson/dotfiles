@@ -60,10 +60,11 @@
 
 (setq window-saved "nothing")
 
-(defun gen-multi-term ()
-  (interactive)
+(defun gen-multi-term (name)
+  (interactive "sName the term buffer: ")
   (switch-to-buffer-other-window nil)
   (multi-term)
+  (rename-buffer name)
 )
 
 (global-set-key (kbd "C-SPC k e") 'eval-region)
@@ -75,6 +76,20 @@
 (global-set-key (kbd "C-SPC k i") 'erc-select)
 (global-set-key (kbd "C-SPC k f") 'org-footnote-new)
 (global-set-key (kbd "C-SPC k l") 'org-toggle-link-display)
+(global-set-key (kbd "C-SPC k n") 'npm-test)
+(global-set-key (kbd "C-SPC k N") 'kill-shell-buffer)
+(global-set-key (kbd "C-SPC k !") 'async-shell-command)
+(defun kill-shell-buffer()
+  (interactive)
+  (setq old-buffer (current-buffer))
+  (with-current-buffer "*Async Shell Command*" (kill-buffer-and-window))
+  (switch-to-buffer-other-window old-buffer)
+)
+
+(defun npm-test()
+  (interactive)
+  (async-shell-command "npm test")
+)
 
 (global-set-key (kbd "C-SPC z s") 'save-windows)
 (global-set-key (kbd "C-SPC z l") 'restore-windows)
