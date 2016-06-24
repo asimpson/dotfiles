@@ -79,6 +79,14 @@
 (global-set-key (kbd "C-SPC k n") 'npm-test)
 (global-set-key (kbd "C-SPC k N") 'kill-shell-buffer)
 (global-set-key (kbd "C-SPC k !") 'async-shell-command)
+(global-set-key (kbd "C-SPC k p") 'simpson-projects-browser)
+
+(defun simpson-projects-browser()
+  (interactive)
+  (cd "~/Projects/")
+  (helm-find-files nil)
+)
+
 (defun kill-shell-buffer()
   (interactive)
   (setq old-buffer (current-buffer))
