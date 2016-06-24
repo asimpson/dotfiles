@@ -315,3 +315,5 @@
     }
   </style>
 ")
+
+(setq exec-path (append exec-path '("/Library/TeX/texbin/latex")))
