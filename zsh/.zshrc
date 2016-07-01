@@ -11,10 +11,8 @@ autoload -U promptinit && promptinit
 
 if [ -n "$INSIDE_EMACS" ]; then
     export TERM=xterm-256color
-    # export LANG='en_US.UTF-8'
-    # export LC_ALL="en_US.UTF-8"
-    export ZSH_THEME="minimal"
-    export PROMPT_COMMAND=""
+    # Disable set title
+    # prompt_pure_set_title() {}
 fi
 
 # Example aliases
