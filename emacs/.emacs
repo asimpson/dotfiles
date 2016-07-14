@@ -62,7 +62,7 @@ depending on it."
 ;(setq split-width-threshold 0)
 
 ;prevent new frame
-(defun switch-to-buffer-other-frame ())
+;(defun switch-to-buffer-other-frame ())
 
 (load "~/.emacs.d/settings.el")
 (load "~/.emacs.d/keybinds.el")
