@@ -320,3 +320,8 @@
 ")
 
 (setq exec-path (append exec-path '("/Library/TeX/texbin/latex")))
+
+;https://github.com/magit/magit/pull/2513
+;Users who use Tramp and experience delays, should consider setting
+;the option to `magit-auto-revert-repository-buffer-p'.
+(setq auto-revert-buffer-list-filter 'magit-auto-revert-repository-buffers-p)
