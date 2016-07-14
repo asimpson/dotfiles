@@ -232,9 +232,6 @@
   '(:eval (propertize evil-mode-line-tag 'face '(:foreground "#bf616a")))
   " "
   mode-line-position
-  " ["
-  '(vc-mode vc-mode)
-  " ] "
   mode-line-modes
   mode-line-misc-info
 ))
