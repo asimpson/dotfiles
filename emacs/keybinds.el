@@ -32,6 +32,7 @@
 ;magit status key
 (global-set-key (kbd "C-SPC") nil)
 (global-set-key (kbd "C-SPC g") 'magit-status)
+(global-set-key (kbd "C-M-u") 'universal-argument)
 
 ;toggle emmet
 (global-set-key (kbd "C-c e") 'emmet-expand-line)
