@@ -18,7 +18,7 @@
 ;helm init!
 (global-set-key (kbd "M-x") 'helm-M-x)
 ;helm buffers list
-(global-set-key (kbd "C-=") 'helm-buffers-list)
+(global-set-key (kbd "C-=") 'helm-mini)
 ;helm + projectfile find files
 (define-key evil-normal-state-map "\C-p" 'helm-projectile-find-file)
 ;helm + projectile do ag search
