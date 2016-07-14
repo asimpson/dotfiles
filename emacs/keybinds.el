@@ -85,6 +85,7 @@
   (interactive)
   (shell-command "date +%Y-%m-%d-%I:%M" t)))
 
+(global-set-key (kbd "C-SPC /") 'swiper-helm)
 
 (defun simpson-projects-browser()
   (interactive)
