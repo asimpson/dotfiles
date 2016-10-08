@@ -8,14 +8,9 @@
 
   `ln -s ~/.dotfiles/zsh/.zshrc ~/.zshrc`
 
-* Symlink plugins `~/.dotfiles/zsh/plugins` to `~/.oh-my-zsh/custom`
-
-  `ln -s ~/.dotfiles/zsh/plugins ~/.oh-my-zsh/custom`
-
-* [Download the adamsimpson theme from the releases section of the Github repo](https://github.com/asimpson/dotfiles/releases).
-
 ## OS X Conf
 * Run `~/.dotfiles/osx/set-defaults.sh` to set system-wide preferences after clean install or on a new machine.
+* Run `brew bundle` to install everything in `Brewfile`.
 
 ### Launchd
 * Launchd is OS X's replacement for `cron`.
@@ -28,21 +23,19 @@
 
   `launchctl load ~/Library/LaunchAgents/com.some-name.plist`
 
-## Tmux Conf
-* Symlink `~/.dotfiles/tmux/tmux.conf` to `$HOME`
+## Emacs Conf
+* Symlink all files in `~/.dotfiles/emacs` to `~/.emacs.d/`
 
-  `ln -s ~/.dotfiles/tmux/tmux.conf ~/.tmux.conf`
+  `ln -s ~/.dotfiles/emacs/.emacs ~/.emacs.d/`
+  `ln -s ~/.dotfiles/emacs/settings.el ~/.emacs.d/`
+  `ln -s ~/.dotfiles/emacs/keybinds.el ~/.emacs.d/`
+
+* Install plugins.
 
 ## Vim Conf
-* [Install vundle](https://github.com/gmarik/vundle)
-
 * Symlink `~/.dotfiles/.vimrc` to `$HOME`
 
   `ln -s ~/.dotfiles/.vimrc ~/.vimrc`
-
-* Fire up `vim .vimrc`, and run `:BundleInstall`
-
-* Re-source `.vimrc`, and all vundle bundles should be installed
 
 ## Git Conf
 * Symlink both `gitmessage.txt` and `master_git_ignore` to `$HOME`
@@ -66,14 +59,3 @@
     [include]
         path = path/to/local/config/gitconfig.local
 ```
-
-## Other Dependencies
-
-* [Homebrew](http://brew.sh)
-  * node
-  * [php](https://github.com/josegonzalez/homebrew-php)
-  * mysql
-  * git
-  * tag
-  * tmux
-  * reattach-to-user-namespace
