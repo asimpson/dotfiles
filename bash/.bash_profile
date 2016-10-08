@@ -12,6 +12,8 @@ PATH="$PATH:/usr/local/share/npm/bin"
 PATH="$PATH:/usr/local/lib/node_modules"
 PATH="/usr/local/sbin:$PATH"
 PATH="/usr/local/bin:$PATH"
+PATH="/Users/asimpson/.better-npm/bin:$PATH"
+PATH="/Users/asimpson/.better-npm/lib/node_modules:$PATH"
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting

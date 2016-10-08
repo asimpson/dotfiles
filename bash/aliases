@@ -2,7 +2,6 @@
 #All my custom BASH aliases
 
 #[misc-start]
-alias arq='/Applications/Arq.app/Contents/MacOS/Arq'
 alias stream='t stream timeline -l -d -c | cut -d , -f 1,3,4'
 alias tweet='t update '
 alias rnginx='sudo nginx -s stop && sudo nginx'
@@ -39,6 +38,7 @@ alias makemkv='/Applications/MakeMKV.app/Contents/MacOS/makemkvcon '
 alias history='history -f'
 #show processes running on a certain port
 alias wtp='lsof -i '
+alias vlc='/Applications/VLC.app/Contents/MacOS/VLC '
 #[misc-end]
 
 #[git-start]
@@ -69,9 +69,8 @@ alias fbase='git fetch && git rebase origin/master'
 alias cleanup='remote prune origin && git gc && git clean -dfx && git stash clear'
 #[git-end]
 
+alias drive='$HOME/gopath/bin/drive '
 alias vpnc_start='sudo /usr/local/sbin/vpnc'
 alias vpnc_end='sudo /usr/local/sbin/vpnc-disconnect'
-
-if [ -x /usr/local/bin/mvim ]; then
-  alias v="mvim -v"
-fi
+alias spacemacs='HOME=~/spacemacs emacs --insecure'
+alias v='nvim'
