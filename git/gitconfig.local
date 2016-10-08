@@ -21,7 +21,6 @@
 	clean = git-media-clean %f
 	smudge = git-media-smudge %f
 [alias]
-  go = checkout
   gre = rebase origin/master
   gpm = pull origin master
   diff = diff --patience
