@@ -8,6 +8,7 @@
 		 ;;rebind help key
      (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
      (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
+     (define-key evil-normal-state-map (kbd "gx") 'browse-url)
      (define-key evil-normal-state-map (kbd "C-b") 'projectile-switch-project)
      (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)))
 
@@ -68,6 +69,7 @@
   (rename-buffer name)
 )
 
+(global-set-key (kbd "C-SPC d") 'deft)
 (global-set-key (kbd "C-SPC k e") 'eval-region)
 (global-set-key (kbd "C-SPC k t") 'gen-multi-term)
 (global-set-key (kbd "C-SPC k j") 'js2-mode-hide-warnings-and-errors)

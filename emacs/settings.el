@@ -1,5 +1,3 @@
-(fset 'evil-visual-update-x-selection 'ignore)
-
 ;turn off toolbar
 (tool-bar-mode -1)
 
@@ -37,8 +35,9 @@
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 (autoload 'markdown-mode "markdown-mode"
    "Major mode for editing Markdown files" t)
-(add-to-list 'auto-mode-alist '("\\.txt\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.txt\\'" . org-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
 
 ;each line gets one line
 (set-default 'truncate-lines t)
@@ -119,8 +118,13 @@
 (defun jsxEmmet()
   (setq emmet-expand-jsx-className? t)
 )
+
+(defun jsEmmet()
+  (setq emmet-expand-jsx-className? nil)
+)
 ;expand class to className in js-mode
 (add-hook 'js2-mode-hook 'jsxEmmet)
+(add-hook 'handlebars-mode-hook 'jsEmmet)
 ;;====end emmet config====;;
 (add-hook 'js2-mode-hook 'relative-line-numbers-mode)
 (add-hook 'css-mode-hook 'relative-line-numbers-mode)
@@ -223,10 +227,8 @@
 
 (setq-default mode-line-format (list
   ;mode-line-modified
-  " "
   '(:eval (if (buffer-modified-p)
-      (propertize "✖" 'face '(:foreground "#cf6a4c"))
-    (propertize "✔" 'face '(:foreground "#8f9d6a"))
+      (propertize " !" 'face '(:foreground "#cf6a4c"))
   ))
   " "
   '(:eval (propertize evil-mode-line-tag 'face '(:foreground "#bf616a")))
@@ -322,3 +324,16 @@
 ;Users who use Tramp and experience delays, should consider setting
 ;the option to `magit-auto-revert-repository-buffer-p'.
 (setq auto-revert-buffer-list-filter 'magit-auto-revert-repository-buffers-p)
+
+(setq projectile-switch-project-action 'projectile-dired)
+
+(add-to-list 'evil-emacs-state-modes 'deft-mode)
+(setq deft-extensions '("txt" "tex" "org"))
+(setq deft-directory "/Users/asimpson/Dropbox (Personal)/Notational Data")
+(setq deft-use-filename-as-title t)
+(setq deft-auto-save-interval 60.0)
+
+(add-to-list 'evil-emacs-state-modes 'dired-mode)
+
+(custom-set-variables
+ '(helm-ag-base-command "ag --nocolor --nogroup"))
