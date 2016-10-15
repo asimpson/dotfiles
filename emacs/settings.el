@@ -337,3 +337,9 @@
 
 (custom-set-variables
  '(helm-ag-base-command "ag --nocolor --nogroup"))
+
+;http://spacemacs.org/doc/FAQ#orgheadline31
+(fset 'evil-visual-update-x-selection 'ignore)
+
+;http://emacs.stackexchange.com/a/58
+;to open a file with sudo, invoke Tramp C-x C-f and then type /sudo::/path

@@ -37,6 +37,7 @@
 
 ;toggle emmet
 (global-set-key (kbd "C-c e") 'emmet-expand-line)
+(global-set-key (kbd "C-c y") 'emmet-next-edit-point)
 
 ;fill-column-line
 (evil-leader/set-key "c" 'fci-mode)
