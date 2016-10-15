@@ -85,6 +85,7 @@ set splitright
 
 au BufRead,BufNewFile *.txt set ft=markdown syntax=markdown
 au BufRead,BufNewFile *.md set ft=markdown syntax=markdown
+au BufRead,BufNewFile *.hbs set syntax=html
 
 "highlight StatusLine ctermfg=black ctermbg=White cterm=bold
 highlight StatusLine cterm=reverse ctermfg=yellow  ctermbg=white
