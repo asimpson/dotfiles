@@ -9,7 +9,8 @@ if [ -n "$INSIDE_EMACS" ]; then
 fi
 
 #http://zsh.sourceforge.net/Doc/Release/Options.html
-HISTFILE=$HOME/.zsh_history
+SAVEHIST=2000
+HISTFILE=~/.zsh_history
 setopt APPEND_HISTORY
 setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_ALL_DUPS
