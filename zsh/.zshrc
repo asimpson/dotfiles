@@ -45,3 +45,9 @@ export EDITOR=nvim
 autoload -U edit-command-line
 zle -N edit-command-line
 bindkey '\C-x\C-e' edit-command-line
+
+#http://superuser.com/questions/417627/oh-my-zsh-history-completion
+bindkey '\e[A' history-beginning-search-backward
+bindkey '\e[B' history-beginning-search-forward
+
+export PATH="$HOME/.yarn/bin:$PATH"
