@@ -192,3 +192,5 @@
 (define-key yas-minor-mode-map (kbd "TAB") nil)
 
 (define-key global-map (kbd "C-SPC e") 'yas-expand)
+
+(define-key global-map (kbd "C-SPC p") 'term-paste)

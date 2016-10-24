@@ -343,3 +343,7 @@
 
 ;http://emacs.stackexchange.com/a/58
 ;to open a file with sudo, invoke Tramp C-x C-f and then type /sudo::/path
+
+;this prevents the stupid behavior in scss where &:before {___ autocompletes
+;lang!
+(defconst ac-css-pseudo-classes nil)
