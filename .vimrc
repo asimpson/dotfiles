@@ -18,6 +18,9 @@ nnoremap <leader>c :noh<cr>
 nnoremap <leader>ss :set wrap<cr>
 nnoremap <leader>sm :set wm=2<cr>
 nnoremap <leader>h :set wm=2<cr>
+" set buffer to hidden, then create a vertical split with the contents of the
+" file at point
+nnoremap <leader>f :set hidden \| :vertical wincmd f<cr>
 "http://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
 nnoremap <CR> G
 " Due to internal representation, Vim has problems with long lines in general.
@@ -77,7 +80,7 @@ filetype off      " use the file type plugins
 filetype plugin indent on  
 
 set clipboard+=unnamed " Yanks go on clipboard instead.
-syntax on
+syntax enable
 set background=dark
 
 set splitbelow
@@ -154,3 +157,6 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 set backspace=2 " make backspace work like most other apps
+
+"vim talk mods
+set wildmenu
