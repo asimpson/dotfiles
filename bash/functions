@@ -116,7 +116,7 @@ function hack {
 }
 
 function hg {
-  fc -lf 1 | grep --color=auto $1
+  fc -lf 1 -1 | grep --color=auto $1
 }
 
 function nb() {

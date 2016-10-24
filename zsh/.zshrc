@@ -10,6 +10,7 @@ fi
 
 #http://zsh.sourceforge.net/Doc/Release/Options.html
 SAVEHIST=2000
+HISTSIZE=2000
 HISTFILE=~/.zsh_history
 setopt APPEND_HISTORY
 setopt HIST_IGNORE_DUPS

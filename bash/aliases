@@ -35,7 +35,7 @@ alias sr='svn revert '
 alias su='svn update'
 alias sdiff='svn diff '
 alias makemkv='/Applications/MakeMKV.app/Contents/MacOS/makemkvcon '
-alias history='history -f'
+#alias history='history -f'
 #show processes running on a certain port
 alias wtp='lsof -i '
 alias vlc='/Applications/VLC.app/Contents/MacOS/VLC '
