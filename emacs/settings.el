@@ -150,22 +150,21 @@
     (use-package evil-magit
       :ensure t
     )
+  )
+)
 
-    (use-package diff-hl
-      :ensure t
-      :bind (
-        ("C-SPC r" . diff-hl-revert-hunk)
-        ("C-x p" . diff-hl-previous-hunk)
-        ("C-x n" . diff-hl-next-hunk)
-      )
-      :config (progn
-        (global-diff-hl-mode)
-        ;diff-hl changes for ocean 16
-        (set-face-background 'diff-hl-change "#96b5b4")
-        (set-face-background 'diff-hl-insert "#a3be8c")
-        (set-face-background 'diff-hl-delete "#d08770")
-      )
-    )
+(use-package diff-hl
+  :ensure t
+  :bind (
+    ("C-SPC r" . diff-hl-revert-hunk)
+    ("C-x p" . diff-hl-previous-hunk)
+    ("C-x n" . diff-hl-next-hunk)
+  )
+  :config (progn
+    (global-diff-hl-mode)
+    (set-face-background 'diff-hl-change "#96b5b4")
+    (set-face-background 'diff-hl-insert "#a3be8c")
+    (set-face-background 'diff-hl-delete "#d08770")
   )
 )
 
@@ -500,12 +499,12 @@
 (use-package yasnippet
   :ensure t
   :bind ("C-SPC e" . yas-expand)
+  :load-path "~/.emacs.d/elpa/yasnippet"
   :init (progn
     (add-hook 'js2-mode-hook #'yas-minor-mode)
     (add-hook 'org-mode-hook #'yas-minor-mode)
   )
   :config (progn
-    (add-to-list 'load-path "~/.emacs.d/elpa/yasnippet")
     (yas-reload-all)
     (define-key yas-minor-mode-map (kbd "<tab>") nil)
     (define-key yas-minor-mode-map (kbd "TAB") nil)
