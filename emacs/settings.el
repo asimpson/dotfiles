@@ -25,6 +25,16 @@
   :init (load-theme 'base16-ocean-dark t)
 )
 
+(use-package exec-path-from-shell
+  :ensure t
+  :config (progn
+    ;(setq exec-path-from-shell-arguments "-l");remove -i
+    ;causes error in shell
+    (when (memq window-system '(mac ns))
+      (exec-path-from-shell-initialize))
+  )
+)
+
 (use-package vimish-fold
   :ensure t
   :config (vimish-fold-global-mode 1)

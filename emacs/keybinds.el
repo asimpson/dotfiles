@@ -1,6 +1,5 @@
 (global-set-key (kbd "C-M-u") 'universal-argument)
 
-;toggle emmet
 (global-set-key (kbd "s-=") 'text-scale-increase)
 (global-set-key (kbd "s--") 'text-scale-decrease)
 

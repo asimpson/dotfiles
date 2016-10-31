@@ -10,11 +10,6 @@
    ["#151718" "#Cd3f45" "#9fca56" "#e6cd69" "#55b5db" "#a074c4" "#55b5db" "#d6d6d6"])
  '(safe-local-variable-values (quote ((css-indent-offset . 4) (evil-shift-width . 4)))))
 
-;(setq exec-path-from-shell-arguments "-l");remove -i
-;causes error in shell
-(when (memq window-system '(mac ns))
-  (exec-path-from-shell-initialize))
-
 ;http://emacs.stackexchange.com/questions/7372/stray-trailing-4m-before-prompt-with-zsh-in-m-x-ansi-term
 ;also good to know to 'send-eof' in helm
 
