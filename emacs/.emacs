@@ -8,13 +8,6 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector
    ["#151718" "#Cd3f45" "#9fca56" "#e6cd69" "#55b5db" "#a074c4" "#55b5db" "#d6d6d6"])
- '(custom-enabled-themes (quote (base16-ocean-dark)))
- '(custom-safe-themes
-   (quote
-    ("b6db49cec08652adf1ff2341ce32c7303be313b0de38c621676122f255ee46db" "0bd7a42bd443517e5e61dac3cabc24018fbd0c6b2b4199b3c4efd9e3727efd30" "e1551b5516e0a439b6ab019ba00cee866e735f66f22ff67a5d882ad0f1383454" "09669536b4a71f409e7e2fd56609cd7f0dff2850d4cbfb43916cc1843c463b80" "0b6645497e51d80eda1d337d6cabe31814d6c381e69491931a688836c16137ed" "f2503f0a035c2122984e90eb184185769ee665de5864edc19b339856942d2d2d" "e87a2bd5abc8448f8676365692e908b709b93f2d3869c42a4371223aab7d9cf8" "50e7f9d112e821e42bd2b8410d50de966c35c7434dec12ddea99cb05dd368dd8" default)))
- '(package-selected-packages
-   (quote
-    (emmet orgmode org-mode vimish-fold yasnippet yaml-mode which-key web-mode visual-fill-column use-package swiper-helm s reveal-in-osx-finder relative-line-numbers nodejs-repl neotree multi-term markdown-mode key-chord js2-mode helm-projectile helm-flyspell helm-ag handlebars-mode gist flycheck fill-column-indicator exec-path-from-shell evil-magit evil-leader escreen emmet-mode diff-hl deft command-log-mode coffee-mode base16-theme avy auto-complete)))
  '(safe-local-variable-values (quote ((css-indent-offset . 4) (evil-shift-width . 4)))))
 
 ;(setq exec-path-from-shell-arguments "-l");remove -i
@@ -38,9 +31,3 @@
 ;https://www.gnu.org/software/emacs/manual/html_node/emacs/Directory-Variables.html
 ;set local variable per project :point_up:
 (put 'narrow-to-region 'disabled nil)
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )

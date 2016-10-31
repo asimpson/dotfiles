@@ -20,6 +20,11 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+(use-package base16-theme
+  :ensure t
+  :init (load-theme 'base16-ocean-dark t)
+)
+
 (use-package vimish-fold
   :ensure t
   :config (vimish-fold-global-mode 1)
