@@ -90,6 +90,15 @@
   )
 )
 
+(use-package evil-matchit
+  :ensure t
+  :config (progn
+    (global-evil-matchit-mode 1)
+    (plist-put evilmi-plugins 'handlebars-mode '((evilmi-simple-get-tag evilmi-simple-jump)
+      (evilmi-html-get-tag evilmi-html-jump)))
+  )
+)
+
 (use-package helm
   :bind (
     ("M-x" . helm-M-x)
