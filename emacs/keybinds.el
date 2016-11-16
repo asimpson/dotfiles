@@ -2,6 +2,9 @@
 
 (global-set-key (kbd "s-=") 'text-scale-increase)
 (global-set-key (kbd "s--") 'text-scale-decrease)
+(global-set-key (kbd "C-SPC !") (lambda()
+  (interactive)
+  (text-scale-set 0)))
 
 (setq window-saved "nothing")
 
@@ -94,3 +97,5 @@
 (define-key global-map (kbd "s-s") 'write-file)
 
 (define-key global-map (kbd "C-SPC L") 'linum-mode)
+
+(define-key global-map (kbd "s-t") nil)

@@ -1,9 +1,9 @@
+;debug use-package 👇
+;(setq use-package-verbose t)
+
 ;turn off toolbar
 (tool-bar-mode -1)
 
-;http://stuff-things.net/2015/10/05/emacs-visible-bell-work-around-on-os-x-el-capitan/
-;better visible bell in status line
-;(setq use-package-verbose t)
 (setq visible-bell nil)
 (setq ring-bell-function (lambda ()
     (invert-face 'mode-line)
@@ -33,6 +33,20 @@
     (when (memq window-system '(mac ns))
       (exec-path-from-shell-initialize))
   )
+)
+
+(use-package dired-narrow
+  :ensure t
+  :demand
+  :bind (:map dired-mode-map
+              ("/" . dired-narrow-fuzzy))
+)
+
+(use-package dired-subtree
+  :ensure t
+  :demand
+  :bind (:map dired-mode-map
+              ("i" . dired-subtree-toggle))
 )
 
 (use-package vimish-fold
@@ -67,6 +81,8 @@
     ;http://spacemacs.org/doc/FAQ#orgheadline31
     (fset 'evil-visual-update-x-selection 'ignore)
     (setq-default evil-shift-width 2)
+    (setq evil-vsplit-window-right t)
+    (setq evil-split-window-below t)
     (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
     (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
     (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
@@ -77,6 +93,8 @@
     (evil-leader/set-key "f" 'helm-projectile-ag)
     (evil-leader/set-key "F" 'helm-do-ag)
     (evil-leader/set-key "c" 'fci-mode)
+    (evil-leader/set-key "v" 'evil-window-vnew)
+    (evil-leader/set-key "x" 'evil-window-new)
     (use-package key-chord
       :ensure t
       :config (progn
@@ -539,6 +557,7 @@
   :ensure t
   :bind ("C-SPC d" . deft)
   :config (progn
+    (add-to-list 'evil-emacs-state-modes 'deft-mode)
     (setq deft-extensions '("txt" "tex" "org"))
     (setq deft-directory "/Users/asimpson/Dropbox (Personal)/Notational Data")
     (setq deft-use-filename-as-title t)
@@ -552,13 +571,35 @@
     ("C-c e" . emmet-expand-line)
     ("C-c y" . emmet-next-edit-point)
   )
-  :config (progn
-    (setq emmet-move-cursor-between-quotes t) ;; default nil
-    ;JSX gets className not class
+  :init (progn
     (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
     (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+    ;JSX gets className not class
     (add-hook 'js2-mode-hook 'jsxEmmet)
     (add-hook 'handlebars-mode-hook 'jsEmmet)
+  )
+  :config (progn
+    (setq emmet-move-cursor-between-quotes t) ;; default nil
+  )
+)
+
+(use-package org-alert
+  :ensure t
+)
+
+(use-package alert
+  :ensure t
+  :config (progn
+    (setq alert-default-style 'notifier)
+    (defun alert-notifier-notify (info)
+      (if alert-notifier-command
+          (let ((args
+                (list "-title"   (alert-encode-string (plist-get info :title))
+                      "-message" (alert-encode-string (plist-get info :message))
+                )))
+            (message "%s" args)
+            (apply #'call-process alert-notifier-command nil nil nil args))
+        (alert-message-notify info)))
   )
 )
 
@@ -571,7 +612,18 @@
 )
 
 (setq tramp-default-method "ssh")
-;(add-to-list 'evil-emacs-state-modes 'deft-mode)
 
 ;http://emacs.stackexchange.com/a/58
 ;to open a file with sudo, invoke Tramp C-x C-f and then type /sudo::/path
+
+(setq dired-recursive-deletes t)
+(setq delete-by-moving-to-trash t)
+(setq dired-use-ls-dired nil)
+
+(defun simpson-rerun()
+  (interactive)
+  (projectile-with-default-dir (projectile-project-root)
+    (async-shell-command (car shell-command-history)))
+)
+
+(global-set-key (kbd "C-SPC .") 'simpson-rerun)
