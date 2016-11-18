@@ -619,11 +619,3 @@
 (setq dired-recursive-deletes t)
 (setq delete-by-moving-to-trash t)
 (setq dired-use-ls-dired nil)
-
-(defun simpson-rerun()
-  (interactive)
-  (projectile-with-default-dir (projectile-project-root)
-    (async-shell-command (car shell-command-history)))
-)
-
-(global-set-key (kbd "C-SPC .") 'simpson-rerun)

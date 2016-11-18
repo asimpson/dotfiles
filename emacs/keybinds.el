@@ -2,7 +2,7 @@
 
 (global-set-key (kbd "s-=") 'text-scale-increase)
 (global-set-key (kbd "s--") 'text-scale-decrease)
-(global-set-key (kbd "C-SPC !") (lambda()
+(global-set-key (kbd "C-SPC k !") (lambda()
   (interactive)
   (text-scale-set 0)))
 
@@ -21,9 +21,9 @@
 (global-set-key (kbd "C-SPC k c") 'clone-indirect-buffer-other-window)
 (global-set-key (kbd "C-SPC k v") 'visual-line-mode)
 (global-set-key (kbd "C-SPC k i") 'erc-select)
-(global-set-key (kbd "C-SPC k n") 'npm-test)
+(global-set-key (kbd "C-SPC k n") 'projectile-run-async-shell-command-in-root)
 (global-set-key (kbd "C-SPC k N") 'kill-shell-buffer)
-(global-set-key (kbd "C-SPC k !") 'async-shell-command)
+(global-set-key (kbd "C-SPC !") 'async-shell-command)
 (global-set-key (kbd "C-SPC k d") (lambda()
   "shells out to date to return a formatted date string at point"
   (interactive)
@@ -33,15 +33,17 @@
 
 (defun kill-shell-buffer()
   (interactive)
-  (setq old-buffer (current-buffer))
-  (with-current-buffer "*Async Shell Command*" (kill-buffer-and-window))
-  (switch-to-buffer-other-window old-buffer)
+  (switch-to-buffer-other-window "*Async Shell Command*")
+  (kill-buffer-and-window)
 )
 
-(defun npm-test()
+(defun simpson-rerun()
   (interactive)
-  (async-shell-command "npm test")
+  (projectile-with-default-dir (projectile-project-root)
+    (async-shell-command (car shell-command-history)))
 )
+
+(global-set-key (kbd "C-SPC .") 'simpson-rerun)
 
 (global-set-key (kbd "C-SPC z s") 'save-windows)
 (global-set-key (kbd "C-SPC z l") 'restore-windows)
@@ -99,3 +101,5 @@
 (define-key global-map (kbd "C-SPC L") 'linum-mode)
 
 (define-key global-map (kbd "s-t") nil)
+
+(define-key global-map (kbd "C-x k") 'kill-buffer-and-window)
