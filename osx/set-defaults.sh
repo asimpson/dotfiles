@@ -70,3 +70,6 @@ defaults write NSGlobalDomain KeyRepeat -int 0 # normal minimum is 2 (30 ms)
 # Kill affected applications
 for app in Finder Dock Mail Safari iTunes iCal Address\ Book SystemUIServer; do killall "$app" > /dev/null 2>&1; done
 echo "OSX Hacks Done. Note that some of these changes require a logout/restart to take effect."
+
+# show full extension to avoid tricky.jpg.app
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true

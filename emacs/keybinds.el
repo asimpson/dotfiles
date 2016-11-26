@@ -8,11 +8,10 @@
 
 (setq window-saved "nothing")
 
-(defun gen-multi-term (name)
-  (interactive "sName the term buffer: ")
+(defun gen-multi-term ()
+  (interactive)
   (switch-to-buffer-other-window nil)
   (multi-term)
-  (rename-buffer name)
 )
 
 (global-set-key (kbd "C-SPC k e") 'eval-region)
