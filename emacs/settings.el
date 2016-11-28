@@ -20,6 +20,12 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+(use-package diminish
+  :config (progn
+    (diminish 'undo-tree)
+  )
+)
+
 (use-package base16-theme
   :ensure t
   :init (load-theme 'base16-ocean-dark t)
@@ -58,6 +64,7 @@
 
 (use-package flycheck
   :ensure t
+  :diminish ""
   :init (add-hook 'after-init-hook #'global-flycheck-mode)
   :bind ("C-SPC '" . flycheck-mode)
   :config (setq-default flycheck-disabled-checkers (list 'javascript-jshint 'emacs-lisp-checkdoc 'emacs-lisp 'json-jsonlist))
@@ -65,6 +72,7 @@
 
 (use-package evil
   :ensure t
+  :diminish "vim"
   :bind ("C-u" . evil-scroll-up)
   :init (progn
     (use-package evil-leader
@@ -118,6 +126,7 @@
 )
 
 (use-package helm
+  :diminish ""
   :bind (
     ("M-x" . helm-M-x)
     ("C-=" . helm-mini)
@@ -134,6 +143,7 @@
 
     (use-package projectile
       :ensure t
+      :diminish ""
       :config (progn
         (projectile-global-mode)
         (setq projectile-switch-project-action 'projectile-dired)
@@ -160,6 +170,7 @@
 
 (use-package helm-flyspell
   :ensure t
+  :diminish ""
   :bind ("C-SPC C" . helm-flyspell-correct)
 )
 
@@ -212,6 +223,7 @@
 
 (use-package auto-complete
   :ensure t
+  :diminish ""
   :config (progn
     (ac-config-default)
     ;this prevents the stupid behavior in scss where &:before {___ autocompletes
@@ -327,7 +339,6 @@
   )
   :config (progn
     (add-hook 'js2-mode-hook 'relative-line-numbers-mode)
-    (rename-modeline "js2-mode" js2-mode "JS")
     (setq js2-basic-offset 2)
     (setq js2-highlight-level 3)
     (setq js2-bounce-indent-p t)
@@ -402,10 +413,10 @@
 
 
 ;http://whattheemacsd.com/appearance.el-01.html
-(defmacro rename-modeline (package-name mode new-name)
-  `(eval-after-load ,package-name
-     '(defadvice ,mode (after rename-modeline activate)
-        (setq mode-name ,new-name))))
+;; (defmacro rename-modeline (package-name mode new-name)
+;;   `(eval-after-load ,package-name
+;;      '(defadvice ,mode (after rename-modeline activate)
+;;         (setq mode-name ,new-name))))
 
 (defun simpson-header ()
   (setq header-line-format
@@ -501,6 +512,7 @@
 
 (use-package which-key
   :ensure t
+  :diminish ""
   :config (which-key-mode)
 )
 
@@ -511,6 +523,7 @@
 
 (use-package relative-line-numbers
   :ensure t
+  :diminish ""
   :bind ("C-SPC l" . relative-line-numbers-mode)
   :config (progn
     (add-hook 'css-mode-hook 'relative-line-numbers-mode)
@@ -540,6 +553,7 @@
 
 (use-package yasnippet
   :ensure t
+  :diminish yas-minor-mode
   :bind ("C-SPC e" . yas-expand)
   :load-path "~/.emacs.d/elpa/yasnippet"
   :init (progn
@@ -567,6 +581,7 @@
 
 (use-package emmet-mode
   :ensure t
+  :diminish "zen"
   :bind (
     ("C-c e" . emmet-expand-line)
     ("C-c y" . emmet-next-edit-point)
@@ -619,3 +634,8 @@
 (setq dired-recursive-deletes t)
 (setq delete-by-moving-to-trash t)
 (setq dired-use-ls-dired nil)
+
+(use-package editorconfig
+  :ensure t
+  :init (editorconfig-mode 1)
+)

@@ -79,15 +79,6 @@
 
 (setq minor-mode-alist (list))
 
-(defun simpson-toggle-minors ()
-  "toggle minor modes on and off"
-  (interactive)
-  (if (equal minor-mode-alist minor-mode-perm-list)
-      (setq minor-mode-alist (list))
-    (setq minor-mode-alist (copy-alist minor-mode-perm-list))))
-
-(define-key global-map (kbd "C-SPC m") 'simpson-toggle-minors)
-
 ;revert buffer to last-commit
 (define-key global-map (kbd "C-SPC R") 'vc-revert)
 
