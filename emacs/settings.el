@@ -21,8 +21,12 @@
   (package-install 'use-package))
 
 (use-package diminish
+  :ensure t
   :config (progn
     (diminish 'undo-tree)
+    (diminish 'web-mode)
+    (diminish 'auto-revert-mode)
+    (diminish 'flyspell-mode)
   )
 )
 
@@ -126,6 +130,7 @@
 )
 
 (use-package helm
+  :ensure t
   :diminish ""
   :bind (
     ("M-x" . helm-M-x)
@@ -596,10 +601,6 @@
   :config (progn
     (setq emmet-move-cursor-between-quotes t) ;; default nil
   )
-)
-
-(use-package org-alert
-  :ensure t
 )
 
 (use-package alert
