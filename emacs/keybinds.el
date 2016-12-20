@@ -28,6 +28,14 @@
   (interactive)
   (shell-command "date +%Y-%m-%d-%I:%M" t)))
 
+(global-set-key (kbd "C-SPC k D") (lambda(name)
+  "create new file for Deft/nvAlt"
+  (interactive "sName of file: ")
+  (setq date (shell-command-to-string "date +%m-%d-%Y"))
+  (setq fixed-date (replace-regexp-in-string "\n$" "" date))
+  (write-region "" "" (concat "~/Dropbox (Personal)/Notational Data/" fixed-date "-" name ".txt"))
+))
+
 (global-set-key (kbd "C-SPC /") 'swiper-helm)
 
 (defun kill-shell-buffer()
