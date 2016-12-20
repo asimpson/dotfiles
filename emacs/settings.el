@@ -23,10 +23,11 @@
 (use-package diminish
   :ensure t
   :config (progn
-    (diminish 'undo-tree)
-    (diminish 'web-mode)
-    (diminish 'auto-revert-mode)
-    (diminish 'flyspell-mode)
+    (diminish 'undo-tree "")
+    (diminish 'web-mode "")
+    (diminish 'auto-revert "")
+    (diminish 'smerge-mode "")
+    (diminish 'flyspell-mode "spell")
   )
 )
 
@@ -56,8 +57,7 @@
   :ensure t
   :demand
   :bind (:map dired-mode-map
-              ("i" . dired-subtree-toggle))
-)
+              ("i" . dired-subtree-toggle)))
 
 (use-package vimish-fold
   :ensure t
@@ -68,7 +68,7 @@
 
 (use-package flycheck
   :ensure t
-  :diminish ""
+  :diminish "lint"
   :init (add-hook 'after-init-hook #'global-flycheck-mode)
   :bind ("C-SPC '" . flycheck-mode)
   :config (setq-default flycheck-disabled-checkers (list 'javascript-jshint 'emacs-lisp-checkdoc 'emacs-lisp 'json-jsonlist))
@@ -335,6 +335,7 @@
 
 (use-package js2-mode
   :ensure t
+  :diminish "JS"
   :interpreter (
     ("node" . js2-mode)
   )
