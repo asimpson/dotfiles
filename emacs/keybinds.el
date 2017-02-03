@@ -23,6 +23,7 @@
 (global-set-key (kbd "C-SPC k n") 'simpson-smart-shell)
 (global-set-key (kbd "C-SPC k N") 'kill-shell-buffer)
 (global-set-key (kbd "C-SPC !") 'async-shell-command)
+(global-set-key (kbd "C-SPC u") 'universal-argument)
 (global-set-key (kbd "C-SPC k d") (lambda()
   "shells out to date to return a formatted date string at point"
   (interactive)
