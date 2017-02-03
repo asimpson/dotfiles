@@ -39,7 +39,7 @@ precmd() {
 
 source ~/.dotfiles/zsh/plugins/ht.plugin.zsh
 
-export EDITOR=nvim
+export EDITOR=/usr/local/bin/vim
 
 # Use C-x C-e to edit the current command line
 # http://nuclearsquid.com/writings/edit-long-commands/
