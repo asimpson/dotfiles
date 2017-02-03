@@ -4,7 +4,15 @@
 ;turn off toolbar
 (tool-bar-mode -1)
 
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+  '( (sh . t)
+     (js . t)
+   )
+)
+
 (setq visible-bell nil)
+
 (setq ring-bell-function (lambda ()
     (invert-face 'mode-line)
     (run-with-timer 0.1 nil 'invert-face 'mode-line)
