@@ -39,6 +39,15 @@
   )
 )
 
+(use-package osx-trash
+  :if (eq system-type 'darwin)
+  :ensure t
+  :config (progn
+    (osx-trash-setup)
+    (setq delete-by-moving-to-trash t)
+  )
+)
+
 (use-package base16-theme
   :ensure t
   :init (load-theme 'base16-ocean-dark t)
@@ -258,6 +267,7 @@
   )
   :config (progn
     ;org mode location
+    ;look into swapping with txt, org-agenda-file-regexp
     (setq org-agenda-files '("~/Dropbox (Personal)/org"))
     ;log when done
     (setq org-log-done t)
