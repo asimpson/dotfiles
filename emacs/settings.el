@@ -88,7 +88,7 @@
   :diminish "lint"
   :init (add-hook 'after-init-hook #'global-flycheck-mode)
   :bind ("C-SPC '" . flycheck-mode)
-  :config (setq-default flycheck-disabled-checkers (list 'javascript-jshint 'emacs-lisp-checkdoc 'emacs-lisp 'json-jsonlist))
+  :config (setq-default flycheck-disabled-checkers (list 'javascript-jshint 'emacs-lisp-checkdoc 'emacs-lisp 'json-jsonlist 'json-mode))
 )
 
 (use-package evil
@@ -266,6 +266,7 @@
     ("\\.txt\\'" . org-mode)
   )
   :config (progn
+    (require 'ox-md)
     ;org mode location
     ;look into swapping with txt, org-agenda-file-regexp
     (setq org-agenda-files '("~/Dropbox (Personal)/org"))
@@ -313,6 +314,7 @@
       (org-capture nil "a"))
     (global-set-key (kbd "C-SPC k f") 'org-footnote-new)
     (global-set-key (kbd "C-SPC k l") 'org-toggle-link-display)
+    (setq org-export-backends '(ascii html icalendar latex odt md))
   )
 )
 
@@ -418,12 +420,16 @@
 
 ;visual-fill-column
 ;https://github.com/joostkremers/visual-fill-column/blob/master/visual-fill-column.el
-(add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
-(setq-default visual-fill-column-width 160)
+(use-package visual-fill-column
+  :ensure t
+  :config (progn
+    (add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
+    (setq-default visual-fill-column-width 160)
+  )
+)
 
 ;https://joelkuiper.eu/spellcheck_emacs
 ;brew install hunspell
-
 
 (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
 
