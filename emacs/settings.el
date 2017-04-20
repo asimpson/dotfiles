@@ -1,7 +1,9 @@
+(require 'notmuch)
 ;debug use-package 👇
 ;(setq use-package-verbose t)
 
 ;turn off toolbar
+(show-paren-mode)
 (tool-bar-mode -1)
 
 (org-babel-do-load-languages
@@ -112,6 +114,7 @@
     (setq-default evil-shift-width 2)
     (setq evil-vsplit-window-right t)
     (setq evil-split-window-below t)
+    (define-key evil-normal-state-map (kbd "RET") 'save-buffer)
     (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
     (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
     (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
@@ -168,6 +171,7 @@
       :diminish ""
       :config (progn
         (projectile-global-mode)
+        (setq projectile-completion-system 'helm)
         (setq projectile-switch-project-action 'projectile-dired)
         (setq projectile-enable-caching nil)
 
@@ -364,7 +368,7 @@
     ("\\.jsx?\\'" . js2-mode)
   )
   :config (progn
-    (add-hook 'js2-mode-hook 'relative-line-numbers-mode)
+    ;; (add-hook 'js2-mode-hook 'relative-line-numbers-mode)
     (setq js2-basic-offset 2)
     (setq js2-highlight-level 3)
     (setq js2-bounce-indent-p t)
@@ -465,12 +469,18 @@
 ;update the header whenever the buffer-list changes
 (add-hook 'buffer-list-update-hook 'simpson-header)
 
-;change header line color to match ocean dark
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;change the color of the frame to match the theme
 (set-face-foreground 'header-line "#a3adb5")
 (set-face-background 'header-line "#4f5b66")
 
 (set-face-attribute 'header-line nil
     :box '(:line-width 3 :color "#4f5b66" :style nil))
+
+(set-face-foreground 'vertical-border "#4f5b66")
+(set-face-background 'fringe "#2b303b")
+;end color changes
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setenv "GPG_AGENT" "/usr/local/bin/gpg-agent")
 ;;read gpg-agent environment
@@ -528,9 +538,6 @@
 (set-face-attribute 'mode-line-inactive nil
     :box '(:line-width 3 :color "#343d46" :style nil))
 
-(set-face-foreground 'vertical-border "#4f5b66")
-(set-face-background 'fringe "#2b303b")
-
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (setq ediff-split-window-function 'split-window-horizontally)
 
@@ -556,9 +563,9 @@
   :diminish ""
   :bind ("C-SPC l" . relative-line-numbers-mode)
   :config (progn
-    (add-hook 'css-mode-hook 'relative-line-numbers-mode)
-    (add-hook 'web-mode-hook 'relative-line-numbers-mode)
-    (add-hook 'emacs-lisp-mode-hook 'relative-line-numbers-mode)
+    ;; (add-hook 'css-mode-hook 'relative-line-numbers-mode)
+    ;; (add-hook 'web-mode-hook 'relative-line-numbers-mode)
+    ;; (add-hook 'emacs-lisp-mode-hook 'relative-line-numbers-mode)
     (set-face-foreground 'relative-line-numbers-current-line "#d08770")
   )
 )
@@ -665,3 +672,6 @@
   :ensure t
   :init (editorconfig-mode 1)
 )
+
+;; Mutt support.
+(setq auto-mode-alist (append '(("mutt-*" . mail-mode)) auto-mode-alist))
