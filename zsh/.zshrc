@@ -52,3 +52,5 @@ bindkey '\e[A' history-beginning-search-backward
 bindkey '\e[B' history-beginning-search-forward
 
 export PATH="$HOME/.yarn/bin:$PATH"
+
+ssh-add -A 2>/dev/null;
