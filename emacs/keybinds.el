@@ -14,6 +14,16 @@
   (multi-term)
 )
 
+(global-set-key (kbd "C-SPC k P") (lambda()
+  "ideal for getting pretty JSON from JSON that is copied from a XHR request"
+  (interactive)
+  (with-temp-buffer
+    (clipboard-yank)
+    (json-pretty-print-buffer)
+    (kill-new (buffer-string))
+  )
+))
+
 (global-set-key (kbd "C-SPC k e") 'eval-region)
 (global-set-key (kbd "C-SPC k t") 'gen-multi-term)
 (global-set-key (kbd "C-SPC k r") 'revert-buffer)
