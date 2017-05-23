@@ -14,7 +14,7 @@
   (multi-term)
 )
 
-(global-set-key (kbd "C-SPC k P") (lambda()
+(defun simpson-pretty-json()
   "ideal for getting pretty JSON from JSON that is copied from a XHR request"
   (interactive)
   (with-temp-buffer
@@ -22,8 +22,24 @@
     (json-pretty-print-buffer)
     (kill-new (buffer-string))
   )
-))
+)
 
+(defun simpson-project-clone(url)
+  "clone a git repo and then change to that project"
+  (interactive "sGit url: ")
+  (let (
+      (projectsDir "~/Projects/")
+      (tempSplit (nth 1 (split-string url "/")))
+      (name (nth 0 (split-string tempSplit "\\.")))
+    )
+    (shell-command (concat "git clone " url " " projectsDir name))
+    (escreen-create-screen)
+    (dired (concat projectsDir name))
+  )
+)
+
+(global-set-key (kbd "C-SPC b") 'simpson-project-clone)
+(global-set-key (kbd "C-SPC k P") 'simpson-pretty-json)
 (global-set-key (kbd "C-SPC k e") 'eval-region)
 (global-set-key (kbd "C-SPC k t") 'gen-multi-term)
 (global-set-key (kbd "C-SPC k r") 'revert-buffer)
