@@ -109,6 +109,7 @@
   :config (progn
     (evil-mode 1)
     (add-to-list 'evil-emacs-state-modes 'dired-mode)
+    (add-to-list 'evil-emacs-state-modes 'epa-key-list-mode)
     ;http://spacemacs.org/doc/FAQ#orgheadline31
     (fset 'evil-visual-update-x-selection 'ignore)
     (setq-default evil-shift-width 2)

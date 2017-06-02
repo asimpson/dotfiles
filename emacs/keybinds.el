@@ -75,7 +75,7 @@
 (defun simpson-smart-shell()
   (interactive)
   (unless (ignore-errors (projectile-run-async-shell-command-in-root))
-  (async-shell-command))
+  (call-interactively 'async-shell-command))
 )
 
 (defun simpson-rerun()
