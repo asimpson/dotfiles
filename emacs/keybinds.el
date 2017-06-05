@@ -29,8 +29,7 @@
   (interactive "sGit url: ")
   (let (
       (projectsDir "~/Projects/")
-      (tempSplit (nth 1 (split-string url "/")))
-      (name (nth 0 (split-string tempSplit "\\.")))
+      (name (nth 0 (split-string (nth 1 (split-string url "/")) "\\.")))
     )
     (shell-command (concat "git clone " url " " projectsDir name))
     (escreen-create-screen)
