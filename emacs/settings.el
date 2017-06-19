@@ -134,8 +134,9 @@
         (key-chord-mode 1)
         (setq key-chord-two-keys-delay 0.1)
         (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
-        (key-chord-define-global "//" 'comment-region)
-        (key-chord-define-global "??" 'uncomment-region)
+        (key-chord-define evil-normal-state-map "//" 'comment-region)
+        (key-chord-define evil-normal-state-map "??" 'uncomment-region)
+        (key-chord-define evil-normal-state-map "cc" 'comment-line)
       )
     )
   )
@@ -173,7 +174,7 @@
       :config (progn
         (projectile-global-mode)
         (setq projectile-completion-system 'helm)
-        (setq projectile-switch-project-action 'projectile-dired)
+        (setq projectile-switch-project-action 'helm-projectile-find-file)
         (setq projectile-enable-caching nil)
 
         (use-package helm-projectile
@@ -330,6 +331,8 @@
   :config (progn
     (setq escreen-prefix-char (kbd "C-SPC s"))
     (global-set-key escreen-prefix-char 'escreen-prefix)
+    ;create a screen right off the bat
+    (call-interactively 'escreen-create-screen)
   )
 )
 
