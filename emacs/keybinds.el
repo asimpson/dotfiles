@@ -138,3 +138,18 @@
 (define-key global-map (kbd "s-p") nil)
 
 (define-key global-map (kbd "C-x k") 'kill-buffer-and-window)
+
+(defun simpson-delete-file-for-buffer()
+  "Kill the current buffer and deletes the file it is visiting."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (when filename
+      ;could add the option to delete files that are not tracked by VC
+      ;http://emacsredux.com/blog/2013/04/03/delete-file-and-buffer/
+      (if (vc-backend filename)
+        (vc-delete-file filename))
+    )
+  )
+)
+
+(define-key global-map (kbd "C-SPC X") 'simpson-delete-file-for-buffer)

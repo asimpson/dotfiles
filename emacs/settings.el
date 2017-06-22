@@ -136,10 +136,19 @@
         (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
         (key-chord-define evil-normal-state-map "//" 'comment-region)
         (key-chord-define evil-normal-state-map "??" 'uncomment-region)
-        (key-chord-define evil-normal-state-map "cc" 'comment-line)
+        (key-chord-define evil-normal-state-map "cc" 'simpson-magit-comment)
       )
     )
   )
+)
+
+(defun simpson-magit-comment()
+  "mashing cc in a magit-status window triggers my custom keybind to (comment-line)
+   this function checks what mode is current and then either comments or commit"
+  (interactive)
+  (if (string-equal major-mode "magit-status-mode")
+    (magit-commit)
+  (comment-line 1))
 )
 
 (use-package evil-matchit
