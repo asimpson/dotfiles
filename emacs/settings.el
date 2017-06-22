@@ -677,5 +677,18 @@
   :init (editorconfig-mode 1)
 )
 
+(use-package prettier-js
+  :ensure t
+  :diminish "🎨"
+  :config (progn
+    (add-hook 'js2-mode-hook 'prettier-js-mode)
+    (setq prettier-js-args '(
+      "--trailing-comma" "es5"
+      "--bracket-spacing" "true"
+      "--single-quote" "true"
+    ))
+  )
+)
+
 ;; Mutt support.
 (setq auto-mode-alist (append '(("mutt-*" . mail-mode)) auto-mode-alist))
