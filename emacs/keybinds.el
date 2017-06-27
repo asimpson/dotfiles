@@ -69,6 +69,7 @@
   (interactive)
   (switch-to-buffer-other-window "*Async Shell Command*")
   (kill-buffer-and-window)
+  (balance-windows)
 )
 
 (defun simpson-smart-shell()
