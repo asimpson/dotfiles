@@ -50,6 +50,10 @@
 (global-set-key (kbd "C-SPC !") 'async-shell-command)
 (global-set-key (kbd "C-SPC u") 'universal-argument)
 (global-set-key (kbd "C-SPC k g") 'ffap)
+(global-set-key (kbd "C-SPC k F") (lambda()
+  (interactive)
+  (byte-recompile-directory package-user-dir nil 'force))
+)
 (global-set-key (kbd "C-SPC k d") (lambda()
   "shells out to date to return a formatted date string at point"
   (interactive)
