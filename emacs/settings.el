@@ -219,6 +219,7 @@
 
 (use-package magit
   :ensure t
+  :pin melpa-stable
   :bind ("C-SPC g" . magit-status)
   :config (progn
     ;https://github.com/magit/magit/pull/2513
@@ -239,6 +240,7 @@
 
     (use-package evil-magit
       :ensure t
+      :pin melpa-stable
     )
   )
 )
