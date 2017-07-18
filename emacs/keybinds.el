@@ -41,7 +41,7 @@
 (global-set-key (kbd "C-SPC k P") 'simpson-pretty-json)
 (global-set-key (kbd "C-SPC k e") 'eval-region)
 (global-set-key (kbd "C-SPC k t") 'gen-multi-term)
-(global-set-key (kbd "C-SPC k r") 'revert-buffer)
+(global-set-key (kbd "C-SPC k r") 'vc-revert-buffer)
 (global-set-key (kbd "C-SPC k c") 'clone-indirect-buffer-other-window)
 (global-set-key (kbd "C-SPC k v") 'visual-line-mode)
 (global-set-key (kbd "C-SPC k i") 'erc-select)
@@ -54,6 +54,13 @@
   (interactive)
   (byte-recompile-directory package-user-dir nil 'force))
 )
+
+(global-set-key (kbd "C-SPC k a") (lambda()
+  "copy the file path for the current buffer to the clipboard"
+  (interactive)
+  (kill-new (buffer-file-name))
+))
+
 (global-set-key (kbd "C-SPC k d") (lambda()
   "shells out to date to return a formatted date string at point"
   (interactive)
@@ -66,10 +73,12 @@
   (setq fixed-date (replace-regexp-in-string "\n$" "" date))
   (write-region "" "" (concat "~/Dropbox (Personal)/Notational Data/" fixed-date "-" name ".txt"))
 ))
+(global-set-key (kbd "C-SPC k ?") 'eww)
 
 (global-set-key (kbd "C-SPC /") 'swiper-helm)
 
 (defun kill-shell-buffer()
+  "kills the Async Shell Command buffer and then balance's the remaining windows"
   (interactive)
   (switch-to-buffer-other-window "*Async Shell Command*")
   (kill-buffer-and-window)
@@ -104,25 +113,13 @@
 (defun save-windows ()
   "saves windows position"
   (interactive)
-  (message "window saved")
-  (setq window-saved "saved")
   (window-configuration-to-register 0)
   (delete-other-windows))
 
 (defun restore-windows ()
   "restores windows position"
   (interactive)
-  (setq window-saved "nothing")
   (jump-to-register 0))
-
-;; (defun print-path ()
-;;   "Print out current buffer path"
-;;   (interactive)
-;;   (message (buffer-file-name)))
-
-;(global-set-key (kbd "S-SPC p") 'print-path)
-
-;http://blog.aaronbieber.com/2016/01/30/dig-into-org-mode.html
 
 (setq minor-mode-perm-list (copy-alist minor-mode-alist))
 
