@@ -61,6 +61,14 @@
   (kill-new (buffer-file-name))
 ))
 
+(global-set-key (kbd "C-SPC D") 'simpson-dired-project)
+
+(defun simpson-dired-project()
+  "returns dired mode for the current project"
+  (interactive)
+  (dired (projectile-project-root))
+)
+
 (global-set-key (kbd "C-SPC k d") (lambda()
   "shells out to date to return a formatted date string at point"
   (interactive)
