@@ -122,6 +122,9 @@
     (define-key evil-normal-state-map (kbd "gx") 'browse-url)
     (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
     (define-key evil-normal-state-map "\C-p" 'helm-projectile-find-file)
+    (define-key evil-normal-state-map (kbd "SPC SPC") 'helm-projectile-find-file)
+    (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
+    (define-key evil-normal-state-map (kbd "C-n") 'evil-scroll-down)
     (define-key evil-normal-state-map (kbd "C-b") 'projectile-switch-project)
     (evil-leader/set-key "f" 'helm-projectile-ag)
     (evil-leader/set-key "F" 'helm-do-ag)
@@ -291,6 +294,9 @@
     (setq org-log-done t)
     ;set deadline warning
     (setq org-deadline-warning-days 3)
+    (setq org-export-with-toc nil)
+    (add-to-list 'load-path "~/.dotfiles/emacs/")
+    (require 'org-notmuch)
     ;org mode keywords
     (setq org-todo-keywords
           '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
