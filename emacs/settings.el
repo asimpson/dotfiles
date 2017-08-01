@@ -33,11 +33,11 @@
 (use-package diminish
   :ensure t
   :config (progn
-    (diminish 'undo-tree "")
-    (diminish 'web-mode "")
-    (diminish 'auto-revert "")
-    (diminish 'smerge-mode "")
-    (diminish 'flyspell-mode "spell")
+    (diminish 'undo-tree)
+    (diminish 'web-mode)
+    (diminish 'auto-revert)
+    (diminish 'smerge-mode)
+    (diminish 'flyspell-mode)
   )
 )
 
@@ -673,7 +673,7 @@
 (setq tramp-default-method "ssh")
 
 ;http://emacs.stackexchange.com/a/58
-;to open a file with sudo, invoke Tramp C-x C-f and then type /sudo::/path
+;to open a file with sudo, invoke C-x C-f and then type /sudo::/path
 
 (setq dired-recursive-deletes t)
 (setq delete-by-moving-to-trash t)

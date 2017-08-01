@@ -173,9 +173,9 @@
 )
 
 (defun simpson-open-mail-in-mail()
-  "open the current notmuch mail in Mail.app"
-  (interactive)
-  (let ((id (notmuch-show-get-message-id t)))
-    (shell-command (concat "open message://%3c" id "%3e"))
-  )
-)
+ "open the current notmuch mail in Mail.app"
+ (interactive)
+ (let ((id (notmuch-show-get-message-id t)))
+   (shell-command (concat "open message://%3c" id "%3e"))
+   )
+ )
