@@ -22,6 +22,7 @@
 ;prevent new frame
 ;(defun switch-to-buffer-other-frame ())
 
+(add-to-list 'load-path "~/.dotfiles/emacs/")
 (load "~/.emacs.d/settings.el")
 (load "~/.emacs.d/keybinds.el")
 

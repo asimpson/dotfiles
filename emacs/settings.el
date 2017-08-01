@@ -109,6 +109,7 @@
   :config (progn
     (evil-mode 1)
     (add-to-list 'evil-emacs-state-modes 'dired-mode)
+    (add-to-list 'evil-emacs-state-modes 'sauron-mode)
     (add-to-list 'evil-emacs-state-modes 'epa-key-list-mode)
     ;http://spacemacs.org/doc/FAQ#orgheadline31
     (fset 'evil-visual-update-x-selection 'ignore)
@@ -287,21 +288,14 @@
   )
   :config (progn
     (require 'ox-md)
-    ;org mode location
     ;look into swapping with txt, org-agenda-file-regexp
     (setq org-agenda-files '("~/Dropbox (Personal)/org"))
-    ;log when done
     (setq org-log-done t)
-    ;set deadline warning
     (setq org-deadline-warning-days 3)
     (setq org-export-with-toc nil)
-    (add-to-list 'load-path "~/.dotfiles/emacs/")
     (require 'org-notmuch)
-    ;org mode keywords
     (setq org-todo-keywords
           '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
-
-    ;capture template http://blog.aaronbieber.com/2016/01/30/dig-into-org-mode.html
     (setq org-capture-templates
           '(("a" "My TODO task format." entry
             (file "~/Dropbox (Personal)/org/tasks.org")
@@ -309,10 +303,8 @@
     :PROPERTIES:
     :CREATED: %T
     :END:")))
-    ;restore windows after org-todo-list closes
     (setq org-agenda-restore-windows-after-quit t)
     (add-hook 'org-mode-hook (lambda () (flyspell-mode 1)))
-    ;org theme changes for ocean 16
     (set-face-foreground 'org-link "#a3be8c")
     (set-face-foreground 'org-tag "#ebcb8b")
     (set-face-foreground 'org-agenda-structure "#65737e")
@@ -656,19 +648,17 @@
   )
 )
 
-(use-package alert
+(use-package sauron
   :ensure t
+  :pin melpa-stable
   :config (progn
-    (setq alert-default-style 'notifier)
-    (defun alert-notifier-notify (info)
-      (if alert-notifier-command
-          (let ((args
-                (list "-title"   (alert-encode-string (plist-get info :title))
-                      "-message" (alert-encode-string (plist-get info :message))
-                )))
-            (message "%s" args)
-            (apply #'call-process alert-notifier-command nil nil nil args))
-        (alert-message-notify info)))
+    (setq sauron-watch-nicks '("asimpson" "yock"))
+    (setq sauron-hide-mode-line t)
+    (setq sauron-modules '(sauron-erc sauron-notifications sauron-ams-org))
+    (setq sauron-column-alist '((timestamp . 20)
+      (origin . 7)
+      (message)))
+    (sauron-start-hidden)
   )
 )
 
