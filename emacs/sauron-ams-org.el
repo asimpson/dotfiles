@@ -26,7 +26,7 @@
     (when (and (< diff 300)
                (> diff 0))
       (setq msg (concat "DUE! " task))
-      (run-at-time diff nil (sauron-add-event 'ams-org 5 msg #'org-agenda-list)))
+      (run-at-time diff nil #'(lambda() (sauron-add-event 'ams-org 5 msg #'org-agenda-list))))
     (when (and (< diff 900)
                (> diff 0))
       (setq msg (concat interval " minutes left before " task))

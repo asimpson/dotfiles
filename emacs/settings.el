@@ -110,6 +110,7 @@
     (evil-mode 1)
     (add-to-list 'evil-emacs-state-modes 'dired-mode)
     (add-to-list 'evil-emacs-state-modes 'sauron-mode)
+    (add-to-list 'evil-emacs-state-modes 'erc-mode)
     (add-to-list 'evil-emacs-state-modes 'epa-key-list-mode)
     ;http://spacemacs.org/doc/FAQ#orgheadline31
     (fset 'evil-visual-update-x-selection 'ignore)
@@ -654,6 +655,7 @@
   :config (progn
     (setq sauron-watch-nicks '("asimpson" "yock"))
     (setq sauron-hide-mode-line t)
+    (setq sauron-separate-frame nil)
     (setq sauron-modules '(sauron-erc sauron-notifications sauron-ams-org))
     (setq sauron-column-alist '((timestamp . 20)
       (origin . 7)

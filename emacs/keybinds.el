@@ -38,6 +38,7 @@
 )
 
 (global-set-key (kbd "C-SPC b") 'simpson-project-clone)
+(global-set-key (kbd "C-SPC B") 'simpson-get-git-url)
 (global-set-key (kbd "C-SPC k P") 'simpson-pretty-json)
 (global-set-key (kbd "C-SPC k e") 'eval-region)
 (global-set-key (kbd "C-SPC k t") 'gen-multi-term)
@@ -179,3 +180,14 @@
    (shell-command (concat "open message://%3c" id "%3e"))
    )
  )
+
+(defun simpson-get-git-url()
+  "Grab the remote url for origin and assume it's a github url.
+   Open the url in the default browser"
+  (interactive)
+  (let (url repo)
+    (setq url (shell-command-to-string "git remote get-url origin"))
+    (setq repo (nth 0 (split-string (nth 1 (split-string url ":")) "\\.")))
+    (shell-command (concat "open https://github.com/" repo) t)
+  )
+)
