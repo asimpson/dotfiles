@@ -660,6 +660,7 @@
     (setq sauron-column-alist '((timestamp . 20)
       (origin . 7)
       (message)))
+    (advice-add 'shell-command-sentinel :before #'simpson-shell-command-sentiel)
     (sauron-start-hidden)
   )
 )
@@ -701,3 +702,9 @@
 
 ;; Mutt support.
 (setq auto-mode-alist (append '(("mutt-*" . mail-mode)) auto-mode-alist))
+
+(defun simpson-shell-command-sentiel(proc sig)
+  (when (and (memq (process-status proc)
+                    '(exit))
+              (not (string= (string-trim sig) "finished")))
+    (sauron-add-event 'shell 3 sig nil)))
