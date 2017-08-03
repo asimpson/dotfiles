@@ -2,7 +2,7 @@
 ;;; -*- lexical-binding: t; -*-
 
 ;; Adam Simpson <adam@adamsimpson.net>
-;; Version: 0.1.0
+;; Version: 0.2.1
 ;; Package-Requires: (sauron org)
 ;; Keywords: sauron, org
 ;; URL: https://github.com/asimpson/dotfiles/
@@ -26,8 +26,10 @@
     (when (and (< diff 300)
                (> diff 0))
       (setq msg (concat "DUE! " task))
-      (run-at-time diff nil (lambda(msg)
-                              (sauron-add-event 'ams-org 5 msg #'org-agenda-list)) msg))
+      (run-at-time diff nil
+        (lambda(msg)
+          (sauron-add-event 'ams-org 5 (propertize msg 'face
+            '(:foreground "firebrick2")) #'org-agenda-list)) msg))
     (when (and (< diff 900)
                (> diff 0))
       (setq msg (concat interval " minutes left before " task))
