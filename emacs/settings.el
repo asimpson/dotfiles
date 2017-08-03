@@ -12,7 +12,6 @@
      (js . t)
    )
 )
-
 (setq visible-bell nil)
 
 (setq ring-bell-function (lambda ()
@@ -38,8 +37,17 @@
     (diminish 'auto-revert)
     (diminish 'smerge-mode)
     (diminish 'flyspell-mode)
+    (diminish 'emacs-lisp-mode "elisp")
   )
 )
+
+;http://whattheemacsd.com/appearance.el-01.html
+(defmacro rename-modeline (package-name mode new-name)
+  `(eval-after-load ,package-name
+     '(defadvice ,mode (after rename-modeline activate)
+        (setq mode-name ,new-name))))
+
+(rename-modeline "elisp-mode" emacs-lisp-mode "elisp")
 
 (use-package osx-trash
   :if (eq system-type 'darwin)
@@ -90,7 +98,8 @@
   :diminish "lint"
   :init (add-hook 'after-init-hook #'global-flycheck-mode)
   :bind ("C-SPC '" . flycheck-mode)
-  :config (setq-default flycheck-disabled-checkers (list 'javascript-jshint 'emacs-lisp-checkdoc 'emacs-lisp 'json-jsonlist 'json-mode))
+  :config (progn
+    (setq flycheck-global-modes '(rjsx-mode emacs-lisp-mode json-mode)))
 )
 
 (use-package evil
@@ -109,8 +118,6 @@
   :config (progn
     (evil-mode 1)
     (add-to-list 'evil-emacs-state-modes 'dired-mode)
-    (add-to-list 'evil-emacs-state-modes 'sauron-mode)
-    (add-to-list 'evil-emacs-state-modes 'erc-mode)
     (add-to-list 'evil-emacs-state-modes 'epa-key-list-mode)
     ;http://spacemacs.org/doc/FAQ#orgheadline31
     (fset 'evil-visual-update-x-selection 'ignore)
@@ -212,7 +219,7 @@
 
 (use-package helm-flyspell
   :ensure t
-  :diminish ""
+  :diminish "spell"
   :bind ("C-SPC C" . helm-flyspell-correct)
 )
 
@@ -288,13 +295,13 @@
     ("\\.txt\\'" . org-mode)
   )
   :config (progn
+    (require 'org-notmuch)
     (require 'ox-md)
     ;look into swapping with txt, org-agenda-file-regexp
     (setq org-agenda-files '("~/Dropbox (Personal)/org"))
     (setq org-log-done t)
     (setq org-deadline-warning-days 3)
     (setq org-export-with-toc nil)
-    (require 'org-notmuch)
     (setq org-todo-keywords
           '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
     (setq org-capture-templates
@@ -374,12 +381,9 @@
 (use-package js2-mode
   :ensure t
   :diminish "JS"
+  :disabled
   :interpreter (
     ("node" . js2-mode)
-  )
-  :mode (
-    ("\\.js?\\'" . js2-mode)
-    ("\\.jsx?\\'" . js2-mode)
   )
   :config (progn
     ;; (add-hook 'js2-mode-hook 'relative-line-numbers-mode)
@@ -396,6 +400,26 @@
     depending on it."
       :type 'boolean
       :group 'js2-mode)
+  )
+)
+
+(use-package rjsx-mode
+  :ensure t
+  :diminish "R"
+  :interpreter (
+    ("node" . rjsx-mode)
+  )
+  :mode (
+    ("\\.js?\\'" . rjsx-mode)
+    ("\\.jsx?\\'" . rjsx-mode)
+  )
+  :config (progn
+    (setq js2-basic-offset 2)
+    (setq js2-highlight-level 3)
+    (setq js2-bounce-indent-p t)
+    (electric-indent-mode -1)
+    (setq js2-mode-show-strict-warnings nil)
+    (add-hook 'js2-mode-hook (lambda() (setq show-trailing-whitespace t)))
   )
 )
 
@@ -459,22 +483,15 @@
   (when (not (file-exists-p (buffer-file-name)))
     (set-buffer-modified-p t)))
 
-
-;http://whattheemacsd.com/appearance.el-01.html
-;; (defmacro rename-modeline (package-name mode new-name)
-;;   `(eval-after-load ,package-name
-;;      '(defadvice ,mode (after rename-modeline activate)
-;;         (setq mode-name ,new-name))))
-
 (defun simpson-header ()
-  (setq header-line-format
-    (list
-      ;16 characters = /Users/asimpson/
-      (if (stringp (buffer-file-name))
-        (eval (concat " ▼ ../" (substring (buffer-file-name) 16 nil)))
-      "¯\\_(ツ)_/¯"
-      )
-  ))
+  (let (output)
+    (setq output "¯\\_(ツ)_/¯")
+    (when (stringp (buffer-file-name))
+      (setq output (concat " ▼ ../" (substring (buffer-file-name) 16 nil))))
+    (when (string= major-mode "sauron-mode")
+      (setq output "(o)"))
+    (setq header-line-format output)
+  )
 )
 
 ;set the header intially
@@ -609,6 +626,7 @@
   :load-path "~/.emacs.d/elpa/yasnippet"
   :init (progn
     (add-hook 'js2-mode-hook #'yas-minor-mode)
+    (add-hook 'rjsx-mode-hook #'yas-minor-mode)
     (add-hook 'org-mode-hook #'yas-minor-mode)
   )
   :config (progn
@@ -653,6 +671,7 @@
   :ensure t
   :pin melpa-stable
   :config (progn
+    (add-to-list 'evil-emacs-state-modes 'sauron-mode)
     (setq sauron-watch-nicks '("asimpson" "yock"))
     (setq sauron-hide-mode-line t)
     (setq sauron-separate-frame nil)
@@ -692,6 +711,7 @@
   :diminish "🎨"
   :config (progn
     (add-hook 'js2-mode-hook 'prettier-js-mode)
+    (add-hook 'rjsx-mode-hook 'prettier-js-mode)
     (setq prettier-js-args '(
       "--trailing-comma" "es5"
       "--bracket-spacing" "true"
@@ -714,3 +734,10 @@
              (not (string= (string-trim sig) "finished")))
     (sauron-add-event 'shell 3 sig (lambda() #'(switch-to-buffer-other-window
                                                 "*Async Shell Command*")))))
+
+(use-package erc
+  :config (progn
+    (add-to-list 'evil-emacs-state-modes 'erc-mode)
+    (evil-set-initial-state 'erc-mode 'emacs)
+  )
+)
