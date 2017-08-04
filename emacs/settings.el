@@ -6,13 +6,12 @@
 (show-paren-mode)
 (tool-bar-mode -1)
 
-(org-babel-do-load-languages
- 'org-babel-load-languages
-  '( (sh . t)
-     (js . t)
-   )
-)
 (setq visible-bell nil)
+
+(setq exec-path (append exec-path '("/Users/asimpson/.better-npm/lib/node_modules")))
+(setq exec-path (append exec-path '("/Users/asimpson/.better-npm/bin")))
+(setq exec-path (append exec-path '("/usr/local/bin")))
+(setenv "PATH" "/Users/asimpson/.better-npm/lib/node_modules:/Users/asimpson/.better-npm/bin:/usr/local/bin:/usr/local/sbin")
 
 (setq ring-bell-function (lambda ()
     (invert-face 'mode-line)
@@ -26,11 +25,17 @@
 
 ;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+ (package-refresh-contents)
+ (package-install 'use-package))
+
+(eval-when-compile
+  (require 'use-package))
+
+(setq-default
+  use-package-always-defer t
+  use-package-always-ensure t)
 
 (use-package diminish
-  :ensure t
   :config (progn
     (diminish 'undo-tree)
     (diminish 'web-mode)
@@ -51,7 +56,6 @@
 
 (use-package osx-trash
   :if (eq system-type 'darwin)
-  :ensure t
   :config (progn
     (osx-trash-setup)
     (setq delete-by-moving-to-trash t)
@@ -59,71 +63,52 @@
 )
 
 (use-package base16-theme
-  :ensure t
   :init (load-theme 'base16-ocean-dark t)
 )
 
 (use-package exec-path-from-shell
-  :ensure t
+  :defer 2
   :config (progn
-    ;(setq exec-path-from-shell-arguments "-l");remove -i
-    ;causes error in shell
     (when (memq window-system '(mac ns))
       (exec-path-from-shell-initialize))
   )
 )
 
 (use-package dired-narrow
-  :ensure t
-  :demand
   :bind (:map dired-mode-map
               ("/" . dired-narrow-fuzzy))
 )
 
 (use-package dired-subtree
-  :ensure t
-  :demand
   :bind (:map dired-mode-map
               ("i" . dired-subtree-toggle)))
 
 (use-package vimish-fold
-  :ensure t
   :config (vimish-fold-global-mode 1)
   :bind (("C-SPC v" . vimish-fold)
          ("C-SPC V" . vimish-fold-delete))
 )
 
 (use-package flycheck
-  :ensure t
   :diminish "lint"
+  :defer 1
   :init (add-hook 'after-init-hook #'global-flycheck-mode)
   :bind ("C-SPC '" . flycheck-mode)
-  :config (progn
-    (setq flycheck-global-modes '(rjsx-mode emacs-lisp-mode json-mode)))
+  :config (setq flycheck-global-modes '(rjsx-mode emacs-lisp-mode json-mode))
 )
 
 (use-package evil
-  :ensure t
   :diminish "vim"
-  :bind ("C-u" . evil-scroll-up)
-  :init (progn
-    (use-package evil-leader
-      :ensure t
-      :config (progn
-        (global-evil-leader-mode)
-        (evil-leader/set-leader ",")
-      )
-    )
-  )
+  :defer 1
   :config (progn
-    (evil-mode 1)
+    (evil-mode t)
+    (setq-default evil-shift-width 2)
+    (setq evil-vsplit-window-right t)
+    (setq evil-split-window-below t)
     (add-to-list 'evil-emacs-state-modes 'dired-mode)
     (add-to-list 'evil-emacs-state-modes 'epa-key-list-mode)
     ;http://spacemacs.org/doc/FAQ#orgheadline31
     (fset 'evil-visual-update-x-selection 'ignore)
-    (setq-default evil-shift-width 2)
-    (setq evil-vsplit-window-right t)
-    (setq evil-split-window-below t)
     (define-key evil-normal-state-map (kbd "RET") 'save-buffer)
     (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
     (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
@@ -135,22 +120,33 @@
     (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
     (define-key evil-normal-state-map (kbd "C-n") 'evil-scroll-down)
     (define-key evil-normal-state-map (kbd "C-b") 'projectile-switch-project)
+
+  )
+)
+
+(use-package evil-leader
+  :after evil
+  :defer 1
+  :config (progn
+    (global-evil-leader-mode)
+    (evil-leader/set-leader ",")
     (evil-leader/set-key "f" 'helm-projectile-ag)
     (evil-leader/set-key "F" 'helm-do-ag)
     (evil-leader/set-key "c" 'fci-mode)
     (evil-leader/set-key "v" 'evil-window-vnew)
     (evil-leader/set-key "x" 'evil-window-new)
-    (use-package key-chord
-      :ensure t
-      :config (progn
-        (key-chord-mode 1)
-        (setq key-chord-two-keys-delay 0.1)
-        (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
-        (key-chord-define evil-normal-state-map "//" 'comment-region)
-        (key-chord-define evil-normal-state-map "??" 'uncomment-region)
-        (key-chord-define evil-normal-state-map "cc" 'simpson-magit-comment)
-      )
-    )
+  )
+)
+
+(use-package key-chord
+  :after evil
+  :config (progn
+    (key-chord-mode 1)
+    (setq key-chord-two-keys-delay 0.1)
+    (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
+    (key-chord-define evil-normal-state-map "//" 'comment-region)
+    (key-chord-define evil-normal-state-map "??" 'uncomment-region)
+    (key-chord-define evil-normal-state-map "cc" 'simpson-magit-comment)
   )
 )
 
@@ -163,8 +159,15 @@
   (comment-line 1))
 )
 
+(use-package god-mode
+  :disabled
+  :config (progn
+    (define-key god-local-mode-map (kbd "P") 'helm-projectile-find-file)
+    (define-key god-local-mode-map (kbd "F") 'helm-projectile-ag)
+  )
+)
+
 (use-package evil-matchit
-  :ensure t
   :config (progn
     (global-evil-matchit-mode 1)
     (plist-put evilmi-plugins 'handlebars-mode '((evilmi-simple-get-tag evilmi-simple-jump)
@@ -173,7 +176,6 @@
 )
 
 (use-package helm
-  :ensure t
   :diminish ""
   :bind (
     ("M-x" . helm-M-x)
@@ -183,43 +185,41 @@
   )
   :config (progn
     (helm-mode)
-    (require 'helm-config)
+    ;(require 'helm-config)
     (set-face-background 'helm-ff-dotted-directory "#2b303b")
     (set-face-background 'helm-ff-dotted-symlink-directory "#2b303b")
     (set-face-foreground 'helm-ff-dotted-directory "#65737e")
     (set-face-foreground 'helm-ff-dotted-symlink-directory "#65737e")
 
-    (use-package projectile
-      :ensure t
-      :diminish ""
-      :config (progn
-        (projectile-global-mode)
-        (setq projectile-completion-system 'helm)
-        (setq projectile-switch-project-action 'helm-projectile-find-file)
-        (setq projectile-enable-caching nil)
-
-        (use-package helm-projectile
-          :ensure t
-          :config (progn
-            (helm-projectile-on)
-          )
-        )
-      )
-    )
-    (use-package helm-ag
-      :ensure t
-      :defer t
-      :config (progn
-        (custom-set-variables
-        '(helm-ag-base-command "ag --nocolor --nogroup"))
-      )
-    )
   )
 )
 
+(use-package projectile
+  :diminish ""
+  :after helm
+  :config (progn
+    (projectile-global-mode)
+    (setq projectile-completion-system 'helm)
+    (setq projectile-enable-caching nil)
+    (setq projectile-switch-project-action 'helm-projectile-find-file)
+  )
+)
+
+(use-package helm-projectile
+  :after projectile
+  :config (progn
+    (helm-projectile-on)
+  )
+)
+
+(use-package helm-ag
+  :init (setq helm-ag-base-command "ag --nocolor --nogroup")
+  :after helm
+)
+
 (use-package helm-flyspell
-  :ensure t
   :diminish "spell"
+  :after helm
   :bind ("C-SPC C" . helm-flyspell-correct)
 )
 
@@ -230,8 +230,8 @@
 )
 
 (use-package magit
-  :ensure t
   :pin melpa-stable
+  :defer 1
   :bind ("C-SPC g" . magit-status)
   :config (progn
     ;https://github.com/magit/magit/pull/2513
@@ -249,16 +249,15 @@
 
     (set-face-foreground 'magit-hash "#96b5b4")
     (set-face-background 'magit-section-highlight "#343d46")
-
-    (use-package evil-magit
-      :ensure t
-      :pin melpa-stable
-    )
   )
 )
 
+(use-package evil-magit
+  :pin melpa-stable
+  :after evil
+)
+
 (use-package diff-hl
-  :ensure t
   :bind (
     ("C-SPC r" . diff-hl-revert-hunk)
     ("C-x p" . diff-hl-previous-hunk)
@@ -273,7 +272,6 @@
 )
 
 (use-package auto-complete
-  :ensure t
   :diminish ""
   :config (progn
     (ac-config-default)
@@ -284,7 +282,7 @@
 )
 
 (use-package org
-  :ensure t
+  :defer 2
   :bind (
     ("C-SPC c" . simpson-org-task-capture)
     ("C-SPC t" . org-todo-list)
@@ -338,13 +336,18 @@
     (global-set-key (kbd "C-SPC k f") 'org-footnote-new)
     (global-set-key (kbd "C-SPC k l") 'org-toggle-link-display)
     (setq org-export-backends '(ascii html icalendar latex odt md))
+    (org-babel-do-load-languages
+    'org-babel-load-languages
+      '( (sh . t)
+        (js . t)
+      )
+    )
   )
 )
 
 (use-package escreen
-  :ensure t
-  :demand t
   :bind ("C-SPC S" . escreen-menu)
+  :demand t
   :config (progn
     (setq escreen-prefix-char (kbd "C-SPC s"))
     (global-set-key escreen-prefix-char 'escreen-prefix)
@@ -354,7 +357,6 @@
 )
 
 (use-package multi-term
-  :ensure t
   :config (progn
     (setq multi-term-program "/bin/zsh")
     (setq multi-term-program-switches "--login")
@@ -363,7 +365,6 @@
 )
 
 (use-package markdown-mode
-  :ensure t
   :mode (
     ("\\.md\\'" . markdown-mode)
   )
@@ -379,7 +380,6 @@
 )
 
 (use-package js2-mode
-  :ensure t
   :diminish "JS"
   :disabled
   :interpreter (
@@ -404,7 +404,6 @@
 )
 
 (use-package rjsx-mode
-  :ensure t
   :diminish "R"
   :interpreter (
     ("node" . rjsx-mode)
@@ -458,12 +457,10 @@
   (setq buffer-face-mode-face '(:family "Hack" :height 120))
   (buffer-face-mode))
 ;¯\_(ツ)_/¯
-(setq flyspell-issue-message-flag nil)
 
 ;visual-fill-column
 ;https://github.com/joostkremers/visual-fill-column/blob/master/visual-fill-column.el
 (use-package visual-fill-column
-  :ensure t
   :config (progn
     (add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
     (setq-default visual-fill-column-width 160)
@@ -474,7 +471,6 @@
 ;brew install hunspell
 
 (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
-
 
 ;treat new buffers as modified files
 ;http://stackoverflow.com/a/2592558/2344737
@@ -579,18 +575,15 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (use-package which-key
-  :ensure t
   :diminish ""
-  :config (which-key-mode)
+  :init (which-key-mode)
 )
 
 (use-package fill-column-indicator
-  :ensure t
   :config (setq fci-rule-column 80)
 )
 
 (use-package relative-line-numbers
-  :ensure t
   :diminish ""
   :bind ("C-SPC l" . relative-line-numbers-mode)
   :config (progn
@@ -602,7 +595,6 @@
 )
 
 (use-package avy
-  :ensure t
   :bind (
     ("C-SPC j" . avy-goto-word-1)
     ("C-SPC J" . avy-goto-char)
@@ -615,15 +607,13 @@
   )
 )
 
-(use-package reveal-in-osx-finder
-  :ensure t
-)
+(use-package reveal-in-osx-finder)
 
 (use-package yasnippet
-  :ensure t
   :diminish yas-minor-mode
   :bind ("C-SPC e" . yas-expand)
   :load-path "~/.emacs.d/elpa/yasnippet"
+  :defer 1
   :init (progn
     (add-hook 'js2-mode-hook #'yas-minor-mode)
     (add-hook 'rjsx-mode-hook #'yas-minor-mode)
@@ -637,7 +627,6 @@
 )
 
 (use-package deft
-  :ensure t
   :bind ("C-SPC d" . deft)
   :config (progn
     (add-to-list 'evil-emacs-state-modes 'deft-mode)
@@ -649,12 +638,12 @@
 )
 
 (use-package emmet-mode
-  :ensure t
   :diminish "zen"
   :bind (
     ("C-c e" . emmet-expand-line)
     ("C-c y" . emmet-next-edit-point)
   )
+  :defer 1
   :init (progn
     (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
     (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
@@ -668,19 +657,19 @@
 )
 
 (use-package sauron
-  :ensure t
   :pin melpa-stable
+  :defer 2
+  :init (setq sauron-modules '(sauron-erc sauron-ams-org))
   :config (progn
     (add-to-list 'evil-emacs-state-modes 'sauron-mode)
     (setq sauron-watch-nicks '("asimpson" "yock"))
     (setq sauron-hide-mode-line t)
     (setq sauron-separate-frame nil)
-    (setq sauron-modules '(sauron-erc sauron-ams-org))
     (setq sauron-column-alist '((timestamp . 20)
       (origin . 7)
       (message)))
-    (advice-add 'shell-command-sentinel :before #'simpson-shell-command-sentiel)
     (sauron-start-hidden)
+    (advice-add 'shell-command-sentinel :before #'simpson-shell-command-sentiel)
   )
 )
 
@@ -702,22 +691,21 @@
 (setq dired-use-ls-dired nil)
 
 (use-package editorconfig
-  :ensure t
   :init (editorconfig-mode 1)
 )
 
 (use-package prettier-js
-  :ensure t
   :diminish "🎨"
-  :config (progn
+  :defer 1
+  :init (progn
     (add-hook 'js2-mode-hook 'prettier-js-mode)
     (add-hook 'rjsx-mode-hook 'prettier-js-mode)
-    (setq prettier-js-args '(
+  )
+  :config (setq prettier-js-args '(
       "--trailing-comma" "es5"
       "--bracket-spacing" "true"
       "--single-quote" "true"
     ))
-  )
 )
 
 ;; Mutt support.
@@ -740,4 +728,9 @@
     (add-to-list 'evil-emacs-state-modes 'erc-mode)
     (evil-set-initial-state 'erc-mode 'emacs)
   )
+)
+
+(use-package flyspell
+  :defer 1
+  :config (setq flyspell-issue-message-flag nil)
 )
