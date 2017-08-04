@@ -273,7 +273,7 @@
 
 (use-package auto-complete
   :diminish ""
-  :config (progn
+  :init (progn
     (ac-config-default)
     ;this prevents the stupid behavior in scss where &:before {___ autocompletes
     ;lang!
@@ -665,9 +665,10 @@
     (setq sauron-watch-nicks '("asimpson" "yock"))
     (setq sauron-hide-mode-line t)
     (setq sauron-separate-frame nil)
-    (setq sauron-column-alist '((timestamp . 20)
+    (setq sauron-column-alist '((timestamp . 8)
       (origin . 7)
       (message)))
+    (setq sauron-timestamp-format "%H:%M:%S")
     (sauron-start-hidden)
     (advice-add 'shell-command-sentinel :before #'simpson-shell-command-sentiel)
   )
