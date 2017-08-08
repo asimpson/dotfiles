@@ -197,6 +197,7 @@
 
 (defun simpson-kill-erc()
   "quits all erc servers"
+  (interactive)
   (erc-cmd-GQ nil)
 )
 

@@ -467,9 +467,6 @@
   )
 )
 
-;https://joelkuiper.eu/spellcheck_emacs
-;brew install hunspell
-
 (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
 
 ;treat new buffers as modified files
@@ -663,8 +660,9 @@
   :config (progn
     (add-to-list 'evil-emacs-state-modes 'sauron-mode)
     (setq sauron-watch-nicks nil)
+    (setq sauron-watch-patterns '("@adam"))
     (setq sauron-hide-mode-line t)
-    (setq sauron-separate-frame nil)
+    (setq sauron-separate-frame t)
     (setq sauron-column-alist '((timestamp . 8)
       (origin . 7)
       (message)))
