@@ -185,6 +185,16 @@
   )
 )
 
+(defun simpson-freenode()
+  "connect to freenode irc"
+  (interactive)
+  (let ((x "irc.freenode.net"))
+    (erc :server x
+      :nick (car (auth-source-user-and-password x))
+      :password (cadr (auth-source-user-and-password x)))
+  )
+)
+
 (defun simpson-kill-erc()
   "quits all erc servers"
   (erc-cmd-GQ nil)
