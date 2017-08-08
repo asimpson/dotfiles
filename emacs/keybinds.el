@@ -9,6 +9,7 @@
 (setq window-saved "nothing")
 
 (defun gen-multi-term ()
+  "open up a mult-term in a new window"
   (interactive)
   (switch-to-buffer-other-window nil)
   (multi-term)
@@ -56,6 +57,11 @@
   (byte-recompile-directory package-user-dir nil 'force))
 )
 
+(global-set-key (kbd "C-SPC m l") 'windmove-right)
+(global-set-key (kbd "C-SPC m h") 'windmove-left)
+(global-set-key (kbd "C-SPC m j") 'windmove-down)
+(global-set-key (kbd "C-SPC m k") 'windmove-up)
+
 (global-set-key (kbd "C-SPC k a") (lambda()
   "copy the file path for the current buffer to the clipboard"
   (interactive)
@@ -95,12 +101,14 @@
 )
 
 (defun simpson-smart-shell()
+  "run shell from projectile root or from current spot in system"
   (interactive)
   (unless (ignore-errors (projectile-run-async-shell-command-in-root))
   (call-interactively 'async-shell-command))
 )
 
 (defun simpson-rerun()
+  "rerun last shell command. respsects projectile."
   (interactive)
   (if (projectile-project-p)
     (projectile-with-default-dir (projectile-project-root)
@@ -164,6 +172,24 @@
 )
 
 (define-key global-map (kbd "C-SPC X") 'simpson-delete-file-for-buffer)
+(define-key global-map (kbd "C-SPC E") 'simpson-erc)
+(define-key global-map (kbd "C-SPC k E") 'simpson-kill-erc)
+
+(defun simpson-erc()
+  "loads all irc servers defined (as a list) in irc-accounts.gpg"
+  (interactive)
+  (seq-doseq (x simpson-irc)
+    (erc-tls :server x
+      :nick (car (auth-source-user-and-password x))
+      :password (cadr (auth-source-user-and-password x)))
+  )
+)
+
+(defun simpson-kill-erc()
+  "quits all erc servers"
+  (erc-cmd-GQ nil)
+)
+
 (defun simpson-macos-mail-link()
   "gets the Message-ID of the current notmuch message and constructs a Mail.app appropriate link
    reference: https://daringfireball.net/2007/12/message_urls_leopard_mail."

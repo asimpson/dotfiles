@@ -1,2 +1,3 @@
 .vim/bundle/*
 .vim/.netrwhist
+*.gpg

@@ -662,7 +662,7 @@
   :init (setq sauron-modules '(sauron-erc sauron-ams-org))
   :config (progn
     (add-to-list 'evil-emacs-state-modes 'sauron-mode)
-    (setq sauron-watch-nicks '("asimpson" "yock"))
+    (setq sauron-watch-nicks nil)
     (setq sauron-hide-mode-line t)
     (setq sauron-separate-frame nil)
     (setq sauron-column-alist '((timestamp . 8)
@@ -728,10 +728,22 @@
   :config (progn
     (add-to-list 'evil-emacs-state-modes 'erc-mode)
     (evil-set-initial-state 'erc-mode 'emacs)
+    (setq erc-default-port 6667)
+    (setq erc-prompt-for-password nil)
+    (setq erc-kill-queries-on-quit t)
+    (setq erc-log-insert-log-on-open t)
+    (setq erc-log-channels-directory "~/.erc/logs/")
+    (setq erc-save-buffer-on-part t)
+    (setq erc-join-buffer "bury")
+    (load-library "~/.dotfiles/emacs/irc-accounts.gpg")
   )
 )
 
 (use-package flyspell
   :defer 1
-  :config (setq flyspell-issue-message-flag nil)
+  :config (progn
+  (add-hook 'erc-mode-hook (lambda () (flyspell-mode 1)))
+  (setq flyspell-issue-message-flag nil))
 )
+
+(setq auth-sources '("~/.dotfiles/emacs/authinfo.gpg"))
