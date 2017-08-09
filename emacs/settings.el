@@ -656,11 +656,12 @@
 (use-package sauron
   :pin melpa-stable
   :defer 2
+  :load-path "~/.dotfiles/emacs/irc-watch.gpg"
   :init (setq sauron-modules '(sauron-erc sauron-ams-org))
   :config (progn
     (add-to-list 'evil-emacs-state-modes 'sauron-mode)
     (setq sauron-watch-nicks nil)
-    (setq sauron-watch-patterns '("@adam"))
+    (setq sauron-watch-patterns simpson-watch-patterns)
     (setq sauron-hide-mode-line t)
     (setq sauron-separate-frame t)
     (setq sauron-column-alist '((timestamp . 8)
