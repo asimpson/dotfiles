@@ -723,6 +723,7 @@
                                                 "*Async Shell Command*")))))
 
 (use-package erc
+  :bind ("C-c f" . simpson-format-slack-name)
   :config (progn
     (add-to-list 'evil-emacs-state-modes 'erc-mode)
     (evil-set-initial-state 'erc-mode 'emacs)
@@ -735,6 +736,14 @@
     (setq erc-join-buffer "bury")
     (load-library "~/.dotfiles/emacs/irc-accounts.gpg")
   )
+)
+
+(defun simpson-format-slack-name()
+  "prepend the @ symbol in erc for slack"
+  (interactive)
+  (backward-word)
+  (insert "@")
+  (forward-word)
 )
 
 (use-package flyspell
