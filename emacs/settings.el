@@ -746,6 +746,16 @@
   (forward-word)
 )
 
+(use-package emoji-cheat-sheet-plus
+  :after magit
+  :init (progn
+    (add-hook 'erc-mode-hook 'emoji-cheat-sheet-plus-display-mode)
+    (add-hook 'magit-mode-hook 'emoji-cheat-sheet-plus-display-mode)
+    ;; insert emoji with helm
+    (global-set-key (kbd "C-c C-e") 'emoji-cheat-sheet-plus-insert)
+  )
+)
+
 (use-package flyspell
   :defer 1
   :config (progn
