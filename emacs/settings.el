@@ -656,9 +656,9 @@
 (use-package sauron
   :pin melpa-stable
   :defer 2
-  :load-path "~/.dotfiles/emacs/irc-watch.gpg"
   :init (setq sauron-modules '(sauron-erc sauron-ams-org))
   :config (progn
+    (load-library "~/.dotfiles/emacs/irc-watch.gpg")
     (add-to-list 'evil-emacs-state-modes 'sauron-mode)
     (setq sauron-watch-nicks nil)
     (setq sauron-watch-patterns simpson-watch-patterns)
@@ -724,7 +724,8 @@
                                                 "*Async Shell Command*")))))
 
 (use-package erc
-  :bind ("C-c f" . simpson-format-slack-name)
+  :bind (:map erc-mode-map ("C-c f" . simpson-format-slack-name))
+  :disabled
   :config (progn
     (add-to-list 'evil-emacs-state-modes 'erc-mode)
     (evil-set-initial-state 'erc-mode 'emacs)
@@ -736,6 +737,8 @@
     (setq erc-save-buffer-on-part t)
     (setq erc-join-buffer "bury")
     (load-library "~/.dotfiles/emacs/irc-accounts.gpg")
+    (setq auth-sources '("~/.dotfiles/emacs/authinfo.gpg"))
+    (add-hook 'erc-mode-hook 'visual-line-mode)
   )
 )
 
@@ -745,6 +748,9 @@
   (backward-word)
   (insert "@")
   (forward-word)
+  (when (looking-at ":")
+    (delete-char 1)
+    (insert " "))
 )
 
 (use-package emoji-cheat-sheet-plus
@@ -763,5 +769,3 @@
   (add-hook 'erc-mode-hook (lambda () (flyspell-mode 1)))
   (setq flyspell-issue-message-flag nil))
 )
-
-(setq auth-sources '("~/.dotfiles/emacs/authinfo.gpg"))
