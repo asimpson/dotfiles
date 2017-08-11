@@ -1,3 +1,4 @@
 .vim/bundle/*
 .vim/.netrwhist
 *.gpg
+/emacs/emacs-custom.el

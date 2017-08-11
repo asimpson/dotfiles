@@ -342,6 +342,13 @@
         (js . t)
       )
     )
+
+    (defun simpson-org-refresh()
+      (interactive)
+      (set-buffer "tasks.org")
+      (revert-buffer t t))
+
+    (run-at-time 0 (* 60 15) #'simpson-org-refresh)
   )
 )
 
@@ -547,7 +554,7 @@
       (propertize " !" 'face '(:foreground "#cf6a4c"))
   ))
   " "
-  '(:eval (propertize evil-mode-line-tag 'face '(:foreground "#bf616a")))
+  '(:eval (when evil-mode (propertize evil-mode-line-tag 'face '(:foreground "#bf616a"))))
   " "
   mode-line-position
   mode-line-modes
@@ -737,7 +744,6 @@
     (setq erc-save-buffer-on-part t)
     (setq erc-join-buffer "bury")
     (load-library "~/.dotfiles/emacs/irc-accounts.gpg")
-    (setq auth-sources '("~/.dotfiles/emacs/authinfo.gpg"))
     (add-hook 'erc-mode-hook 'visual-line-mode)
   )
 )
@@ -769,3 +775,5 @@
   (add-hook 'erc-mode-hook (lambda () (flyspell-mode 1)))
   (setq flyspell-issue-message-flag nil))
 )
+
+(setq auth-sources '("~/.dotfiles/emacs/authinfo.gpg"))

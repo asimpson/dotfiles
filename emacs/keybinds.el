@@ -149,7 +149,12 @@
 
 ;write buffer to fil0
 (define-key global-map (kbd "C-SPC w") 'write-file)
-(define-key global-map (kbd "s-s") 'write-file)
+(define-key global-map (kbd "s-s") 'simpson-save)
+
+(defun simpson-save()
+"save buffer"
+  (interactive)
+  (save-buffer))
 
 (define-key global-map (kbd "C-SPC L") 'linum-mode)
 
