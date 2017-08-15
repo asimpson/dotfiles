@@ -233,3 +233,11 @@
     (shell-command (concat "open https://github.com/" repo) t)
   )
 )
+
+(defun simpson-move-window-right()
+  (interactive)
+  (let (buf (current-buffer))
+    (delete-window)
+    (split-window-right)
+    (windmove-right)
+    (switch-to-buffer buf)))
