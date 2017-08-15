@@ -1,4 +1,4 @@
-(require 'notmuch)
+(use-package notmuch)
 ;debug use-package 👇
 ;(setq use-package-verbose t)
 
@@ -99,6 +99,7 @@
 
 (use-package evil
   :diminish "vim"
+  :disabled
   :defer 1
   :config (progn
     (evil-mode t)
@@ -139,14 +140,16 @@
 )
 
 (use-package key-chord
-  :after evil
+  :defer 1
   :config (progn
     (key-chord-mode 1)
     (setq key-chord-two-keys-delay 0.1)
-    (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
-    (key-chord-define evil-normal-state-map "//" 'comment-region)
-    (key-chord-define evil-normal-state-map "??" 'uncomment-region)
-    (key-chord-define evil-normal-state-map "cc" 'simpson-magit-comment)
+    (if simpson-evil
+      (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
+      (key-chord-define evil-normal-state-map "//" 'comment-region)
+      (key-chord-define evil-normal-state-map "??" 'uncomment-region)
+      (key-chord-define evil-normal-state-map "cc" 'simpson-magit-comment)
+    (key-chord-define-global "jk" 'god-local-mode))
   )
 )
 
@@ -160,22 +163,28 @@
 )
 
 (use-package god-mode
-  :disabled
   :config (progn
-    (define-key god-local-mode-map (kbd "P") 'helm-projectile-find-file)
-    (define-key god-local-mode-map (kbd "F") 'helm-projectile-ag)
-  )
+    (defun simpson-god-mode-hook ()
+      (if god-local-mode
+          (set-face-attribute 'mode-line nil :background "#d08770" :foreground "#343d46" :box '(:line-width 3 :color "#d08770" :style nil))
+        (set-face-attribute 'mode-line nil :background "#dfe1e8" :foreground "#343d46"  :box '(:line-width 3 :color "#dfe1e8" :style ni))))
+    (add-hook 'god-mode-enabled-hook 'simpson-god-mode-hook)
+    (add-hook 'god-mode-disabled-hook 'simpson-god-mode-hook)
+    (when simpson-helm
+      (define-key god-local-mode-map (kbd "P") 'helm-projectile-find-file)
+      (define-key god-local-mode-map (kbd "F") 'helm-projectile-ag)))
 )
 
 (use-package evil-matchit
+  :after evil
   :config (progn
-    (global-evil-matchit-mode 1)
-    (plist-put evilmi-plugins 'handlebars-mode '((evilmi-simple-get-tag evilmi-simple-jump)
-      (evilmi-html-get-tag evilmi-html-jump)))
+     (global-evil-matchit-mode 1)
+     (plist-put evilmi-plugins 'handlebars-mode '((evilmi-simple-get-tag evilmi-simple-jump)))
   )
 )
 
 (use-package helm
+  :disabled
   :diminish ""
   :bind (
     ("M-x" . helm-M-x)
@@ -185,23 +194,19 @@
   )
   :config (progn
     (helm-mode)
-    ;(require 'helm-config)
     (set-face-background 'helm-ff-dotted-directory "#2b303b")
     (set-face-background 'helm-ff-dotted-symlink-directory "#2b303b")
     (set-face-foreground 'helm-ff-dotted-directory "#65737e")
-    (set-face-foreground 'helm-ff-dotted-symlink-directory "#65737e")
-
-  )
+    (set-face-foreground 'helm-ff-dotted-symlink-directory "#65737e"))
 )
 
 (use-package projectile
   :diminish ""
-  :after helm
   :config (progn
     (projectile-global-mode)
-    (setq projectile-completion-system 'helm)
     (setq projectile-enable-caching nil)
-    (setq projectile-switch-project-action 'helm-projectile-find-file)
+    (setq projectile-switch-project-action 'projectile-find-file)
+    (setq projectile-completion-system (if simpson-helm 'helm 'ivy))
   )
 )
 
@@ -209,16 +214,20 @@
   :after projectile
   :config (progn
     (helm-projectile-on)
-  )
-)
+    (setq projectile-switch-project-action 'projectile-find-file)
+    (setq projectile-completion-system (if simpson-helm 'helm 'ivy))
+   )
+ )
 
 (use-package helm-ag
+  :disabled
   :init (setq helm-ag-base-command "ag --nocolor --nogroup")
   :after helm
 )
 
 (use-package helm-flyspell
   :diminish "spell"
+  :disabled
   :after helm
   :bind ("C-SPC C" . helm-flyspell-correct)
 )
@@ -554,7 +563,7 @@
       (propertize " !" 'face '(:foreground "#cf6a4c"))
   ))
   " "
-  '(:eval (when evil-mode (propertize evil-mode-line-tag 'face '(:foreground "#bf616a"))))
+  '(:eval (when simpson-evil (propertize evil-mode-line-tag 'face '(:foreground "#bf616a"))))
   " "
   mode-line-position
   mode-line-modes
@@ -633,7 +642,7 @@
 (use-package deft
   :bind ("C-SPC d" . deft)
   :config (progn
-    (add-to-list 'evil-emacs-state-modes 'deft-mode)
+    (when simpson-evil (add-to-list 'evil-emacs-state-modes 'deft-mode))
     (setq deft-extensions '("txt" "tex" "org"))
     (setq deft-directory "/Users/asimpson/Dropbox (Personal)/Notational Data")
     (setq deft-use-filename-as-title t)
@@ -666,11 +675,11 @@
   :init (setq sauron-modules '(sauron-erc sauron-ams-org))
   :config (progn
     (load-library "~/.dotfiles/emacs/irc-watch.gpg")
-    (add-to-list 'evil-emacs-state-modes 'sauron-mode)
+    (when simpson-evil (add-to-list 'evil-emacs-state-modes 'sauron-mode))
     (setq sauron-watch-nicks nil)
     (setq sauron-watch-patterns simpson-watch-patterns)
     (setq sauron-hide-mode-line t)
-    (setq sauron-separate-frame t)
+    (setq sauron-separate-frame nil)
     (setq sauron-column-alist '((timestamp . 8)
       (origin . 7)
       (message)))
@@ -698,7 +707,8 @@
 (setq dired-use-ls-dired nil)
 
 (use-package editorconfig
-  :init (editorconfig-mode 1)
+  :defer 1
+  :config (editorconfig-mode 1)
 )
 
 (use-package prettier-js
@@ -732,10 +742,9 @@
 
 (use-package erc
   :bind (:map erc-mode-map ("C-c f" . simpson-format-slack-name))
-  :disabled
   :config (progn
-    (add-to-list 'evil-emacs-state-modes 'erc-mode)
-    (evil-set-initial-state 'erc-mode 'emacs)
+    (when simpson-evil (add-to-list 'evil-emacs-state-modes 'erc-mode)
+      (evil-set-initial-state 'erc-mode 'emacs))
     (setq erc-default-port 6667)
     (setq erc-prompt-for-password nil)
     (setq erc-kill-queries-on-quit t)
@@ -760,12 +769,10 @@
 )
 
 (use-package emoji-cheat-sheet-plus
-  :after magit
+  :defer 2
   :init (progn
     (add-hook 'erc-mode-hook 'emoji-cheat-sheet-plus-display-mode)
     (add-hook 'magit-mode-hook 'emoji-cheat-sheet-plus-display-mode)
-    ;; insert emoji with helm
-    (global-set-key (kbd "C-c C-e") 'emoji-cheat-sheet-plus-insert)
   )
 )
 
@@ -777,3 +784,18 @@
 )
 
 (setq auth-sources '("~/.dotfiles/emacs/authinfo.gpg"))
+
+(use-package ivy
+  :defer 1
+  :config (progn
+    (setq ivy-use-virtual-buffers t)
+    (ivy-mode)
+    (setq ivy-height 20)
+    (global-set-key (kbd "M-x") 'counsel-M-x)
+    (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+    (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+    (global-set-key (kbd "C-SPC /") 'swiper)
+    (global-set-key (kbd "C-c C-r") 'ivy-resume)
+    (define-key global-map (kbd "C-=") 'ivy-switch-buffer)
+  )
+)
