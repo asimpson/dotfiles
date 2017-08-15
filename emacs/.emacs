@@ -9,8 +9,10 @@
 (package-initialize)
 (setq custom-file "~/.dotfiles/emacs/emacs-custom.el")
 (add-to-list 'load-path "~/.dotfiles/emacs/")
-(setq simpson-helm nil)
-(setq simpson-evil nil)
+(defvar simpson-helm nil
+  "Variable to enable or disable helm specific configurations")
+(defvar simpson-evil nil
+  "Variable to enable or disable evil specific configurations")
 (setq idle-update-delay 1)
 (load "~/.emacs.d/settings.el")
 (load "~/.emacs.d/keybinds.el")

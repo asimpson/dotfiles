@@ -98,8 +98,8 @@
 )
 
 (use-package evil
+  :if simpson-evil
   :diminish "vim"
-  :disabled
   :defer 1
   :config (progn
     (evil-mode t)
@@ -185,7 +185,7 @@
 )
 
 (use-package helm
-  :disabled
+  :if simpson-helm
   :diminish ""
   :bind (
     ("M-x" . helm-M-x)
@@ -215,24 +215,32 @@
 
 (use-package helm-projectile
   :after projectile
+  :if simpson-helm
   :config (progn
     (helm-projectile-on)
     (setq projectile-switch-project-action 'projectile-find-file)
     (setq projectile-completion-system (if simpson-helm 'helm 'ivy))
    )
- )
+)
 
 (use-package helm-ag
-  :disabled
-  :init (setq helm-ag-base-command "ag --nocolor --nogroup")
+  :if simpson-helm
   :after helm
+  :init (setq helm-ag-base-command "ag --nocolor --nogroup")
 )
 
 (use-package helm-flyspell
   :diminish "spell"
-  :disabled
+  :if simpson-helm
   :after helm
   :bind ("C-SPC C" . helm-flyspell-correct)
+)
+
+(use-package flyspell-correct-ivy
+  :diminish "spell"
+  :if (not simpson-helm)
+  :after ivy
+  :bind ("C-SPC C" . flyspell-correct-previous-word-generic)
 )
 
 (defun simpson-projects-browser()
@@ -285,6 +293,7 @@
 
 (use-package auto-complete
   :diminish ""
+  :demand t
   :init (progn
     (ac-config-default)
     ;this prevents the stupid behavior in scss where &:before {___ autocompletes
@@ -466,7 +475,6 @@
 (setq make-backup-files nil) ; stop creating backup~ files
 ;backups suck, use Git
 (setq auto-save-default nil)
-
 ;splash screen is gross
 (setq inhibit-splash-screen t)
 
@@ -791,6 +799,7 @@
 
 (use-package ivy
   :defer 1
+  :if (not simpson-helm)
   :config (progn
     (setq ivy-use-virtual-buffers t)
     (ivy-mode)
