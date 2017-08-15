@@ -38,7 +38,7 @@
   )
 )
 
-(global-set-key (kbd "C-SPC b") 'simpson-project-clone)
+(global-set-key (kbd "C-SPC k b") 'simpson-project-clone)
 (global-set-key (kbd "C-SPC B") 'simpson-get-git-url)
 (global-set-key (kbd "C-SPC k P") 'simpson-pretty-json)
 (global-set-key (kbd "C-SPC k e") 'eval-region)
@@ -90,7 +90,6 @@
 ))
 (global-set-key (kbd "C-SPC k ?") 'eww)
 
-(global-set-key (kbd "C-SPC /") 'swiper-helm)
 
 (defun kill-shell-buffer()
   "kills the Async Shell Command buffer and then balance's the remaining windows"

@@ -140,16 +140,16 @@
 )
 
 (use-package key-chord
-  :defer 1
+  :after god-mode
   :config (progn
     (key-chord-mode 1)
     (setq key-chord-two-keys-delay 0.1)
-    (if simpson-evil
+    (when simpson-evil
       (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
       (key-chord-define evil-normal-state-map "//" 'comment-region)
       (key-chord-define evil-normal-state-map "??" 'uncomment-region)
-      (key-chord-define evil-normal-state-map "cc" 'simpson-magit-comment)
-    (key-chord-define-global "jk" 'god-local-mode))
+      (key-chord-define evil-normal-state-map "cc" 'simpson-magit-comment))
+    (unless simpson-evil (key-chord-define-global "jk" 'god-local-mode))
   )
 )
 
@@ -157,12 +157,13 @@
   "mashing cc in a magit-status window triggers my custom keybind to (comment-line)
    this function checks what mode is current and then either comments or commit"
   (interactive)
-  (if (string-equal major-mode "magit-status-mode")
+  (if (string= major-mode "magit-status-mode")
     (magit-commit)
   (comment-line 1))
 )
 
 (use-package god-mode
+  :defer 1
   :config (progn
     (defun simpson-god-mode-hook ()
       (if god-local-mode
@@ -202,6 +203,8 @@
 
 (use-package projectile
   :diminish ""
+  :bind (("C-SPC b" . projectile-switch-project)
+         ("C-SPC p" . projectile-find-file-other-window))
   :config (progn
     (projectile-global-mode)
     (setq projectile-enable-caching nil)
@@ -707,6 +710,7 @@
 (setq dired-use-ls-dired nil)
 
 (use-package editorconfig
+  :diminish ""
   :defer 1
   :config (editorconfig-mode 1)
 )
@@ -791,6 +795,7 @@
     (setq ivy-use-virtual-buffers t)
     (ivy-mode)
     (setq ivy-height 20)
+    (setq ivy-count-format "")
     (global-set-key (kbd "M-x") 'counsel-M-x)
     (global-set-key (kbd "<f1> f") 'counsel-describe-function)
     (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
