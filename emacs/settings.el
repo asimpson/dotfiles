@@ -163,6 +163,7 @@
 )
 
 (use-package god-mode
+  :if (not simpson-evil)
   :defer 1
   :config (progn
     (defun simpson-god-mode-hook ()
@@ -204,7 +205,7 @@
 (use-package projectile
   :diminish ""
   :bind (("C-SPC b" . projectile-switch-project)
-         ("C-SPC p" . projectile-find-file-other-window))
+         ("C-c C-p" . projectile-find-file-other-window))
   :config (progn
     (projectile-global-mode)
     (setq projectile-enable-caching nil)
