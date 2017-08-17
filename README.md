@@ -1,10 +1,14 @@
-# Dotfiles
+![logo](http://asimpson.github.io/dotfiles/logo.svg)
+
+# Install
+
+`git clone git@github.com:asimpson/dotfiles.git ~/.dotfiles`
 
 ## Shell Conf
-* Source `~/.dotfiles/bash/functions` and `~/.dotfiles/bash/aliases` in one of these: `.bash_profile`, `.bashrc`, or `.zshrc`.
+Source `~/.dotfiles/bash/functions` and `~/.dotfiles/bash/aliases` in one of these: `.bash_profile`, `.bashrc`, or `.zshrc`.
 
 ## Zsh Conf
-* Symlink `~/.dotfiles/zsh/.zshrc` to `$HOME`
+Symlink `~/.dotfiles/zsh/.zshrc` to `$HOME`:
 
   `ln -s ~/.dotfiles/zsh/.zshrc ~/.zshrc`
 
@@ -13,7 +17,7 @@
 * Run `brew bundle` to install everything in `Brewfile`.
 
 ### Launchd
-* Launchd is OS X's replacement for `cron`.
+Launchd is OS X's replacement for `cron`.
 
 * Symlink each `.plist` file in `~/.dotfiles/launch-scripts/` into `~/Library/LaunchAgents`
 
@@ -29,8 +33,6 @@
   `ln -s ~/.dotfiles/emacs/.emacs ~/.emacs.d/`
   `ln -s ~/.dotfiles/emacs/settings.el ~/.emacs.d/`
   `ln -s ~/.dotfiles/emacs/keybinds.el ~/.emacs.d/`
-
-* Install plugins.
 
 ## Vim Conf
 * Symlink `~/.dotfiles/.vimrc` to `$HOME`
