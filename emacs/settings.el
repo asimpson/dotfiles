@@ -35,25 +35,6 @@
   use-package-always-defer t
   use-package-always-ensure t)
 
-(use-package diminish
-  :config (progn
-    (diminish 'undo-tree)
-    (diminish 'web-mode)
-    (diminish 'auto-revert)
-    (diminish 'smerge-mode)
-    (diminish 'flyspell-mode)
-    (diminish 'emacs-lisp-mode "elisp")
-  )
-)
-
-;http://whattheemacsd.com/appearance.el-01.html
-(defmacro rename-modeline (package-name mode new-name)
-  `(eval-after-load ,package-name
-     '(defadvice ,mode (after rename-modeline activate)
-        (setq mode-name ,new-name))))
-
-(rename-modeline "elisp-mode" emacs-lisp-mode "elisp")
-
 (use-package osx-trash
   :if (eq system-type 'darwin)
   :config (progn
@@ -276,6 +257,7 @@
 (use-package evil-magit
   :pin melpa-stable
   :after evil
+  :if simpson-evil
 )
 
 (use-package diff-hl
@@ -409,7 +391,6 @@
 )
 
 (use-package js2-mode
-  :diminish "JS"
   :disabled
   :interpreter (
     ("node" . js2-mode)
@@ -421,7 +402,7 @@
     (setq js2-bounce-indent-p t)
     (electric-indent-mode -1)
     (setq js2-mode-show-strict-warnings nil)
-    (add-hook 'js2-mode-hook '(lambda() (setq show-trailing-whitespace t)))
+    (add-hook 'js2-mode-hook (lambda() (setq show-trailing-whitespace t)))
     (global-set-key (kbd "C-SPC k j") 'js2-mode-hide-warnings-and-errors)
     (defcustom js2-strict-missing-semi-warning nil
       "Non-nil to warn about semicolon auto-insertion after statement.
@@ -433,7 +414,6 @@
 )
 
 (use-package rjsx-mode
-  :diminish "R"
   :interpreter (
     ("node" . rjsx-mode)
   )
@@ -448,6 +428,7 @@
     (electric-indent-mode -1)
     (setq js2-mode-show-strict-warnings nil)
     (add-hook 'js2-mode-hook (lambda() (setq show-trailing-whitespace t)))
+    (add-hook 'rjsx-mode-hook (lambda() (setq mode-name "jsx")))
   )
 )
 
@@ -489,6 +470,7 @@
 ;visual-fill-column
 ;https://github.com/joostkremers/visual-fill-column/blob/master/visual-fill-column.el
 (use-package visual-fill-column
+  :defer 1
   :config (progn
     (add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
     (setq-default visual-fill-column-width 160)
@@ -655,7 +637,7 @@
   :bind ("C-SPC d" . deft)
   :config (progn
     (when simpson-evil (add-to-list 'evil-emacs-state-modes 'deft-mode))
-    (setq deft-extensions '("txt" "tex" "org"))
+    (setq deft-extensions '("txt" "txt.gpg" "org"))
     (setq deft-directory "/Users/asimpson/Dropbox (Personal)/Notational Data")
     (setq deft-use-filename-as-title t)
     (setq deft-auto-save-interval 60.0)
@@ -725,7 +707,7 @@
 )
 
 (use-package prettier-js
-  :diminish "🎨"
+  :diminish "pretty"
   :defer 1
   :init (progn
     (add-hook 'js2-mode-hook 'prettier-js-mode)
@@ -790,6 +772,7 @@
 )
 
 (use-package flyspell
+  :diminish "spell"
   :defer 1
   :config (progn
   (add-hook 'erc-mode-hook (lambda () (flyspell-mode 1)))
@@ -799,6 +782,7 @@
 (setq auth-sources '("~/.dotfiles/emacs/authinfo.gpg"))
 
 (use-package ivy
+  :diminish ""
   :defer 1
   :if (not simpson-helm)
   :config (progn
@@ -812,5 +796,28 @@
     (global-set-key (kbd "C-SPC /") 'swiper)
     (global-set-key (kbd "C-c C-r") 'ivy-resume)
     (define-key global-map (kbd "C-=") 'ivy-switch-buffer)
+  )
+)
+(use-package elisp-mode
+  :ensure nil
+  :init (progn
+    (defun simpson-pretty-lambda()
+      "make the word lambda the greek character in elisp files"
+      (setq prettify-symbols-alist '(("lambda" . 955))))
+
+    (add-hook 'emacs-lisp-mode-hook 'simpson-pretty-lambda)
+    (add-hook 'emacs-lisp-mode-hook 'prettify-symbols-mode)
+    (add-hook 'emacs-lisp-mode-hook (lambda () (setq mode-name "λ")))
+  )
+)
+
+(use-package diminish
+  ;minor modes are set with diminish
+  ;major modes are changed in the mode hook using the variable mode-name
+  :defer 1
+  :config (progn
+    (diminish 'smerge-mode)
+    (eval-after-load "autorevert" '(diminish 'auto-revert-mode))
+    (eval-after-load "undo-tree" '(diminish 'undo-tree-mode))
   )
 )
