@@ -315,6 +315,8 @@
     :END:")))
     (setq org-agenda-restore-windows-after-quit t)
     (add-hook 'org-mode-hook (lambda () (flyspell-mode 1)))
+    (add-hook 'org-mode-hook 'visual-line-mode)
+    (add-hook 'org-mode-hook (lambda () (setq mode-name "org")))
     (set-face-foreground 'org-link "#a3be8c")
     (set-face-foreground 'org-tag "#ebcb8b")
     (set-face-foreground 'org-agenda-structure "#65737e")
@@ -749,6 +751,7 @@
     (setq erc-join-buffer "bury")
     (load-library "~/.dotfiles/emacs/irc-accounts.gpg")
     (add-hook 'erc-mode-hook 'visual-line-mode)
+    (add-hook 'erc-mode-hook (lambda () (setq mode-name "irc")))
   )
 )
 
