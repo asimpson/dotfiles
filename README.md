@@ -1,3 +1,4 @@
+![logo](http://asimpson.github.io/dotfiles/logo.svg)
 # Dotfiles
 
 ## Shell Conf
