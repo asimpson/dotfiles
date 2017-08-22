@@ -795,6 +795,8 @@
     (global-set-key (kbd "C-SPC /") 'swiper)
     (global-set-key (kbd "C-c C-r") 'ivy-resume)
     (define-key global-map (kbd "C-=") 'ivy-switch-buffer)
+    (delete '(counsel-M-x . "^") ivy-initial-inputs-alist)
+    (push '(counsel-M-x . "") ivy-initial-inputs-alist)
   )
 )
 
