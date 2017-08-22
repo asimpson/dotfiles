@@ -1,4 +1,3 @@
-(use-package notmuch)
 ;debug use-package 👇
 ;(setq use-package-verbose t)
 
@@ -44,7 +43,7 @@
 )
 
 (use-package base16-theme
-  :init (load-theme 'base16-ocean-dark t)
+  :init (load-theme 'base16-ocean t)
 )
 
 (use-package exec-path-from-shell
@@ -65,6 +64,7 @@
               ("i" . dired-subtree-toggle)))
 
 (use-package vimish-fold
+  :defer 1
   :config (vimish-fold-global-mode 1)
   :bind (("C-SPC v" . vimish-fold)
          ("C-SPC V" . vimish-fold-delete))
@@ -267,6 +267,7 @@
 )
 
 (use-package diff-hl
+  :defer 1
   :bind (
     ("C-SPC r" . diff-hl-revert-hunk)
     ("C-x p" . diff-hl-previous-hunk)
@@ -600,6 +601,7 @@
 )
 
 (use-package avy
+  :defer 1
   :bind (
     ("C-SPC j" . avy-goto-word-1)
     ("C-SPC J" . avy-goto-char)
@@ -789,14 +791,20 @@
     (ivy-mode)
     (setq ivy-height 20)
     (setq ivy-count-format "")
-    (global-set-key (kbd "M-x") 'counsel-M-x)
-    (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-    (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-    (global-set-key (kbd "C-SPC /") 'swiper)
     (global-set-key (kbd "C-c C-r") 'ivy-resume)
     (define-key global-map (kbd "C-=") 'ivy-switch-buffer)
     (delete '(counsel-M-x . "^") ivy-initial-inputs-alist)
     (push '(counsel-M-x . "") ivy-initial-inputs-alist)
+  )
+)
+
+(use-package counsel
+  :defer 1
+  :if (not simpson-helm)
+  :config (progn
+    (global-set-key (kbd "M-x") 'counsel-M-x)
+    (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+    (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
   )
 )
 
@@ -836,3 +844,23 @@
     (add-hook 'makefile-bsdmake-mode-hook (lambda () (setq mode-name "make")))
   )
 )
+
+(use-package swiper
+  :defer 1
+  :if (not simpson-helm)
+  :bind ("C-SPC /" . swiper)
+)
+
+(use-package swiper-helm
+  :defer 1
+  :if simpson-helm
+  :bind ("C-SPC /" . swiper-helm)
+)
+
+(use-package command-log-mode)
+
+(use-package elisp-format)
+
+(use-package gist)
+
+(use-package notmuch)
