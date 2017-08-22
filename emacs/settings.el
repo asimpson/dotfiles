@@ -832,7 +832,7 @@
     (diminish 'buffer-face-mode)
     (eval-after-load "autorevert" '(diminish 'auto-revert-mode))
     (eval-after-load "undo-tree" '(diminish 'undo-tree-mode))
+    (add-hook 'shell-mode-hook (lambda () (setq mode-name "shell")))
+    (add-hook 'makefile-bsdmake-mode-hook (lambda () (setq mode-name "make")))
   )
 )
-
-(add-hook 'shell-mode-hook (lambda () (setq mode-name "shell")))
