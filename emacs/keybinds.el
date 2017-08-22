@@ -240,3 +240,9 @@
     (split-window-right)
     (windmove-right)
     (switch-to-buffer buf)))
+
+
+(defun simpson-get-file-name()
+  "return the file name for a buffer"
+  (interactive)
+  (kill-new (car (reverse (split-string (buffer-file-name) "/")))))
