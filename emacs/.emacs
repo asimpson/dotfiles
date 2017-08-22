@@ -11,7 +11,7 @@
 (add-to-list 'load-path "~/.dotfiles/emacs/")
 (defvar simpson-helm nil
   "Variable to enable or disable helm specific configurations")
-(defvar simpson-evil nil
+(defvar simpson-evil t
   "Variable to enable or disable evil specific configurations")
 (setq idle-update-delay 1)
 (load "~/.emacs.d/settings.el")

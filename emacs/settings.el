@@ -97,8 +97,10 @@
     (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
     (define-key evil-normal-state-map (kbd "gx") 'browse-url)
     (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
-    (define-key evil-normal-state-map "\C-p" 'helm-projectile-find-file)
-    (define-key evil-normal-state-map (kbd "SPC SPC") 'helm-projectile-find-file)
+    (when simpson-helm (define-key evil-normal-state-map "\C-p" 'helm-projectile-find-file))
+    (when simpson-helm (define-key evil-normal-state-map (kbd "SPC SPC") 'helm-projectile-find-file))
+    (unless simpson-helm (define-key evil-normal-state-map (kbd "SPC SPC") 'projectile-find-file-other-window))
+    (unless simpson-helm (define-key evil-normal-state-map (kbd "\C-p") 'projectile-find-file-other-window))
     (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
     (define-key evil-normal-state-map (kbd "C-n") 'evil-scroll-down)
     (define-key evil-normal-state-map (kbd "C-b") 'projectile-switch-project)
@@ -107,13 +109,16 @@
 )
 
 (use-package evil-leader
+  :if simpson-evil
   :after evil
   :defer 1
   :config (progn
     (global-evil-leader-mode)
     (evil-leader/set-leader ",")
-    (evil-leader/set-key "f" 'helm-projectile-ag)
-    (evil-leader/set-key "F" 'helm-do-ag)
+    (when simpson-helm
+      (evil-leader/set-key "f" 'helm-projectile-ag)
+      (evil-leader/set-key "F" 'helm-do-ag))
+    (unless simpson-helm (evil-leader/set-key "f" 'counsel-ag))
     (evil-leader/set-key "c" 'fci-mode)
     (evil-leader/set-key "v" 'evil-window-vnew)
     (evil-leader/set-key "x" 'evil-window-new)
@@ -121,7 +126,7 @@
 )
 
 (use-package key-chord
-  :after god-mode
+  :defer 3
   :config (progn
     (key-chord-mode 1)
     (setq key-chord-two-keys-delay 0.1)
@@ -159,6 +164,7 @@
 )
 
 (use-package evil-matchit
+  :if simpson-evil
   :after evil
   :config (progn
      (global-evil-matchit-mode 1)
@@ -388,6 +394,7 @@
     (add-hook 'markdown-mode-hook 'visual-line-mode)
     ;toggle on spell-check for writing
     (add-hook 'markdown-mode-hook (lambda () (flyspell-mode 1)))
+    (add-hook 'markdown-mode-hook (lambda () (setq mode-name "md")))
     (setq markdown-open-command "/usr/local/bin/marked")
   )
 )
@@ -820,7 +827,10 @@
   :defer 1
   :config (progn
     (diminish 'smerge-mode)
+    (diminish 'buffer-face-mode)
     (eval-after-load "autorevert" '(diminish 'auto-revert-mode))
     (eval-after-load "undo-tree" '(diminish 'undo-tree-mode))
   )
 )
+
+(add-hook 'shell-mode-hook (lambda () (setq mode-name "shell")))
