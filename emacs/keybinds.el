@@ -33,7 +33,7 @@
       (name (nth 0 (split-string (nth 1 (split-string url "/")) "\\.")))
     )
     (shell-command (concat "git clone " url " " projectsDir name))
-    (escreen-create-screen)
+    (eyebrowse-create-window-config)
     (dired (concat projectsDir name))
   )
 )

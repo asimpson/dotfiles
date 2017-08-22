@@ -364,17 +364,6 @@
   )
 )
 
-(use-package escreen
-  :bind ("C-SPC S" . escreen-menu)
-  :demand t
-  :config (progn
-    (setq escreen-prefix-char (kbd "C-SPC s"))
-    (global-set-key escreen-prefix-char 'escreen-prefix)
-    ;create a screen right off the bat
-    (call-interactively 'escreen-create-screen)
-  )
-)
-
 (use-package multi-term
   :config (progn
     (setq multi-term-program "/bin/zsh")
@@ -568,7 +557,7 @@
   " "
   '(:eval (when simpson-evil (propertize evil-mode-line-tag 'face '(:foreground "#bf616a"))))
   " "
-  mode-line-position
+  '(:eval mode-line-position)
   mode-line-modes
   mode-line-misc-info
 ))
@@ -808,6 +797,17 @@
     (define-key global-map (kbd "C-=") 'ivy-switch-buffer)
   )
 )
+
+(use-package eyebrowse
+  :defer 1
+  :init (setq eyebrowse-keymap-prefix (kbd "C-SPC s"))
+  :config (progn
+   ;use list-face-display to see all faces
+   (set-face-foreground 'eyebrowse-mode-line-active "#b48ead")
+   (eyebrowse-mode t)
+   (setq eyebrowse-new-workspace t))
+)
+
 (use-package elisp-mode
   :ensure nil
   :init (progn
