@@ -60,11 +60,13 @@
 )
 
 (use-package dired-narrow
+  :defer 1
   :bind (:map dired-mode-map
               ("/" . dired-narrow-fuzzy))
 )
 
 (use-package dired-subtree
+  :defer 1
   :bind (:map dired-mode-map
               ("i" . dired-subtree-toggle)))
 
@@ -869,3 +871,5 @@
 (use-package gist)
 
 (use-package notmuch)
+
+(desktop-save-mode)
