@@ -3,12 +3,19 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+(eval-when-compile
+  (require 'use-package))
+
+(setq-default
+  use-package-always-defer t
+  use-package-always-ensure t)
+
 ;debug use-package 👇
 ;(setq use-package-verbose t)
 
-;turn off toolbar
 (show-paren-mode)
 (tool-bar-mode -1)
+(scroll-bar-mode -1)
 
 (setq visible-bell nil)
 
@@ -22,22 +29,7 @@
     (run-with-timer 0.1 nil 'invert-face 'mode-line)
 ))
 
-;no scrollbars, what is this a GUI?!
-(scroll-bar-mode -1)
-
 (global-set-key (kbd "C-SPC") nil)
-
-;; Bootstrap `use-package'
-(unless (package-installed-p 'use-package)
- (package-refresh-contents)
- (package-install 'use-package))
-
-(eval-when-compile
-  (require 'use-package))
-
-(setq-default
-  use-package-always-defer t
-  use-package-always-ensure t)
 
 (use-package osx-trash
   :if (eq system-type 'darwin)
@@ -190,10 +182,11 @@
   )
   :config (progn
     (helm-mode)
-    (set-face-background 'helm-ff-dotted-directory "#2b303b")
-    (set-face-background 'helm-ff-dotted-symlink-directory "#2b303b")
-    (set-face-foreground 'helm-ff-dotted-directory "#65737e")
-    (set-face-foreground 'helm-ff-dotted-symlink-directory "#65737e"))
+    (when (string= (car custom-enabled-themes) "base16-ocean")
+      (set-face-background 'helm-ff-dotted-directory (plist-get base16-ocean-colors :base00))
+      (set-face-background 'helm-ff-dotted-symlink-directory (plist-get base16-ocean-colors :base00))
+      (set-face-foreground 'helm-ff-dotted-directory (plist-get base16-ocean-colors :base03))
+      (set-face-foreground 'helm-ff-dotted-symlink-directory (plist-get base16-ocean-colors :base03))))
 )
 
 (use-package projectile
@@ -254,16 +247,16 @@
     ;the option to `magit-auto-revert-repository-buffer-p'.
     (setq auto-revert-buffer-list-filter 'magit-auto-revert-repository-buffers-p)
     (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
-    (set-face-foreground 'magit-blame-date "#ebcb8b")
-    (set-face-foreground 'magit-blame-hash "#ebcb8b")
-    (set-face-foreground 'magit-blame-heading "#ebcb8b")
-    (set-face-foreground 'magit-blame-name "#ebcb8b")
-    (set-face-foreground 'magit-blame-summary "#ebcb8b")
-    (set-face-foreground 'magit-sequence-onto "#ebcb8b")
-    (set-face-foreground 'magit-sequence-done "#ebcb8b")
-
-    (set-face-foreground 'magit-hash "#96b5b4")
-    (set-face-background 'magit-section-highlight "#343d46")
+    (when (string= (car custom-enabled-themes) "base16-ocean")
+      (set-face-foreground 'magit-blame-date (plist-get base16-ocean-colors :base0A))
+      (set-face-foreground 'magit-blame-hash (plist-get base16-ocean-colors :base0A))
+      (set-face-foreground 'magit-blame-heading (plist-get base16-ocean-colors :base0A))
+      (set-face-foreground 'magit-blame-name (plist-get base16-ocean-colors :base0A))
+      (set-face-foreground 'magit-blame-summary (plist-get base16-ocean-colors :base0A))
+      (set-face-foreground 'magit-sequence-onto (plist-get base16-ocean-colors :base0A))
+      (set-face-foreground 'magit-sequence-done (plist-get base16-ocean-colors :base0A))
+      (set-face-foreground 'magit-hash (plist-get base16-ocean-colors :base0C))
+      (set-face-background 'magit-section-highlight (plist-get base16-ocean-colors :base01)))
   )
 )
 
@@ -282,9 +275,10 @@
   )
   :config (progn
     (global-diff-hl-mode)
-    (set-face-background 'diff-hl-change "#96b5b4")
-    (set-face-background 'diff-hl-insert "#a3be8c")
-    (set-face-background 'diff-hl-delete "#d08770")
+    (when (string= (car custom-enabled-themes) "base16-ocean")
+      (set-face-background 'diff-hl-change (plist-get base16-ocean-colors :base0C))
+      (set-face-background 'diff-hl-insert (plist-get base16-ocean-colors :base0B))
+      (set-face-background 'diff-hl-delete (plist-get base16-ocean-colors :base09)))
   )
 )
 
@@ -331,9 +325,10 @@
     (add-hook 'org-mode-hook (lambda () (flyspell-mode 1)))
     (add-hook 'org-mode-hook 'visual-line-mode)
     (add-hook 'org-mode-hook (lambda () (setq mode-name "org")))
-    (set-face-foreground 'org-link "#a3be8c")
-    (set-face-foreground 'org-tag "#ebcb8b")
-    (set-face-foreground 'org-agenda-structure "#65737e")
+    (when (string= (car custom-enabled-themes) "base16-ocean")
+      (set-face-foreground 'org-link (plist-get base16-ocean-colors :base0B))
+      (set-face-foreground 'org-tag (plist-get base16-ocean-colors :base0A))
+      (set-face-foreground 'org-agenda-structure (plist-get base16-ocean-colors :base03)))
     (setq org-html-head "
       <style>
         body {
@@ -471,10 +466,7 @@
   (interactive)
   (setq buffer-face-mode-face '(:family "Hack" :height 120))
   (buffer-face-mode))
-;¯\_(ツ)_/¯
 
-;visual-fill-column
-;https://github.com/joostkremers/visual-fill-column/blob/master/visual-fill-column.el
 (use-package visual-fill-column
   :defer 1
   :config (progn
@@ -509,18 +501,13 @@
 ;update the header whenever the buffer-list changes
 (add-hook 'buffer-list-update-hook 'simpson-header)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;change the color of the frame to match the theme
-(set-face-foreground 'header-line "#a3adb5")
-(set-face-background 'header-line "#4f5b66")
-
-(set-face-attribute 'header-line nil
-    :box '(:line-width 3 :color "#4f5b66" :style nil))
-
-(set-face-foreground 'vertical-border "#4f5b66")
-(set-face-background 'fringe "#2b303b")
-;end color changes
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(when (string= (car custom-enabled-themes) "base16-ocean")
+  (set-face-foreground 'header-line "#a3adb5")
+  (set-face-background 'header-line (plist-get base16-ocean-colors :base02))
+  (set-face-attribute 'header-line nil
+      :box `(:line-width 3 :color ,(plist-get base16-ocean-colors :base02) :style nil))
+  (set-face-foreground 'vertical-border (plist-get base16-ocean-colors :base02))
+  (set-face-background 'fringe (plist-get base16-ocean-colors :base00)))
 
 (setenv "GPG_AGENT" "/usr/local/bin/gpg-agent")
 ;;read gpg-agent environment
@@ -533,9 +520,7 @@
   )
 (defvar gpg-agent-info-file)
 (setq gpg-agent-info-file (concat (getenv "HOME") "/.gpg-agent-info"))
-(when
-    ;this is the condition for when
-    (file-exists-p gpg-agent-info-file)
+(when (file-exists-p gpg-agent-info-file)
   (with-temp-buffer
     ;create a temp buffer and evalute the BODY of the function
     (progn
@@ -552,11 +537,6 @@
 ;http://pages.sachachua.com/.emacs.d/Sacha.html#orgheadline15
 (fset 'yes-or-no-p 'y-or-n-p)
 
-(defvar simpson-project-name()
-  (:eval (when (ignore-errors (projectile-project-root))
-    (concat " / " (projectile-project-name))))
-)
-
 (setq-default mode-line-format (list
   ;mode-line-modified
   '(:eval (if (buffer-modified-p)
@@ -570,13 +550,13 @@
   mode-line-misc-info
 ))
 
-;colors are set for ocean dark
-(set-face-attribute 'mode-line nil
-    :background "#dfe1e8"
-    :foreground "#343d46"
-    :box '(:line-width 3 :color "#dfe1e8" :style nil))
-(set-face-attribute 'mode-line-inactive nil
-    :box '(:line-width 3 :color "#343d46" :style nil))
+(when (string= (car custom-enabled-themes) "base16-ocean")
+  (set-face-attribute 'mode-line nil
+      :background (plist-get base16-ocean-colors :base06)
+      :foreground (plist-get base16-ocean-colors :base01)
+      :box `(:line-width 3 :color ,(plist-get base16-ocean-colors :base06) :style nil))
+  (set-face-attribute 'mode-line-inactive nil
+      :box `(:line-width 3 :color ,(plist-get base16-ocean-colors :base01) :style nil)))
 
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (setq ediff-split-window-function 'split-window-horizontally)
@@ -584,7 +564,8 @@
 (setq confirm-kill-emacs 'yes-or-no-p)
 
 (add-hook 'css-mode-hook '(lambda() (setq show-trailing-whitespace t)))
-(set-face-background 'trailing-whitespace "#ab7967")
+(when (string= (car custom-enabled-themes) "base16-ocean")
+  (set-face-background 'trailing-whitespace (plist-get base16-ocean-colors :base0F)))
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (use-package which-key
@@ -603,7 +584,8 @@
     ;; (add-hook 'css-mode-hook 'relative-line-numbers-mode)
     ;; (add-hook 'web-mode-hook 'relative-line-numbers-mode)
     ;; (add-hook 'emacs-lisp-mode-hook 'relative-line-numbers-mode)
-    (set-face-foreground 'relative-line-numbers-current-line "#d08770")
+    (when (string= (car custom-enabled-themes) "base16-ocean")
+      (set-face-foreground 'relative-line-numbers-current-line (plist-get base16-ocean-colors :base09)))
   )
 )
 
@@ -614,10 +596,11 @@
     ("C-SPC J" . avy-goto-char)
   )
   :config (progn
-    (set-face-background 'avy-lead-face  "#bf616a")
-    (set-face-background 'avy-lead-face-0  "#96b5b4")
-    (set-face-background 'avy-lead-face-1  "#c0c5ce")
-    (set-face-background 'avy-lead-face-2  "#b48ead")
+    (when (string= (car custom-enabled-themes) "base16-ocean")
+      (set-face-background 'avy-lead-face (plist-get base16-ocean-colors :base08))
+      (set-face-background 'avy-lead-face-0 (plist-get base16-ocean-colors :base0C))
+      (set-face-background 'avy-lead-face-1 (plist-get base16-ocean-colors :base05))
+      (set-face-background 'avy-lead-face-2 (plist-get base16-ocean-colors :base0E)))
   )
 )
 
@@ -665,9 +648,7 @@
     (add-hook 'js2-mode-hook 'jsxEmmet)
     (add-hook 'handlebars-mode-hook 'jsEmmet)
   )
-  :config (progn
-    (setq emmet-move-cursor-between-quotes t) ;; default nil
-  )
+  :config (setq emmet-move-cursor-between-quotes t) ;; default nil
 )
 
 (use-package sauron
@@ -815,12 +796,18 @@
   )
 )
 
+(use-package counsel-projectile
+  :if (not simpson-helm)
+  :defer 1
+)
+
 (use-package eyebrowse
   :defer 1
   :init (setq eyebrowse-keymap-prefix (kbd "C-SPC s"))
   :config (progn
    ;use list-face-display to see all faces
-   (set-face-foreground 'eyebrowse-mode-line-active "#b48ead")
+   (when (string= (car custom-enabled-themes) "base16-ocean")
+    (set-face-foreground 'eyebrowse-mode-line-active (plist-get base16-ocean-colors :base0E)))
    (eyebrowse-mode t)
    (setq eyebrowse-new-workspace t))
 )
