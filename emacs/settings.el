@@ -121,12 +121,19 @@
     (when simpson-helm
       (evil-leader/set-key "f" 'helm-projectile-ag)
       (evil-leader/set-key "F" 'helm-do-ag))
-    (unless simpson-helm (evil-leader/set-key "f" 'counsel-ag))
+    (unless simpson-helm
+      (evil-leader/set-key "f" 'counsel-projectile-ag)
+      (evil-leader/set-key "F" 'simpson-counsel-ag))
     (evil-leader/set-key "c" 'fci-mode)
     (evil-leader/set-key "v" 'evil-window-vnew)
     (evil-leader/set-key "x" 'evil-window-new)
   )
 )
+
+(defun simpson-counsel-ag()
+  (interactive)
+  (let ((current-prefix-arg t))
+  (counsel-ag)))
 
 (use-package key-chord
   :defer 3
@@ -238,7 +245,9 @@
 (defun simpson-projects-browser()
   (interactive)
   (cd "~/Projects/")
-  (helm-find-files nil)
+  (if simpson-helm
+    (helm-find-files nil)
+  (counsel-find-file))
 )
 
 (use-package magit
@@ -787,8 +796,13 @@
     (define-key global-map (kbd "C-=") 'ivy-switch-buffer)
     (delete '(counsel-M-x . "^") ivy-initial-inputs-alist)
     (push '(counsel-M-x . "") ivy-initial-inputs-alist)
+    (ivy-add-actions 'counsel-projectile-ag '(("O" simpson-other-window "open in new window")))
   )
 )
+
+(defun simpson-other-window(x)
+  (let ((file (car (split-string x ":"))))
+  (find-file-other-window (concat (locate-dominating-file file ".git") file))))
 
 (use-package counsel
   :defer 1
