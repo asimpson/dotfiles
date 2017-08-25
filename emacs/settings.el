@@ -295,17 +295,6 @@
   )
 )
 
-(use-package auto-complete
-  :diminish ""
-  :demand t
-  :init (progn
-    (ac-config-default)
-    ;this prevents the stupid behavior in scss where &:before {___ autocompletes
-    ;lang!
-    (defconst ac-css-pseudo-classes nil)
-  )
-)
-
 (use-package org
   :defer 2
   :bind (
@@ -887,6 +876,11 @@
 (use-package json-mode
   :defer 1
   :mode ("\\.json?\\'" . json-mode))
+
+(use-package company
+  :defer 1
+  :diminish ""
+  :config (global-company-mode))
 
 (defun simpson-sauron-toggle(&optional x)
   "A function to keep the sauron window visible and sized correctly after move/balance operation.
