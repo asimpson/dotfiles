@@ -878,3 +878,13 @@
 (use-package notmuch)
 
 (desktop-save-mode)
+
+(use-package php-mode
+  :defer 1
+  :mode ("\\.php?\\'" . php-mode)
+  :config (add-hook 'php-mode-hook (lambda () (setq mode-name "php"))))
+
+(use-package json-mode
+  :defer 1
+  :mode ("\\.json?\\'" . json-mode))
+
