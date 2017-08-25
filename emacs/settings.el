@@ -74,7 +74,11 @@
   :defer 1
   :init (add-hook 'after-init-hook #'global-flycheck-mode)
   :bind ("C-SPC '" . flycheck-mode)
-  :config (setq flycheck-global-modes '(rjsx-mode emacs-lisp-mode json-mode))
+  :config (progn
+    (setq flycheck-global-modes '(rjsx-mode emacs-lisp-mode json-mode))
+    ;https://github.com/flycheck/flycheck/issues/1129#issuecomment-319600923
+    (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))
+  )
 )
 
 (use-package evil
