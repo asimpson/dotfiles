@@ -572,7 +572,8 @@
 
 (use-package which-key
   :diminish ""
-  :init (which-key-mode)
+  :defer 1
+  :config (which-key-mode)
 )
 
 (use-package fill-column-indicator
