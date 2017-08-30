@@ -886,7 +886,7 @@
 
 (defun simpson-sauron-toggle(&optional x)
   "A function to keep the sauron window visible and sized correctly after move/balance operation.
-   Optional argument to satisfy the various ways the evil-window-move- functions are called."
+Optional argument to satisfy the various ways the evil-window-move- functions are called."
   (interactive)
   (when (window-live-p (get-buffer-window "*Sauron*"))
     (sr-hide)
@@ -897,3 +897,8 @@
 (advice-add 'evil-window-move-far-right :after #'simpson-sauron-toggle)
 (advice-add 'evil-window-move-far-left :after #'simpson-sauron-toggle)
 (advice-add 'evil-quit :after #'balance-windows)
+
+(use-package ivy-lobsters
+  :ensure nil
+  :defer 1
+  :load-path "~/Projects/ivy-lobsters")
