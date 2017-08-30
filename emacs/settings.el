@@ -92,6 +92,7 @@
     (setq evil-split-window-below t)
     (add-to-list 'evil-emacs-state-modes 'dired-mode)
     (add-to-list 'evil-emacs-state-modes 'epa-key-list-mode)
+    (add-to-list 'evil-emacs-state-modes 'ivy-occur-mode)
     ;http://spacemacs.org/doc/FAQ#orgheadline31
     (fset 'evil-visual-update-x-selection 'ignore)
     (define-key evil-normal-state-map (kbd "RET") 'save-buffer)
@@ -778,7 +779,6 @@
   :defer 1
   :if (not simpson-helm)
   :config (progn
-    (add-to-list 'evil-emacs-state-modes 'ivy-occur-mode)
     (setq ivy-use-virtual-buffers t)
     (ivy-mode)
     (setq ivy-height 20)
