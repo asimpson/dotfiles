@@ -777,6 +777,7 @@
   :defer 1
   :if (not simpson-helm)
   :config (progn
+    (add-to-list 'evil-emacs-state-modes 'ivy-occur-mode)
     (setq ivy-use-virtual-buffers t)
     (ivy-mode)
     (setq ivy-height 20)
@@ -796,6 +797,7 @@
 (use-package counsel
   :defer 1
   :if (not simpson-helm)
+  :bind ("C-SPC f" . counsel-find-file)
   :config (progn
     (global-set-key (kbd "M-x") 'counsel-M-x)
     (global-set-key (kbd "<f1> f") 'counsel-describe-function)
