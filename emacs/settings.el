@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 ;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -367,6 +368,8 @@
       (revert-buffer t t))
 
     (run-at-time 0 (* 60 15) #'simpson-org-refresh)
+
+    (set-face-attribute 'org-mode-line-clock nil :foreground (plist-get base16-ocean-colors :base0E) :background nil :box nil)
   )
 )
 
@@ -891,8 +894,7 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
   (interactive)
   (when (window-live-p (get-buffer-window "*Sauron*"))
     (sr-hide)
-    (sr-show))
-)
+    (sr-show)))
 
 (advice-add 'balance-windows :after #'simpson-sauron-toggle)
 (advice-add 'evil-window-move-far-right :after #'simpson-sauron-toggle)
