@@ -1,4 +1,4 @@
-;;; -*- lexical-binding: t; -*-
+;; -*- lexical-binding: t; -*-
 ;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)

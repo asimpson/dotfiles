@@ -1,4 +1,4 @@
-;;; -*- lexical-binding: t; -*-
+;; -*- lexical-binding: t; -*-
 (global-set-key (kbd "C-M-u") 'universal-argument)
 
 (global-set-key (kbd "s-=") 'text-scale-increase)

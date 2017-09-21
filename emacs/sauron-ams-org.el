@@ -1,5 +1,5 @@
 ;;; sauron-ams-org.el --- Parse org-agenda for sauron.
-;;; -*- lexical-binding: t; -*-
+;; -*- lexical-binding: t; -*-
 
 ;; Adam Simpson <adam@adamsimpson.net>
 ;; Version: 0.2.1
