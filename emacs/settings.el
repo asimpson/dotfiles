@@ -791,6 +791,7 @@
     (delete '(counsel-M-x . "^") ivy-initial-inputs-alist)
     (push '(counsel-M-x . "") ivy-initial-inputs-alist)
     (ivy-add-actions 'counsel-projectile-ag '(("O" simpson-other-window "open in new window")))
+    (ivy-add-actions 'counsel-ag '(("O" simpson-other-window "open in new window")))
   )
 )
 
