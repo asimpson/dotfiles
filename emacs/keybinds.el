@@ -3,11 +3,13 @@
 
 (global-set-key (kbd "s-=") 'text-scale-increase)
 (global-set-key (kbd "s--") 'text-scale-decrease)
-(global-set-key (kbd "C-SPC k !") (lambda()
-  (interactive)
-  (text-scale-set 0)))
+(global-set-key (kbd "C-SPC k !") 'simpson-restore-text)
 
-(setq window-saved "nothing")
+(defun simpson-restore-text()
+  "reset text size to default"
+  (interactive)
+  (text-scale-set 0)
+)
 
 (defun gen-multi-term ()
   "open up a mult-term in a new window"
@@ -53,42 +55,45 @@
 (global-set-key (kbd "C-SPC !") 'async-shell-command)
 (global-set-key (kbd "C-SPC u") 'universal-argument)
 (global-set-key (kbd "C-SPC k g") 'ffap)
-(global-set-key (kbd "C-SPC k F") (lambda()
+(global-set-key (kbd "C-SPC k F") 'simpson-byte-compile)
+
+(defun simpson-byte-compile()
+  "force byte compilation"
   (interactive)
   (byte-recompile-directory package-user-dir nil 'force))
-)
 
 (global-set-key (kbd "C-SPC m l") 'windmove-right)
 (global-set-key (kbd "C-SPC m h") 'windmove-left)
 (global-set-key (kbd "C-SPC m j") 'windmove-down)
 (global-set-key (kbd "C-SPC m k") 'windmove-up)
 
-(global-set-key (kbd "C-SPC k a") (lambda()
+(global-set-key (kbd "C-SPC k a") 'simpson-copy-file-buffer)
+
+(defun simpson-copy-file-buffer()
   "copy the file path for the current buffer to the clipboard"
   (interactive)
   (kill-new (buffer-file-name))
-))
-
-(global-set-key (kbd "C-SPC D") 'simpson-dired-project)
-
-(defun simpson-dired-project()
-  "returns dired mode for the current project"
-  (interactive)
-  (dired (projectile-project-root))
 )
 
-(global-set-key (kbd "C-SPC k d") (lambda()
+(global-set-key (kbd "C-SPC D") 'dired-jump)
+
+(global-set-key (kbd "C-SPC k d") 'simpson-insert-date)
+
+(defun simpson-insert-date()
   "shells out to date to return a formatted date string at point"
   (interactive)
-  (shell-command "date +%Y-%m-%d-%I:%M" t)))
+  (shell-command "date +%Y-%m-%d-%I:%M" t))
 
-(global-set-key (kbd "C-SPC k D") (lambda(name)
+
+(defun simpson-new-note(name)
   "create new file for Deft/nvAlt"
   (interactive "sName of file: ")
   (setq date (shell-command-to-string "date +%m-%d-%y"))
   (setq fixed-date (replace-regexp-in-string "\n$" "" date))
   (write-region "" "" (concat "~/Dropbox (Personal)/Notational Data/" fixed-date "-" name ".txt"))
-))
+)
+
+(global-set-key (kbd "C-SPC k D") 'simpson-new-note)
 (global-set-key (kbd "C-SPC k ?") 'eww)
 
 
