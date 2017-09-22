@@ -873,7 +873,11 @@
 
 (use-package notmuch)
 
-(desktop-save-mode)
+
+(use-package desktop
+  :defer 1
+  :config (desktop-save-mode)
+)
 
 (use-package php-mode
   :defer 1
