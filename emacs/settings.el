@@ -916,3 +916,6 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
   :defer 1
   :after ivy
   :load-path "~/.dotfiles/emacs/ivy-feedwrangler.el")
+(use-package vlf
+  :defer 1
+)
