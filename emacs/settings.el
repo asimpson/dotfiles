@@ -919,3 +919,22 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
 (use-package vlf
   :defer 1
 )
+(use-package hydra
+  :defer 1
+  :config (progn
+    (global-set-key (kbd "C-c a") 'hydra-text/body)
+  )
+)
+
+(defhydra hydra-text ()
+  "
+    zoom
+    ----
+    Here are the options:
+    ---
+    _g_ zoom
+    _l_ back
+  "
+  ("g" text-scale-increase "in")
+  ("l" text-scale-decrease "out"))
+
