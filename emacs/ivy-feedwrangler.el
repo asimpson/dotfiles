@@ -2,7 +2,7 @@
 ;; -*- lexical-binding: t; -*-
 
 ;; Adam Simpson <adam@adamsimpson.net>
-;; Version: 0.0.1
+;; Version: 0.1.0
 ;; Package-Requires: (ivy)
 ;; Keywords: rss, curl, ivy
 ;; URL: https://github.com/asimpson/dotfiles/
@@ -17,11 +17,16 @@
   "The base URL for the API."
 )
 
+(defvar ivy-feedwrangler--body-buffer
+  "feedwrangler-body"
+  "The buffer to perform body reading in"
+)
+
 (defun ivy-feedwrangler--parse-feed(feed)
   "Returns feed items in format: 'Site Title - Post title' format."
   (mapcar (lambda (x)
     (cons (format "%s - %s" (alist-get 'feed_name x) (alist-get 'title x))
-      (list :url (alist-get 'url x) :id (alist-get 'feed_item_id x)))) feed))
+      (list :url (alist-get 'url x) :id (alist-get 'feed_item_id x) :body (alist-get 'body x)))) feed))
 
 
 (defun ivy-feedwrangler--get-token()
@@ -73,7 +78,14 @@
     ("X" (lambda (item)
         (let ((token (ivy-feedwrangler--get-token)) url)
           (setq url (concat ivy-feedwrangler--base-url "mark_all_read?access_token=" token))
-          (with-temp-buffer (call-process "curl" nil t nil "-s" url)))) "Mark all as Read")))
+          (with-temp-buffer (call-process "curl" nil t nil "-s" url)))) "Mark all as Read")
+    ("p" (lambda (item)
+        (let ( (body (plist-get (cdr item) :body)) )
+          (kill-buffer ivy-feedwrangler--body-buffer)
+          (with-current-buffer (get-buffer-create ivy-feedwrangler--body-buffer)
+            (insert body)
+            (shr-render-buffer ivy-feedwrangler--body-buffer)))) "View Post")
+))
 
 (provide 'ivy-feedwrangler)
 
