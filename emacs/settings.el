@@ -109,8 +109,13 @@
     (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
     (define-key evil-normal-state-map (kbd "C-n") 'evil-scroll-down)
     (define-key evil-normal-state-map (kbd "C-b") 'projectile-switch-project)
-
   )
+)
+
+(add-hook 'evil-after-load-hook 'simpson-set-evil-active)
+
+(defun simpson-set-evil-active()
+  (setq simpson-evil-active t)
 )
 
 (use-package evil-leader
@@ -262,6 +267,7 @@
     ;the option to `magit-auto-revert-repository-buffer-p'.
     (setq auto-revert-buffer-list-filter 'magit-auto-revert-repository-buffers-p)
     (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+    (put 'magit-clean 'disabled nil)
     (when (string= (car custom-enabled-themes) "base16-ocean")
       (set-face-foreground 'magit-blame-date (plist-get base16-ocean-colors :base0A))
       (set-face-foreground 'magit-blame-hash (plist-get base16-ocean-colors :base0A))
@@ -345,33 +351,39 @@
           width: 100%;
           max-width: 100%;
         }
+        pre {
+          overflow-y: scroll !important;
+        }
       </style>
     ")
     (setq exec-path (append exec-path '("/Library/TeX/texbin/latex")))
-    (defun simpson-org-task-capture ()
-      "Capture a task with my default template."
-      (interactive)
-      (org-capture nil "a"))
     (global-set-key (kbd "C-SPC k f") 'org-footnote-new)
     (global-set-key (kbd "C-SPC k l") 'org-toggle-link-display)
-    (setq org-export-backends '(ascii html icalendar latex odt md))
+    (setq org-export-backends '(ascii html icalendar latex md))
     (org-babel-do-load-languages
     'org-babel-load-languages
       '( (sh . t)
         (js . t)
       )
     )
-
-    (defun simpson-org-refresh()
-      (interactive)
-      (set-buffer "tasks.org")
-      (revert-buffer t t))
-
     (run-at-time 0 (* 60 15) #'simpson-org-refresh)
-
-    (set-face-attribute 'org-mode-line-clock nil :foreground (plist-get base16-ocean-colors :base0E) :background nil :box nil)
+    (set-face-attribute 'org-mode-line-clock nil :foreground (plist-get base16-ocean-colors :base0E) :background nil :box nil :inherit nil)
+    (setq org-pretty-entities t)
+    (setq org-export-with-section-numbers nil)
   )
 )
+
+(defun simpson-org-task-capture ()
+  "Capture a task with my default template."
+  (interactive)
+  (org-capture nil "a"))
+
+(defun simpson-org-refresh()
+  "refreshes task buffer to pull in tasks that have been added outside emacs"
+  (interactive)
+  (when (buffer-live-p "tasks.org")
+    (set-buffer "tasks.org")
+    (revert-buffer t t)))
 
 (use-package multi-term
   :config (progn
@@ -549,7 +561,7 @@
       (propertize " !" 'face '(:foreground "#cf6a4c"))
   ))
   " "
-  '(:eval (when simpson-evil (propertize evil-mode-line-tag 'face '(:foreground "#bf616a"))))
+  '(:eval (when (and simpson-evil simpson-evil-active) (propertize evil-mode-line-tag 'face '(:foreground "#bf616a"))))
   " "
   '(:eval mode-line-position)
   mode-line-modes
@@ -786,7 +798,7 @@
     (ivy-mode)
     (setq ivy-height 20)
     (setq ivy-count-format "")
-    (global-set-key (kbd "C-c C-r") 'ivy-resume)
+    (global-set-key (kbd "C-SPC A") 'ivy-resume)
     (define-key global-map (kbd "C-=") 'ivy-switch-buffer)
     (delete '(counsel-M-x . "^") ivy-initial-inputs-alist)
     (push '(counsel-M-x . "") ivy-initial-inputs-alist)
@@ -873,19 +885,16 @@
 
 (use-package notmuch)
 
-
 (use-package desktop
   :defer 1
   :config (desktop-save-mode)
 )
 
 (use-package php-mode
-  :defer 1
   :mode ("\\.php?\\'" . php-mode)
   :config (add-hook 'php-mode-hook (lambda () (setq mode-name "php"))))
 
 (use-package json-mode
-  :defer 1
   :mode ("\\.json?\\'" . json-mode))
 
 (use-package company
@@ -908,14 +917,31 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
 
 (use-package ivy-lobsters
   :ensure nil
-  :defer 1
+  :after ivy
+  :config (setq ivy-lobsters-keep-focus t)
   :load-path "~/Projects/ivy-lobsters")
 
 (use-package ivy-feedwrangler
   :ensure nil
-  :defer 1
   :after ivy
   :load-path "~/.dotfiles/emacs/ivy-feedwrangler.el")
-(use-package vlf
+
+(use-package ox-confluence
   :defer 1
+  :ensure nil
+  :load-path "~/.dotfiles/emacs/ox-confluence.el")
+
+(use-package vlf)
+
+(use-package mocha)
+
+(use-package lua-mode
+  :mode("\\.lua?\\'" . lua-mode)
 )
+
+(use-package racket-mode
+  :mode("\\.rkt?\\'" . racket-mode)
+)
+(setq compilation-always-kill t)
+
+(use-package realgud)

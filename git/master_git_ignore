@@ -16,3 +16,4 @@ page_cache/*
 .agignore
 todo.txt
 package-lock.json
+.dir-locals.el

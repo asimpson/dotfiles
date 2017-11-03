@@ -13,7 +13,10 @@
   "Variable to enable or disable helm specific configurations")
 (defvar simpson-evil t
   "Variable to enable or disable evil specific configurations")
+(defvar simpson-evil-active nil
+  "set to true once evil is loaded")
 (setq idle-update-delay 1)
 (load "~/.emacs.d/settings.el")
 (load "~/.emacs.d/keybinds.el")
 (put 'narrow-to-region 'disabled nil)
+(message "Init time: %s" (emacs-init-time))
