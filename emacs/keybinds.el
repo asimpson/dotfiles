@@ -124,24 +124,10 @@
 
 (global-set-key (kbd "C-SPC .") 'simpson-rerun)
 
-(global-set-key (kbd "C-SPC z s") 'save-windows)
-(global-set-key (kbd "C-SPC z l") 'restore-windows)
-
 ;narrow region
 (global-set-key (kbd "C-SPC n") 'narrow-to-region)
 ;widen
 (global-set-key (kbd "C-SPC N") 'widen)
-
-(defun save-windows ()
-  "saves windows position"
-  (interactive)
-  (window-configuration-to-register 0)
-  (delete-other-windows))
-
-(defun restore-windows ()
-  "restores windows position"
-  (interactive)
-  (jump-to-register 0))
 
 (setq minor-mode-perm-list (copy-alist minor-mode-alist))
 
