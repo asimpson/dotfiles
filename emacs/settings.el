@@ -130,6 +130,7 @@
       (evil-leader/set-key "F" 'helm-do-ag))
     (unless simpson-helm
       (evil-leader/set-key "f" 'counsel-projectile-ag)
+      (evil-leader/set-key "s" 'hydra-searching/body)
       (evil-leader/set-key "F" 'simpson-counsel-ag))
     (evil-leader/set-key "c" 'fci-mode)
     (evil-leader/set-key "v" 'evil-window-vnew)
@@ -546,7 +547,7 @@
   (set-face-foreground 'header-line "#a3adb5")
   (set-face-background 'header-line (plist-get base16-ocean-colors :base02))
   (set-face-attribute 'header-line nil
-      :box `(:line-width 3 :color ,(plist-get base16-ocean-colors :base02) :style nil))
+      :box `(:line-width 1 :color ,(plist-get base16-ocean-colors :base02) :style nil))
   (set-face-foreground 'vertical-border (plist-get base16-ocean-colors :base02))
   (set-face-background 'fringe (plist-get base16-ocean-colors :base00)))
 
@@ -965,6 +966,73 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
 (use-package racket-mode
   :mode("\\.rkt?\\'" . racket-mode)
 )
+
+(use-package hydra
+  :defer 1
+  :config (progn
+    (global-set-key (kbd "C-SPC M") 'hydra-mocha/body)
+    (global-set-key (kbd "C-SPC z") 'hydra-ivy-view/body)
+  )
+)
+
+(defhydra hydra-mocha (:exit t)
+  "
+    Mocha:
+    _a_ test at point
+    _f_ test file
+  "
+  ("a" mocha-test-at-point "file at point")
+  ("f" mocha-test-file "whole file"))
+
+(defhydra hydra-ivy-view (:exit t)
+  "
+    Ivy views:
+    _s_ switch view
+    _p_ push view
+    _P_ pop view
+  "
+  ("s" ivy-switch-view "switch view")
+  ("P" ivy-pop-view "delete the latest view")
+  ("p" ivy-push-view "push a new view"))
+
+(defun simpson-rg-switches(dir switches)
+  (interactive
+   (let (dir switches)
+    (list
+      (if (y-or-n-p "Pick dir?")
+        (setq dir (read-directory-name "rg dir: "))
+      (setq dir nil))
+      (setq switches (read-string "rg switches: ")))
+  (counsel-rg nil dir switches))))
+
+(defhydra hydra-searching (:exit t)
+  "
+    ^Searching tools
+    ----------------------------------------------
+    _a_ ag without switches
+    _A_ ag with extra switches
+    _r_ rg without switches
+    _R_ rg with extra switches
+
+    ^silver searcher options
+    ----------------------------------------------
+    -Ghtml   - ag search by type
+    --ignore - ag ignore file path
+
+    ^ripgrep options
+    ----------------------------------------------
+    -g - search files matching glob, -g '*spec.js'
+    -M - limit lines to N
+    -t - search files matching type
+       - rg --type-list lists all types
+    -C - show context N lines
+  "
+  ("a" counsel-projectile-ag "projectile ag")
+  ("A" simpson-counsel-ag "ag with switches")
+  ("r" counsel-rg "projectile rg")
+  ("R" simpson-rg-switches "rg with switches"))
+
+
 (setq compilation-always-kill t)
 
 (use-package realgud)
