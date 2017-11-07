@@ -307,6 +307,7 @@
   :defer 2
   :bind (
     ("C-SPC c" . simpson-org-task-capture)
+    ("C-SPC k B" . simpson-org-blog-capture)
     ("C-SPC t" . org-todo-list)
     ("C-SPC a" . org-agenda)
     ("C-SPC T" . org-tags-view)
@@ -318,6 +319,7 @@
     (require 'org-notmuch)
     (require 'ox-md)
     ;look into swapping with txt, org-agenda-file-regexp
+    (setq org-agenda-file-regexp "\\`[^.].*\\.txt\\'")
     (setq org-agenda-files '("~/Dropbox (Personal)/org"))
     (setq org-log-done t)
     (setq org-deadline-warning-days 3)
@@ -326,9 +328,16 @@
           '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
     (setq org-capture-templates
           '(("a" "My TODO task format." entry
-            (file "~/Dropbox (Personal)/org/tasks.org")
+            (file "~/Dropbox (Personal)/org/tasks.txt")
             "* TODO %? %^g
     :PROPERTIES:
+    :CREATED: %T
+    :END:")
+          ("b" "My blog post captures" entry
+            (file "~/Dropbox (Personal)/org/reading.txt")
+            "* %? %^g
+    :PROPERTIES:
+    %(simpson-prompt-for-feedwrangler-url)
     :CREATED: %T
     :END:")))
     (setq org-agenda-restore-windows-after-quit t)
@@ -373,10 +382,24 @@
   )
 )
 
+(defun simpson-prompt-for-feedwrangler-url()
+  (if (y-or-n-p "Get feedwrangler url?")
+    (concat ":URL:" " " ivy-feedwrangler--current-link)
+  (let (url)
+    (setq url (read-string "What url?: "))
+    (concat ":URL:" " " url)
+  ))
+)
+
 (defun simpson-org-task-capture ()
   "Capture a task with my default template."
   (interactive)
   (org-capture nil "a"))
+
+(defun simpson-org-blog-capture ()
+  "Capture a blog post with my blog template."
+  (interactive)
+  (org-capture nil "b"))
 
 (defun simpson-org-refresh()
   "refreshes task buffer to pull in tasks that have been added outside emacs"
