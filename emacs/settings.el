@@ -306,6 +306,7 @@
 
 (use-package org
   :defer 2
+  :if (file-exists-p "~/Dropbox (Personal)/org/tasks.txt")
   :bind (
     ("C-SPC c" . simpson-org-task-capture)
     ("C-SPC k B" . simpson-org-blog-capture)
