@@ -129,7 +129,7 @@
       (evil-leader/set-key "f" 'helm-projectile-ag)
       (evil-leader/set-key "F" 'helm-do-ag))
     (unless simpson-helm
-      (evil-leader/set-key "f" 'counsel-projectile-ag)
+      (evil-leader/set-key "f" 'counsel-rg)
       (evil-leader/set-key "s" 'hydra-searching/body)
       (evil-leader/set-key "F" 'simpson-counsel-ag))
     (evil-leader/set-key "c" 'fci-mode)
@@ -833,6 +833,7 @@
     (push '(counsel-M-x . "") ivy-initial-inputs-alist)
     (ivy-add-actions 'counsel-projectile-ag '(("O" simpson-other-window "open in new window")))
     (ivy-add-actions 'counsel-ag '(("O" simpson-other-window "open in new window")))
+    (ivy-add-actions 'counsel-rg '(("O" simpson-other-window "open in new window")))
   )
 )
 
