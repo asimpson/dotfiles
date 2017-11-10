@@ -999,7 +999,14 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
   "
   ("s" ivy-switch-view "switch view")
   ("P" ivy-pop-view "delete the latest view")
-  ("p" ivy-push-view "push a new view"))
+  ("p" simpson-push-view "push a new view"))
+
+(defun simpson-push-view()
+  (interactive)
+  (ivy-push-view)
+  (when (y-or-n-p "Zoom?")
+    (delete-other-windows))
+)
 
 (defun simpson-rg-switches(dir switches)
   (interactive
