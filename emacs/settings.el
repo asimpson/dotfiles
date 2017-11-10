@@ -699,10 +699,12 @@
   :defer 2
   :init (setq sauron-modules '(sauron-erc sauron-ams-org))
   :config (progn
-    (load-library "~/.dotfiles/emacs/irc-watch.gpg")
+    (when (file-exists-p "~/.dotfiles/emacs/irc-watch.gpg")
+      (load-library "~/.dotfiles/emacs/irc-watch.gpg"))
     (when simpson-evil (add-to-list 'evil-emacs-state-modes 'sauron-mode))
     (setq sauron-watch-nicks nil)
-    (setq sauron-watch-patterns simpson-watch-patterns)
+    (when (boundp 'simpson-watch-patterns)
+      (setq sauron-watch-patterns simpson-watch-patterns))
     (setq sauron-hide-mode-line t)
     (setq sauron-separate-frame nil)
     (setq sauron-column-alist '((timestamp . 8)
@@ -778,7 +780,8 @@
     (setq erc-log-channels-directory "~/.erc/logs/")
     (setq erc-save-buffer-on-part t)
     (setq erc-join-buffer "bury")
-    (load-library "~/.dotfiles/emacs/irc-accounts.gpg")
+    (when (file-exists-p "~/.dotfiles/emacs/irc-accounts.gpg")
+      (load-library "~/.dotfiles/emacs/irc-accounts.gpg"))
     (add-hook 'erc-mode-hook 'visual-line-mode)
     (add-hook 'erc-mode-hook (lambda () (setq mode-name "irc")))
   )
@@ -811,7 +814,8 @@
   (setq flyspell-issue-message-flag nil))
 )
 
-(setq auth-sources '("~/.dotfiles/emacs/authinfo.gpg"))
+(when (file-exists-p "~/.dotfiles/emacs/authinfo.gpg")
+  (setq auth-sources '("~/.dotfiles/emacs/authinfo.gpg")))
 
 (use-package ivy
   :diminish ""

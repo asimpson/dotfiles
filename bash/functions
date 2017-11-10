@@ -54,7 +54,7 @@ function marked {
   open -a Marked\ 2.app $@
 }
 
-function man {
+function xman {
   open dash://man:$1
 }
 
