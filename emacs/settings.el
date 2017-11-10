@@ -406,8 +406,8 @@
 (defun simpson-org-refresh()
   "refreshes task buffer to pull in tasks that have been added outside emacs"
   (interactive)
-  (when (buffer-live-p "tasks.org")
-    (set-buffer "tasks.org")
+  (when (buffer-live-p "tasks.txt")
+    (set-buffer "tasks.txt")
     (revert-buffer t t)))
 
 (use-package multi-term
