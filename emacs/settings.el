@@ -1049,3 +1049,11 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
 (setq compilation-always-kill t)
 
 (use-package realgud)
+
+(defun create-scratch-buffer ()
+  "create a scratch buffer"
+  (interactive)
+  (switch-to-buffer (get-buffer-create "*scratch*"))
+  (insert ";; This buffer is for text that is not saved, and for Lisp evaluation.
+;; To create a file, visit it with C-x C-f and enter text in its buffer.")
+  (lisp-interaction-mode))
