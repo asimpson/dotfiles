@@ -4,15 +4,17 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+(menu-bar-mode -1)
+
 (eval-when-compile
   (require 'use-package))
 
 (setq-default
-  use-package-always-defer t
-  use-package-always-ensure t)
+ use-package-always-defer t
+ use-package-always-ensure t)
 
-;debug use-package 👇
-;(setq use-package-verbose t)
+;;debug use-package 👇
+;;(setq use-package-verbose t)
 
 (show-paren-mode)
 (tool-bar-mode -1)
@@ -38,7 +40,7 @@
             (setq delete-by-moving-to-trash t)))
 
 (use-package base16-theme
-  :if (unless (null window-system))
+  :if (display-graphic-p)
   :init (load-theme 'base16-ocean t))
 
 (use-package exec-path-from-shell
@@ -125,7 +127,7 @@
 (defun simpson-counsel-ag()
   (interactive)
   (let ((current-prefix-arg t))
-  (counsel-ag)))
+    (counsel-ag)))
 
 (use-package key-chord
   :defer 3
@@ -458,8 +460,8 @@
 
 (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
 
-;treat new buffers as modified files
-;http://stackoverflow.com/a/2592558/2344737
+;;treat new buffers as modified files
+;;http://stackoverflow.com/a/2592558/2344737
 (add-hook 'find-file-hooks 'assume-new-is-modified)
 (defun assume-new-is-modified ()
   (when (not (file-exists-p (buffer-file-name)))
@@ -474,17 +476,17 @@
       (setq output "(o)"))
     (setq header-line-format output)))
 
-;set the header intially
+;;set the header intially
 (simpson-header)
 
-;update the header whenever the buffer-list changes
+;;update the header whenever the buffer-list changes
 (add-hook 'buffer-list-update-hook 'simpson-header)
 
 (when (string= (car custom-enabled-themes) "base16-ocean")
   (set-face-foreground 'header-line "#a3adb5")
   (set-face-background 'header-line (plist-get base16-ocean-colors :base02))
   (set-face-attribute 'header-line nil
-      :box `(:line-width 1 :color ,(plist-get base16-ocean-colors :base02) :style nil))
+                      :box `(:line-width 1 :color ,(plist-get base16-ocean-colors :base02) :style nil))
   (set-face-foreground 'vertical-border (plist-get base16-ocean-colors :base02))
   (set-face-background 'fringe (plist-get base16-ocean-colors :base00)))
 
@@ -532,11 +534,11 @@
 
 (when (string= (car custom-enabled-themes) "base16-ocean")
   (set-face-attribute 'mode-line nil
-      :background (plist-get base16-ocean-colors :base06)
-      :foreground (plist-get base16-ocean-colors :base01)
-      :box `(:line-width 3 :color ,(plist-get base16-ocean-colors :base06) :style nil))
+                      :background (plist-get base16-ocean-colors :base06)
+                      :foreground (plist-get base16-ocean-colors :base01)
+                      :box `(:line-width 3 :color ,(plist-get base16-ocean-colors :base06) :style nil))
   (set-face-attribute 'mode-line-inactive nil
-      :box `(:line-width 3 :color ,(plist-get base16-ocean-colors :base01) :style nil)))
+                      :box `(:line-width 3 :color ,(plist-get base16-ocean-colors :base01) :style nil)))
 
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (setq ediff-split-window-function 'split-window-horizontally)
@@ -685,7 +687,7 @@
                    '(exit))
              (not (string= (string-trim sig) "finished")))
     (sauron-add-event 'shell 3 sig (lambda() #'(switch-to-buffer-other-window
-                                                "*Async Shell Command*")))))
+                                           "*Async Shell Command*")))))
 
 (use-package erc
   :bind (:map erc-mode-map ("C-c f" . simpson-format-slack-name))
@@ -749,7 +751,7 @@
 
 (defun simpson-other-window(x)
   (let ((file (car (split-string x ":"))))
-  (find-file-other-window (concat (locate-dominating-file file ".git") file))))
+    (find-file-other-window (concat (locate-dominating-file file ".git") file))))
 
 (use-package counsel
   :defer 1
@@ -818,6 +820,7 @@
 
 (use-package desktop
   :defer 1
+  :if (display-graphic-p)
   :config (desktop-save-mode))
 
 (use-package php-mode
