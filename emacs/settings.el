@@ -38,6 +38,7 @@
             (setq delete-by-moving-to-trash t)))
 
 (use-package base16-theme
+  :if (unless (null window-system))
   :init (load-theme 'base16-ocean t))
 
 (use-package exec-path-from-shell
@@ -331,7 +332,8 @@
              '((sh . t)
                (js . t)))
             (run-at-time 0 (* 60 15) #'simpson-org-refresh)
-            (set-face-attribute 'org-mode-line-clock nil :foreground (plist-get base16-ocean-colors :base0E) :background nil :box nil :inherit nil)
+            (when (string= (car custom-enabled-themes) "base16-ocean")
+              (set-face-attribute 'org-mode-line-clock nil :foreground (plist-get base16-ocean-colors :base0E) :background nil :box nil :inherit nil))
             (setq org-pretty-entities t)
             (setq org-export-with-section-numbers nil)))
 
