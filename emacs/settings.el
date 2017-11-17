@@ -58,10 +58,7 @@
 
 (use-package vimish-fold
   :defer 1
-  :config (vimish-fold-global-mode 1)
-  :bind (("C-SPC v" . vimish-fold)
-         ("C-SPC V" . vimish-fold-delete))
-)
+  :config (vimish-fold-global-mode 1))
 
 (use-package flycheck
   :diminish "lint"
@@ -875,29 +872,32 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
 (use-package hydra
   :defer 1
   :config (progn
-    (global-set-key (kbd "C-SPC M") 'hydra-mocha/body)
-    (global-set-key (kbd "C-SPC z") 'hydra-ivy-view/body)
-  )
-)
+            (global-set-key (kbd "C-SPC M") 'hydra-mocha/body)
+            (global-set-key (kbd "C-SPC G") 'hydra-magit/body)
+            (global-set-key (kbd "C-SPC z") 'ivy-window-configuration--hydra/body)
+            (global-set-key (kbd "C-SPC x") 'hydra-js2/body)
+            (global-set-key (kbd "C-SPC v") 'hydra-vimish/body)))
 
-(defhydra hydra-mocha (:exit t)
+(defhydra hydra-mocha ()
   "
     Mocha:
     _a_ test at point
     _f_ test file
+    _p_ test project
   "
   ("a" mocha-test-at-point "file at point")
+  ("p" mocha-test-project "project" :exit t)
   ("f" mocha-test-file "whole file"))
 
 (defun simpson-rg-switches(dir switches)
   (interactive
    (let (dir switches)
-    (list
+     (list
       (if (y-or-n-p "Pick dir?")
-        (setq dir (read-directory-name "rg dir: "))
-      (setq dir nil))
+          (setq dir (read-directory-name "rg dir: "))
+        (setq dir nil))
       (setq switches (read-string "rg switches: ")))
-  (counsel-rg nil dir switches))))
+     (counsel-rg nil dir switches))))
 
 (defhydra hydra-searching (:exit t)
   "
@@ -936,5 +936,49 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
   (insert ";; This buffer is for text that is not saved, and for Lisp evaluation.
 ;; To create a file, visit it with C-x C-f and enter text in its buffer.")
   (lisp-interaction-mode))
+
+(defhydra hydra-magit (:exit t)
+  "
+    Handy magit commands:
+    _f_ find file given revision
+    _F_ find file in other window given revision
+    _l_ see the current file's log
+    _b_ blame the current file
+  "
+  ("f" magit-find-file "find file given rev")
+  ("F" magit-find-file-other-window "find file in other window given rev")
+  ("l" magit-log-buffer-file "view log for file")
+  ("b" magit-blame "view blame for file"))
+
 (use-package aggressive-indent
   :mode("\\.el?\\'" . aggressive-indent-mode))
+
+(defun simpson-trash(file)
+  "Prompt for file and trash it"
+  (interactive
+   (list (read-file-name "Files to trash: ")))
+  (call-process "trash" nil nil nil file))
+
+(defhydra hydra-js2 ()
+  "
+    JS2 Folding/Narrowing:
+    _n_ narrow to defun
+    _v_ fold
+    _d_ highlight defun
+  "
+  ("n" js2-narrow-to-defun "narrow to defun" :exit t)
+  ("v" vimish-fold "fold")
+  ("d" js2-mark-defun "highlight defun"))
+
+(defhydra hydra-vimish (:exit t)
+  "
+    Vimish Folding
+    _v_ fold
+    _V_ unfold
+    _x_ delete all folds
+  "
+  ("V" vimish-fold-delete "unfold")
+  ("v" vimish-fold "fold")
+  ("x" vimish-fold-delete-all "delete all"))
+
+;;; settings.el ends here
