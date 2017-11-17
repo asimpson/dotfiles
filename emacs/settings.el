@@ -981,4 +981,9 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
   ("v" vimish-fold "fold")
   ("x" vimish-fold-delete-all "delete all"))
 
+(use-package ivy-window-configuration
+  :ensure nil
+  :after hydra
+  :load-path "~/Projects/ivy-window-configuration/ivy-window-configuration.el")
+
 ;;; settings.el ends here
