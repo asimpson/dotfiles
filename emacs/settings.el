@@ -785,6 +785,7 @@
 
           (add-hook 'emacs-lisp-mode-hook 'simpson-pretty-lambda)
           (add-hook 'emacs-lisp-mode-hook 'prettify-symbols-mode)
+          (add-hook 'emacs-lisp-mode-hook 'aggressive-indent-mode)
           (add-hook 'emacs-lisp-mode-hook (lambda () (setq mode-name "λ")))))
 
 
@@ -857,7 +858,8 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
 (use-package ivy-feedwrangler
   :ensure nil
   :after ivy
-  :load-path "~/Projects/ivy-feedwrangler/ivy-feedwrangler.el")
+  :if (file-exists-p "~/Projects/ivy-feedwrangler/")
+  :load-path "~/Projects/ivy-feedwrangler/")
 
 (use-package ox-confluence
   :defer 1
@@ -955,8 +957,7 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
   ("l" magit-log-buffer-file "view log for file")
   ("b" magit-blame "view blame for file"))
 
-(use-package aggressive-indent
-  :mode("\\.el?\\'" . aggressive-indent-mode))
+(use-package aggressive-indent)
 
 (defun simpson-trash(file)
   "Prompt for file and trash it"
@@ -988,7 +989,9 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
 
 (use-package ivy-window-configuration
   :ensure nil
-  :after hydra
-  :load-path "~/Projects/ivy-window-configuration/ivy-window-configuration.el")
+  :after ivy
+  :if (file-exists-p "~/Projects/ivy-window-configuration/")
+  :load-path "~/Projects/ivy-window-configuration/")
 
+(server-start)
 ;;; settings.el ends here
