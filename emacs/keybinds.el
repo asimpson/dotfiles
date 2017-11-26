@@ -90,18 +90,17 @@
   (interactive)
   (shell-command "date +%Y-%m-%d-%I:%M" t))
 
-
 (defun simpson-new-note(name)
-  "create new file for Deft/nvAlt"
+  "create new file for nvAlt"
   (interactive "sName of file: ")
   (setq date (shell-command-to-string "date +%m-%d-%y"))
   (setq fixed-date (replace-regexp-in-string "\n$" "" date))
-  (write-region "" "" (concat "~/Dropbox (Personal)/Notational Data/" fixed-date "-" name ".txt"))
-)
+  (write-region "" "" (concat "~/Dropbox (Personal)/Notational Data/" fixed-date "-" name ".txt")))
 
+(global-set-key (kbd "C-SPC d") (lambda() (interactive)
+                                  (dired "~/Dropbox (Personal)/Notational Data/" "-laGht")))
 (global-set-key (kbd "C-SPC k D") 'simpson-new-note)
 (global-set-key (kbd "C-SPC k ?") 'eww)
-
 
 (defun kill-shell-buffer()
   "kills the Async Shell Command buffer and then balance's the remaining windows"
@@ -109,7 +108,7 @@
   (switch-to-buffer-other-window "*Async Shell Command*")
   (kill-buffer-and-window)
   (balance-windows)
-)
+  )
 
 (defun simpson-smart-shell()
   "run shell from projectile root or from current spot in system"

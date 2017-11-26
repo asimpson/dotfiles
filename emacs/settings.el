@@ -598,15 +598,6 @@
             (define-key yas-minor-mode-map (kbd "<tab>") nil)
             (define-key yas-minor-mode-map (kbd "TAB") nil)))
 
-(use-package deft
-  :bind ("C-SPC d" . deft)
-  :config (progn
-            (when simpson-evil (add-to-list 'evil-emacs-state-modes 'deft-mode))
-            (setq deft-extensions '("txt" "txt.gpg" "org"))
-            (setq deft-directory "/Users/asimpson/Dropbox (Personal)/Notational Data")
-            (setq deft-use-filename-as-title t)
-            (setq deft-auto-save-interval 60.0)))
-
 (use-package emmet-mode
   :diminish "zen"
   :bind (("C-c e" . emmet-expand-line)
@@ -654,9 +645,17 @@
 ;;http://emacs.stackexchange.com/a/58
 ;;to open a file with sudo, invoke C-x C-f and then type /sudo::/path
 
-(setq dired-recursive-deletes t)
-(setq delete-by-moving-to-trash t)
-(setq dired-use-ls-dired nil)
+(use-package dired
+  :ensure nil
+  :demand t
+  :config (progn
+            (setq dired-recursive-deletes t)
+            (setq delete-by-moving-to-trash t)
+            (setq dired-use-ls-dired nil)
+            (define-key dired-mode-map "j" 'dired-next-line)
+            (define-key dired-mode-map "k" 'dired-previous-line)
+            (define-key dired-mode-map "e" 'epa-dired-do-encrypt)
+            (define-key dired-mode-map "E" 'epa-dired-do-decrypt)))
 
 (use-package editorconfig
   :diminish ""
@@ -746,6 +745,7 @@
             (delete '(counsel-M-x . "^") ivy-initial-inputs-alist)
             (push '(counsel-M-x . "") ivy-initial-inputs-alist)
             (ivy-add-actions 'counsel-projectile-ag '(("O" simpson-other-window "open in new window")))
+            (define-key dired-mode-map "r" 'counsel-rg)
             (ivy-add-actions 'counsel-ag '(("O" simpson-other-window "open in new window")))
             (ivy-add-actions 'counsel-rg '(("O" simpson-other-window "open in new window")))))
 
@@ -759,6 +759,7 @@
   :bind ("C-SPC f" . counsel-find-file)
   :config (progn
             (global-set-key (kbd "M-x") 'counsel-M-x)
+            (define-key dired-mode-map "f" 'counsel-find-file)
             (global-set-key (kbd "<f1> f") 'counsel-describe-function)
             (global-set-key (kbd "<f1> v") 'counsel-describe-variable)))
 
