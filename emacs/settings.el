@@ -996,6 +996,18 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
   :load-path "~/Projects/ivy-window-configuration/")
 
 (server-start)
+
+(use-package indium
+  :after evil
+  :config (progn
+            (when simpson-evil (add-to-list 'evil-emacs-state-modes 'indium-repl-mode))
+            (advice-add 'indium-scratch-setup-buffer :after #'simpson-indium-emacs)))
+
+(defun simpson-indium-emacs (buf)
+  (with-current-buffer buf
+    (evil-emacs-state)
+    (insert "'use strict';")))
+
 (defhydra hydra-help (:exit t)
   "
     Describe things
