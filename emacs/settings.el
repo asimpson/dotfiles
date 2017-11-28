@@ -884,6 +884,7 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
             (global-set-key (kbd "C-SPC G") 'hydra-magit/body)
             (global-set-key (kbd "C-SPC z") 'ivy-window-configuration--hydra/body)
             (global-set-key (kbd "C-SPC x") 'hydra-js2/body)
+            (global-set-key (kbd "C-SPC ?") 'hydra-help/body)
             (global-set-key (kbd "C-SPC v") 'hydra-vimish/body)))
 
 (defhydra hydra-mocha ()
@@ -995,4 +996,17 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
   :load-path "~/Projects/ivy-window-configuration/")
 
 (server-start)
+(defhydra hydra-help (:exit t)
+  "
+    Describe things
+    _v_ describe variables
+    _f_ describe function
+    _s_ describe symbol
+    _m_ describe mode
+  "
+  ("v" describe-variable "describe variable")
+  ("f" describe-function "describe function")
+  ("s" describe-symbol "describe symbol")
+  ("m" describe-mode "describe mode"))
+
 ;;; settings.el ends here
