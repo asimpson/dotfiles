@@ -235,7 +235,7 @@
             ;;https://github.com/magit/magit/pull/2513
             ;;Users who use Tramp and experience delays, should consider setting
             ;;the option to `magit-auto-revert-repository-buffer-p'.
-            (setq auto-revert-buffer-list-filter 'magit-auto-revert-repository-buffers-p)
+            (setq auto-revert-buffer-list-filter nil);;'magit-auto-revert-repository-buffers-p)
             (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
             (put 'magit-clean 'disabled nil)
             (when (string= (car custom-enabled-themes) "base16-ocean")
@@ -606,12 +606,12 @@
   :init (progn
           ;; Auto-start on any markup modes
           (add-hook 'sgml-mode-hook 'emmet-mode)
+          (add-hook 'sgml-mode-hook 'jsEmmet)
           ;; enable Emmet's css abbreviation.
           (add-hook 'css-mode-hook  'emmet-mode)
           ;;JSX gets className not class
           (add-hook 'js2-mode-hook 'jsxEmmet)
           (add-hook 'handlebars-mode-hook 'jsEmmet))
-  ;; default nil
   :config (setq emmet-move-cursor-between-quotes t))
 
 (use-package sauron
@@ -741,6 +741,7 @@
             (setq ivy-height 20)
             (setq ivy-count-format "")
             (global-set-key (kbd "C-SPC A") 'ivy-resume)
+            (global-set-key (kbd "C-d") 'ivy-occur-delete-candidate)
             (define-key global-map (kbd "C-=") 'ivy-switch-buffer)
             (delete '(counsel-M-x . "^") ivy-initial-inputs-alist)
             (push '(counsel-M-x . "") ivy-initial-inputs-alist)
@@ -972,10 +973,12 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
     JS2 Folding/Narrowing:
     _n_ narrow to defun
     _v_ fold
+    _o_ org narrow to sub tree
     _d_ highlight defun
   "
   ("n" js2-narrow-to-defun "narrow to defun" :exit t)
   ("v" vimish-fold "fold")
+  ("o" org-narrow-to-subtree "org narrow to subtree" :exit t)
   ("d" js2-mark-defun "highlight defun"))
 
 (defhydra hydra-vimish (:exit t)
