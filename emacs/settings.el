@@ -284,6 +284,10 @@
             (setq org-log-done t)
             (setq org-deadline-warning-days 3)
             (setq org-export-with-toc nil)
+            (setq org-refile-targets '(
+                                       ("personal.txt" . (:level . 1))
+                                       ("tasks.txt" . (:level . 1))
+                                       ("reading.txt" . (:level . 1))))
             (setq org-todo-keywords
                   '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
             (setq org-capture-templates
@@ -298,6 +302,12 @@
                      "* %? %^g
     :PROPERTIES:
     %(simpson-prompt-for-feedwrangler-url)
+    :CREATED: %T
+    :END:")
+                    ("p" "Personal: " entry
+                     (file "~/Dropbox (Personal)/org/personal.txt")
+                     "* %? %^g
+    :PROPERTIES:
     :CREATED: %T
     :END:")))
             (setq org-agenda-restore-windows-after-quit t)
@@ -999,5 +1009,20 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
   ("f" describe-function "describe function")
   ("s" describe-symbol "describe symbol")
   ("m" describe-mode "describe mode"))
+
+(defun simpson-org-to-todo()
+  "Convert a line (or region) in an org file to a TODO"
+  (interactive)
+  (let ((heading "") (i 1) (number (read-number "What level?" 1)))
+    (while (<= i number)
+      (setq heading (concat heading "*"))
+      (setq i (+ i 1)))
+    (if (region-active-p)
+        (let ((strings (seq-map (lambda(x) (concat heading " TODO " x))
+                                (split-string (buffer-substring-no-properties (region-beginning) (region-end)) "\n" t))))
+          (delete-active-region)
+          (insert (mapconcat 'identity strings "\n")))
+      (org-beginning-of-line)
+      (insert heading " TODO ") t)))
 
 ;;; settings.el ends here
