@@ -83,7 +83,7 @@
 
 (global-set-key (kbd "C-SPC D") 'dired-jump)
 
-(global-set-key (kbd "C-SPC k d") 'simpson-insert-date)
+(global-set-key (kbd "C-SPC k d") 'simpson-new-note)
 
 (defun simpson-insert-date()
   "shells out to date to return a formatted date string at point"
@@ -99,7 +99,6 @@
 
 (global-set-key (kbd "C-SPC d") (lambda() (interactive)
                                   (dired "~/Dropbox (Personal)/Notational Data/" "-laGht")))
-(global-set-key (kbd "C-SPC k D") 'simpson-new-note)
 (global-set-key (kbd "C-SPC k ?") 'eww)
 
 (defun kill-shell-buffer()
