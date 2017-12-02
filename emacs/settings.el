@@ -641,6 +641,10 @@
             (define-key dired-mode-map "j" 'dired-next-line)
             (define-key dired-mode-map "k" 'dired-previous-line)
             (define-key dired-mode-map "e" 'epa-dired-do-encrypt)
+            (define-key dired-mode-map (kbd "C-l") 'evil-window-right)
+            (define-key dired-mode-map (kbd "C-h") 'evil-window-left)
+            (define-key dired-mode-map (kbd "C-j") 'evil-window-down)
+            (define-key dired-mode-map (kbd "C-k") 'evil-window-up)
             (define-key dired-mode-map "E" 'epa-dired-do-decrypt)))
 
 (use-package editorconfig
