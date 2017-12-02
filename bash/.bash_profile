@@ -21,9 +21,4 @@ PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 ############################
 # gpg-agent
 ############################
-GPG_AGENT="/usr/local/bin/gpg-agent"
 export GPG_TTY=$(tty)
-
-if [ -f ${GPG_AGENT} ]; then
-  . ~/.bash_gpg
-fi
