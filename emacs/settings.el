@@ -731,12 +731,12 @@
             (setq ivy-height 20)
             (setq ivy-count-format "")
             (global-set-key (kbd "C-SPC A") 'ivy-resume)
-            (global-set-key (kbd "C-d") 'ivy-occur-delete-candidate)
             (define-key global-map (kbd "C-=") 'ivy-switch-buffer)
             (delete '(counsel-M-x . "^") ivy-initial-inputs-alist)
             (push '(counsel-M-x . "") ivy-initial-inputs-alist)
             (ivy-add-actions 'counsel-projectile-ag '(("O" simpson-other-window "open in new window")))
             (define-key dired-mode-map "r" 'counsel-rg)
+            (setq ivy-use-selectable-prompt t)
             (ivy-add-actions 'counsel-ag '(("O" simpson-other-window "open in new window")))
             (ivy-add-actions 'counsel-rg '(("O" simpson-other-window "open in new window")))))
 
