@@ -21,8 +21,8 @@ function frame()
 end
 
 function capture()
-   os.execute("/usr/local/bin/emacsclient -c -n -e '(org-capture nil \"b\")' &")
-   hs.timer.doAfter(1, function() hs.application.find('Emacs'):findWindow("Capture"):focus() end)
+   os.execute("/usr/local/bin/emacsclient -c -n -e '(org-capture)' &")
+   hs.timer.doAfter(0.2, function() hs.application.find('Emacs'):findWindow("*Org Select*"):focus() end)
 end
 
 function toggleZoomMute()
@@ -45,11 +45,9 @@ function toggleZoomMute()
     end
     if (mute) then
         zoom:selectMenuItem(muteAudio)
-        hs.alert.show("Muted")
     end
     if (unmute) then
         zoom:selectMenuItem(unMuteAudio)
-        hs.alert.show("Unmuted")
     end
 end
 
@@ -70,7 +68,7 @@ function chooser()
    end)
    choose:choices(choices)
    choose:rows(3)
-   choose:width(20)
+   choose:width(30)
    choose:show()
 end
 
