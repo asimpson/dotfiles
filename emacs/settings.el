@@ -1018,6 +1018,11 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
   ("k" describe-key "describe symbol")
   ("m" describe-mode "describe mode"))
 
+(use-package slime
+  :mode("\\.lisp?\\'" . slime-mode)
+  :config(progn
+           (setq inferior-lisp-program "/usr/local/bin/ccl")))
+
 (defun simpson-org-to-todo()
   "Convert a line (or region) in an org file to a TODO"
   (interactive)
