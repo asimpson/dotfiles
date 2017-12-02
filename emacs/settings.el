@@ -85,6 +85,7 @@
             (add-to-list 'evil-emacs-state-modes 'dired-mode)
             (add-to-list 'evil-emacs-state-modes 'epa-key-list-mode)
             (add-to-list 'evil-emacs-state-modes 'ivy-occur-mode)
+            (add-to-list 'evil-emacs-state-modes 'comint-mode)
             ;;http://spacemacs.org/doc/FAQ#orgheadline31
             (fset 'evil-visual-update-x-selection 'ignore)
             (define-key evil-normal-state-map (kbd "RET") 'save-buffer)
@@ -950,7 +951,8 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
   ("l" magit-log-buffer-file "view log for file")
   ("b" magit-blame "view blame for file"))
 
-(use-package aggressive-indent)
+(use-package aggressive-indent
+  :mode("\\.lisp?\\'" . aggressive-indent-mode))
 
 (defun simpson-trash(file)
   "Prompt for file and trash it"
@@ -1008,10 +1010,12 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
     _f_ describe function
     _s_ describe symbol
     _m_ describe mode
+    _f_ describe keybind
   "
-  ("v" describe-variable "describe variable")
-  ("f" describe-function "describe function")
+  ("v" counsel-describe-variable "describe variable")
+  ("f" counsel-describe-function "describe function")
   ("s" describe-symbol "describe symbol")
+  ("k" describe-key "describe symbol")
   ("m" describe-mode "describe mode"))
 
 (defun simpson-org-to-todo()
