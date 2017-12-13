@@ -246,6 +246,7 @@
             (setq auto-revert-buffer-list-filter nil);;'magit-auto-revert-repository-buffers-p)
             (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
             (put 'magit-clean 'disabled nil)
+            (add-hook 'magit-status-sections-hook 'magit-insert-worktrees)
             (when (string= (car custom-enabled-themes) "base16-ocean")
               (set-face-foreground 'magit-blame-date (plist-get base16-ocean-colors :base0A))
               (set-face-foreground 'magit-blame-hash (plist-get base16-ocean-colors :base0A))
