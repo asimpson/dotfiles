@@ -8,15 +8,13 @@
 (defun simpson-restore-text()
   "reset text size to default"
   (interactive)
-  (text-scale-set 0)
-)
+  (text-scale-set 0))
 
 (defun gen-multi-term ()
   "open up a mult-term in a new window"
   (interactive)
   (switch-to-buffer-other-window nil)
-  (multi-term)
-)
+  (multi-term))
 
 (defun simpson-pretty-json()
   "ideal for getting pretty JSON from JSON that is copied from a XHR request"
@@ -24,22 +22,17 @@
   (with-temp-buffer
     (clipboard-yank)
     (json-pretty-print-buffer)
-    (kill-new (buffer-string))
-  )
-)
+    (kill-new (buffer-string))))
 
 (defun simpson-project-clone(url)
   "clone a git repo and then change to that project"
   (interactive "sGit url: ")
   (let (
-      (projectsDir "~/Projects/")
-      (name (nth 0 (split-string (nth 1 (split-string url "/")) "\\.")))
-    )
+        (projectsDir "~/Projects/")
+        (name (nth 0 (split-string (nth 1 (split-string url "/")) "\\."))))
     (shell-command (concat "git clone " url " " projectsDir name))
     (eyebrowse-create-window-config)
-    (dired (concat projectsDir name))
-  )
-)
+    (dired (concat projectsDir name))))
 
 (global-set-key (kbd "C-SPC k b") 'simpson-project-clone)
 (global-set-key (kbd "C-SPC B") 'simpson-get-git-url)
@@ -106,29 +99,25 @@
   (interactive)
   (switch-to-buffer-other-window "*Async Shell Command*")
   (kill-buffer-and-window)
-  (balance-windows)
-  )
+  (balance-windows))
 
 (defun simpson-smart-shell()
   "run shell from projectile root or from current spot in system"
   (interactive)
   (unless (ignore-errors (projectile-run-async-shell-command-in-root))
-  (call-interactively 'async-shell-command))
-)
+    (call-interactively 'async-shell-command)))
 
 (defun simpson-rerun()
   "rerun last shell command. respsects projectile."
   (interactive)
   (if (projectile-project-p)
-    (projectile-with-default-dir (projectile-project-root)
-      (async-shell-command (car shell-command-history)))
-    (async-shell-command (car shell-command-history))
-  )
-)
+      (projectile-with-default-dir (projectile-project-root)
+        (async-shell-command (car shell-command-history)))
+    (async-shell-command (car shell-command-history))))
 
 (global-set-key (kbd "C-SPC .") 'simpson-rerun)
 
-;narrow region
+;;narrow region
 (global-set-key (kbd "C-SPC n") 'narrow-to-region)
 ;widen
 (global-set-key (kbd "C-SPC N") 'widen)
@@ -163,16 +152,12 @@
   (interactive)
   (let ((filename (buffer-file-name)))
     (when filename
-      ;could add the option to delete files that are not tracked by VC
-      ;http://emacsredux.com/blog/2013/04/03/delete-file-and-buffer/
+      ;;could add the option to delete files that are not tracked by VC
+      ;;http://emacsredux.com/blog/2013/04/03/delete-file-and-buffer/
       (if (vc-backend filename)
-        (vc-delete-file filename))
-    )
-  )
-)
+          (vc-delete-file filename)))))
 
 (define-key global-map (kbd "C-SPC X") 'simpson-delete-file-for-buffer)
-(define-key global-map (kbd "C-SPC E") 'simpson-erc)
 (define-key global-map (kbd "C-SPC k E") 'simpson-kill-erc)
 
 (defun simpson-erc()
@@ -180,43 +165,34 @@
   (interactive)
   (seq-doseq (x simpson-irc)
     (erc-tls :server x
-      :nick (car (auth-source-user-and-password x))
-      :password (cadr (auth-source-user-and-password x)))
-  )
-)
+             :nick (car (auth-source-user-and-password x))
+             :password (cadr (auth-source-user-and-password x)))))
 
 (defun simpson-freenode()
   "connect to freenode irc"
   (interactive)
   (let ((x "irc.freenode.net"))
     (erc :server x
-      :nick (car (auth-source-user-and-password x))
-      :password (cadr (auth-source-user-and-password x)))
-  )
-)
+         :nick (car (auth-source-user-and-password x))
+         :password (cadr (auth-source-user-and-password x)))))
 
 (defun simpson-kill-erc()
   "quits all erc servers"
   (interactive)
-  (erc-cmd-GQ nil)
-)
+  (erc-cmd-GQ nil))
 
 (defun simpson-macos-mail-link()
   "gets the Message-ID of the current notmuch message and constructs a Mail.app appropriate link
    reference: https://daringfireball.net/2007/12/message_urls_leopard_mail."
   (interactive)
   (let ((id (notmuch-show-get-message-id t)))
-    (kill-new (concat "message://%3c" id "%3e"))
-  )
-)
+    (kill-new (concat "message://%3c" id "%3e"))))
 
 (defun simpson-open-mail-in-mail()
- "open the current notmuch mail in Mail.app"
- (interactive)
- (let ((id (notmuch-show-get-message-id t)))
-   (shell-command (concat "open message://%3c" id "%3e"))
-   )
- )
+  "open the current notmuch mail in Mail.app"
+  (interactive)
+  (let ((id (notmuch-show-get-message-id t)))
+    (shell-command (concat "open message://%3c" id "%3e"))))
 
 (defun simpson-get-git-url()
   "Grab the remote url for origin and assume it's a github url.
@@ -225,9 +201,7 @@
   (let (url repo)
     (setq url (shell-command-to-string "git remote get-url origin"))
     (setq repo (nth 0 (split-string (nth 1 (split-string url ":")) "\\.")))
-    (shell-command (concat "open https://github.com/" repo) t)
-  )
-)
+    (shell-command (concat "open https://github.com/" repo) t)))
 
 (defun simpson-move-window-right()
   (interactive)
@@ -236,7 +210,6 @@
     (split-window-right)
     (windmove-right)
     (switch-to-buffer buf)))
-
 
 (defun simpson-get-file-name()
   "return the file name for a buffer"
