@@ -1062,4 +1062,26 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
 (use-package cargo
   :config(progn
            (add-hook 'rust-mode-hook 'cargo-minor-mode)))
+(defun simpson-shell-history()
+  "Interact with shell-command-history through Ivy"
+  (interactive)
+  (ivy-read "Run previous commands:"
+            shell-command-history
+            :action (lambda(x)
+                      (push x shell-command-history)
+                      (delete-dups shell-command-history)
+                      (async-shell-command x))))
+
+(with-eval-after-load "keybinds.el"
+  (with-temp-buffer
+    (insert-file-contents "~/.emacs.d/shell-history")
+    (setq shell-command-history (split-string (buffer-string) "\n"))))
+
+(defun simpson-save-history()
+  "Write contents of shell-command-history to ~/.emacs.d/shell-history"
+  (with-temp-buffer
+    (insert (mapconcat 'identity shell-command-history "\n"))
+    (write-file "~/.emacs.d/shell-history")))
+
+(add-hook 'kill-emacs-hook 'simpson-save-history)
 ;;; settings.el ends here
