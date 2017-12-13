@@ -801,7 +801,7 @@
 (use-package diminish
   :defer 1
   :config (progn
-            (diminish 'smerge-mode)
+            (diminish 'smerge-mode "#$!&")
             (diminish 'buffer-face-mode)
             (eval-after-load "autorevert" '(diminish 'auto-revert-mode))
             (eval-after-load "undo-tree" '(diminish 'undo-tree-mode))
@@ -1036,7 +1036,9 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
 
 (use-package slime
   :mode("\\.lisp?\\'" . slime-mode)
+  :diminish ""
   :config(progn
+           (add-hook 'slime-mode-hook (lambda () (setq mode-name "goo")))
            (setq inferior-lisp-program "/usr/local/bin/ccl")))
 
 (defun simpson-org-to-todo()
