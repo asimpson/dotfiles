@@ -1089,4 +1089,8 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
     (write-file "~/.emacs.d/shell-history")))
 
 (add-hook 'kill-emacs-hook 'simpson-save-history)
+(use-package dockerfile-mode
+  :config (add-hook 'dockerfile-mode-hook (lambda() (setq mode-name "dockerfile")))
+  :mode ("Dockerfile\\'" . dockerfile-mode))
+
 ;;; settings.el ends here
