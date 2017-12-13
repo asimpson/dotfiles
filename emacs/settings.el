@@ -1025,11 +1025,13 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
     _s_ describe symbol
     _m_ describe mode
     _f_ describe keybind
+    _a_ helpful at point
   "
   ("v" counsel-describe-variable "describe variable")
   ("f" counsel-describe-function "describe function")
   ("s" describe-symbol "describe symbol")
   ("k" describe-key "describe symbol")
+  ("a" helpful-at-point "helpful at point")
   ("m" describe-mode "describe mode"))
 
 (use-package slime
@@ -1062,6 +1064,9 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
 (use-package cargo
   :config(progn
            (add-hook 'rust-mode-hook 'cargo-minor-mode)))
+
+(use-package helpful)
+
 (defun simpson-shell-history()
   "Interact with shell-command-history through Ivy"
   (interactive)
