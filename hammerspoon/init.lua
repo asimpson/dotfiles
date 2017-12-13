@@ -13,6 +13,10 @@ choices =  {
    {
       ['text'] = 'Emacs frame',
       ['func'] = 'frame'
+   },
+   {
+      ['text'] = 'View Desktop in Alfred',
+      ['func'] = 'desktop'
    }
 }
 
@@ -72,4 +76,9 @@ function chooser()
    choose:show()
 end
 
+function desktop()
+  hs.eventtap.keyStroke('cmd', 'space')
+  hs.eventtap.keyStrokes('~desktop')
+  hs.eventtap.keyStroke('cmd', hs.keycodes.map['down'])
+end
 hs.hotkey.bind({"cmd, shift"}, ".", chooser)
