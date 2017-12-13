@@ -1038,4 +1038,14 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
       (org-beginning-of-line)
       (insert heading " TODO ") t)))
 
+(use-package rust-mode
+  :mode("\\.rs?\\'" . rust-mode)
+  :diminish ""
+  :config(progn
+           (setq rust-indent-offset 2)
+           (add-hook 'rust-mode-hook (lambda () (setq mode-name "rust")))))
+
+(use-package cargo
+  :config(progn
+           (add-hook 'rust-mode-hook 'cargo-minor-mode)))
 ;;; settings.el ends here
