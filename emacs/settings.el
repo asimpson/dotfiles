@@ -891,7 +891,8 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
             (global-set-key (kbd "C-SPC z") 'ivy-window-configuration--hydra/body)
             (global-set-key (kbd "C-SPC x") 'hydra-js2/body)
             (global-set-key (kbd "C-SPC ?") 'hydra-help/body)
-            (global-set-key (kbd "C-SPC v") 'hydra-vimish/body)))
+            (global-set-key (kbd "C-SPC v") 'hydra-vimish/body)
+            (global-set-key (kbd "C-SPC E") 'hydra-eww/body)))
 
 (defhydra hydra-mocha ()
   "
@@ -1054,6 +1055,31 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
           (insert (mapconcat 'identity strings "\n")))
       (org-beginning-of-line)
       (insert heading " TODO ") t)))
+
+(defun eww-more-readable ()
+  "Makes eww more pleasant to use. Run it after eww buffer is loaded.
+Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.html."
+  (interactive)
+  (setq eww-header-line-format nil)
+  (set-window-margins (get-buffer-window) 10 10)
+  (text-scale-set 1)
+  (redraw-display)
+  (eww-reload 'local))
+
+(defhydra hydra-eww (:exit t)
+  "
+    Go forth and browse...text
+    _r_ eww-more-readable
+    _R_ eww-readable
+    _b_ eww-back-url
+    _h_ eww-history-browse
+    _g_ eww
+  "
+  ("r" eww-more-readable "better readable")
+  ("R" eww-readable "default readable")
+  ("b" eww-back-url "eww back" :exit nil)
+  ("g" eww "eww")
+  ("h" eww-history-browse "browse history"))
 
 (use-package rust-mode
   :mode("\\.rs?\\'" . rust-mode)
