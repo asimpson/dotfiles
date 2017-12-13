@@ -57,7 +57,14 @@
 (use-package dired-subtree
   :defer 1
   :bind (:map dired-mode-map
-              ("i" . dired-subtree-toggle)))
+              ("i" . dired-subtree-toggle))
+  :config(progn
+           (set-face-foreground 'dired-subtree-depth-1-face "white")
+           (set-face-foreground 'dired-subtree-depth-2-face "white")
+           (set-face-foreground 'dired-subtree-depth-3-face "white")
+           (set-face-foreground 'dired-subtree-depth-4-face "white")
+           (set-face-foreground 'dired-subtree-depth-5-face "white")
+           (set-face-foreground 'dired-subtree-depth-6-face "white")))
 
 (use-package vimish-fold
   :defer 1
@@ -481,8 +488,10 @@
 (defun simpson-header ()
   (let (output)
     (setq output "¯\\_(ツ)_/¯")
-    (when (stringp (buffer-file-name))
+    (when (and (stringp (buffer-file-name)) (> (length (buffer-file-name)) 16))
       (setq output (concat " ▼ ../" (substring (buffer-file-name) 16 nil))))
+    (when (and (stringp (buffer-file-name)) (< (length (buffer-file-name)) 16))
+      (setq output (buffer-file-name)))
     (when (string= major-mode "sauron-mode")
       (setq output "(o)"))
     (setq header-line-format output)))
