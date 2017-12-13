@@ -908,9 +908,8 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
   (interactive
    (let (dir switches)
      (list
-      (if (y-or-n-p "Pick dir?")
-          (setq dir (read-directory-name "rg dir: "))
-        (setq dir nil))
+      (when (y-or-n-p "Pick dir?")
+        (setq dir (read-directory-name "rg dir: ")))
       (setq switches (read-string "rg switches: ")))
      (counsel-rg nil dir switches))))
 
