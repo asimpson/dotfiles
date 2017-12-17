@@ -1,0 +1,46 @@
+* Emacs config notes
+** Email
+Some mu4e configuration is kept in ~./mu4e.el.gpg~.
+*** Bookmark
+#+BEGIN_SRC elisp
+  (add-to-list 'mu4e-bookmarks
+               (make-mu4e-bookmark
+                :name  "name"
+                :query "maildir:/path/path/INBOX OR maildir:/otherpath/otherpath/INBOX"
+                :key ?c))
+#+END_SRC
+*** Contexts
+#+BEGIN_SRC elisp
+
+  (setq mu4e-contexts `(
+                        ,(make-mu4e-context
+                          :name "First context"
+                          :match-func (lambda (msg)
+                                        (when msg
+                                          (mu4e-message-contact-field-matches msg :to "adam@adamsimpson.net")))
+                          :vars '((user-mail-address . "adam@adamsimpson.net")
+                                  (mu4e-sent-folder . "/path/path/Sent Items")
+                                  (mu4e-drafts-folder . "/path/path/Drafts")
+                                  (mu4e-trash-folder . "/path/path/Trash")
+                                  (mu4e-refile-folder . "/path/path/Archive")
+                                  (smtpmail-user . "fastmail_user@fastmail.com")
+                                  (smtpmail-smtp-server . "fastmail smtp")))
+                        ,(make-mu4e-context
+                          :name "Work"
+                          :match-func (lambda (msg)
+                                        (when msg
+                                          (or (mu4e-message-contact-field-matches msg :to "work email")
+                                              (mu4e-message-contact-field-matches msg :to "other email like a list account or alias"))))
+                          :vars '((user-mail-address . "email@work.com")
+                                  (mu4e-sent-folder . "/path/path/Sent Mail")
+                                  (mu4e-drafts-folder . "/path/path/Drafts")
+                                  (mu4e-trash-folder . "/path/path/Trash")
+                                  (mu4e-refile-folder . "/path/path/All Mail")
+                                  (smtpmail-smtp-server . "other smtp" )
+                                  (smtpmail-user . "smtp user")
+                                  (mu4e-sent-messages-behavior . delete)))))
+#+END_SRC
+Note that ~mu4e-sent-messages-behavior~ is set to ~delete~ which is ideal for Gmail.
+*** Offlineimap
+** Modeline
+[[http://asimpson.github.io/dotfiles/mode-line.png]]

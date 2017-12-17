@@ -1105,4 +1105,60 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 
 (use-package suggest)
 
+;; mu4e-bookmarks, mu4e-contexts, mu4e-user-mail-address are all set in mu4e.gpg
+(use-package mu4e
+  :ensure nil
+  :defer 1
+  :load-path "/usr/local/Cellar/mu/0.9.18_1/share/emacs/site-lisp/mu/mu4e"
+  :config (progn
+            (when (file-exists-p "~/.dotfiles/emacs/mu4e.el.gpg")
+              (load-library "~/.dotfiles/emacs/mu4e.el.gpg"))
+            (set-face-attribute 'mu4e-highlight-face nil :background "LightGreen" :foreground nil)
+            (setq mu4e-maildir "~/Mail")
+            (setq mu4e-view-show-images t)
+            (setq send-mail-function 'smtpmail-send-it)
+            (setq message-send-mail-function 'smtpmail-send-it)
+            (setq message-kill-buffer-on-exit t)
+            (setq mu4e-context-policy 'pick-first)
+            (setq mu4e-compose-format-flowed t)
+            (setq mu4e-view-show-addresses 't)
+            (setq smtpmail-stream-type 'ssl)
+            (setq mu4e-get-mail-command "true")
+            (setq mu4e-update-interval 300)
+            (setq smtpmail-smtp-service 465)
+            (setq user-full-name "Adam Simpson")
+            (add-to-list 'mu4e-view-actions '("eww view" . jcs-view-in-eww) t)
+            (add-to-list 'mu4e-view-actions '("shr view" . simpson-shr-view) t)
+            (define-key mu4e-headers-mode-map (kbd "C-c C-u") 'mu4e-update-index)
+            (define-key mu4e-headers-mode-map "j" 'next-line)
+            (define-key mu4e-headers-mode-map "k" 'previous-line)
+            (define-key mu4e-headers-mode-map (kbd "C-j") 'evil-window-down)
+            (define-key mu4e-headers-mode-map (kbd "C-k") 'evil-window-up)
+            (define-key mu4e-headers-mode-map (kbd "C-h") 'evil-window-left)
+            (define-key mu4e-headers-mode-map (kbd "C-l") 'evil-window-right)
+            (define-key mu4e-view-mode-map "j" 'next-line)
+            (define-key mu4e-view-mode-map "k" 'previous-line)))
+
+(use-package org-mu4e
+  :ensure nil
+  :defer 1
+  :load-path "/usr/local/Cellar/mu/0.9.18_1/share/emacs/site-lisp/mu/mu4e")
+
+(defun jcs-view-in-eww (msg)
+  (eww-browse-url (concat "file://" (mu4e~write-body-to-html msg))))
+
+(defun simpson-shr-view(msg)
+  "Parse m4ue message as html and render it in a new frame using shr."
+  (let ((buf "*shr-email*"))
+    (when (get-buffer buf) (kill-buffer buf))
+    (switch-to-buffer-other-frame buf)
+    (with-current-buffer (get-buffer-create buf)
+      (insert (mu4e-message-field msg :body-html))
+      (shr-render-buffer buf)
+      (delete-other-windows))))
+
+(defun simpson-browse-url()
+  (interactive)
+  (call-process "open" nil nil nil (get-text-property (point) 'shr-url)))
+
 ;;; settings.el ends here
