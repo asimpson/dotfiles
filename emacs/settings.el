@@ -1,10 +1,7 @@
 ;; -*- lexical-binding: t; -*-
-;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
-
-(menu-bar-mode -1)
 
 (eval-when-compile
   (require 'use-package))
@@ -16,20 +13,21 @@
 ;;debug use-package 👇
 ;;(setq use-package-verbose t)
 
-(show-paren-mode)
 (tool-bar-mode -1)
+(server-start)
+(menu-bar-mode -1)
+(show-paren-mode)
 (scroll-bar-mode -1)
-
 (setq visible-bell nil)
+
+(setq ring-bell-function (lambda ()
+                           (invert-face 'mode-line)
+                           (run-with-timer 0.1 nil 'invert-face 'mode-line)))
 
 (setq exec-path (append exec-path '("/Users/asimpson/.better-npm/lib/node_modules")))
 (setq exec-path (append exec-path '("/Users/asimpson/.better-npm/bin")))
 (setq exec-path (append exec-path '("/usr/local/bin")))
 (setenv "PATH" "/Users/asimpson/.better-npm/lib/node_modules:/Users/asimpson/.better-npm/bin:/usr/local/bin:/usr/local/sbin")
-
-(setq ring-bell-function (lambda ()
-                           (invert-face 'mode-line)
-                           (run-with-timer 0.1 nil 'invert-face 'mode-line)))
 
 (global-set-key (kbd "C-SPC") nil)
 
@@ -41,7 +39,15 @@
 
 (use-package base16-theme
   :if (display-graphic-p)
+  :disabled
   :init (load-theme 'base16-ocean t))
+
+(use-package tomorrow-theme
+  :ensure nil
+  :if (display-graphic-p)
+  :load-path "~/Projects/tomorrow-theme/GNU Emacs"
+  :init (require 'tomorrow-day-theme)
+  (load-theme 'tomorrow-day t))
 
 (use-package exec-path-from-shell
   :defer 2
@@ -107,12 +113,8 @@
             (unless simpson-helm (define-key evil-normal-state-map (kbd "\C-p") 'projectile-find-file-other-window))
             (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
             (define-key evil-normal-state-map (kbd "C-n") 'evil-scroll-down)
-            (define-key evil-normal-state-map (kbd "C-b") 'projectile-switch-project)))
-
-(add-hook 'evil-after-load-hook 'simpson-set-evil-active)
-
-(defun simpson-set-evil-active()
-  (setq simpson-evil-active t))
+            (define-key evil-normal-state-map (kbd "C-b") 'projectile-switch-project)
+            (add-hook 'post-command-hook 'simpson-evil-mode)))
 
 (use-package evil-leader
   :if simpson-evil
@@ -121,10 +123,10 @@
   :config (progn
             (global-evil-leader-mode)
             (evil-leader/set-leader ",")
-            (when simpson-helm
-              (evil-leader/set-key "f" 'helm-projectile-ag)
-              (evil-leader/set-key "F" 'helm-do-ag))
-            (unless simpson-helm
+            (if simpson-helm
+                (progn
+                  (evil-leader/set-key "f" 'helm-projectile-ag)
+                  (evil-leader/set-key "F" 'helm-do-ag))
               (evil-leader/set-key "f" 'counsel-rg)
               (evil-leader/set-key "s" 'hydra-searching/body)
               (evil-leader/set-key "F" 'simpson-counsel-ag))
@@ -142,12 +144,12 @@
   :config (progn
             (key-chord-mode 1)
             (setq key-chord-two-keys-delay 0.1)
-            (when simpson-evil
-              (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
-              (key-chord-define evil-normal-state-map "//" 'comment-region)
-              (key-chord-define evil-normal-state-map "??" 'uncomment-region)
-              (key-chord-define evil-normal-state-map "cc" 'simpson-magit-comment))
-            (unless simpson-evil (key-chord-define-global "jk" 'god-local-mode))))
+            (if simpson-evil
+                (progn (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
+                       (key-chord-define evil-normal-state-map "//" 'comment-region)
+                       (key-chord-define evil-normal-state-map "??" 'uncomment-region)
+                       (key-chord-define evil-normal-state-map "cc" 'simpson-magit-comment))
+              (key-chord-define-global "jk" 'god-local-mode))))
 
 (defun simpson-magit-comment()
   "mashing cc in a magit-status window triggers my custom keybind to (comment-line)
@@ -161,12 +163,6 @@
   :if (not simpson-evil)
   :defer 1
   :config (progn
-            (defun simpson-god-mode-hook ()
-              (if god-local-mode
-                  (set-face-attribute 'mode-line nil :background "#d08770" :foreground "#343d46" :box '(:line-width 3 :color "#d08770" :style nil))
-                (set-face-attribute 'mode-line nil :background "#dfe1e8" :foreground "#343d46"  :box '(:line-width 3 :color "#dfe1e8" :style ni))))
-            (add-hook 'god-mode-enabled-hook 'simpson-god-mode-hook)
-            (add-hook 'god-mode-disabled-hook 'simpson-god-mode-hook)
             (when simpson-helm
               (define-key god-local-mode-map (kbd "P") 'helm-projectile-find-file)
               (define-key god-local-mode-map (kbd "F") 'helm-projectile-ag))))
@@ -270,10 +266,14 @@
          ("C-x n" . diff-hl-next-hunk))
   :config (progn
             (global-diff-hl-mode)
-            (when (string= (car custom-enabled-themes) "base16-ocean")
-              (set-face-background 'diff-hl-change (plist-get base16-ocean-colors :base0C))
-              (set-face-background 'diff-hl-insert (plist-get base16-ocean-colors :base0B))
-              (set-face-background 'diff-hl-delete (plist-get base16-ocean-colors :base09)))))
+            (cond
+             ((string= (car custom-enabled-themes) "tomorrow-day") (progn
+                                                                     (set-face-background 'diff-hl-delete "red3")
+                                                                     (set-face-background 'diff-hl-insert "LightGreen")))
+             ((string= (car custom-enabled-themes) "base16-ocean") (progn
+                                                                     (set-face-background 'diff-hl-change (plist-get base16-ocean-colors :base0C))
+                                                                     (set-face-background 'diff-hl-insert (plist-get base16-ocean-colors :base0B))
+                                                                     (set-face-background 'diff-hl-delete (plist-get base16-ocean-colors :base09)))))))
 
 (use-package org
   :defer 2
@@ -285,7 +285,6 @@
          ("C-SPC T" . org-tags-view))
   :mode (("\\.txt\\'" . org-mode))
   :config (progn
-            (require 'org-notmuch)
             (require 'ox-md)
             ;;look into swapping with txt, org-agenda-file-regexp
             (setq org-agenda-file-regexp "\\`[^.].*\\.txt\\'")
@@ -323,10 +322,6 @@
             (add-hook 'org-mode-hook (lambda () (flyspell-mode 1)))
             (add-hook 'org-mode-hook 'visual-line-mode)
             (add-hook 'org-mode-hook (lambda () (setq mode-name "org")))
-            (when (string= (car custom-enabled-themes) "base16-ocean")
-              (set-face-foreground 'org-link (plist-get base16-ocean-colors :base0B))
-              (set-face-foreground 'org-tag (plist-get base16-ocean-colors :base0A))
-              (set-face-foreground 'org-agenda-structure (plist-get base16-ocean-colors :base03)))
             (setq org-html-head "
       <style>
         body {
@@ -353,8 +348,13 @@
              '((sh . t)
                (js . t)))
             (run-at-time 0 (* 60 15) #'simpson-org-refresh)
-            (when (string= (car custom-enabled-themes) "base16-ocean")
-              (set-face-attribute 'org-mode-line-clock nil :foreground (plist-get base16-ocean-colors :base0E) :background nil :box nil :inherit nil))
+            (if (string= (car custom-enabled-themes) "base16-ocean")
+                (progn
+                  (set-face-foreground 'org-link (plist-get base16-ocean-colors :base0B))
+                  (set-face-foreground 'org-tag (plist-get base16-ocean-colors :base0A))
+                  (set-face-foreground 'org-agenda-structure (plist-get base16-ocean-colors :base03))
+                  (set-face-attribute 'org-mode-line-clock nil :foreground (plist-get base16-ocean-colors :base0E) :background nil :box nil :inherit nil))
+              (set-face-attribute 'org-mode-line-clock nil :foreground nil :background nil :box nil :inherit nil))
             (setq org-pretty-entities t)
             (setq org-export-with-section-numbers nil)))
 
@@ -432,37 +432,26 @@
             (add-hook 'js2-mode-hook (lambda() (setq show-trailing-whitespace t)))
             (add-hook 'rjsx-mode-hook (lambda() (setq mode-name "jsx")))))
 
-;;indents! so brutal, each mode can have their own, e.g. css
-;;spaces
 (setq-default indent-tabs-mode nil)
-
-;;2 of em
 (setq-default tab-width 2)
-
-;;yes, css, even you
 (setq-default css-indent-offset 2)
 
-;;fonts
 (set-face-attribute 'default nil :font "Hack-10" )
 (set-frame-font "Hack-10" nil t)
 
 ;;modes w/ file extensions
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.php?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.scss\\'" . css-mode))
-(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+
+(use-package yaml-mode
+  :mode (("\\.yml?\\'" . yaml-mode)))
 
 ;;each line gets one line
 (set-default 'truncate-lines t)
 
-;;backups suck, use Git
-;; stop creating backup~ files
 (setq make-backup-files nil)
 
-;;backups suck, use Git
 (setq auto-save-default nil)
 
-;;splash screen is gross
 (setq inhibit-splash-screen t)
 
 ;; Use monospaced font faces in current buffer
@@ -486,56 +475,56 @@
   (when (not (file-exists-p (buffer-file-name)))
     (set-buffer-modified-p t)))
 
-(defun simpson-header ()
-  (let (output)
-    (setq output "¯\\_(ツ)_/¯")
-    (when (and (stringp (buffer-file-name)) (> (length (buffer-file-name)) 16))
-      (setq output (concat " ▼ ../" (substring (buffer-file-name) 16 nil))))
-    (when (and (stringp (buffer-file-name)) (< (length (buffer-file-name)) 16))
-      (setq output (buffer-file-name)))
-    (when (string= major-mode "sauron-mode")
-      (setq output "(o)"))
-    (setq header-line-format output)))
-
-;;set the header intially
-(simpson-header)
-
-;;update the header whenever the buffer-list changes
-(add-hook 'buffer-list-update-hook 'simpson-header)
+(setq header-line-format nil)
 
 (when (string= (car custom-enabled-themes) "base16-ocean")
-  (set-face-foreground 'header-line "#a3adb5")
-  (set-face-background 'header-line (plist-get base16-ocean-colors :base02))
-  (set-face-attribute 'header-line nil
-                      :box `(:line-width 1 :color ,(plist-get base16-ocean-colors :base02) :style nil))
   (set-face-foreground 'vertical-border (plist-get base16-ocean-colors :base02))
   (set-face-background 'fringe (plist-get base16-ocean-colors :base00)))
 
 (setq epg-gpg-program "/usr/local/bin/gpg")
 
-;;y over yes
 ;;http://pages.sachachua.com/.emacs.d/Sacha.html#orgheadline15
 (fset 'yes-or-no-p 'y-or-n-p)
 
-(setq-default mode-line-format (list
-                                ;;mode-line-modified
-                                '(:eval (if (buffer-modified-p)
-                                            (propertize " !" 'face '(:foreground "#cf6a4c"))
-                                          ))
-                                " "
-                                '(:eval (when (and simpson-evil simpson-evil-active) (propertize evil-mode-line-tag 'face '(:foreground "#bf616a"))))
-                                " "
-                                '(:eval mode-line-position)
-                                mode-line-modes
-                                mode-line-misc-info))
+(use-package shrink-path
+  :defer 1)
 
-(when (string= (car custom-enabled-themes) "base16-ocean")
+(setq-default mode-line-format nil)
+
+(eval-after-load 'shrink-path (lambda()
+                                (setq-default mode-line-format (list
+                                                                '(:eval (when (buffer-modified-p)
+                                                                          (propertize " !" 'face '(:foreground "Indianred"))))
+                                                                " "
+                                                                '(:eval (when (buffer-file-name)
+                                                                          (propertize (shrink-path-file (buffer-file-name) t) 'help-echo (buffer-file-name))))
+                                                                " "
+                                                                '(:eval mode-line-position)
+                                                                mode-line-modes
+                                                                mode-line-misc-info))))
+
+(set-face-attribute 'mode-line nil :height 1.0 :box nil)
+
+(if (string= (car custom-enabled-themes) "base16-ocean")
+    (progn
+      (set-face-attribute 'mode-line nil
+                          :background (plist-get base16-ocean-colors :base06)
+                          :foreground (plist-get base16-ocean-colors :base01)
+                          :box `(:line-width 3 :color ,(plist-get base16-ocean-colors :base06) :style nil))
+      (set-face-attribute 'mode-line-inactive nil
+                          :box `(:line-width 3 :color ,(plist-get base16-ocean-colors :base01) :style nil)))
   (set-face-attribute 'mode-line nil
-                      :background (plist-get base16-ocean-colors :base06)
-                      :foreground (plist-get base16-ocean-colors :base01)
-                      :box `(:line-width 3 :color ,(plist-get base16-ocean-colors :base06) :style nil))
+                      :background "khaki1" :box '(:line-width 5 :color "khaki1"))
   (set-face-attribute 'mode-line-inactive nil
-                      :box `(:line-width 3 :color ,(plist-get base16-ocean-colors :base01) :style nil)))
+                      :background "LightCyan2" :box '(:line-width 5 :color "LightCyan2")))
+
+(set-face-background 'fringe nil)
+
+(defun simpson-evil-mode ()
+  "Change mode line color based on evil state."
+  (cond
+   ((evil-insert-state-p) (set-face-attribute 'mode-line nil :background "IndianRed" :foreground "white" :box '(:line-width 5 :color "IndianRed")))
+   ((evil-normal-state-p) (set-face-attribute 'mode-line nil :background "khaki1" :foreground "black" :box '(:line-width 5 :color "khaki1")))))
 
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (setq ediff-split-window-function 'split-window-horizontally)
@@ -561,9 +550,6 @@
   :diminish ""
   :bind ("C-SPC l" . relative-line-numbers-mode)
   :config (progn
-            ;; (add-hook 'css-mode-hook 'relative-line-numbers-mode)
-            ;; (add-hook 'web-mode-hook 'relative-line-numbers-mode)
-            ;; (add-hook 'emacs-lisp-mode-hook 'relative-line-numbers-mode)
             (when (string= (car custom-enabled-themes) "base16-ocean")
               (set-face-foreground 'relative-line-numbers-current-line (plist-get base16-ocean-colors :base09)))))
 
@@ -604,7 +590,7 @@
           ;; Auto-start on any markup modes
           (add-hook 'sgml-mode-hook 'emmet-mode)
           (add-hook 'sgml-mode-hook 'jsEmmet)
-          ;; enable Emmet's css abbreviation.
+          ;; enable Emmet's css abbreviation
           (add-hook 'css-mode-hook  'emmet-mode)
           ;;JSX gets className not class
           (add-hook 'js2-mode-hook 'jsxEmmet)
@@ -824,8 +810,6 @@
 
 (use-package gist)
 
-(use-package notmuch)
-
 (use-package desktop
   :defer 1
   :if (display-graphic-p)
@@ -1004,8 +988,6 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
   :if (file-exists-p "~/Projects/ivy-window-configuration/")
   :load-path "~/Projects/ivy-window-configuration/")
 
-(server-start)
-
 (use-package indium
   :after evil
   :config (progn
@@ -1116,8 +1098,11 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
     (write-file "~/.emacs.d/shell-history")))
 
 (add-hook 'kill-emacs-hook 'simpson-save-history)
+
 (use-package dockerfile-mode
   :config (add-hook 'dockerfile-mode-hook (lambda() (setq mode-name "dockerfile")))
   :mode ("Dockerfile\\'" . dockerfile-mode))
+
+(use-package suggest)
 
 ;;; settings.el ends here
