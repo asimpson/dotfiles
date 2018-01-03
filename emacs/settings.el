@@ -500,9 +500,29 @@
                                                                           (propertize (shrink-path-file (buffer-file-name) t) 'help-echo (buffer-file-name))))
                                                                 " "
                                                                 '(:eval mode-line-position)
+                                                                '(:eval simpson-software-update)
                                                                 mode-line-modes
                                                                 mode-line-misc-info))))
 
+(defvar simpson-software-update "")
+
+(defun simpson-update-check()
+  "Process that checks for software updates on macOS."
+  (let (proc)
+    (setq proc (start-process "softwareupdate" "*softwareupdate*" "softwareupdate" "-l"))
+    (set-process-sentinel proc 'simpson-update-check--sentinel)))
+
+(defun simpson-update-check--sentinel(proc msg)
+  "Search for word recommended in softwareupdate output to determine if there are software updates."
+  (when (string= msg "finished\n")
+    (if (with-current-buffer "*softwareupdate*"
+          (goto-char (point-min))
+          (search-forward "recommended" nil t))
+        (setq simpson-software-update "‼")
+      (setq simpson-software-update ""))
+    (kill-buffer "*softwareupdate*")))
+
+(run-at-time 0 (* 60 60) #'simpson-update-check)
 (set-face-attribute 'mode-line nil :height 1.0 :box nil)
 
 (if (string= (car custom-enabled-themes) "base16-ocean")
