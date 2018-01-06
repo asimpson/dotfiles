@@ -504,6 +504,7 @@
     (set-buffer-modified-p t)))
 
 (setq header-line-format nil)
+(set-face-attribute 'header-line nil :background "white" :box nil)
 
 (when (string= (car custom-enabled-themes) "base16-ocean")
   (set-face-foreground 'vertical-border (plist-get base16-ocean-colors :base02))
@@ -828,6 +829,7 @@
             (when (string= (car custom-enabled-themes) "base16-ocean")
               (set-face-foreground 'eyebrowse-mode-line-active (plist-get base16-ocean-colors :base0E)))
             (eyebrowse-mode t)
+            (set-face-foreground 'eyebrowse-mode-line-active "green4")
             (setq eyebrowse-new-workspace t)))
 
 (use-package elisp-mode
@@ -853,6 +855,7 @@
             (eval-after-load "autorevert" '(diminish 'auto-revert-mode))
             (eval-after-load "undo-tree" '(diminish 'undo-tree-mode))
             (add-hook 'shell-mode-hook (lambda () (setq mode-name "shell")))
+            (add-hook 'image-mode-hook (lambda () (setq mode-name "image")))
             (add-hook 'makefile-bsdmake-mode-hook (lambda () (setq mode-name "make")))))
 
 (use-package swiper
@@ -1216,6 +1219,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   (interactive)
   (call-process "open" nil nil nil (get-text-property (point) 'shr-url)))
 
+(add-to-list 'auto-mode-alist '("\\.hbs\\'" . html-mode))
 (eval-after-load 'eww (lambda()
                         (simpson-make-neutral eww-mode-map)
                         (simpson-make-neutral--keys eww-mode-map)
