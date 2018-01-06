@@ -527,11 +527,30 @@
                                                                           (propertize (shrink-path-file (buffer-file-name) t) 'help-echo (buffer-file-name))))
                                                                 " "
                                                                 '(:eval mode-line-position)
+                                                                '(:eval simpson-mail-count)
                                                                 '(:eval simpson-software-update)
+                                                                " "
                                                                 mode-line-modes
                                                                 mode-line-misc-info))))
 
-(defvar simpson-software-update "")
+(defvar simpson-mail-count nil)
+
+(defvar simpson-software-update nil)
+
+(defun simpson-check-mail()
+  ;; stolen from  https://github.com/iqbalansari/mu4e-alert/blob/master/mu4e-alert.el#L288
+  (let (num (output (shell-command-to-string "mu find flag:unread maildir:/sb/INBOX OR flag:unread maildir:/fast/INBOX 2>/dev/null")))
+    (if (> (length output) 0)
+        (progn
+          (setq num (number-to-string (length (split-string output "\n" t))))
+          (setq simpson-mail-count (concat (propertize "mail icon"
+                                                       'display display-time-mail-icon
+                                                       'face display-time-mail-face
+                                                       'help-echo (concat num " " "unread mail")
+                                                       'keymap '(mode-line keymap
+                                                                           (mouse-1 . mu4e)))
+                                           " " num)))
+      (setq simpson-mail-count nil))))
 
 (defun simpson-update-check()
   "Process that checks for software updates on macOS."
@@ -546,10 +565,12 @@
           (goto-char (point-min))
           (search-forward "recommended" nil t))
         (setq simpson-software-update "‼")
-      (setq simpson-software-update ""))
+      (setq simpson-software-update nil))
     (kill-buffer "*softwareupdate*")))
 
 (run-at-time 0 (* 60 60) #'simpson-update-check)
+(run-at-time 0 (* 60 3) #'simpson-check-mail)
+
 (set-face-attribute 'mode-line nil :height 1.0 :box nil)
 
 (if (string= (car custom-enabled-themes) "base16-ocean")
