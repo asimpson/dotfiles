@@ -947,11 +947,24 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
     Mocha:
     _a_ test at point
     _f_ test file
+    _r_ reload local dir
     _p_ test project
+    _c_ custom project scope
   "
   ("a" mocha-test-at-point "file at point")
   ("p" mocha-test-project "project" :exit t)
+  ("r" simpson-hack-local "reload local vars")
+  ("c" simpson-mocha-scope "custom project scope")
   ("f" mocha-test-file "whole file"))
+
+(defun simpson-hack-local()
+  (interactive)
+  (hack-dir-local-variables-non-file-buffer))
+
+(defun simpson-mocha-scope()
+  (interactive)
+  (let ((dir (read-directory-name "Which dir?: ")) (string (read-string "What glob? :")))
+    (setq mocha-project-test-directory (concat dir string))))
 
 (defun simpson-rg-switches(dir switches)
   (interactive
