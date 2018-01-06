@@ -61,3 +61,19 @@ Launchd is OS X's replacement for `cron`.
     [include]
         path = path/to/local/config/gitconfig.local
 ```
+
+## GPG Conf
+
+- Install `pinentry-mac` and then tell GPG about it by adding it to `~/.gnupg/gpg-agent.conf` like this:
+`pinentry-program /usr/local/bin/pinentry-mac`
+
+- update `~/.gitconfig` with these two values to enable GPG signing:
+
+```
+[user]
+	signingkey = KEYID
+[commit]
+  gpgsign = true
+```
+
+- `gpgconf --kill gpg-agent` kills the currently running `gpg-agent`. Use this to test config changes.
