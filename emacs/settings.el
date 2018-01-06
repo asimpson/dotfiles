@@ -31,6 +31,12 @@
 
 (global-set-key (kbd "C-SPC") nil)
 
+(defvar simpson-dropbox-path ""
+  "variable that points to the proper Dropbox path")
+
+(cond
+ ((file-exists-p "~/Dropbox (Personal)/") (setq simpson-dropbox-path "~/Dropbox\ (Personal)/"))
+ ((file-exists-p "~/Dropbox/") (setq simpson-dropbox-path "~/Dropbox/")))
 (use-package osx-trash
   :if (eq system-type 'darwin)
   :config (progn
@@ -277,7 +283,7 @@
 
 (use-package org
   :defer 2
-  :if (file-exists-p "~/Dropbox (Personal)/org/tasks.txt")
+  :if (file-exists-p (concat simpson-dropbox-path "/org/tasks.txt"))
   :bind (("C-SPC c" . simpson-org-task-capture)
          ("C-SPC k B" . simpson-org-blog-capture)
          ("C-SPC t" . org-todo-list)
@@ -288,7 +294,7 @@
             (require 'ox-md)
             ;;look into swapping with txt, org-agenda-file-regexp
             (setq org-agenda-file-regexp "\\`[^.].*\\.txt\\'")
-            (setq org-agenda-files '("~/Dropbox (Personal)/org"))
+            (setq org-agenda-files `(,(concat simpson-dropbox-path "org")))
             (setq org-log-done t)
             (setq org-deadline-warning-days 3)
             (setq org-export-with-toc nil)
@@ -299,21 +305,21 @@
             (setq org-todo-keywords
                   '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
             (setq org-capture-templates
-                  '(("a" "My TODO task format." entry
-                     (file "~/Dropbox (Personal)/org/tasks.txt")
+                  `(("a" "My TODO task format." entry
+                     (file ,(concat simpson-dropbox-path "org/tasks.txt"))
                      "* TODO %? %^g
     :PROPERTIES:
     :CREATED: %T
     :END:")
                     ("b" "My blog post captures" entry
-                     (file "~/Dropbox (Personal)/org/reading.txt")
+                     (file ,(concat simpson-dropbox-path "org/reading.txt"))
                      "* %? %^g
     :PROPERTIES:
     %(simpson-prompt-for-feedwrangler-url)
     :CREATED: %T
     :END:")
                     ("p" "Personal: " entry
-                     (file "~/Dropbox (Personal)/org/personal.txt")
+                     (file ,(concat simpson-dropbox-path "org/personal.txt"))
                      "* %? %^g
     :PROPERTIES:
     :CREATED: %T

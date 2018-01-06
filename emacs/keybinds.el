@@ -88,10 +88,10 @@
   (interactive "sName of file: ")
   (setq date (shell-command-to-string "date +%m-%d-%y"))
   (setq fixed-date (replace-regexp-in-string "\n$" "" date))
-  (write-region "" "" (concat "~/Dropbox (Personal)/Notational Data/" fixed-date "-" name ".txt")))
+  (write-region "" "" (concat simpson-dropbox-path "Notational Data/" fixed-date "-" name ".txt")))
 
 (global-set-key (kbd "C-SPC d") (lambda() (interactive)
-                                  (dired "~/Dropbox (Personal)/Notational Data/" "-laGht")))
+                                  (dired (concat simpson-dropbox-path "Notational Data/") "-laGht")))
 (global-set-key (kbd "C-SPC k ?") 'eww)
 
 (defun kill-shell-buffer()
