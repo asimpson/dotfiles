@@ -1119,13 +1119,19 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
     _R_ eww-readable
     _b_ eww-back-url
     _h_ eww-history-browse
+    _c_ simpson-eww-external
     _g_ eww
   "
   ("r" eww-more-readable "better readable")
   ("R" eww-readable "default readable")
   ("b" eww-back-url "eww back" :exit nil)
   ("g" eww "eww")
+  ("c" simpson-eww-external "simpson-eww-external")
   ("h" eww-history-browse "browse history"))
+
+(defun simpson-eww-external()
+  (interactive)
+  (browse-url-default-browser (get-text-property (point) 'shr-url)))
 
 (use-package rust-mode
   :mode("\\.rs?\\'" . rust-mode)
@@ -1191,7 +1197,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
             (setq smtpmail-smtp-service 465)
             (setq user-full-name "Adam Simpson")
             (add-to-list 'mu4e-view-actions '("eww view" . jcs-view-in-eww) t)
-            (add-to-list 'mu4e-view-actions '("shr view" . simpson-shr-view) t)
+            (add-to-list 'mu4e-view-actions '("Shr view" . simpson-shr-view) t)
             (define-key mu4e-headers-mode-map (kbd "C-c C-u") 'mu4e-update-index)
             (simpson-make-neutral mu4e-headers-mode-map)
             (simpson-make-neutral--keys mu4e-headers-mode-map)
@@ -1203,7 +1209,9 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   :load-path "/usr/local/Cellar/mu/0.9.18_1/share/emacs/site-lisp/mu/mu4e")
 
 (defun jcs-view-in-eww (msg)
-  (eww-browse-url (concat "file://" (mu4e~write-body-to-html msg))))
+  (eww-browse-url (concat "file://" (mu4e~write-body-to-html msg)))
+  (text-scale-set 1)
+  (eww-reload t))
 
 (defun simpson-shr-view(msg)
   "Parse m4ue message as html and render it in a new frame using shr."
@@ -1220,6 +1228,11 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   (call-process "open" nil nil nil (get-text-property (point) 'shr-url)))
 
 (add-to-list 'auto-mode-alist '("\\.hbs\\'" . html-mode))
+
+(defun xah-rename-eww-hook ()
+  "Rename eww browser's buffer so sites open in new page."
+  (rename-buffer "eww" t))
+
 (eval-after-load 'eww (lambda()
                         (simpson-make-neutral eww-mode-map)
                         (simpson-make-neutral--keys eww-mode-map)
