@@ -1209,12 +1209,20 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
             (setq mu4e-update-interval 300)
             (setq smtpmail-smtp-service 465)
             (setq user-full-name "Adam Simpson")
+            (setq mu4e-confirm-quit nil)
             (add-to-list 'mu4e-view-actions '("eww view" . jcs-view-in-eww) t)
             (add-to-list 'mu4e-view-actions '("Shr view" . simpson-shr-view) t)
             (define-key mu4e-headers-mode-map (kbd "C-c C-u") 'mu4e-update-index)
+            (define-key mu4e-main-mode-map "q" 'simpson-mu4e-quit)
             (simpson-make-neutral mu4e-headers-mode-map)
             (simpson-make-neutral--keys mu4e-headers-mode-map)
             (simpson-make-neutral--keys mu4e-view-mode-map)))
+
+(defun simpson-mu4e-quit()
+  "Quit mu4e and then update mail icon"
+  (interactive)
+  (mu4e-quit)
+  (simpson-check-mail))
 
 (use-package org-mu4e
   :ensure nil
