@@ -940,7 +940,8 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
             (global-set-key (kbd "C-SPC x") 'hydra-js2/body)
             (global-set-key (kbd "C-SPC ?") 'hydra-help/body)
             (global-set-key (kbd "C-SPC v") 'hydra-vimish/body)
-            (global-set-key (kbd "C-SPC E") 'hydra-eww/body)))
+            (global-set-key (kbd "C-SPC E") 'hydra-eww/body)
+            (global-set-key (kbd "C-SPC h") 'hydra-smerge/body)))
 
 (defhydra hydra-mocha ()
   "
@@ -1259,5 +1260,13 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
                         (simpson-make-neutral--keys eww-mode-map)
                         (add-hook 'eww-mode-hook #'xah-rename-eww-hook)))
 
+(defhydra hydra-smerge()
+  "
+    Shortcut to smerge next and previous:
+    _n_ smerge-next
+    _p_ smerge-prev
+  "
+  ("n" smerge-next "next conflict")
+  ("p" smerge-prev "previous conflict"))
 
 ;;; settings.el ends here
