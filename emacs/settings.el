@@ -70,7 +70,7 @@
 
 (use-package tomorrow-theme
   :ensure nil
-  :if (display-graphic-p)
+  :if (and (display-graphic-p) (file-exists-p "~/Projects/tomorrow-theme/GNU Emacs"))
   :load-path "~/Projects/tomorrow-theme/GNU Emacs"
   :init (require 'tomorrow-day-theme)
   (load-theme 'tomorrow-day t))
