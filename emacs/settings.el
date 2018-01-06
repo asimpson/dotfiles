@@ -35,7 +35,7 @@
   "variable that points to the proper Dropbox path")
 
 (cond
- ((file-exists-p "~/Dropbox (Personal)/") (setq simpson-dropbox-path "~/Dropbox\ (Personal)/"))
+ ((file-exists-p "~/Dropbox (Personal)/") (setq simpson-dropbox-path "~/Dropbox (Personal)/"))
  ((file-exists-p "~/Dropbox/") (setq simpson-dropbox-path "~/Dropbox/")))
 
 (defmacro simpson-make-neutral (map)
@@ -304,7 +304,7 @@
 
 (use-package org
   :defer 2
-  :if (file-exists-p (concat simpson-dropbox-path "/org/tasks.txt"))
+  :if (file-exists-p (concat simpson-dropbox-path "org/tasks.txt"))
   :pin org
   :bind (("C-SPC c" . simpson-org-task-capture)
          ("C-SPC k B" . simpson-org-blog-capture)
