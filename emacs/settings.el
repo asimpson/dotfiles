@@ -37,6 +37,26 @@
 (cond
  ((file-exists-p "~/Dropbox (Personal)/") (setq simpson-dropbox-path "~/Dropbox\ (Personal)/"))
  ((file-exists-p "~/Dropbox/") (setq simpson-dropbox-path "~/Dropbox/")))
+
+(defmacro simpson-make-neutral (map)
+  "Create evil-style window movement for a given map."
+  `(progn
+     (define-key ,map (kbd "C-j") 'evil-window-down)
+     (define-key ,map (kbd "C-k") 'evil-window-up)
+     (define-key ,map (kbd "C-h") 'evil-window-left)
+     (define-key ,map (kbd "C-l") 'evil-window-right)))
+
+(defmacro simpson-make-neutral--keys (map)
+  "Create evil-style  movement for a given map."
+  `(progn
+     (define-key ,map "j" 'next-line)
+     (define-key ,map "k" 'previous-line)))
+
+(defmacro simpson-load-file (file)
+  "Check if file exists and if it does load it."
+  `(when (file-exists-p ,file)
+     (load-library ,file)))
+
 (use-package osx-trash
   :if (eq system-type 'darwin)
   :config (progn
@@ -104,15 +124,14 @@
             (add-to-list 'evil-emacs-state-modes 'dired-mode)
             (add-to-list 'evil-emacs-state-modes 'epa-key-list-mode)
             (add-to-list 'evil-emacs-state-modes 'ivy-occur-mode)
+            (add-to-list 'evil-emacs-state-modes 'image-mode)
             (add-to-list 'evil-emacs-state-modes 'comint-mode)
+            (add-to-list 'evil-emacs-state-modes 'eww-mode)
             ;;http://spacemacs.org/doc/FAQ#orgheadline31
             (fset 'evil-visual-update-x-selection 'ignore)
             (define-key evil-normal-state-map (kbd "RET") 'save-buffer)
-            (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
-            (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
-            (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
+            (simpson-make-neutral evil-normal-state-map)
             (define-key evil-normal-state-map (kbd "gx") 'browse-url)
-            (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
             (when simpson-helm (define-key evil-normal-state-map "\C-p" 'helm-projectile-find-file))
             (when simpson-helm (define-key evil-normal-state-map (kbd "SPC SPC") 'helm-projectile-find-file))
             (unless simpson-helm (define-key evil-normal-state-map (kbd "SPC SPC") 'projectile-find-file-other-window))
@@ -121,6 +140,8 @@
             (define-key evil-normal-state-map (kbd "C-n") 'evil-scroll-down)
             (define-key evil-normal-state-map (kbd "C-b") 'projectile-switch-project)
             (add-hook 'post-command-hook 'simpson-evil-mode)))
+
+(eval-after-load 'image-mode (lambda() (simpson-make-neutral image-mode-map)))
 
 (use-package evil-leader
   :if simpson-evil
@@ -626,21 +647,19 @@
 (use-package sauron
   :pin melpa-stable
   :defer 2
-  :init (setq sauron-modules '(sauron-erc sauron-ams-org))
   :config (progn
-            (when (file-exists-p "~/.dotfiles/emacs/irc-watch.gpg")
-              (load-library "~/.dotfiles/emacs/irc-watch.gpg"))
+            (setq sauron-modules '(sauron-erc sauron-ams-org))
+            (simpson-load-file "~/.dotfiles/emacs/irc-watch.gpg")
             (when simpson-evil (add-to-list 'evil-emacs-state-modes 'sauron-mode))
             (setq sauron-watch-nicks nil)
             (when (boundp 'simpson-watch-patterns)
               (setq sauron-watch-patterns simpson-watch-patterns))
             (setq sauron-hide-mode-line t)
-            (setq sauron-separate-frame nil)
+            (setq sauron-separate-frame t)
             (setq sauron-column-alist '((timestamp . 8)
                                         (origin . 7)
                                         (message)))
             (setq sauron-timestamp-format "%H:%M:%S")
-            (sauron-start-hidden)
             (advice-add 'shell-command-sentinel :before #'simpson-shell-command-sentiel)))
 
 (defun jsxEmmet()
@@ -661,13 +680,9 @@
             (setq dired-recursive-deletes t)
             (setq delete-by-moving-to-trash t)
             (setq dired-use-ls-dired nil)
-            (define-key dired-mode-map "j" 'dired-next-line)
-            (define-key dired-mode-map "k" 'dired-previous-line)
             (define-key dired-mode-map "e" 'epa-dired-do-encrypt)
-            (define-key dired-mode-map (kbd "C-l") 'evil-window-right)
-            (define-key dired-mode-map (kbd "C-h") 'evil-window-left)
-            (define-key dired-mode-map (kbd "C-j") 'evil-window-down)
-            (define-key dired-mode-map (kbd "C-k") 'evil-window-up)
+            (simpson-make-neutral dired-mode-map)
+            (simpson-make-neutral--keys dired-mode-map)
             (define-key dired-mode-map "E" 'epa-dired-do-decrypt)))
 
 (use-package editorconfig
@@ -699,7 +714,7 @@
                    '(exit))
              (not (string= (string-trim sig) "finished")))
     (sauron-add-event 'shell 3 sig (lambda() #'(switch-to-buffer-other-window
-                                           "*Async Shell Command*")))))
+                                                "*Async Shell Command*")))))
 
 (use-package erc
   :bind (:map erc-mode-map ("C-c f" . simpson-format-slack-name))
@@ -713,8 +728,9 @@
             (setq erc-log-channels-directory "~/.erc/logs/")
             (setq erc-save-buffer-on-part t)
             (setq erc-join-buffer "bury")
-            (when (file-exists-p "~/.dotfiles/emacs/irc-accounts.gpg")
-              (load-library "~/.dotfiles/emacs/irc-accounts.gpg"))
+            (simpson-make-neutral erc-mode-map)
+            (setq erc-modules '(autojoin button completion fill irccontrols list match menu move-to-prompt netsplit networks noncommands readonly ring stamp))
+            (simpson-load-file "~/.dotfiles/emacs/irc-accounts.gpg")
             (add-hook 'erc-mode-hook 'visual-line-mode)
             (add-hook 'erc-mode-hook (lambda () (setq mode-name "irc")))))
 
@@ -759,10 +775,7 @@
             (push '(counsel-M-x . "") ivy-initial-inputs-alist)
             (ivy-add-actions 'counsel-projectile-ag '(("O" simpson-other-window "open in new window")))
             (define-key dired-mode-map "r" 'counsel-rg)
-            (define-key ivy-occur-mode-map (kbd "C-l") 'evil-window-right)
-            (define-key ivy-occur-mode-map (kbd "C-h") 'evil-window-left)
-            (define-key ivy-occur-mode-map (kbd "C-j") 'evil-window-down)
-            (define-key ivy-occur-mode-map (kbd "C-k") 'evil-window-up)
+            (simpson-make-neutral ivy-occur-mode-map)
             (setq ivy-use-selectable-prompt t)
             (ivy-add-actions 'counsel-ag '(("O" simpson-other-window "open in new window")))
             (ivy-add-actions 'counsel-rg '(("O" simpson-other-window "open in new window")))))
@@ -1137,8 +1150,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   :defer 1
   :load-path "/usr/local/Cellar/mu/0.9.18_1/share/emacs/site-lisp/mu/mu4e"
   :config (progn
-            (when (file-exists-p "~/.dotfiles/emacs/mu4e.el.gpg")
-              (load-library "~/.dotfiles/emacs/mu4e.el.gpg"))
+            (simpson-load-file "~/.dotfiles/emacs/mu4e.el.gpg")
             (set-face-attribute 'mu4e-highlight-face nil :background "LightGreen" :foreground nil)
             (setq mu4e-maildir "~/Mail")
             (setq mu4e-view-show-images t)
@@ -1156,14 +1168,9 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
             (add-to-list 'mu4e-view-actions '("eww view" . jcs-view-in-eww) t)
             (add-to-list 'mu4e-view-actions '("shr view" . simpson-shr-view) t)
             (define-key mu4e-headers-mode-map (kbd "C-c C-u") 'mu4e-update-index)
-            (define-key mu4e-headers-mode-map "j" 'next-line)
-            (define-key mu4e-headers-mode-map "k" 'previous-line)
-            (define-key mu4e-headers-mode-map (kbd "C-j") 'evil-window-down)
-            (define-key mu4e-headers-mode-map (kbd "C-k") 'evil-window-up)
-            (define-key mu4e-headers-mode-map (kbd "C-h") 'evil-window-left)
-            (define-key mu4e-headers-mode-map (kbd "C-l") 'evil-window-right)
-            (define-key mu4e-view-mode-map "j" 'next-line)
-            (define-key mu4e-view-mode-map "k" 'previous-line)))
+            (simpson-make-neutral mu4e-headers-mode-map)
+            (simpson-make-neutral--keys mu4e-headers-mode-map)
+            (simpson-make-neutral--keys mu4e-view-mode-map)))
 
 (use-package org-mu4e
   :ensure nil
@@ -1186,5 +1193,11 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (defun simpson-browse-url()
   (interactive)
   (call-process "open" nil nil nil (get-text-property (point) 'shr-url)))
+
+(eval-after-load 'eww (lambda()
+                        (simpson-make-neutral eww-mode-map)
+                        (simpson-make-neutral--keys eww-mode-map)
+                        (add-hook 'eww-mode-hook #'xah-rename-eww-hook)))
+
 
 ;;; settings.el ends here
