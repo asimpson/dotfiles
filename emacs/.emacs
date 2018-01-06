@@ -6,6 +6,7 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (add-to-list 'package-archives
              '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 (package-initialize)
 (setq custom-file "~/.dotfiles/emacs/emacs-custom.el")
 (add-to-list 'load-path "~/.dotfiles/emacs/")
@@ -17,3 +18,4 @@
 (load "~/.emacs.d/settings.el")
 (load "~/.emacs.d/keybinds.el")
 (message "Init time: %s" (emacs-init-time))
+(put 'narrow-to-region 'disabled nil)

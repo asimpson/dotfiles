@@ -305,6 +305,7 @@
 (use-package org
   :defer 2
   :if (file-exists-p (concat simpson-dropbox-path "/org/tasks.txt"))
+  :pin org
   :bind (("C-SPC c" . simpson-org-task-capture)
          ("C-SPC k B" . simpson-org-blog-capture)
          ("C-SPC t" . org-todo-list)
