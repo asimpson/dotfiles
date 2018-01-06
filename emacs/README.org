@@ -1,6 +1,63 @@
 * Emacs config notes
 ** Email
 Some mu4e configuration is kept in ~./mu4e.el.gpg~.
+*** Software
+**** Overview
+Stolen from the [[https://www.djcbsoftware.nl/code/mu/mu4e/High_002dlevel-overview.html#High_002dlevel-overview][mu4e manual]].
+#+BEGIN_SRC
+  +---------+
+  | emacs   |
+  |    +------+
+  +----| mu4e | --> send mail (smtpmail)
+        +------+
+        |  A
+        V  |  ---/ search, view, move mail
+  +---------+    \
+  |   mu    |
+  +---------+
+    |    A
+    V    |
+  +---------+
+  | Maildir |  <--- receive mail (fetchmail,
+  +---------+                     offlineimap, ...)
+
+#+END_SRC
+**** mu and mu4e
+     ~brew install mu --with-emacs~
+
+     ~mu index --maildir=~/Mail~
+**** mbsync or offlineimap
+***** mbsync
+     ~brew install isync~
+
+     ~brew services start isync~
+     - [[http://isync.sourceforge.net/mbsync.html#CONFIGURATION][manual]]
+     - [[https://wiki.archlinux.org/index.php/Isync][arch wiki entry]]
+     #+BEGIN_SRC text
+       IMAPAccount service
+       Host imap.service.com
+       User user@service.com
+       PassCmd "gpg -q --for-your-eyes-only --no-tty -d ~/.mailpass.gpg"
+       SSLType IMAPS
+
+       IMAPStore service-remote
+       Account service
+
+       MaildirStore service-local
+       Path ~/Mail/service/
+       Inbox ~/Mail/service/Inbox
+
+       Channel service
+       Master :service-remote:
+       Slave :service-local:
+       Patterns *
+       # Automatically create missing mailboxes, both locally and on the server
+       Create Slave
+       SyncState *
+     #+END_SRC
+***** offlineimap
+     #+BEGIN_SRC
+     #+END_SRC
 *** Bookmark
 #+BEGIN_SRC elisp
   (add-to-list 'mu4e-bookmarks
@@ -10,6 +67,7 @@ Some mu4e configuration is kept in ~./mu4e.el.gpg~.
                 :key ?c))
 #+END_SRC
 *** Contexts
+- These variables in context can also be set outside of a context if there aren't multiple accounts.
 #+BEGIN_SRC elisp
 
   (setq mu4e-contexts `(
@@ -41,6 +99,8 @@ Some mu4e configuration is kept in ~./mu4e.el.gpg~.
                                   (mu4e-sent-messages-behavior . delete)))))
 #+END_SRC
 Note that ~mu4e-sent-messages-behavior~ is set to ~delete~ which is ideal for Gmail.
-*** Offlineimap
+*** SMTP
+- ~authinfo.gpg~ needs to be setup with the smtp host(s).
+~machine smtp.host.com port 57 login servicelogin@service.com password puppies~
 ** Modeline
 [[http://asimpson.github.io/dotfiles/mode-line.png]]
