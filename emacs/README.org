@@ -26,11 +26,18 @@ Stolen from the [[https://www.djcbsoftware.nl/code/mu/mu4e/High_002dlevel-overvi
      ~brew install mu --with-emacs~
 
      ~mu index --maildir=~/Mail~
+
+     set ~simpson-mail-update-command~ in ~mu4e.el.gpg~ to a string that will be run to check for mail on the CLI to update the mail icon, e.g. ~(setq simpson-mail-update-command "mu find flag:unread maildir:/service/Inbox 2>/dev/null")~
+
+    One issue to work around here: http://pragmaticemacs.com/emacs/fixing-duplicate-uid-errors-when-using-mbsync-and-mu4e/
+    #+BEGIN_QUOTE
+    After a lot of digging around I found the solution was in the mbsync and mu4e manuals (of course). The problem is caused because mu4e does not by default rename files when moving them to a new directory and this then causes problems for mbsync. This is easily fixed by setting
+    #+END_QUOTE
+    ~(setq mu4e-change-filenames-when-moving t)~
 **** mbsync or offlineimap
 ***** mbsync
      ~brew install isync~
 
-     ~brew services start isync~
      - [[http://isync.sourceforge.net/mbsync.html#CONFIGURATION][manual]]
      - [[https://wiki.archlinux.org/index.php/Isync][arch wiki entry]]
      #+BEGIN_SRC text
@@ -55,9 +62,34 @@ Stolen from the [[https://www.djcbsoftware.nl/code/mu/mu4e/High_002dlevel-overvi
        Create Slave
        SyncState *
      #+END_SRC
+     - the brew services setup for isync doesn't work. I rolled my own launchd plist plus a small shell script to sync messages every couple minutes.
 ***** offlineimap
      #+BEGIN_SRC
      #+END_SRC
+     ~brew install offlineimap~
+     ~brew services start offlineimap~
+      #+BEGIN_SRC text
+
+    [general]
+    accounts = name
+
+    [Account name]
+    localrepository = local
+    remoterepository = remote
+    postsynchook = mu index --maildir=~/Mail
+
+    [Repository local]
+    type = Maildir
+    localfolders = ~/Mail/name
+
+    [Repository remote]
+    type = IMAP
+    remotehost = imap.name.com
+    remoteuser = loginUser
+    remotepass = puppies
+    ssl=true
+    sslcacertfile = /usr/local/etc/openssl/cert.pem
+      #+END_SRC
 *** Bookmark
 #+BEGIN_SRC elisp
   (add-to-list 'mu4e-bookmarks
