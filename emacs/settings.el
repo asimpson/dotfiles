@@ -541,7 +541,7 @@
 
 (defun simpson-check-mail()
   ;; stolen from  https://github.com/iqbalansari/mu4e-alert/blob/master/mu4e-alert.el#L288
-  (let (num (output (shell-command-to-string "mu find flag:unread maildir:/sb/INBOX OR flag:unread maildir:/fast/INBOX 2>/dev/null")))
+  (let (num (output (shell-command-to-string simpson-mail-update-command)))
     (if (> (length output) 0)
         (progn
           (setq num (number-to-string (length (split-string output "\n" t))))
