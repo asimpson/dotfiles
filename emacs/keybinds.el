@@ -181,6 +181,11 @@
   (interactive)
   (erc-cmd-GQ nil))
 
+(defun simpson-kill-circe()
+  "quits all circe servers"
+  (interactive)
+  (circe-command-GQUIT nil))
+
 (defun simpson-macos-mail-link()
   "gets the Message-ID of the current notmuch message and constructs a Mail.app appropriate link
    reference: https://daringfireball.net/2007/12/message_urls_leopard_mail."

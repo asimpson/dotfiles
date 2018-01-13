@@ -127,6 +127,10 @@
             (add-to-list 'evil-emacs-state-modes 'image-mode)
             (add-to-list 'evil-emacs-state-modes 'comint-mode)
             (add-to-list 'evil-emacs-state-modes 'eww-mode)
+            (add-to-list 'evil-emacs-state-modes 'circe-mode)
+            (add-to-list 'evil-emacs-state-modes 'circe-server-mode)
+            (add-to-list 'evil-emacs-state-modes 'circe-channel-mode)
+            (add-to-list 'evil-emacs-state-modes 'sql-interactive-mode)
             ;;http://spacemacs.org/doc/FAQ#orgheadline31
             (fset 'evil-visual-update-x-selection 'ignore)
             (define-key evil-normal-state-map (kbd "RET") 'save-buffer)
@@ -1070,6 +1074,7 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
   :after evil
   :config (progn
             (when simpson-evil (add-to-list 'evil-emacs-state-modes 'indium-repl-mode))
+            (simpson-make-neutral indium-repl-mode-map)
             (advice-add 'indium-scratch-setup-buffer :after #'simpson-indium-emacs)))
 
 (defun simpson-indium-emacs (buf)
@@ -1268,5 +1273,29 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   "
   ("n" smerge-next "next conflict")
   ("p" smerge-prev "previous conflict"))
+
+(defun fetch-freenode-password(&rest params)
+  "Returns the freenode token from auth-source."
+  (let ((entry (auth-source-search :host "irc.freenode.net" :max 1)))
+    (funcall (plist-get (car entry) :secret))))
+
+(use-package circe
+  :config(progn
+           (require 'circe-chanop)
+           (simpson-make-neutral circe-mode-map)
+           (add-hook 'circe-mode-hook (lambda () (setq mode-name "irc")))
+           (setq circe-network-options
+                 '(("Freenode"
+                    :tls t
+                    :nick "asimpson"
+                    :sasl-username "asimpson"
+                    :sasl-password fetch-freenode-password)))))
+
+(use-package sql
+  :ensure nil
+  :config (progn
+            (simpson-make-neutral sql-interactive-mode-map)))
+
+(use-package restclient)
 
 ;;; settings.el ends here
