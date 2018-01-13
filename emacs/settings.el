@@ -560,22 +560,19 @@
 
 (defun simpson-update-check()
   "Process that checks for software updates on macOS."
-  (let (proc)
-    (setq proc (start-process "softwareupdate" "*softwareupdate*" "softwareupdate" "-l"))
-    (set-process-sentinel proc 'simpson-update-check--sentinel)))
+  (set-process-sentinel (start-process "softwareupdate" "*softwareupdate*" "softwareupdate" "-l") 'simpson-update-check--sentinel))
 
 (defun simpson-update-check--sentinel(proc msg)
   "Search for word recommended in softwareupdate output to determine if there are software updates."
-  (when (string= msg "finished\n")
+  (when (and (string= msg "finished\n") (buffer-live-p (get-buffer "*softwareupdate*")))
     (if (with-current-buffer "*softwareupdate*"
           (goto-char (point-min))
           (search-forward "recommended" nil t))
         (setq simpson-software-update "‼")
-      (setq simpson-software-update nil))
-    (kill-buffer "*softwareupdate*")))
+      (setq simpson-software-update nil)
+      (kill-buffer "*softwareupdate*"))))
 
 (run-at-time 0 (* 60 60) #'simpson-update-check)
-(run-at-time 0 (* 60 3) #'simpson-check-mail)
 
 (set-face-attribute 'mode-line nil :height 1.0 :box nil)
 
