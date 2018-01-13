@@ -220,3 +220,16 @@
   "return the file name for a buffer"
   (interactive)
   (kill-new (car (reverse (split-string (buffer-file-name) "/")))))
+
+(defun simpson-org-scratch()
+  "make a new buffer with org-mode"
+  (interactive)
+  (evil-window-new nil nil)
+  (org-mode))
+
+(define-key global-map (kbd "C-SPC y") 'simpson-org-scratch)
+
+(define-key global-map (kbd "M-y") (lambda() (interactive) (counsel-yank-pop)))
+
+
+;;; keybinds.el ends here
