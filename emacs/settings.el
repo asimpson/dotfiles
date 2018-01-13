@@ -1219,7 +1219,8 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
             (define-key mu4e-main-mode-map "q" 'simpson-mu4e-quit)
             (simpson-make-neutral mu4e-headers-mode-map)
             (simpson-make-neutral--keys mu4e-headers-mode-map)
-            (simpson-make-neutral--keys mu4e-view-mode-map)))
+            (simpson-make-neutral--keys mu4e-view-mode-map)
+            (run-at-time 0 (* 60 3) #'simpson-check-mail)))
 
 (defun simpson-mu4e-quit()
   "Quit mu4e and then update mail icon"
