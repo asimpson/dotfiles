@@ -62,17 +62,17 @@
 
 (global-set-key (kbd "C-SPC k a") 'simpson-copy-file-buffer)
 
-(defun simpson-copy-file-buffer()
+(defun simpson-copy-file-buffer-name()
   "copy the file path for the current buffer to the clipboard"
   (interactive)
   (let (path)
     (if (projectile-project-p)
-      (setq path (nth 1 (split-string (buffer-file-name) (projectile-project-name))))
-    (setq path (buffer-file-name)))
+        (setq path (nth 1 (split-string (buffer-file-name) (projectile-project-name))))
+      (setq path (buffer-file-name)))
 
     (if (y-or-n-p "Code formatting?")
-      (kill-new (concat "`"path"`"))
-    (kill-new path))))
+        (kill-new (concat "`"path"`"))
+      (kill-new path))))
 
 (global-set-key (kbd "C-SPC D") 'dired-jump)
 
