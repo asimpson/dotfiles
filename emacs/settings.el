@@ -701,6 +701,7 @@
   :ensure nil
   :demand t
   :config (progn
+            (setq dired-dwim-target t)
             (setq dired-recursive-deletes t)
             (setq delete-by-moving-to-trash t)
             (setq dired-use-ls-dired nil)
