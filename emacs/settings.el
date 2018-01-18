@@ -822,15 +822,27 @@
   :if (not simpson-helm)
   :defer 1)
 
+(defun simpson-browse()
+  "Fuzzy finding interface to eyebrowse workspaces."
+  (interactive)
+  (let* ((panes (map 'list (lambda (win)
+                             (list (if (string-empty-p (car (last win)))
+                                       (number-to-string (car win))
+                                     (car (last win))) :number (car win)))
+                     (eyebrowse--get 'window-configs)))
+         (pane (completing-read "Jump to session: " panes)))
+    (eyebrowse-switch-to-window-config (plist-get (cdr (assoc pane panes)) :number))))
+
 (use-package eyebrowse
   :defer 1
   :init (setq eyebrowse-keymap-prefix (kbd "C-SPC s"))
   :config (progn
-            ;;use list-face-display to see all faces
             (when (string= (car custom-enabled-themes) "base16-ocean")
               (set-face-foreground 'eyebrowse-mode-line-active (plist-get base16-ocean-colors :base0E)))
             (eyebrowse-mode t)
             (set-face-foreground 'eyebrowse-mode-line-active "green4")
+            (setq eyebrowse-mode-line-style nil)
+            (global-set-key (kbd "C-SPC s t") 'simpson-browse)
             (setq eyebrowse-new-workspace t)))
 
 (use-package elisp-mode
