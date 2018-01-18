@@ -1296,4 +1296,16 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 
 (use-package restclient)
 
+(eval-after-load 'compilation-mode (lambda()
+                                     (setq compilation-error-regexp-alist-alist
+                                           (cons '(node "^[  ]+at \\(?:[^\(\n]+ \(\\)?\\([a-zA-Z\.0-9_/-]+\\):\\([0-9]+\\):\\([0-9]+\\)\)?$"
+                                                        1 ;; file
+                                                        2 ;; line
+                                                        3 ;; column
+                                                        )
+                                                 compilation-error-regexp-alist-alist))
+
+                                     (setq compilation-error-regexp-alist
+                                           (cons 'node compilation-error-regexp-alist))))
+
 ;;; settings.el ends here
