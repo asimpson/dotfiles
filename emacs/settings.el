@@ -930,10 +930,8 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
   :if (file-exists-p "~/Projects/ivy-feedwrangler/")
   :load-path "~/Projects/ivy-feedwrangler/")
 
-(use-package ox-confluence
-  :defer 1
-  :ensure nil
-  :load-path "~/.dotfiles/emacs/ox-confluence.el")
+(use-package ox-jira
+  :after org)
 
 (use-package vlf)
 
