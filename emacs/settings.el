@@ -323,6 +323,8 @@
             (setq org-agenda-files `(,(concat simpson-dropbox-path "org")))
             (setq org-log-done t)
             (setq org-deadline-warning-days 3)
+            (setq org-refile-use-outline-path 'file)
+            (setq org-outline-path-complete-in-steps nil)
             (setq org-export-with-toc nil)
             (setq org-refile-targets '(
                                        ("personal.txt" . (:level . 1))
