@@ -17,11 +17,28 @@ choices =  {
    {
       ['text'] = 'View Desktop in Alfred',
       ['func'] = 'desktop'
+   },
+   {
+      ['text'] = 'Toggle JS',
+      ['func'] = 'toggleJS'
    }
 }
 
 function frame()
    os.execute("/usr/local/bin/emacsclient -c -n &")
+end
+
+
+function toggleJS()
+    hs.application.launchOrFocus("Safari")
+    local zoom = hs.appfinder.appFromName("Safari")
+
+    local js = {"Develop", "Disable JavaScript"}
+    local jsButton = zoom:findMenuItem(js)
+
+    if (jsButton) then
+        zoom:selectMenuItem(js)
+    end
 end
 
 function capture()
