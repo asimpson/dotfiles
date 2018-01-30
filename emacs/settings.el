@@ -570,11 +570,12 @@
     (if (with-current-buffer "*softwareupdate*"
           (goto-char (point-min))
           (search-forward "recommended" nil t))
-        (setq simpson-software-update "‼")
+        (setq simpson-software-update "*")
       (setq simpson-software-update nil)
-      (kill-buffer "*softwareupdate*"))))
+      (kill-buffer "*softwareupdate*")))
+  (run-at-time (* 60 60) nil #'simpson-update-check))
 
-(run-at-time 0 (* 60 60) #'simpson-update-check)
+(run-at-time 0 nil #'simpson-update-check)
 
 (set-face-attribute 'mode-line nil :height 1.0 :box nil)
 
