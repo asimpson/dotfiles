@@ -75,6 +75,8 @@
   :init (require 'tomorrow-day-theme)
   (load-theme 'tomorrow-day t))
 
+(eval-after-load 'tomorrow-day-theme (set-face-background 'highlight "lavender"))
+
 (use-package exec-path-from-shell
   :defer 2
   :config (progn
@@ -528,11 +530,11 @@
 
 (eval-after-load 'shrink-path (lambda()
                                 (setq-default mode-line-format (list
-                                                                '(:eval (when (buffer-modified-p)
-                                                                          (propertize " !" 'face '(:foreground "Indianred"))))
                                                                 " "
                                                                 '(:eval (when (buffer-file-name)
                                                                           (propertize (shrink-path-file (buffer-file-name) t) 'help-echo (buffer-file-name))))
+                                                                '(:eval (when (buffer-modified-p)
+                                                                          (propertize "*" 'face '(:foreground "#cd5c5c"))))
                                                                 " "
                                                                 '(:eval mode-line-position)
                                                                 '(:eval simpson-mail-count)
