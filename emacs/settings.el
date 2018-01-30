@@ -542,7 +542,6 @@
                                                                 mode-line-misc-info))))
 
 (defvar simpson-mail-count nil)
-
 (defvar simpson-software-update nil)
 
 (defun simpson-check-mail()
@@ -827,12 +826,16 @@
   :defer 1)
 
 (defun simpson-browse()
-  "Fuzzy finding interface to eyebrowse workspaces."
+  "Fuzzy finding interface to eyebrowse workspaces.
+If the workspace is not tagged with a name, the number is used instead.
+An asterisk (*) deontes current workspace."
   (interactive)
   (let* ((panes (map 'list (lambda (win)
                              (list (if (string-empty-p (car (last win)))
                                        (number-to-string (car win))
-                                     (car (last win))) :number (car win)))
+                                     (if (equal (car win) (eyebrowse--get 'current-slot))
+                                         (concat (car (last win)) "*")
+                                       (car (last win)))) :number (car win)))
                      (eyebrowse--get 'window-configs)))
          (pane (completing-read "Jump to session: " panes)))
     (eyebrowse-switch-to-window-config (plist-get (cdr (assoc pane panes)) :number))))
