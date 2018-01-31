@@ -1294,23 +1294,6 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   ("n" smerge-next "next conflict")
   ("p" smerge-prev "previous conflict"))
 
-(defun fetch-freenode-password(&rest params)
-  "Returns the freenode token from auth-source."
-  (let ((entry (auth-source-search :host "irc.freenode.net" :max 1)))
-    (funcall (plist-get (car entry) :secret))))
-
-(use-package circe
-  :config(progn
-           (require 'circe-chanop)
-           (simpson-make-neutral circe-mode-map)
-           (add-hook 'circe-mode-hook (lambda () (setq mode-name "irc")))
-           (setq circe-network-options
-                 '(("Freenode"
-                    :tls t
-                    :nick "asimpson"
-                    :sasl-username "asimpson"
-                    :sasl-password fetch-freenode-password)))))
-
 (use-package sql
   :ensure nil
   :config (progn

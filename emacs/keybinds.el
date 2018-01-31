@@ -160,31 +160,18 @@
 (define-key global-map (kbd "C-SPC X") 'simpson-delete-file-for-buffer)
 (define-key global-map (kbd "C-SPC k E") 'simpson-kill-erc)
 
-(defun simpson-erc()
-  "loads all irc servers defined (as a list) in irc-accounts.gpg"
+(defun simpson-znc()
+  "connect to znc irc bouncer. znc-server is defined in irc-accounts.gpg"
   (interactive)
-  (seq-doseq (x simpson-irc)
-    (erc-tls :server x
-             :nick (car (auth-source-user-and-password x))
-             :password (cadr (auth-source-user-and-password x)))))
-
-(defun simpson-freenode()
-  "connect to freenode irc"
-  (interactive)
-  (let ((x "irc.freenode.net"))
-    (erc :server x
-         :nick (car (auth-source-user-and-password x))
-         :password (cadr (auth-source-user-and-password x)))))
+  (erc-tls :server znc-server
+           :port 6697
+           :nick "asimpson"
+           :password (concat "adam@erc/freenode:"(cadr (auth-source-user-and-password "irc.znc.net")))))
 
 (defun simpson-kill-erc()
   "quits all erc servers"
   (interactive)
   (erc-cmd-GQ nil))
-
-(defun simpson-kill-circe()
-  "quits all circe servers"
-  (interactive)
-  (circe-command-GQUIT nil))
 
 (defun simpson-macos-mail-link()
   "gets the Message-ID of the current notmuch message and constructs a Mail.app appropriate link
