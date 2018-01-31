@@ -32,14 +32,14 @@
 (global-set-key (kbd "C-SPC") nil)
 
 (defvar simpson-dropbox-path ""
-  "variable that points to the proper Dropbox path")
+  "Variable that points to the proper Dropbox path.")
 
 (cond
  ((file-exists-p "~/Dropbox (Personal)/") (setq simpson-dropbox-path "~/Dropbox (Personal)/"))
  ((file-exists-p "~/Dropbox/") (setq simpson-dropbox-path "~/Dropbox/")))
 
 (defmacro simpson-make-neutral (map)
-  "Create evil-style window movement for a given map."
+  "Create evil-style window movement for a given MAP."
   `(progn
      (define-key ,map (kbd "C-j") 'evil-window-down)
      (define-key ,map (kbd "C-k") 'evil-window-up)
@@ -47,13 +47,13 @@
      (define-key ,map (kbd "C-l") 'evil-window-right)))
 
 (defmacro simpson-make-neutral--keys (map)
-  "Create evil-style  movement for a given map."
+  "Create evil-style  movement for a given MAP."
   `(progn
      (define-key ,map "j" 'next-line)
      (define-key ,map "k" 'previous-line)))
 
 (defmacro simpson-load-file (file)
-  "Check if file exists and if it does load it."
+  "Check if FILE exists and if it does load it."
   `(when (file-exists-p ,file)
      (load-library ,file)))
 
@@ -395,7 +395,7 @@
             (setq org-export-with-section-numbers nil)))
 
 (defun simpson-prompt-for-feedwrangler-url()
-  (if (y-or-n-p "Get feedwrangler url?")
+  (if (y-or-n-p "Get feedwrangler url? ")
       (concat ":URL:" " " ivy-feedwrangler--current-link)
     (let (url)
       (setq url (read-string "What url?: "))
@@ -490,8 +490,8 @@
 
 (setq inhibit-splash-screen t)
 
-;; Use monospaced font faces in current buffer
 (defun markdown-fonts ()
+  "Use monospaced font faces in current buffer."
   (interactive)
   (setq buffer-face-mode-face '(:family "Hack" :height 120))
   (buffer-face-mode))
@@ -504,10 +504,10 @@
 
 (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
 
-;;treat new buffers as modified files
-;;http://stackoverflow.com/a/2592558/2344737
 (add-hook 'find-file-hooks 'assume-new-is-modified)
 (defun assume-new-is-modified ()
+  "Assume a new buffer that doesn't have a file is unmodified.
+http://stackoverflow.com/a/2592558/2344737."
   (when (not (file-exists-p (buffer-file-name)))
     (set-buffer-modified-p t)))
 
@@ -743,7 +743,7 @@
                    '(exit))
              (not (string= (string-trim sig) "finished")))
     (sauron-add-event 'shell 3 sig (lambda() #'(switch-to-buffer-other-window
-                                                "*Async Shell Command*")))))
+                                           "*Async Shell Command*")))))
 
 (use-package erc
   :bind (:map erc-mode-map ("C-c f" . simpson-format-slack-name))
@@ -991,7 +991,7 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
   (interactive
    (let (dir switches)
      (list
-      (when (y-or-n-p "Pick dir?")
+      (when (y-or-n-p "Pick dir? ")
         (setq dir (read-directory-name "rg dir: ")))
       (setq switches (read-string "rg switches: ")))
      (counsel-rg nil dir switches))))
@@ -1027,7 +1027,7 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
 (setq compilation-always-kill t)
 
 (defun create-scratch-buffer ()
-  "create a scratch buffer"
+  "Create a scratch buffer."
   (interactive)
   (switch-to-buffer (get-buffer-create "*scratch*"))
   (insert ";; This buffer is for text that is not saved, and for Lisp evaluation.
@@ -1094,6 +1094,7 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
             (advice-add 'indium-scratch-setup-buffer :after #'simpson-indium-emacs)))
 
 (defun simpson-indium-emacs (buf)
+  "Run after the scratch BUF is setup and add 'use-strict' mode."
   (with-current-buffer buf
     (evil-emacs-state)
     (insert "'use strict';")))
@@ -1138,7 +1139,8 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
       (insert heading " TODO ") t)))
 
 (defun eww-more-readable ()
-  "Makes eww more pleasant to use. Run it after eww buffer is loaded.
+  "Make eww more pleasant to use.
+Run it after eww buffer is loaded.
 Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.html."
   (interactive)
   (setq eww-header-line-format nil)
@@ -1253,6 +1255,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   :load-path "/usr/local/Cellar/mu/0.9.18_1/share/emacs/site-lisp/mu/mu4e")
 
 (defun jcs-view-in-eww (msg)
+  "View MSG in eww."
   (eww-browse-url (concat "file://" (mu4e~write-body-to-html msg)))
   (text-scale-set 1)
   (eww-reload t))
