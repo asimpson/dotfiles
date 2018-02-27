@@ -1313,4 +1313,29 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
                                      (setq compilation-error-regexp-alist
                                            (cons 'node compilation-error-regexp-alist))))
 
+(defun post-to-micro()
+  "Take the current org buffer or a buffer filled with HTML and post to micro.blog converting to HTML first if necessary.
+I assume a authinfo.gpg entry like this:
+machine micro.blog login username password API-TOKEN port API-URL"
+  (interactive)
+  (let* ((org-export-show-temporary-export-buffer nil)
+         (auth-info (auth-source-user-and-password "micro.blog"))
+         (url (plist-get (car (last auth-info)) :port))
+         (token (encode-coding-string (cadr auth-info) 'utf-8))
+         (post (progn
+                 (if (y-or-n-p "Export org mode or use HTML in current buffer? ")
+                     (progn
+                       (org-html-export-as-html nil nil nil t)
+                       (with-current-buffer "*Org HTML Export*"
+                         (buffer-substring-no-properties (point-min) (point-max))))
+                   (with-current-buffer (current-buffer)
+                     (buffer-substring-no-properties (point-min) (point-max))))))
+         (json (json-encode `(("network" . "micro")
+                              ("post" . ,post))))
+         (url-request-method "POST")
+         (url-request-extra-headers `(("Content-Type" . "application/json")
+                                      ("X-API-KEY" . ,token)))
+         (url-request-data (encode-coding-string json 'utf-8)))
+    (url-retrieve url (lambda(_)) nil t)
+    (delete-window)))
 ;;; settings.el ends here
