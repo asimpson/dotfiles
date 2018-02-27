@@ -163,7 +163,9 @@
 (defun simpson-znc()
   "connect to znc irc bouncer. znc-server is defined in irc-accounts.gpg"
   (interactive)
-  (erc-tls :server znc-server
+  (erc-tls :server (if (y-or-n-p "Home? ")
+                       (plist-get znc-server :home)
+                     (plist-get znc-server :remote))
            :port 6697
            :nick "asimpson"
            :password (concat "adam@erc/freenode:"(cadr (auth-source-user-and-password "irc.znc.net")))))
