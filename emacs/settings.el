@@ -1338,4 +1338,16 @@ machine micro.blog login username password API-TOKEN port API-URL"
          (url-request-data (encode-coding-string json 'utf-8)))
     (url-retrieve url (lambda(_)) nil t)
     (delete-window)))
+
+(use-package inf-ruby)
+
+(use-package tide
+  :defer 3
+  :config (progn
+            (defun setup-tide-mode()
+              (tide-setup)
+              (eldoc-mode)
+              (tide-hl-identifier-mode))
+            (add-hook 'rjsx-mode-hook 'setup-tide-mode)))
+
 ;;; settings.el ends here
