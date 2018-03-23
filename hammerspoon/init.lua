@@ -21,6 +21,10 @@ choices =  {
    {
       ['text'] = 'Toggle JS',
       ['func'] = 'toggleJS'
+   },
+   {
+      ['text'] = 'Napkin paste',
+      ['func'] = 'napkinPaste'
    }
 }
 
@@ -28,6 +32,22 @@ function frame()
    os.execute("/usr/local/bin/emacsclient -c -n &")
 end
 
+function napkinPaste()
+    hs.application.launchOrFocus("Napkin")
+    appCheck("Napkin", function()
+      hs.eventtap.keyStroke('cmd', 'n')
+      hs.timer.doAfter(0.5, function() hs.eventtap.keyStroke('cmd', 'v') end)
+    end)
+end
+
+function appCheck(app, cb)
+  local appInstance = hs.appfinder.appFromName(app)
+  if appInstance:isFrontmost() then
+     cb()
+  else
+    appCheck(app, cb)
+  end
+end
 
 function toggleJS()
     hs.application.launchOrFocus("Safari")
