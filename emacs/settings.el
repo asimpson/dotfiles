@@ -164,8 +164,19 @@
               (evil-leader/set-key "s" 'hydra-searching/body)
               (evil-leader/set-key "F" 'simpson-counsel-ag))
             (evil-leader/set-key "c" 'fci-mode)
-            (evil-leader/set-key "v" 'evil-window-vnew)
-            (evil-leader/set-key "x" 'evil-window-new)))
+            (evil-leader/set-key "t" 'hydra-mocha/body)
+            (evil-leader/set-key "v" 'simpson-vert-split)
+            (evil-leader/set-key "x" 'simpson-horizontal-split)))
+
+(defun simpson-vert-split()
+  (interactive)
+  (split-window-right)
+  (evil-window-right 1))
+
+(defun simpson-horizontal-split()
+  (interactive)
+  (split-window-vertically)
+  (evil-window-down 1))
 
 (defun simpson-counsel-ag()
   (interactive)
