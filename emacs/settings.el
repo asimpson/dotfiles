@@ -110,7 +110,7 @@
   :init (add-hook 'after-init-hook #'global-flycheck-mode)
   :bind ("C-SPC '" . flycheck-mode)
   :config (progn
-            (setq flycheck-global-modes '(rjsx-mode emacs-lisp-mode json-mode))
+            (setq flycheck-global-modes '(rjsx-mode emacs-lisp-mode))
             ;;https://github.com/flycheck/flycheck/issues/1129#issuecomment-319600923
             (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))))
 
@@ -406,6 +406,7 @@
             (org-babel-do-load-languages
              'org-babel-load-languages
              '((sh . t)
+               (emacs-lisp . t)
                (js . t)))
             (run-at-time 0 (* 60 15) #'simpson-org-refresh)
             (if (string= (car custom-enabled-themes) "base16-ocean")
@@ -1305,11 +1306,9 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   "Parse m4ue message as html and render it in a new frame using shr."
   (let ((buf "*shr-email*"))
     (when (get-buffer buf) (kill-buffer buf))
-    (switch-to-buffer-other-frame buf)
     (with-current-buffer (get-buffer-create buf)
       (insert (mu4e-message-field msg :body-html))
-      (shr-render-buffer buf)
-      (delete-other-windows))))
+      (shr-render-buffer buf))))
 
 (defun simpson-browse-url()
   (interactive)
@@ -1319,6 +1318,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 
 (defun xah-rename-eww-hook ()
   "Rename eww browser's buffer so sites open in new page."
+  (text-scale-set 1)
   (rename-buffer "eww" t))
 
 (eval-after-load 'eww (lambda()
