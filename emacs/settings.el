@@ -340,14 +340,24 @@
             (setq org-outline-path-complete-in-steps nil)
             (setq org-export-with-toc nil)
             (setq org-refile-targets '(
+                                       (nil . (:level . 1))
+                                       (nil . (:level . 2))
                                        ("personal.txt" . (:level . 1))
                                        ("tasks.txt" . (:level . 1))
+                                       ("side.txt" . (:level . 1))
                                        ("reading.txt" . (:level . 1))))
             (setq org-todo-keywords
                   '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
             (setq org-capture-templates
                   `(("a" "My TODO task format." entry
                      (file ,(concat simpson-dropbox-path "org/tasks.txt"))
+                     "* TODO %? %^g
+    :PROPERTIES:
+    :CREATED: %T
+    :END:")
+
+                    ("s" "Side projects tracker" entry
+                     (file ,(concat simpson-dropbox-path "org/side.txt"))
                      "* TODO %? %^g
     :PROPERTIES:
     :CREATED: %T
@@ -1360,5 +1370,8 @@ machine micro.blog login username password API-TOKEN port API-URL"
               (eldoc-mode)
               (tide-hl-identifier-mode))
             (add-hook 'rjsx-mode-hook 'setup-tide-mode)))
+
+(use-package org-mime
+  :config (require 'org-mime))
 
 ;;; settings.el ends here
