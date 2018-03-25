@@ -65,12 +65,12 @@
 
 (use-package base16-theme
   :if (display-graphic-p)
-  :disabled
-  :init (load-theme 'base16-ocean t))
+  :init (load-theme 'base16-dracula t))
 
 (use-package tomorrow-theme
   :ensure nil
   :if (and (display-graphic-p) (file-exists-p "~/Projects/tomorrow-theme/GNU Emacs"))
+  :disabled
   :load-path "~/Projects/tomorrow-theme/GNU Emacs"
   :init (require 'tomorrow-day-theme)
   (load-theme 'tomorrow-day t))
@@ -307,17 +307,20 @@
   :defer 1
   :bind (("C-SPC r" . diff-hl-revert-hunk)
          ("C-x p" . diff-hl-previous-hunk)
-         ("C-x n" . diff-hl-next-hunk))
-  :config (progn
-            (global-diff-hl-mode)
-            (cond
-             ((string= (car custom-enabled-themes) "tomorrow-day") (progn
-                                                                     (set-face-background 'diff-hl-delete "red3")
-                                                                     (set-face-background 'diff-hl-insert "LightGreen")))
-             ((string= (car custom-enabled-themes) "base16-ocean") (progn
-                                                                     (set-face-background 'diff-hl-change (plist-get base16-ocean-colors :base0C))
-                                                                     (set-face-background 'diff-hl-insert (plist-get base16-ocean-colors :base0B))
-                                                                     (set-face-background 'diff-hl-delete (plist-get base16-ocean-colors :base09)))))))
+         ("C-x n" . diff-hl-next-hunk)) :config (progn
+                                                  (global-diff-hl-mode)
+                                                  (cond
+                                                   ((string= (car custom-enabled-themes) "base16-dracula") (progn
+                                                                                                             (set-face-background 'diff-hl-change (plist-get base16-dracula-colors :base0C))
+                                                                                                             (set-face-background 'diff-hl-insert (plist-get base16-dracula-colors :base0B))
+                                                                                                             (set-face-background 'diff-hl-delete (plist-get base16-dracula-colors :base09))))
+                                                   ((string= (car custom-enabled-themes) "tomorrow-day") (progn
+                                                                                                           (set-face-background 'diff-hl-delete "red3")
+                                                                                                           (set-face-background 'diff-hl-insert "LightGreen")))
+                                                   ((string= (car custom-enabled-themes) "base16-ocean") (progn
+                                                                                                           (set-face-background 'diff-hl-change (plist-get base16-ocean-colors :base0C))
+                                                                                                           (set-face-background 'diff-hl-insert (plist-get base16-ocean-colors :base0B))
+                                                                                                           (set-face-background 'diff-hl-delete (plist-get base16-ocean-colors :base09)))))))
 
 (use-package org
   :defer 2
@@ -539,6 +542,10 @@ http://stackoverflow.com/a/2592558/2344737."
   (set-face-foreground 'vertical-border (plist-get base16-ocean-colors :base02))
   (set-face-background 'fringe (plist-get base16-ocean-colors :base00)))
 
+(when (string= (car custom-enabled-themes) "base16-dracula")
+  (set-face-foreground 'vertical-border (plist-get base16-dracula-colors :base02))
+  (set-face-background 'fringe (plist-get base16-dracula-colors :base00)))
+
 (setq epg-gpg-program "/usr/local/bin/gpg")
 
 ;;http://pages.sachachua.com/.emacs.d/Sacha.html#orgheadline15
@@ -601,18 +608,31 @@ http://stackoverflow.com/a/2592558/2344737."
 
 (set-face-attribute 'mode-line nil :height 1.0 :box nil)
 
-(if (string= (car custom-enabled-themes) "base16-ocean")
-    (progn
-      (set-face-attribute 'mode-line nil
-                          :background (plist-get base16-ocean-colors :base06)
-                          :foreground (plist-get base16-ocean-colors :base01)
-                          :box `(:line-width 3 :color ,(plist-get base16-ocean-colors :base06) :style nil))
-      (set-face-attribute 'mode-line-inactive nil
-                          :box `(:line-width 3 :color ,(plist-get base16-ocean-colors :base01) :style nil)))
-  (set-face-attribute 'mode-line nil
-                      :background "khaki1" :box '(:line-width 5 :color "khaki1"))
-  (set-face-attribute 'mode-line-inactive nil
-                      :background "LightCyan2" :box '(:line-width 5 :color "LightCyan2")))
+(defun modeline-theme()
+  (when (string= (car custom-enabled-themes) "base16-ocean")
+    (set-face-attribute 'mode-line nil
+                        :background (plist-get base16-ocean-colors :base06)
+                        :foreground (plist-get base16-ocean-colors :base01)
+                        :box `(:line-width 3 :color ,(plist-get base16-ocean-colors :base06) :style nil))
+    (set-face-attribute 'mode-line-inactive nil
+                        :box `(:line-width 3 :color ,(plist-get base16-ocean-colors :base01) :style nil)))
+
+  (when (string= (car custom-enabled-themes) "tomorrow-day")
+    (set-face-attribute 'mode-line nil
+                        :background "khaki1" :box '(:line-width 5 :color "khaki1"))
+    (set-face-attribute 'mode-line-inactive nil
+                        :background "LightCyan2" :box '(:line-width 5 :color "LightCyan2")))
+
+  (when (string= (car custom-enabled-themes) "base16-dracula")
+    (set-face-attribute 'mode-line nil
+                        :background (plist-get base16-dracula-colors :base04)
+                        :foreground (plist-get base16-dracula-colors :base01)
+                        :box `(:line-width 5 :color ,(plist-get base16-dracula-colors :base04) :style nil))
+    (set-face-attribute 'mode-line-inactive nil
+                        :background (plist-get base16-dracula-colors :base01)
+                        :foreground (plist-get base16-dracula-colors :base06)
+                        :box `(:line-width 5 :color ,(plist-get base16-dracula-colors :base01) :style nil))))
+(modeline-theme)
 
 (set-face-background 'fringe nil)
 
@@ -620,7 +640,7 @@ http://stackoverflow.com/a/2592558/2344737."
   "Change mode line color based on evil state."
   (cond
    ((evil-insert-state-p) (set-face-attribute 'mode-line nil :background "IndianRed" :foreground "white" :box '(:line-width 5 :color "IndianRed")))
-   ((evil-normal-state-p) (set-face-attribute 'mode-line nil :background "khaki1" :foreground "black" :box '(:line-width 5 :color "khaki1")))))
+   ((evil-normal-state-p) (modeline-theme))))
 
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (setq ediff-split-window-function 'split-window-horizontally)
@@ -1373,5 +1393,7 @@ machine micro.blog login username password API-TOKEN port API-URL"
 
 (use-package org-mime
   :config (require 'org-mime))
+
+(use-package rainbow-mode)
 
 ;;; settings.el ends here
