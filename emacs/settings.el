@@ -345,10 +345,7 @@
             (setq org-refile-targets '(
                                        (nil . (:level . 1))
                                        (nil . (:level . 2))
-                                       ("personal.txt" . (:level . 1))
-                                       ("tasks.txt" . (:level . 1))
-                                       ("side.txt" . (:level . 1))
-                                       ("reading.txt" . (:level . 1))))
+                                       (org-agenda-files . (:level . 1))))
             (setq org-todo-keywords
                   '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
             (setq org-capture-templates
@@ -1394,6 +1391,7 @@ machine micro.blog login username password API-TOKEN port API-URL"
 (use-package org-mime
   :config (require 'org-mime))
 
-(use-package rainbow-mode)
+(use-package rainbow-mode
+  :diminish "")
 
 ;;; settings.el ends here
