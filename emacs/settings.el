@@ -622,6 +622,9 @@ http://stackoverflow.com/a/2592558/2344737."
                         :background "LightCyan2" :box '(:line-width 5 :color "LightCyan2")))
 
   (when (string= (car custom-enabled-themes) "base16-dracula")
+    (set-face-attribute 'header-line nil
+                        :background (plist-get base16-dracula-colors :base00)
+                        :box `(:color ,(plist-get base16-dracula-colors :base00)))
     (set-face-attribute 'mode-line nil
                         :background (plist-get base16-dracula-colors :base04)
                         :foreground (plist-get base16-dracula-colors :base01)
