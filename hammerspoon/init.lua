@@ -23,6 +23,10 @@ choices =  {
       ['func'] = 'toggleJS'
    },
    {
+      ['text'] = 'Join Zoom',
+      ['func'] = 'joinZoom'
+   },
+   {
       ['text'] = 'Napkin paste',
       ['func'] = 'napkinPaste'
    }
@@ -30,6 +34,17 @@ choices =  {
 
 function frame()
    os.execute("/usr/local/bin/emacsclient -c -n &")
+end
+
+function joinZoom()
+    hs.application.launchOrFocus("zoom.us")
+    appCheck('zoom.us', function()
+      hs.timer.doAfter(2.5, function()
+        hs.eventtap.keyStroke('cmd', 'j')
+        hs.eventtap.keyStroke('cmd', 'v')
+        hs.eventtap.keyStroke({}, 'return')
+      end)
+    end)
 end
 
 function napkinPaste()
@@ -63,7 +78,7 @@ end
 
 function capture()
    os.execute("/usr/local/bin/emacsclient -c -n -e '(org-capture)' &")
-   hs.timer.doAfter(0.2, function() hs.application.find('Emacs'):findWindow("*Org Select*"):focus() end)
+   hs.timer.doAfter(0.5, function() hs.application.find('Emacs'):findWindow("*Org Select*"):focus() end)
 end
 
 function toggleZoomMute()
