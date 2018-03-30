@@ -107,10 +107,9 @@
 (use-package flycheck
   :diminish "lint"
   :defer 1
-  :init (add-hook 'after-init-hook #'global-flycheck-mode)
   :bind ("C-SPC '" . flycheck-mode)
   :config (progn
-            (setq flycheck-global-modes '(rjsx-mode emacs-lisp-mode))
+            (setq flycheck-global-modes '(rjsx-mode emacs-lisp-mode rust-mode))
             ;;https://github.com/flycheck/flycheck/issues/1129#issuecomment-319600923
             (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))))
 
@@ -1220,8 +1219,21 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
            (add-hook 'rust-mode-hook (lambda () (setq mode-name "rust")))))
 
 (use-package cargo
+  :defer 1
   :config(progn
            (add-hook 'rust-mode-hook 'cargo-minor-mode)))
+
+(use-package flycheck-rust
+  :defer 1
+  :config (add-hook 'flycheck-mode-hook 'flycheck-rust-setup))
+
+(use-package racer
+  :defer 1
+  :config (progn
+            (setq racer-cmd "~/.cargo/bin/racer")
+            (add-hook 'rust-mode-hook 'racer-mode)
+            (add-hook 'racer-mode-hook 'eldoc-mode)
+            (add-hook 'racer-mode-hook 'company-mode)))
 
 (use-package helpful)
 
@@ -1396,5 +1408,13 @@ machine micro.blog login username password API-TOKEN port API-URL"
 
 (use-package rainbow-mode
   :diminish "")
+
+(use-package persistent-scratch
+  :defer 1
+  :config (progn
+            (persistent-scratch-setup-default)
+            (persistent-scratch-autosave-mode)))
+
+(setq warning-suppress-types '(undo discard-info))
 
 ;;; settings.el ends here
