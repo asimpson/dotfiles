@@ -34,6 +34,7 @@ choices =  {
 
 function frame()
    os.execute("/usr/local/bin/emacsclient -c -n &")
+   hs.timer.doAfter(0.5, function() hs.application.find('Emacs'):findWindow("*scratch*"):focus() end)
 end
 
 function joinZoom()
