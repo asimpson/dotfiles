@@ -73,9 +73,8 @@
   :disabled
   :load-path "~/Projects/tomorrow-theme/GNU Emacs"
   :init (require 'tomorrow-day-theme)
+  :config (set-face-background 'highlight "lavender")
   (load-theme 'tomorrow-day t))
-
-(eval-after-load 'tomorrow-day-theme (set-face-background 'highlight "lavender"))
 
 (use-package exec-path-from-shell
   :defer 2
@@ -286,6 +285,7 @@
             (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
             (put 'magit-clean 'disabled nil)
             (add-hook 'magit-status-sections-hook 'magit-insert-worktrees)
+            (setq magit-commit-show-diff nil)
             (when (string= (car custom-enabled-themes) "base16-ocean")
               (set-face-foreground 'magit-blame-date (plist-get base16-ocean-colors :base0A))
               (set-face-foreground 'magit-blame-hash (plist-get base16-ocean-colors :base0A))
@@ -1231,6 +1231,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   :defer 1
   :config (progn
             (setq racer-cmd "~/.cargo/bin/racer")
+            (setq racer-rust-src-path "/Users/asimpson/.rustup/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src")
             (add-hook 'rust-mode-hook 'racer-mode)
             (add-hook 'racer-mode-hook 'eldoc-mode)
             (add-hook 'racer-mode-hook 'company-mode)))

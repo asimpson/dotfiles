@@ -18,3 +18,4 @@ todo.txt
 package-lock.json
 .dir-locals.el
 jsconfig.json
+fast.sh
