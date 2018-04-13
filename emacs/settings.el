@@ -526,6 +526,7 @@
 (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
 
 (add-hook 'find-file-hooks 'assume-new-is-modified)
+
 (defun assume-new-is-modified ()
   "Assume a new buffer that doesn't have a file is unmodified.
 http://stackoverflow.com/a/2592558/2344737."
@@ -1221,6 +1222,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (use-package cargo
   :defer 1
   :config(progn
+           (setq cargo-process--command-fmt "fmt -- --force")
            (add-hook 'rust-mode-hook 'cargo-minor-mode)))
 
 (use-package flycheck-rust
@@ -1327,6 +1329,28 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   (interactive)
   (call-process "open" nil nil nil (get-text-property (point) 'shr-url)))
 
+(defmacro json-parse (buffer)
+  "Parse and return JSON from buffer. Ideally for the url-retrieve family of funcs."
+  `(with-current-buffer ,buffer (json-read-from-string (buffer-substring-no-properties url-http-end-of-headers (point-max)))))
+
+(defun ltc()
+  "Get LTC price from coinbase API via synchronous url retrieve."
+  (interactive)
+  (let ((data (json-parse (url-retrieve-synchronously "https://api.coinbase.com/v2/prices/LTC-USD/spot" t))))
+    (message "LTC: $%s" (alist-get 'amount (car data)))))
+
+(defun new-ltc()
+  "Get LTC price from coinbase API via async url retrieve."
+  (interactive)
+  (with-temp-buffer (url-retrieve "https://api.coinbase.com/v2/prices/LTC-USD/spot"
+                                  (lambda(_) (let ((data (json-parse (current-buffer))))
+                                          (message "LTC: $%s" (alist-get 'amount (car data))))))))
+
+(defun simpson-lambda(file)
+  (interactive
+   (list (read-file-name "Which lambda?" "/Users/asimpson/Projects/blog-admin/packages/node_modules/@lambdas")))
+  (async-shell-command (concat "node run.js " (file-name-base file))))
+
 (add-to-list 'auto-mode-alist '("\\.hbs\\'" . html-mode))
 
 (defun xah-rename-eww-hook ()
@@ -1417,5 +1441,13 @@ machine micro.blog login username password API-TOKEN port API-URL"
             (persistent-scratch-autosave-mode)))
 
 (setq warning-suppress-types '(undo discard-info))
+
+(defun simpson-clean-shell()
+  (font-lock-mode)
+  (undo-tree-mode))
+
+(add-hook 'shell-mode-hook 'simpson-clean-shell)
+
+(setq eshell-command-completion-function 'completion-at-point)
 
 ;;; settings.el ends here
