@@ -1,0 +1,158 @@
+
+# Emacs Lite
+
+This is an attempt to publish a "lite" version of Emacs with *just* the essential modern packages.
+
+
+## Config
+
+    ;; -*- lexical-binding: t; -*-
+    (setq gc-cons-threshold 64000000)
+    (add-hook 'after-init-hook (lambda ()
+                                 ;; restore after startup
+                                 (setq gc-cons-threshold 800000)))
+
+    (require 'package)
+
+    (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+
+    (add-to-list 'package-archives
+                 '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+
+    (package-initialize)
+
+    (unless (package-installed-p 'use-package)
+      (package-refresh-contents)
+      (package-install 'use-package))
+
+    (eval-when-compile
+      (require 'use-package))
+
+    (setq-default use-package-always-defer t
+                  use-package-always-ensure t
+                  indent-tabs-mode nil
+                  tab-width 2
+                  css-indent-offset 2)
+
+    (fset 'yes-or-no-p 'y-or-n-p)
+
+    (setq make-backup-files nil
+          auto-save-default nil
+          inhibit-splash-screen t
+          confirm-kill-emacs 'yes-or-no-p
+          epg-gpg-program "/usr/local/bin/gpg"
+          visible-bell nil)
+
+    (menu-bar-mode -1)
+    (tool-bar-mode -1)
+
+    (setq ring-bell-function (lambda ()
+                               (invert-face 'mode-line)
+                               (run-with-timer 0.1 nil 'invert-face 'mode-line)))
+
+    (setq exec-path (append exec-path '("/usr/local/bin")))
+
+    (use-package flycheck
+      :defer 1
+      :config (progn
+                (setq flycheck-global-modes '(rjsx-mode emacs-lisp-mode))
+                ;;https://github.com/flycheck/flycheck/issues/1129#issuecomment-319600923
+                (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))))
+
+    (use-package projectile
+      :config (progn
+                (projectile-global-mode)
+                (setq projectile-enable-caching nil)
+                (setq projectile-completion-system 'ivy)))
+
+    (use-package magit
+      :pin melpa-stable
+      :defer 1
+      :config (progn
+                (put 'magit-clean 'disabled nil)
+                (add-hook 'magit-status-sections-hook 'magit-insert-worktrees)
+                (setq magit-commit-show-diff nil)))
+
+    (use-package markdown-mode
+      :mode (("\\.md\\'" . markdown-mode))
+      :config (progn
+                (add-hook 'markdown-mode-hook 'visual-line-mode)
+                (add-hook 'markdown-mode-hook (lambda () (flyspell-mode 1)))))
+
+    (use-package rjsx-mode
+      :interpreter (("node" . rjsx-mode))
+      :mode (("\\.js?\\'" . rjsx-mode)
+             ("\\.jsx?\\'" . rjsx-mode))
+      :config (progn
+                (electric-indent-mode -1)
+                (setq js2-basic-offset 2
+                      js2-highlight-level 3
+                      js2-bounce-indent-p t
+                      js2-mode-show-strict-warnings nil)))
+
+    (use-package which-key
+      :defer 1
+      :config (which-key-mode))
+
+    (use-package reveal-in-osx-finder)
+
+    (use-package emmet-mode
+      :defer 1
+      :config (progn
+                (setq emmet-move-cursor-between-quotes t)
+                (add-hook 'sgml-mode-hook 'emmet-mode)
+                (add-hook 'css-mode-hook  'emmet-mode)))
+
+    (setq dired-dwim-target t
+          dired-recursive-deletes t
+          dired-use-ls-dired nil
+          delete-by-moving-to-trash t)
+
+    (use-package editorconfig
+      :defer 1
+      :config (editorconfig-mode 1))
+
+    (use-package flyspell
+      :defer 1
+      :config (progn
+                (setq flyspell-issue-message-flag nil)))
+
+    (use-package ivy
+      :defer 1
+      :config (progn
+                (ivy-mode)
+                (setq ivy-use-virtual-buffers t)
+                (setq ivy-count-format "")
+                (setq ivy-use-selectable-prompt t)))
+
+    (use-package counsel
+      :defer 1
+      :config (progn
+                (global-set-key (kbd "M-x") 'counsel-M-x)))
+
+    (use-package swiper :defer 1)
+
+    (use-package vlf)
+
+
+## Helpful Keybinds
+
+-   `C-x C-c` Exit Emacs
+-   `C-x b` Switch to buffer
+-   `C-g` Cancel any operation
+-   `M-x` Command prompt
+-   `C-p` Go up a line
+-   `C-n` Go down a line
+
+
+## Helpful Commands
+
+
+### Swiper
+
+-   `swiper` Search in buffer
+
+
+### Magit
+
+-   `magit-status` Git status.
