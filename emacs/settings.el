@@ -1329,21 +1329,21 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   (interactive)
   (call-process "open" nil nil nil (get-text-property (point) 'shr-url)))
 
-(defmacro json-parse (buffer)
+(defmacro json-parse! (buffer)
   "Parse and return JSON from buffer. Ideally for the url-retrieve family of funcs."
   `(with-current-buffer ,buffer (json-read-from-string (buffer-substring-no-properties url-http-end-of-headers (point-max)))))
 
 (defun ltc()
   "Get LTC price from coinbase API via synchronous url retrieve."
   (interactive)
-  (let ((data (json-parse (url-retrieve-synchronously "https://api.coinbase.com/v2/prices/LTC-USD/spot" t))))
+  (let ((data (json-parse! (url-retrieve-synchronously "https://api.coinbase.com/v2/prices/LTC-USD/spot" t))))
     (message "LTC: $%s" (alist-get 'amount (car data)))))
 
 (defun new-ltc()
   "Get LTC price from coinbase API via async url retrieve."
   (interactive)
   (with-temp-buffer (url-retrieve "https://api.coinbase.com/v2/prices/LTC-USD/spot"
-                                  (lambda(_) (let ((data (json-parse (current-buffer))))
+                                  (lambda(_) (let ((data (json-parse! (current-buffer))))
                                           (message "LTC: $%s" (alist-get 'amount (car data))))))))
 
 (defun simpson-lambda(file)
