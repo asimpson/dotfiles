@@ -1,3 +1,4 @@
+(setq load-prefer-newer t)
 (setq gc-cons-threshold 64000000)
 (add-hook 'after-init-hook (lambda ()
                             ;; restore after startup

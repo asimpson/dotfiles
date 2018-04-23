@@ -3,6 +3,7 @@ This is an attempt to publish a "lite" version of Emacs with /just/ the essentia
 ** Config
    #+BEGIN_SRC emacs-lisp
      ;; -*- lexical-binding: t; -*-
+     (setq load-prefer-newer t)
      (setq gc-cons-threshold 64000000)
      (add-hook 'after-init-hook (lambda ()
                                   ;; restore after startup
