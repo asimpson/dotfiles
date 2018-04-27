@@ -974,6 +974,11 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
   :config (setq ivy-lobsters-keep-focus t)
   :load-path "~/Projects/ivy-lobsters")
 
+(use-package pinboard-popular
+  :ensure nil
+  :after ivy
+  :load-path "~/Projects/ivy-pinboard-popular")
+
 (use-package ivy-feedwrangler
   :ensure nil
   :after ivy
@@ -1449,5 +1454,7 @@ machine micro.blog login username password API-TOKEN port API-URL"
 (add-hook 'shell-mode-hook 'simpson-clean-shell)
 
 (setq eshell-command-completion-function 'completion-at-point)
+
+(use-package elquery)
 
 ;;; settings.el ends here
