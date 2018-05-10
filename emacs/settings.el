@@ -752,9 +752,14 @@ http://stackoverflow.com/a/2592558/2344737."
             (setq delete-by-moving-to-trash t)
             (setq dired-use-ls-dired nil)
             (define-key dired-mode-map "e" 'epa-dired-do-encrypt)
+            (define-key dired-mode-map (kbd "C-o") 'simpson-dired-open-at-point)
             (simpson-make-neutral dired-mode-map)
             (simpson-make-neutral--keys dired-mode-map)
             (define-key dired-mode-map "E" 'epa-dired-do-decrypt)))
+
+(defun simpson-dired-open-at-point()
+  (interactive)
+  (call-process "open" nil nil nil (dired-filename-at-point)))
 
 (use-package editorconfig
   :diminish ""
