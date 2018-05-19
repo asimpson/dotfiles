@@ -1290,7 +1290,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   :load-path "/usr/local/Cellar/mu/0.9.18_1/share/emacs/site-lisp/mu/mu4e"
   :config (progn
             (simpson-load-file "~/.dotfiles/emacs/mu4e.el.gpg")
-            (set-face-attribute 'mu4e-highlight-face nil :background "LightGreen" :foreground nil)
+            (set-face-attribute 'mu4e-highlight-face nil :background "DarkRed" :foreground nil)
             (setq mu4e-maildir "~/Mail")
             (setq mu4e-view-show-images t)
             (setq send-mail-function 'smtpmail-send-it)
