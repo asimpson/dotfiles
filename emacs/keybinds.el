@@ -29,9 +29,10 @@
   (interactive "sGit url: ")
   (let (
         (projectsDir "~/Projects/")
-        (name (nth 0 (split-string (nth 1 (split-string url "/")) "\\."))))
+        (name (car (split-string (car (last (split-string url "/"))) "\\."))))
     (shell-command (concat "git clone " url " " projectsDir name))
     (eyebrowse-create-window-config)
+    (eyebrowse-rename-window-config (eyebrowse--get 'current-slot) name)
     (dired (concat projectsDir name))))
 
 (global-set-key (kbd "C-SPC k b") 'simpson-project-clone)
