@@ -1306,8 +1306,6 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
             (setq user-full-name "Adam Simpson")
             (setq mu4e-confirm-quit nil)
             (setq mu4e~view-html-text 'text)
-            (add-to-list 'mu4e-view-actions '("eww view" . jcs-view-in-eww) t)
-            (add-to-list 'mu4e-view-actions '("Shr view" . simpson-shr-view) t)
             (add-to-list 'mu4e-view-actions
                          '("ViewInBrowser" . mu4e-action-view-in-browser) t)
             (define-key mu4e-headers-mode-map (kbd "C-c C-u") 'mu4e-update-index)
@@ -1327,24 +1325,6 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   :ensure nil
   :defer 1
   :load-path "/usr/local/Cellar/mu/0.9.18_1/share/emacs/site-lisp/mu/mu4e")
-
-(defun jcs-view-in-eww (msg)
-  "View MSG in eww."
-  (eww-browse-url (concat "file://" (mu4e~write-body-to-html msg)))
-  (text-scale-set 1)
-  (eww-reload t))
-
-(defun simpson-shr-view(msg)
-  "Parse m4ue message as html and render it in a new frame using shr."
-  (let ((buf "*shr-email*"))
-    (when (get-buffer buf) (kill-buffer buf))
-    (with-current-buffer (get-buffer-create buf)
-      (insert (mu4e-message-field msg :body-html))
-      (shr-render-buffer buf))))
-
-(defun simpson-browse-url()
-  (interactive)
-  (call-process "open" nil nil nil (get-text-property (point) 'shr-url)))
 
 (defmacro json-parse! (buffer)
   "Parse and return JSON from buffer. Ideally for the url-retrieve family of funcs."
