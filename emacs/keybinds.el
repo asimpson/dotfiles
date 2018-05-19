@@ -120,24 +120,24 @@
 
 ;;narrow region
 (global-set-key (kbd "C-SPC n") 'narrow-to-region)
-;widen
+;;widen
 (global-set-key (kbd "C-SPC N") 'widen)
 
 (setq minor-mode-perm-list (copy-alist minor-mode-alist))
 
 (setq minor-mode-alist (list))
 
-;revert buffer to last-commit
+;;revert buffer to last-commit
 (define-key global-map (kbd "C-SPC R") 'vc-revert)
 
 (global-set-key "\M-h" 'help-command)
 
-;write buffer to fil0
+;;write buffer to fil0
 (define-key global-map (kbd "C-SPC w") 'write-file)
 (define-key global-map (kbd "s-s") 'simpson-save)
 
 (defun simpson-save()
-"save buffer"
+  "save buffer"
   (interactive)
   (save-buffer))
 
