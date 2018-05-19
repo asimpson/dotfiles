@@ -91,7 +91,7 @@ au BufRead,BufNewFile *.md set ft=markdown syntax=markdown
 au BufRead,BufNewFile *.hbs set syntax=html
 
 "highlight StatusLine ctermfg=black ctermbg=White cterm=bold
-highlight StatusLine cterm=reverse ctermfg=yellow  ctermbg=white
+"highlight StatusLine cterm=reverse ctermfg=yellow  ctermbg=white
 " file path [line number] [encoding] [filetype]
 "[%{strlen(&fenc)?&fenc:&enc}]\
 set statusline=%F%m%r%h%w\ [%n]\%=\ [line\ %l\/%L]\ [%{&filetype}]
@@ -130,7 +130,7 @@ set undofile
 set undolevels=1000 "maximum number of changes that can be undone
 set undoreload=10000 "maximum number lines to save for undo on a buffer reload
 
-set guifont=Hack:h10
+set guifont=Hack:h12
 "project specific vim settings
 set exrc
 
