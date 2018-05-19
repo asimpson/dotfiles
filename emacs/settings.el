@@ -1469,4 +1469,8 @@ machine micro.blog login username password API-TOKEN port API-URL"
 
 (use-package elquery)
 
+(use-package package-lint)
+
+(use-package flymake-json
+  :init (add-hook 'json-mode-hook 'flymake-json-load))
 ;;; settings.el ends here
