@@ -853,6 +853,7 @@ http://stackoverflow.com/a/2592558/2344737."
             (define-key dired-mode-map "r" 'counsel-rg)
             (simpson-make-neutral ivy-occur-mode-map)
             (setq ivy-use-selectable-prompt t)
+            (ivy-add-actions 'counsel-find-file '(("D" simpson-delete "delete")))
             (ivy-add-actions 'counsel-ag '(("O" simpson-other-window "open in new window")))
             (ivy-add-actions 'counsel-rg '(("O" simpson-other-window "open in new window")))))
 
@@ -869,6 +870,9 @@ http://stackoverflow.com/a/2592558/2344737."
             (define-key dired-mode-map "f" 'counsel-find-file)
             (global-set-key (kbd "<f1> f") 'counsel-describe-function)
             (global-set-key (kbd "<f1> v") 'counsel-describe-variable)))
+
+(defun simpson-delete(x)
+  (call-process "trash" nil nil nil x))
 
 (use-package counsel-projectile
   :if (not simpson-helm)
