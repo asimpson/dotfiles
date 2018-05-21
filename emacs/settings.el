@@ -1458,4 +1458,13 @@ machine micro.blog login username password API-TOKEN port API-URL"
   :defer 1
   :diminish "clip"
   :config (osx-clipboard-mode))
+
+(defun simpson-cancel-timer()
+  "Browse timer list by function name and cancel the selected timer."
+  (interactive)
+  (let ((selection (completing-read "Which timer: "
+                                    (mapcar (lambda(timer)
+                                              (propertize (symbol-name (nth 5 (append timer nil))) 'timer timer)) timer-list))))
+    (cancel-timer (get-text-property 0 'timer selection))))
+
 ;;; settings.el ends here
