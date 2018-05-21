@@ -108,6 +108,7 @@
   :defer 1
   :bind ("C-SPC '" . flycheck-mode)
   :config (progn
+            (global-flycheck-mode)
             (setq flycheck-global-modes '(rjsx-mode emacs-lisp-mode rust-mode))
             ;;https://github.com/flycheck/flycheck/issues/1129#issuecomment-319600923
             (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))))
