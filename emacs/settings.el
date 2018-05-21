@@ -1453,4 +1453,9 @@ machine micro.blog login username password API-TOKEN port API-URL"
 
 (use-package flymake-json
   :init (add-hook 'json-mode-hook 'flymake-json-load))
+
+(use-package osx-clipboard
+  :defer 1
+  :diminish "clip"
+  :config (osx-clipboard-mode))
 ;;; settings.el ends here
