@@ -129,6 +129,11 @@ This is an attempt to publish a "lite" version of Emacs with /just/ the essentia
      (use-package swiper :defer 1)
 
      (use-package vlf)
+
+     (use-package osx-clipboard
+       :if (eq system-type 'darwin)
+       :defer 1
+       :config (osx-clipboard-mode))
    #+END_SRC
 ** Helpful Keybinds
 - ~C-x C-c~ Exit Emacs
