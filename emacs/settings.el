@@ -753,7 +753,7 @@ http://stackoverflow.com/a/2592558/2344737."
 
 (defun simpson-dired-open-at-point()
   (interactive)
-  (call-process "open" nil nil nil (dired-filename-at-point)))
+  (call-process "open" nil nil nil (file-truename (dired-file-name-at-point))))
 
 (use-package editorconfig
   :diminish ""
