@@ -287,6 +287,7 @@
             (put 'magit-clean 'disabled nil)
             (add-hook 'magit-status-sections-hook 'magit-insert-worktrees)
             (setq magit-commit-show-diff nil)
+            (setq magit-log-section-commit-count 0)
             (when (string= (car custom-enabled-themes) "base16-ocean")
               (set-face-foreground 'magit-blame-date (plist-get base16-ocean-colors :base0A))
               (set-face-foreground 'magit-blame-hash (plist-get base16-ocean-colors :base0A))
@@ -579,7 +580,7 @@ http://stackoverflow.com/a/2592558/2344737."
     (if (> (length output) 0)
         (progn
           (setq num (number-to-string (length (split-string output "\n" t))))
-          (setq simpson-mail-count (concat (propertize "mail icon"
+          (setq simpson-mail-count (concat (propertize "mail"
                                                        'display display-time-mail-icon
                                                        'face display-time-mail-face
                                                        'help-echo (concat num " " "unread mail")
@@ -681,7 +682,6 @@ http://stackoverflow.com/a/2592558/2344737."
 (use-package yasnippet
   :diminish yas-minor-mode
   :bind ("C-SPC e" . yas-expand)
-  :load-path "~/.emacs.d/elpa/yasnippet"
   :defer 1
   :init (progn
           (add-hook 'js2-mode-hook #'yas-minor-mode)
@@ -804,16 +804,6 @@ http://stackoverflow.com/a/2592558/2344737."
             (add-hook 'erc-mode-hook 'visual-line-mode)
             (add-hook 'erc-mode-hook (lambda () (setq mode-name "irc")))))
 
-(defun simpson-format-slack-name()
-  "prepend the @ symbol in erc for slack"
-  (interactive)
-  (backward-word)
-  (insert "@")
-  (forward-word)
-  (when (looking-at ":")
-    (delete-char 1)
-    (insert " ")))
-
 (use-package emoji-cheat-sheet-plus
   :defer 2
   :init (progn
@@ -843,11 +833,11 @@ http://stackoverflow.com/a/2592558/2344737."
             (define-key global-map (kbd "C-=") 'ivy-switch-buffer)
             (delete '(counsel-M-x . "^") ivy-initial-inputs-alist)
             (push '(counsel-M-x . "") ivy-initial-inputs-alist)
-            (ivy-add-actions 'counsel-projectile-ag '(("O" simpson-other-window "open in new window")))
-            (define-key dired-mode-map "r" 'counsel-rg)
             (simpson-make-neutral ivy-occur-mode-map)
             (setq ivy-use-selectable-prompt t)
+            (define-key dired-mode-map "r" 'counsel-rg)
             (ivy-add-actions 'counsel-find-file '(("D" simpson-delete "delete")))
+            (ivy-add-actions 'counsel-projectile-ag '(("O" simpson-other-window "open in new window")))
             (ivy-add-actions 'counsel-ag '(("O" simpson-other-window "open in new window")))
             (ivy-add-actions 'counsel-rg '(("O" simpson-other-window "open in new window")))))
 
@@ -975,12 +965,12 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
   :ensure nil
   :after ivy
   :config (setq ivy-lobsters-keep-focus t)
-  :load-path "~/Projects/ivy-lobsters")
+  :if (file-exists-p "~/Projects/ivy-lobsters/")
+  :load-path "~/Projects/ivy-lobsters/")
 
 (use-package pinboard-popular
   :ensure nil
-  :after ivy
-  :load-path "~/Projects/ivy-pinboard-popular")
+  :load-path "~/Projects/ivy-pinboard-popular/")
 
 (use-package ivy-feedwrangler
   :ensure nil
@@ -1321,7 +1311,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   :load-path "/usr/local/Cellar/mu/0.9.18_1/share/emacs/site-lisp/mu/mu4e")
 
 (defmacro json-parse! (buffer)
-  "Parse and return JSON from buffer. Ideally for the url-retrieve family of funcs."
+  "Parse and return JSON from BUFFER.  Ideally for the 'url-retrieve' family of funcs."
   `(with-current-buffer ,buffer (json-read-from-string (buffer-substring-no-properties url-http-end-of-headers (point-max)))))
 
 (defun ltc()
@@ -1383,8 +1373,10 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
                                            (cons 'node compilation-error-regexp-alist))))
 
 (defun post-to-micro()
-  "Take the current org buffer or a buffer filled with HTML and post to micro.blog converting to HTML first if necessary.
+  "Take current org buffer or a buffer filled with HTML and post to micro.blog.
+This converts to HTML first if necessary.
 I assume a authinfo.gpg entry like this:
+
 machine micro.blog login username password API-TOKEN port API-URL"
   (interactive)
   (let* ((org-export-show-temporary-export-buffer nil)
@@ -1450,8 +1442,8 @@ machine micro.blog login username password API-TOKEN port API-URL"
 
 (use-package osx-clipboard
   :defer 1
-  :diminish "clip"
-  :config (osx-clipboard-mode))
+  :if (eq system-type 'darwin)
+  :diminish "")
 
 (defun simpson-cancel-timer()
   "Browse timer list by function name and cancel the selected timer."
