@@ -141,8 +141,6 @@
   (interactive)
   (save-buffer))
 
-(define-key global-map (kbd "C-SPC L") 'linum-mode)
-
 (define-key global-map (kbd "s-t") nil)
 (define-key global-map (kbd "s-p") nil)
 

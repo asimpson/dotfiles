@@ -402,7 +402,7 @@
             (setq org-export-backends '(ascii html icalendar latex md))
             (org-babel-do-load-languages
              'org-babel-load-languages
-             '((sh . t)
+             '((shell . t)
                (emacs-lisp . t)
                (js . t)))
             (run-at-time 0 (* 60 15) #'simpson-org-refresh)
@@ -663,13 +663,6 @@ http://stackoverflow.com/a/2592558/2344737."
 
 (use-package fill-column-indicator
   :config (setq fci-rule-column 80))
-
-(use-package relative-line-numbers
-  :diminish ""
-  :bind ("C-SPC l" . relative-line-numbers-mode)
-  :config (progn
-            (when (string= (car custom-enabled-themes) "base16-ocean")
-              (set-face-foreground 'relative-line-numbers-current-line (plist-get base16-ocean-colors :base09)))))
 
 (use-package avy
   :defer 1
@@ -1467,5 +1460,12 @@ machine micro.blog login username password API-TOKEN port API-URL"
                                     (mapcar (lambda(timer)
                                               (propertize (symbol-name (nth 5 (append timer nil))) 'timer timer)) timer-list))))
     (cancel-timer (get-text-property 0 'timer selection))))
+
+
+(add-hook 'prog-mode-hook (lambda()
+                            (display-line-numbers-mode)
+                            (setq display-line-numbers 'relative)))
+
+(set-face-background 'line-number nil)
 
 ;;; settings.el ends here
