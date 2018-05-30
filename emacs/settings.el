@@ -1461,4 +1461,14 @@ machine micro.blog login username password API-TOKEN port API-URL"
 
 (set-face-background 'line-number nil)
 
+(pixel-scroll-mode)
+
+(add-to-list 'default-frame-alist
+             '(ns-transparent-titlebar . t))
+
+(add-to-list 'default-frame-alist
+             '(ns-appearance . dark))
+
+(setq frame-title-format nil)
+
 ;;; settings.el ends here
