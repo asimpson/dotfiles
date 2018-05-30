@@ -580,12 +580,12 @@ http://stackoverflow.com/a/2592558/2344737."
     (if (> (length output) 0)
         (progn
           (setq num (number-to-string (length (split-string output "\n" t))))
-          (setq simpson-mail-count (concat (propertize "mail"
-                                                       'display display-time-mail-icon
-                                                       'face display-time-mail-face
-                                                       'help-echo (concat num " " "unread mail")
-                                                       'keymap '(mode-line keymap
-                                                                           (mouse-1 . mu4e)))
+          (setq simpson-mail-count (concat " " (propertize "mail"
+                                                           'display display-time-mail-icon
+                                                           'face display-time-mail-face
+                                                           'help-echo (concat num " " "unread mail")
+                                                           'keymap '(mode-line keymap
+                                                                               (mouse-1 . mu4e)))
                                            " " num)))
       (setq simpson-mail-count nil))))
 
