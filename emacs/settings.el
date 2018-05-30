@@ -1398,6 +1398,7 @@ machine micro.blog login username password API-TOKEN port API-URL"
                                       ("X-API-KEY" . ,token)))
          (url-request-data (encode-coding-string json 'utf-8)))
     (url-retrieve url (lambda(_)) nil t)
+    (kill-buffer)
     (delete-window)))
 
 (use-package inf-ruby)
