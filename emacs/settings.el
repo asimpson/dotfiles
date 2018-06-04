@@ -195,8 +195,10 @@
               (key-chord-define-global "jk" 'god-local-mode))))
 
 (defun simpson-magit-comment()
-  "mashing cc in a magit-status window triggers my custom keybind to (comment-line)
-   this function checks what mode is current and then either comments or commit"
+  "A small wrapper around 'comment-line' keychord for magit.
+Mashing cc in a magit-status window triggers my custom keybind
+to (comment-line) this function checks what mode is current and then either
+comments or commit"
   (interactive)
   (if (string= major-mode "magit-status-mode")
       (magit-commit)
@@ -282,7 +284,7 @@
             ;;https://github.com/magit/magit/pull/2513
             ;;Users who use Tramp and experience delays, should consider setting
             ;;the option to `magit-auto-revert-repository-buffer-p'.
-            (setq auto-revert-buffer-list-filter nil);;'magit-auto-revert-repository-buffers-p)
+            (setq auto-revert-buffer-list-filter nil)
             (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
             (put 'magit-clean 'disabled nil)
             (add-hook 'magit-status-sections-hook 'magit-insert-worktrees)
@@ -435,7 +437,7 @@
   (org-capture nil "b"))
 
 (defun simpson-org-refresh()
-  "refreshes task buffer to pull in tasks that have been added outside emacs"
+  "Refreshes task buffer to pull in tasks that have been added outside Emacs."
   (interactive)
   (when (buffer-live-p "tasks.txt")
     (set-buffer "tasks.txt")
@@ -473,8 +475,8 @@
             (global-set-key (kbd "C-SPC k j") 'js2-mode-hide-warnings-and-errors)
             (defcustom js2-strict-missing-semi-warning nil
               "Non-nil to warn about semicolon auto-insertion after statement.
-    Technically this is legal per Ecma-262, but some style guides disallow
-    depending on it."
+  Technically this is legal per Ecma-262, but some style guides disallow
+  depending on it."
               :type 'boolean
               :group 'js2-mode)))
 
@@ -575,7 +577,7 @@ http://stackoverflow.com/a/2592558/2344737."
 (defvar simpson-software-update nil)
 
 (defun simpson-check-mail()
-  ;; stolen from  https://github.com/iqbalansari/mu4e-alert/blob/master/mu4e-alert.el#L288
+  "Stolen from https://github.com/iqbalansari/mu4e-alert/blob/master/mu4e-alert.el#L288."
   (let (num (output (shell-command-to-string simpson-mail-update-command)))
     (if (> (length output) 0)
         (progn
@@ -590,11 +592,12 @@ http://stackoverflow.com/a/2592558/2344737."
       (setq simpson-mail-count nil))))
 
 (defun simpson-update-check()
-  "Process that checks for software updates on macOS."
+  "Process that check for software update on macOS."
   (set-process-sentinel (start-process "softwareupdate" "*softwareupdate*" "softwareupdate" "-l") 'simpson-update-check--sentinel))
 
 (defun simpson-update-check--sentinel(proc msg)
-  "Search for word recommended in softwareupdate output to determine if there are software updates."
+  "Search for word recommended in MSG in BUFFER output to determine update.
+PROC is not used."
   (when (and (string= msg "finished\n") (buffer-live-p (get-buffer "*softwareupdate*")))
     (if (with-current-buffer "*softwareupdate*"
           (goto-char (point-min))
@@ -752,6 +755,7 @@ http://stackoverflow.com/a/2592558/2344737."
             (define-key dired-mode-map "E" 'epa-dired-do-decrypt)))
 
 (defun simpson-dired-open-at-point()
+  "Call open process on filename at point."
   (interactive)
   (call-process "open" nil nil nil (file-truename (dired-file-name-at-point))))
 
@@ -949,8 +953,10 @@ An asterisk (*) deontes current workspace."
   :config (global-company-mode))
 
 (defun simpson-sauron-toggle(&optional x)
-  "A function to keep the sauron window visible and sized correctly after move/balance operation.
-Optional argument to satisfy the various ways the evil-window-move- functions are called."
+  "A function to keep the sauron window visible and sized correctly.
+
+  Optional argument (X) to satisfy the various ways the evil-window-move-
+  functions are called."
   (interactive)
   (when (window-live-p (get-buffer-window "*Sauron*"))
     (sr-hide)
@@ -1071,7 +1077,7 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
   (interactive)
   (switch-to-buffer (get-buffer-create "*scratch*"))
   (insert ";; This buffer is for text that is not saved, and for Lisp evaluation.
-;; To create a file, visit it with C-x C-f and enter text in its buffer.")
+  ;; To create a file, visit it with C-x C-f and enter text in its buffer.")
   (lisp-interaction-mode))
 
 (defhydra hydra-magit (:exit t)
@@ -1091,7 +1097,7 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
   :mode("\\.lisp?\\'" . aggressive-indent-mode))
 
 (defun simpson-trash(file)
-  "Prompt for file and trash it"
+  "Prompt for FILE and trash it."
   (interactive
    (list (read-file-name "Files to trash: ")))
   (call-process "trash" nil nil nil file))
@@ -1164,7 +1170,7 @@ Optional argument to satisfy the various ways the evil-window-move- functions ar
            (setq inferior-lisp-program "/usr/local/bin/ccl")))
 
 (defun simpson-org-to-todo()
-  "Convert a line (or region) in an org file to a TODO"
+  "Convert a line (or region) in an org file to a TODO."
   (interactive)
   (let ((heading "") (i 1) (number (read-number "What level?" 1)))
     (while (<= i number)
@@ -1254,7 +1260,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
     (setq shell-command-history (split-string (buffer-string) "\n"))))
 
 (defun simpson-save-history()
-  "Write contents of shell-command-history to ~/.emacs.d/shell-history"
+  "Write contents of 'shell-command-history' to ~/.emacs.d/shell-history."
   (with-temp-buffer
     (insert (mapconcat 'identity shell-command-history "\n"))
     (write-file "~/.emacs.d/shell-history")))
@@ -1300,7 +1306,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
             (run-at-time 0 (* 60 3) #'simpson-check-mail)))
 
 (defun simpson-mu4e-quit()
-  "Quit mu4e and then update mail icon"
+  "Quit mu4e and then update mail icon."
   (interactive)
   (mu4e-quit)
   (simpson-check-mail))
