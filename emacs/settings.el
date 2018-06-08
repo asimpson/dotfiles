@@ -831,18 +831,17 @@ PROC is not used."
   :defer 1
   :if (not simpson-helm)
   :config (progn
-            (setq ivy-use-virtual-buffers t)
             (ivy-mode)
+            (setq ivy-use-virtual-buffers t)
             (setq ivy-height 20)
             (setq ivy-count-format "")
+            (setq ivy-use-selectable-prompt t)
             (global-set-key (kbd "C-SPC A") 'ivy-resume)
             (define-key global-map (kbd "C-=") 'ivy-switch-buffer)
             (delete '(counsel-M-x . "^") ivy-initial-inputs-alist)
             (push '(counsel-M-x . "") ivy-initial-inputs-alist)
             (simpson-make-neutral ivy-occur-mode-map)
-            (setq ivy-use-selectable-prompt t)
             (define-key dired-mode-map "r" 'counsel-rg)
-            (ivy-add-actions 'counsel-find-file '(("D" simpson-delete "delete")))
             (ivy-add-actions 'counsel-projectile-ag '(("O" simpson-other-window "open in new window")))
             (ivy-add-actions 'counsel-ag '(("O" simpson-other-window "open in new window")))
             (ivy-add-actions 'counsel-rg '(("O" simpson-other-window "open in new window")))))
@@ -858,6 +857,7 @@ PROC is not used."
   :config (progn
             (global-set-key (kbd "M-x") 'counsel-M-x)
             (define-key dired-mode-map "f" 'counsel-find-file)
+            (ivy-add-actions 'counsel-find-file '(("D" simpson-delete "delete")))
             (global-set-key (kbd "<f1> f") 'counsel-describe-function)
             (global-set-key (kbd "<f1> v") 'counsel-describe-variable)))
 
