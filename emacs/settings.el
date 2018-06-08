@@ -459,6 +459,8 @@ comments or commit"
             ;;toggle on spell-check for writing
             (add-hook 'markdown-mode-hook (lambda () (flyspell-mode 1)))
             (add-hook 'markdown-mode-hook (lambda () (setq mode-name "md")))
+            (setq markdown-command "/usr/local/bin/pandoc")
+            (setq markdown-live-preview-delete-export t)
             (setq markdown-open-command "/usr/local/bin/marked")))
 
 (use-package js2-mode
@@ -1340,15 +1342,10 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 
 (add-to-list 'auto-mode-alist '("\\.hbs\\'" . html-mode))
 
-(defun xah-rename-eww-hook ()
-  "Rename eww browser's buffer so sites open in new page."
-  (text-scale-set 1)
-  (rename-buffer "eww" t))
-
 (eval-after-load 'eww (lambda()
                         (simpson-make-neutral eww-mode-map)
                         (simpson-make-neutral--keys eww-mode-map)
-                        (add-hook 'eww-mode-hook #'xah-rename-eww-hook)))
+                        (add-hook 'eww-mode-hook (lambda() (text-scale-set 1)))))
 
 (defhydra hydra-smerge()
   "
@@ -1476,5 +1473,8 @@ machine micro.blog login username password API-TOKEN port API-URL"
              '(ns-appearance . dark))
 
 (setq frame-title-format nil)
+
+(use-package org-preview-html
+  :after org)
 
 ;;; settings.el ends here
