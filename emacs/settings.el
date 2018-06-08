@@ -1279,7 +1279,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (use-package mu4e
   :ensure nil
   :defer 1
-  :load-path "/usr/local/Cellar/mu/0.9.18_1/share/emacs/site-lisp/mu/mu4e"
+  :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e"
   :config (progn
             (simpson-load-file "~/.dotfiles/emacs/mu4e.el.gpg")
             (set-face-attribute 'mu4e-highlight-face nil :background "DarkRed" :foreground nil)
@@ -1316,7 +1316,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (use-package org-mu4e
   :ensure nil
   :defer 1
-  :load-path "/usr/local/Cellar/mu/0.9.18_1/share/emacs/site-lisp/mu/mu4e")
+  :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e")
 
 (defmacro json-parse! (buffer)
   "Parse and return JSON from BUFFER.  Ideally for the 'url-retrieve' family of funcs."
