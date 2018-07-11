@@ -794,7 +794,6 @@
                                                 "*Async Shell Command*")))))
 
 (use-package erc
-  :bind (:map erc-mode-map ("C-c f" . simpson-format-slack-name))
   :config (progn
             (when simpson-evil (add-to-list 'evil-emacs-state-modes 'erc-mode)
                   (evil-set-initial-state 'erc-mode 'emacs))
@@ -861,9 +860,6 @@
             (ivy-add-actions 'counsel-find-file '(("D" simpson-delete "delete")))
             (global-set-key (kbd "<f1> f") 'counsel-describe-function)
             (global-set-key (kbd "<f1> v") 'counsel-describe-variable)))
-
-(defun simpson-delete(x)
-  (call-process "trash" nil nil nil x))
 
 (use-package counsel-projectile
   :if (not simpson-helm)
@@ -1023,13 +1019,9 @@ An asterisk (*) deontes current workspace."
   "
   ("a" mocha-test-at-point "file at point")
   ("p" mocha-test-project "project" :exit t)
-  ("r" simpson-hack-local "reload local vars")
+  ("r" hack-dir-local-variables-non-file-buffer "reload local vars")
   ("c" simpson-mocha-scope "custom project scope")
   ("f" mocha-test-file "whole file"))
-
-(defun simpson-hack-local()
-  (interactive)
-  (hack-dir-local-variables-non-file-buffer))
 
 (defun simpson-mocha-scope()
   (interactive)
@@ -1088,22 +1080,27 @@ An asterisk (*) deontes current workspace."
     Handy magit commands:
     _f_ find file given revision
     _F_ find file in other window given revision
+    _p_ magit-file-popup
     _l_ see the current file's log
     _b_ blame the current file
   "
   ("f" magit-find-file "find file given rev")
   ("F" magit-find-file-other-window "find file in other window given rev")
+  ("p" magit-file-popup "Magit file popup")
   ("l" magit-log-buffer-file "view log for file")
   ("b" magit-blame "view blame for file"))
 
 (use-package aggressive-indent
   :mode("\\.lisp?\\'" . aggressive-indent-mode))
 
+(defun simpson-delete(x)
+  (call-process "trash" nil nil nil x))
+
 (defun simpson-trash(file)
   "Prompt for FILE and trash it."
   (interactive
    (list (read-file-name "Files to trash: ")))
-  (call-process "trash" nil nil nil file))
+  (simpson-delete file))
 
 (defhydra hydra-js2 ()
   "
@@ -1257,7 +1254,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
                       (delete-dups shell-command-history)
                       (async-shell-command x))))
 
-(with-eval-after-load "keybinds.el"
+(with-eval-after-load ".emacs"
   (with-temp-buffer
     (insert-file-contents "~/.emacs.d/shell-history")
     (setq shell-command-history (split-string (buffer-string) "\n"))))
