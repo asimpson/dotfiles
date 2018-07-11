@@ -540,14 +540,6 @@
 
 (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
 
-;; (add-hook 'find-file-hooks 'assume-new-is-modified)
-
-(defun assume-new-is-modified ()
-  "Assume a new buffer that doesn't have a file is unmodified.
-  http://stackoverflow.com/a/2592558/2344737."
-  (when (not (file-exists-p (buffer-file-name)))
-    (set-buffer-modified-p t)))
-
 (setq header-line-format nil)
 (set-face-attribute 'header-line nil :background "white" :box nil)
 
@@ -663,8 +655,6 @@
 (setq ediff-split-window-function 'split-window-horizontally)
 
 (setq confirm-kill-emacs 'yes-or-no-p)
-
-(add-hook 'css-mode-hook '(lambda() (setq show-trailing-whitespace t)))
 
 (when (string= (car custom-enabled-themes) "base16-ocean")
   (set-face-background 'trailing-whitespace (plist-get base16-ocean-colors :base0F)))
