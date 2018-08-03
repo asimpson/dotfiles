@@ -1561,11 +1561,14 @@ machine micro.blog login username password API-TOKEN port API-URL"
   (shell-command "date +%Y-%m-%d-%I:%M" t))
 
 (defun simpson-new-note(name)
-  "create new file for nvAlt"
+  "Create new file for nvAlt with NAME."
   (interactive "sName of file: ")
-  (setq date (shell-command-to-string "date +%m-%d-%y"))
-  (setq fixed-date (replace-regexp-in-string "\n$" "" date))
-  (write-region "" "" (concat simpson-dropbox-path "Notational Data/" fixed-date "-" name ".txt")))
+  (let* ((use-buf (y-or-n-p "Use this buffer? "))
+         (date (replace-regexp-in-string "\n$" "" (shell-command-to-string "date +%m-%d-%y")))
+         (file (concat simpson-dropbox-path "Notational Data/" date "-" name ".txt")))
+    (if use-buf
+        (write-file file)
+      (write-region "" "" file))))
 
 (global-set-key (kbd "C-SPC d") (lambda() (interactive)
                                   (dired (concat simpson-dropbox-path "Notational Data/") "-laGht")))
