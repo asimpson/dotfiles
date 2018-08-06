@@ -773,10 +773,12 @@
   :init (progn
           (add-hook 'js2-mode-hook 'prettier-js-mode)
           (add-hook 'rjsx-mode-hook 'prettier-js-mode))
-  :config (setq prettier-js-args '(
-                                   "--trailing-comma" "es5"
-                                   "--bracket-spacing" "true"
-                                   "--single-quote" "true")))
+  :config (progn
+            (setq prettier-js-command "prettier-eslint")
+            (setq prettier-js-args '(
+                                     "--trailing-comma" "es5"
+                                     "--bracket-spacing" "true"
+                                     "--single-quote" "true"))))
 
 ;; Mutt support.
 (setq auto-mode-alist (append '(("mutt-*" . mail-mode)) auto-mode-alist))
