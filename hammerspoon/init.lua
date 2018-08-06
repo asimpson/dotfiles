@@ -1,12 +1,5 @@
 choices =  {
    {
-      ['text'] = 'Toggle Zoom',
-      ['func'] = 'toggleZoomMute'},
-   {
-      ['text'] = 'Toggle Caffeine',
-      ['func'] = 'toggleCaffine'
-   },
-   {
       ['text'] = 'Org capture',
       ['func'] = 'capture'
    },
@@ -29,12 +22,20 @@ choices =  {
    {
       ['text'] = 'Napkin paste',
       ['func'] = 'napkinPaste'
+   },
+   {
+      ['text'] = 'Play/Pause',
+      ['func'] = 'play'
    }
 }
 
 function frame()
    os.execute("/usr/local/bin/emacsclient -c -n &")
    hs.timer.doAfter(0.5, function() hs.application.find('Emacs'):findWindow("*scratch*"):focus() end)
+end
+
+function play()
+   hs.eventtap.event.newSystemKeyEvent('PLAY', true):post()
 end
 
 function joinZoom()
@@ -106,15 +107,6 @@ function toggleZoomMute()
     if (unmute) then
         zoom:selectMenuItem(unMuteAudio)
     end
-end
-
-function toggleCaffine()
-   local state = hs.caffeinate.toggle('displayIdle')
-   if (state) then
-    hs.alert.show('caffeinated')
-   else
-    hs.alert.show('decaffeinated')
-   end
 end
 
 function chooser()
