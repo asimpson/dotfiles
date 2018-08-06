@@ -1702,6 +1702,43 @@ machine micro.blog login username password API-TOKEN port API-URL"
 
 (put 'narrow-to-region 'disabled nil)
 
-(provide '.emacs)
+(eval-after-load 'ivy-mode (progn
+                             (require 'loop)
+                             (defun hacker-news()
+                               "Browse hacker-news from Ivy."
+                               (interactive)
+                               (let ((url "https://news.ycombinator.com/news") links)
+                                 (with-current-buffer (url-retrieve-synchronously url t)
+                                   (keep-lines "storylink")
+                                   (kill-new (buffer-substring-no-properties url-http-end-of-headers (point-max)))
+                                   (loop-for-each-line
+                                     (unless (= (point-max) (point))
+                                       (push (let (title link id)
+                                               (when (ignore-errors (re-search-forward "storylink"))
+                                                 (re-search-backward "<")
+                                                 (setq link (substring (pinboard-popular--re-capture-between "href=" "/") 0 -1))
+                                                 (setq title (decode-coding-string (substring (pinboard-popular--re-capture-between ">" "<") 0 -1) 'utf-8))
+                                                 (move-beginning-of-line nil)
+                                                 (setq id (concat "https://news.ycombinator.com/item?id=" (buffer-substring-no-properties (re-search-forward "up_") (- (re-search-forward "'") 1))))
+                                                 `(,title :title ,title :link ,link :id ,id))) links))))
+                                 (ivy-read "Hackernews: " (reverse (seq-uniq links))
+                                           :action (lambda(link) (browse-url (plist-get (cdr link) :link))))))
+
+                             (ivy-set-actions 'hacker-news
+                                              '(("c" (lambda(item) (browse-url (plist-get (cdr item) :id))) "Jump to comments")))))
+
+(defun pinboard-unread()
+  "Browse pinboard unread items from Emacs."
+  (interactive)
+  (let* ((auth-info (auth-source-user-and-password "pinboard-rss"))
+         (feed (encode-coding-string (cadr auth-info) 'utf-8)))
+    (browse-url (get-text-property 0 'url
+                                   (completing-read "Unread:" (with-current-buffer (url-retrieve-synchronously feed)
+                                                                (mapcar (lambda(x) (list
+                                                                               (propertize
+                                                                                (decode-coding-string (car (cddr (car (xml-get-children x 'title)))) 'utf-8)
+                                                                                'url
+                                                                                (car (cddr (car (xml-get-children x 'link)))))))
+                                                                        (xml-get-children (assq 'rdf:RDF (xml-parse-region url-http-end-of-headers)) 'item))))))))
 
 ;;; .emacs ends here
