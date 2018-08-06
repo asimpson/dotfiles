@@ -346,7 +346,6 @@
   :mode (("\\.txt\\'" . org-mode))
   :config (progn
             (require 'ox-md)
-            ;;look into swapping with txt, org-agenda-file-regexp
             (setq org-agenda-file-regexp "\\`[^.].*\\.txt\\'")
             (setq org-agenda-files `(,(concat simpson-dropbox-path "org")))
             (setq org-log-done t)
@@ -648,7 +647,7 @@
 (defun simpson-evil-mode ()
   "Change mode line color based on evil state."
   (cond
-   ((evil-insert-state-p) (set-face-attribute 'mode-line nil :background "IndianRed" :foreground "white" :box '(:line-width 5 :color "IndianRed")))
+   ((evil-insert-state-p) (set-face-attribute 'mode-line nil :background "#ea51b2" :foreground "white" :box '(:line-width 5 :color "#ea51b2")))
    ((evil-normal-state-p) (modeline-theme))))
 
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
