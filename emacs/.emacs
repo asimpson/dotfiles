@@ -1656,19 +1656,6 @@ machine micro.blog login username password API-TOKEN port API-URL"
   (interactive)
   (erc-cmd-GQ nil))
 
-(defun simpson-macos-mail-link()
-  "gets the Message-ID of the current notmuch message and constructs a Mail.app appropriate link
-   reference: https://daringfireball.net/2007/12/message_urls_leopard_mail."
-  (interactive)
-  (let ((id (notmuch-show-get-message-id t)))
-    (kill-new (concat "message://%3c" id "%3e"))))
-
-(defun simpson-open-mail-in-mail()
-  "open the current notmuch mail in Mail.app"
-  (interactive)
-  (let ((id (notmuch-show-get-message-id t)))
-    (shell-command (concat "open message://%3c" id "%3e"))))
-
 (defun simpson-get-git-url()
   "Grab the remote url for origin and assume it's a github url.
    Open the url in the default browser"
