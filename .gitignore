@@ -2,3 +2,4 @@
 .vim/.netrwhist
 *.gpg
 /emacs/emacs-custom.el
+*.elc
