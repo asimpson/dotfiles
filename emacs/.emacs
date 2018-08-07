@@ -1742,4 +1742,12 @@ machine micro.blog login username password API-TOKEN port API-URL"
                                                                                 (car (cddr (car (xml-get-children x 'link)))))))
                                                                         (xml-get-children (assq 'rdf:RDF (xml-parse-region url-http-end-of-headers)) 'item))))))))
 
+(defun simpson-search-eslint()
+  "Search the web for the eslint error at point."
+  (interactive)
+  (let* ((err (flycheck-overlay-errors-at (point)))
+         (id (flycheck-error-id (car err)))
+         (url (concat "https://duckduckgo.com/?q=" id)))
+    (browse-url url)))
+
 ;;; .emacs ends here
