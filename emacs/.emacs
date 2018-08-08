@@ -1464,8 +1464,6 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
             (setq alert-default-style 'notifier)))
 
 (use-package deadgrep
-  :load-path "~/Projects/deadgrep"
-  :ensure nil
   :commands deadgrep
   :config (progn
             (simpson-make-neutral--keys deadgrep-mode-map)
