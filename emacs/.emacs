@@ -711,9 +711,14 @@
           (add-hook 'handlebars-mode-hook 'jsEmmet))
   :config (setq emmet-move-cursor-between-quotes t))
 
+(use-package sauron-ams-org
+  :defer 2
+  :load-path "~/Projects/sauron-ams-org"
+  :ensure nil)
+
 (use-package sauron
   :pin melpa-stable
-  :defer 2
+  :after sauron-ams-org
   :config (progn
             (setq sauron-modules '(sauron-erc sauron-ams-org))
             (simpson-load-file "~/.dotfiles/emacs/irc-watch.gpg")
