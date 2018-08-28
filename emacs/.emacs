@@ -1478,18 +1478,18 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (global-set-key (kbd "C-SPC k !") 'simpson-restore-text)
 
 (defun simpson-restore-text()
-  "reset text size to default"
+  "Reset text size to default."
   (interactive)
   (text-scale-set 0))
 
 (defun gen-multi-term ()
-  "open up a mult-term in a new window"
+  "Open up a mult-term in a new window."
   (interactive)
   (switch-to-buffer-other-window nil)
   (multi-term))
 
 (defun simpson-pretty-json()
-  "ideal for getting pretty JSON from JSON that is copied from a XHR request"
+  "Ideal for getting pretty JSON from JSON that is copied from a XHR request."
   (interactive)
   (with-temp-buffer
     (clipboard-yank)
@@ -1497,7 +1497,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
     (kill-new (buffer-string))))
 
 (defun simpson-project-clone(url)
-  "clone a git repo and then change to that project"
+  "Clone a git repo given URL and then change to that project."
   (interactive "sGit url: ")
   (let (
         (projectsDir "~/Projects/")
@@ -1519,12 +1519,12 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (global-set-key (kbd "C-SPC k F") 'simpson-byte-compile)
 
 (defun simpson-byte-compile()
-  "force byte compilation"
+  "Force byte compilation."
   (interactive)
   (byte-recompile-directory package-user-dir nil 'force))
 
 (defun simpson-copy-file-buffer-name()
-  "copy the file path for the current buffer to the clipboard"
+  "Copy the file path for the current buffer to the clipboard."
   (interactive)
   (let (path)
     (if (projectile-project-p)
@@ -1540,7 +1540,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (global-set-key (kbd "C-SPC k d") 'simpson-new-note)
 
 (defun simpson-insert-date()
-  "shells out to date to return a formatted date string at point"
+  "Shell out to date to return a formatted date string at point."
   (interactive)
   (shell-command "date +%Y-%m-%d-%I:%M" t))
 
@@ -1558,14 +1558,14 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
                                   (dired (concat simpson-dropbox-path "Notational Data/") "-laGht")))
 
 (defun kill-shell-buffer()
-  "kills the Async Shell Command buffer and then balance's the remaining windows"
+  "Kill the Async Shell Command buffer and then balance's the remaining windows."
   (interactive)
   (switch-to-buffer-other-window "*Async Shell Command*")
   (kill-buffer-and-window)
   (balance-windows))
 
 (defun simpson-smart-shell()
-  "run shell from projectile root or from current spot in system"
+  "Run shell from projectile root or from current spot in system."
   (interactive)
   (unless (ignore-errors (projectile-run-async-shell-command-in-root))
     (call-interactively 'async-shell-command)))
@@ -1596,12 +1596,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 
 ;;write buffer to fil0
 (define-key global-map (kbd "C-SPC w") 'write-file)
-(define-key global-map (kbd "s-s") 'simpson-save)
-
-(defun simpson-save()
-  "save buffer"
-  (interactive)
-  (save-buffer))
+(define-key global-map (kbd "s-s") 'save-buffer)
 
 (define-key global-map (kbd "s-t") nil)
 (define-key global-map (kbd "s-p") nil)
@@ -1619,10 +1614,9 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
           (vc-delete-file filename)))))
 
 (define-key global-map (kbd "C-SPC X") 'simpson-delete-file-for-buffer)
-(define-key global-map (kbd "C-SPC k E") 'simpson-kill-erc)
 
 (defun simpson-znc()
-  "connect to znc irc bouncer. znc-server is defined in irc-accounts.gpg"
+  "Connect to znc irc bouncer.  znc-server is defined in irc-accounts.gpg."
   (interactive)
   (let ((choice (completing-read "Which IRC Network? " '("freenode" "mozilla"))))
     (erc-tls :server (if (y-or-n-p "Home? ")
@@ -1632,27 +1626,14 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
              :nick "asimpson"
              :password (concat "adam@erc/" choice ":"(cadr (auth-source-user-and-password "irc.znc.net"))))))
 
-(defun simpson-kill-erc()
-  "quits all erc servers"
-  (interactive)
-  (erc-cmd-GQ nil))
-
 (defun simpson-get-git-url()
   "Grab the remote url for origin and assume it's a github url.
-   Open the url in the default browser"
+Open the url in the default browser"
   (interactive)
   (let (url repo)
     (setq url (shell-command-to-string "git remote get-url origin"))
     (setq repo (nth 0 (split-string (nth 1 (split-string url ":")) "\\.")))
     (shell-command (concat "open https://github.com/" repo) t)))
-
-(defun simpson-move-window-right()
-  (interactive)
-  (let (buf (current-buffer))
-    (delete-window)
-    (split-window-right)
-    (windmove-right)
-    (switch-to-buffer buf)))
 
 (defun simpson-get-file-name()
   "Return the file name for a buffer."
