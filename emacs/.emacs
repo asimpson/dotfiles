@@ -445,11 +445,13 @@
   (org-capture nil "b"))
 
 (defun simpson-org-refresh()
-  "Refreshes task buffer to pull in tasks that have been added outside Emacs."
+  "Refreshes org buffers that change via dropbox to pull in tasks that have been added outside Emacs."
   (interactive)
-  (when (buffer-live-p "tasks.txt")
-    (set-buffer "tasks.txt")
-    (revert-buffer t t)))
+  (let ((buffers '("tasks.txt" "refile-beorg.txt")))
+    (seq-each (lambda(buf)
+                (when (buffer-live-p (get-buffer buf))
+                  (set-buffer buf)
+                  (revert-buffer t t))) buffers)))
 
 (use-package multi-term
   :config (progn
