@@ -1667,7 +1667,7 @@ Open the url in the default browser"
   (interactive)
   (let* ((err (flycheck-overlay-errors-at (point)))
          (id (flycheck-error-id (car err)))
-         (url (concat "https://duckduckgo.com/?q=" id)))
+         (url (concat "https://duckduckgo.com/?q=" id " !")))
     (browse-url url)))
 
 (message "Init time: %s" (emacs-init-time))
