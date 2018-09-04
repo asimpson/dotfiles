@@ -759,9 +759,19 @@
             (setq dired-use-ls-dired nil)
             (define-key dired-mode-map "e" 'epa-dired-do-encrypt)
             (define-key dired-mode-map (kbd "C-o") 'simpson-dired-open-at-point)
+            (define-key dired-mode-map (kbd "C-c !") 'simpson-dired-script-at-point)
             (simpson-make-neutral dired-mode-map)
             (simpson-make-neutral--keys dired-mode-map)
             (define-key dired-mode-map "E" 'epa-dired-do-decrypt)))
+
+(defun simpson-dired-script-at-point()
+  "Call 'async-shell-command' on file at point.
+If file is package.json run npm install."
+  (interactive)
+  (let ((file (dired-file-name-at-point)))
+    (if (string-equal "package.json" (car (last (split-string file "/"))))
+        (async-shell-command "npm i")
+      (async-shell-command file))))
 
 (defun simpson-dired-open-at-point()
   "Call open process on filename at point."
