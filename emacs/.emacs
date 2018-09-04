@@ -1680,5 +1680,10 @@ Open the url in the default browser"
          (url (concat "https://duckduckgo.com/?q=" id " !")))
     (browse-url url)))
 
+(use-package nrs
+  :load-path "~/Projects/nrs"
+  :after ivy
+  :ensure nil)
+
 (message "Init time: %s" (emacs-init-time))
 ;;; .emacs ends here
