@@ -1691,5 +1691,7 @@ Open the url in the default browser"
 
 (defun simpson-set-default-dir(url &rest args)
   (setq default-directory (expand-file-name "~/")))
+
+(setq async-shell-command-buffer 'new-buffer)
 (message "Init time: %s" (emacs-init-time))
 ;;; .emacs ends here
