@@ -1686,5 +1686,10 @@ Open the url in the default browser"
   :after ivy
   :ensure nil)
 
+;;this exists because mu4e will trigger browse-url with a file that doesn't exist thanks to git checkouts.
+(advice-add 'browse-url :before #'simpson-set-default-dir)
+
+(defun simpson-set-default-dir(url &rest args)
+  (setq default-directory (expand-file-name "~/")))
 (message "Init time: %s" (emacs-init-time))
 ;;; .emacs ends here
