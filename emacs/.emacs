@@ -79,6 +79,7 @@
 
 (use-package osx-trash
   :if (eq system-type 'darwin)
+  :defer 1
   :config (progn
             (osx-trash-setup)
             (setq delete-by-moving-to-trash t)))
