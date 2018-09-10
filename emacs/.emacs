@@ -770,7 +770,7 @@
 If file is package.json run npm install."
   (interactive)
   (let ((file (dired-file-name-at-point)))
-    (if (string-equal "package.json" (car (last (split-string file "/"))))
+    (if (string-equal "package.json" (file-name-nondirectory file))
         (async-shell-command "npm i")
       (async-shell-command file))))
 
