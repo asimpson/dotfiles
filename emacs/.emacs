@@ -1694,5 +1694,12 @@ Open the url in the default browser"
   (setq default-directory (expand-file-name "~/")))
 
 (setq async-shell-command-buffer 'new-buffer)
+(defun simpson-kill-shells()
+  (interactive)
+  (seq-each (lambda(buf) (when (string-match "Async Shell" (buffer-name buf))
+                      (switch-to-buffer-other-window buf)
+                      (kill-buffer-and-window))) (buffer-list))
+  (balance-windows))
+
 (message "Init time: %s" (emacs-init-time))
 ;;; .emacs ends here
