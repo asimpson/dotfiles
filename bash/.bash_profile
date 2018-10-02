@@ -1,3 +1,8 @@
+source /usr/local/share/chruby/chruby.sh
+source /usr/local/share/chruby/auto.sh
+
+RUBIES+=(/usr/local/rubies/*)
+
 [[ -s "$HOME/.profile" ]] && source "$HOME/.profile" # Load the default .profile
 
 if [ -f ~/.dotfiles/bash/functions ]; then
@@ -14,10 +19,6 @@ PATH="/usr/local/sbin:$PATH"
 PATH="/usr/local/bin:$PATH"
 PATH="/Users/asimpson/.better-npm/bin:$PATH"
 PATH="/Users/asimpson/.better-npm/lib/node_modules:$PATH"
-PATH="$HOME/.cargo/bin:$PATH"
-
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 
 ############################
 # gpg-agent
