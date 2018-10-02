@@ -81,3 +81,5 @@ alias fixemacs='emacs -n --debug-init'
 alias e='emacsclient -t -c '
 alias dired='emacsclient -e "(dired default-directory)" -c -t'
 alias ssh-pass='ssh -o PreferredAuthentications=password '
+alias ssh_on="sudo systemsetup -setremotelogin on && echo asimpson@$(ifconfig | grep 'inet 1' | cut -c 6- | awk 'NR==2 {print $1}')"
+alias ssh_off='sudo systemsetup -setremotelogin off'
