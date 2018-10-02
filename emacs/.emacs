@@ -130,7 +130,7 @@
   :bind ("C-SPC '" . flycheck-mode)
   :config (progn
             (global-flycheck-mode)
-            (setq flycheck-global-modes '(rjsx-mode emacs-lisp-mode rust-mode))
+            (setq flycheck-global-modes '(rjsx-mode emacs-lisp-mode rust-mode ruby-mode))
             ;;https://github.com/flycheck/flycheck/issues/1129#issuecomment-319600923
             (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))))
 
@@ -1183,7 +1183,8 @@ An asterisk (*) deontes current workspace."
   ("m" describe-mode "describe mode"))
 
 (use-package slime
-  :mode("\\.lisp?\\'" . slime-mode)
+  :mode(("\\.lisp?\\'" . slime-mode)
+        ("\\.lisp?\\'" . common-lisp-mode))
   :diminish ""
   :config(progn
            (add-hook 'slime-mode-hook (lambda () (setq mode-name "goo")))
