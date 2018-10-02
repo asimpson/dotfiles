@@ -866,8 +866,12 @@ If file is package.json run npm install."
             (ivy-add-actions 'counsel-rg '(("O" simpson-other-window "open in new window")))))
 
 (defun simpson-other-window(x)
-  (let ((file (car (split-string x ":"))))
-    (find-file-other-window (concat (locate-dominating-file file ".git") file))))
+  (let* ((string (split-string x ":"))
+         (num (string-to-number (car (cdr string))))
+         (file (car string)))
+    (find-file-other-window (concat (locate-dominating-file file ".git") file))
+    (with-current-buffer (get-buffer (file-name-nondirectory file))
+      (goto-line num))))
 
 (use-package counsel
   :defer 1
