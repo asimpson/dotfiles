@@ -1706,5 +1706,15 @@ Open the url in the default browser"
                       (kill-buffer-and-window))) (buffer-list))
   (balance-windows))
 
+(use-package simpson-ruby-version
+  :ensure nil
+  :load-path "~/Projects/simpson-ruby-version"
+  :defer 1
+  :commands simpson-ruby-version
+  :config (progn
+            (setq simpson-ruby-default-gem-path "/usr/local/bin/gem")
+            (setq simpson-ruby-rubies-path "/usr/local/rubies/")
+            (setq simpson-ruby-gem-path "~/.gem/ruby/")))
+
 (message "Init time: %s" (emacs-init-time))
 ;;; .emacs ends here
