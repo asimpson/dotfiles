@@ -1716,6 +1716,15 @@ Open the url in the default browser"
             (setq simpson-ruby-rubies-path "/usr/local/rubies/")
             (setq simpson-ruby-gem-path "~/.gem/ruby/")))
 
+(use-package rspec-mode
+  :defer 1
+  :mode ("*spec.rb" . rspec-mode))
+
+(use-package web-mode
+  :defer 1
+  :mode ("\\.html\\.erb\\'" . web-mode)
+  :config (setq web-mode-markup-indent-offset 2))
+
 (setq battery-mode-line-format "[%b%p%%/%t]")
 (setq battery-mode-line-limit 90)
 (display-battery-mode)
