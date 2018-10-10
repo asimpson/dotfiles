@@ -1716,5 +1716,9 @@ Open the url in the default browser"
             (setq simpson-ruby-rubies-path "/usr/local/rubies/")
             (setq simpson-ruby-gem-path "~/.gem/ruby/")))
 
+(setq battery-mode-line-format "[%b%p%%/%t]")
+(setq battery-mode-line-limit 90)
+(display-battery-mode)
+
 (message "Init time: %s" (emacs-init-time))
 ;;; .emacs ends here
