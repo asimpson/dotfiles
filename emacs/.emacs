@@ -1321,6 +1321,8 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
             (setq user-full-name "Adam Simpson")
             (setq mu4e-confirm-quit nil)
             (setq mu4e~view-html-text 'text)
+            (setq mu4e-change-filenames-when-moving t)
+            (setq mu4e-headers-include-related nil)
             (add-to-list 'mu4e-view-actions
                          '("ViewInBrowser" . mu4e-action-view-in-browser) t)
             (define-key mu4e-headers-mode-map (kbd "C-c C-u") 'mu4e-update-index)
