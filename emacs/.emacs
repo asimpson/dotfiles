@@ -1729,5 +1729,26 @@ Open the url in the default browser"
 (setq battery-mode-line-limit 90)
 (display-battery-mode)
 
-(message "Init time: %s" (emacs-init-time))
+(defun simpson-bump-migration()
+  "Rename a conflicting migration to the current version + 1 or the user supplied number."
+  (interactive)
+  (let* ((name (file-name-base (dired-file-name-at-point)))
+         (path (file-truename (dired-file-name-at-point)))
+         (int (car (split-string name "_")))
+         (next (+ (string-to-number int) 1))
+         (user-next (number-to-string (read-number "Bump to: " next)))
+         (new (concat (f-dirname path) "/0" user-next "_" (mapconcat 'identity (cdr (split-string name "_")) "_") ".rb")))
+    (rename-file path new)))
+
+(defun simpson-plantuml-preview()
+  (interactive)
+  (let ((current-prefix-arg '(4))) (call-interactively 'plantuml-preview)))
+
+(use-package plantuml-mode
+  :mode ("\\.plantuml?\\'" . plantuml-mode)
+  :config (progn
+            (setq plantuml-jar-path "/usr/local/Cellar/plantuml/1.2018.12/libexec/plantuml.jar")
+            (define-key plantuml-mode-map (kbd "C-c C-c") 'simpson-plantuml-preview)))
+
+  (message "Init time: %s" (emacs-init-time))
 ;;; .emacs ends here
