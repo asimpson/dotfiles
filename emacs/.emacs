@@ -1821,11 +1821,19 @@ Open the url in the default browser"
                        (setq plantuml-jar-path "/usr/local/Cellar/plantuml/1.2018.12/libexec/plantuml.jar")
                        (define-key plantuml-mode-map (kbd "C-c C-c") 'simpson-plantuml-preview)))
 
-  (message "Init time: %s" (emacs-init-time))
 (defun simpson-see-process-for-port()
   "Prompt for port and view running process listening on that port."
   (interactive)
   (let ((port (read-string "Which port? ")))
     (async-shell-command (concat "lsof -wni tcp:" port))))
+
+(use-package twittering-mode
+             :config (progn
+                       (setq twittering-icon-mode t)
+                       (setq twittering-display-remaining t)
+                       (setq twittering-initial-timeline-spec-string "a_simpson/foss")
+                       (setq twittering-use-icon-storage t)))
+
+(message "Init time: %s" (emacs-init-time))
 
 ;;; .emacs ends here
