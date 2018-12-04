@@ -530,8 +530,8 @@
 (setq-default tab-width 2)
 (setq-default css-indent-offset 2)
 
-(set-face-attribute 'default nil :font "Hack-10" )
-(set-frame-font "Hack-10" nil t)
+(set-face-attribute 'default nil :font "Hack-12" )
+(set-frame-font "Hack-12" nil t)
 
 ;;modes w/ file extensions
 (add-to-list 'auto-mode-alist '("\\.scss\\'" . css-mode))
