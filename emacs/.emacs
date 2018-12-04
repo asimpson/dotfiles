@@ -1788,7 +1788,8 @@ Open the url in the default browser"
 
 (use-package rspec-mode
   :defer 1
-  :mode ("*spec.rb" . rspec-mode))
+  :mode ("*spec.rb" . rspec-mode)
+  :config (simpson-make-neutral compilation-mode-map))
 
 (use-package web-mode
   :defer 1
