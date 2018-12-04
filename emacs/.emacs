@@ -1255,13 +1255,13 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   :config (add-hook 'flycheck-mode-hook 'flycheck-rust-setup))
 
 (use-package racer
-  :defer 1
-  :config (progn
-            (setq racer-cmd "~/.cargo/bin/racer")
-            (setq racer-rust-src-path "/Users/asimpson/.rustup/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src")
-            (add-hook 'rust-mode-hook 'racer-mode)
-            (add-hook 'racer-mode-hook 'eldoc-mode)
-            (add-hook 'racer-mode-hook 'company-mode)))
+             :defer 1
+             :config (progn
+                       (setq racer-cmd "~/.cargo/bin/racer")
+                       (setq racer-rust-src-path nil)
+                       (add-hook 'rust-mode-hook 'racer-mode)
+                       (add-hook 'racer-mode-hook 'eldoc-mode)
+                       (add-hook 'racer-mode-hook 'company-mode)))
 
 (use-package helpful)
 
