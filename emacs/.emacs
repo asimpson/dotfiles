@@ -431,7 +431,12 @@
              'org-babel-load-languages
              '((shell . t)
                (emacs-lisp . t)
+               (plantuml . t)
                (js . t)))
+            (setq org-plantuml-jar-path "/usr/local/Cellar/plantuml/1.2018.12/libexec/plantuml.jar")
+            (setq org-confirm-babel-evaluate (lambda (lang src) (not (string-equal lang "plantuml"))))
+            (add-to-list
+             'org-src-lang-modes '("plantuml" . plantuml))
             (run-at-time 0 (* 60 15) #'simpson-org-refresh)
             (if (string= (car custom-enabled-themes) "base16-ocean")
                 (progn
@@ -1762,10 +1767,10 @@ Open the url in the default browser"
   (let ((current-prefix-arg '(4))) (call-interactively 'plantuml-preview)))
 
 (use-package plantuml-mode
-  :mode ("\\.plantuml?\\'" . plantuml-mode)
-  :config (progn
-            (setq plantuml-jar-path "/usr/local/Cellar/plantuml/1.2018.12/libexec/plantuml.jar")
-            (define-key plantuml-mode-map (kbd "C-c C-c") 'simpson-plantuml-preview)))
+             :mode ("\\.plantuml?\\'" . plantuml-mode)
+             :config (progn
+                       (setq plantuml-jar-path "/usr/local/Cellar/plantuml/1.2018.12/libexec/plantuml.jar")
+                       (define-key plantuml-mode-map (kbd "C-c C-c") 'simpson-plantuml-preview)))
 
   (message "Init time: %s" (emacs-init-time))
 ;;; .emacs ends here
