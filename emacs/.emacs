@@ -313,6 +313,7 @@
 
 (use-package evil-magit
   :pin melpa-stable
+  :defer 1
   :after evil
   :if simpson-evil)
 
@@ -1014,17 +1015,20 @@ An asterisk (*) deontes current workspace."
 (use-package ivy-lobsters
   :ensure nil
   :after ivy
+  :defer 1
   :config (setq ivy-lobsters-keep-focus t)
   :if (file-exists-p "~/Projects/ivy-lobsters/")
   :load-path "~/Projects/ivy-lobsters/")
 
 (use-package pinboard-popular
   :ensure nil
+  :commands pinboard-popular
   :load-path "~/Projects/pinboard-popular/")
 
 (use-package ivy-feedwrangler
   :ensure nil
   :after ivy
+  :commands ivy-feedwrangler
   :if (file-exists-p "~/Projects/ivy-feedwrangler/")
   :load-path "~/Projects/ivy-feedwrangler/")
 
@@ -1694,6 +1698,7 @@ Open the url in the default browser"
 
 (use-package ivy-hacker-news
   :load-path "~/Projects/ivy-hacker-news"
+  :commands ivy-hacker-news
   :ensure nil
   :after ivy)
 
@@ -1713,6 +1718,7 @@ Open the url in the default browser"
 (use-package nrs
   :load-path "~/Projects/nrs"
   :after ivy
+  :commands nrs
   :ensure nil)
 
 ;;this exists because mu4e will trigger browse-url with a file that doesn't exist thanks to git checkouts.
@@ -1732,7 +1738,6 @@ Open the url in the default browser"
 (use-package simpson-ruby-version
   :ensure nil
   :load-path "~/Projects/simpson-ruby-version"
-  :defer 1
   :commands simpson-ruby-version
   :config (progn
             (setq simpson-ruby-default-gem-path "/usr/local/bin/gem")
