@@ -943,10 +943,10 @@ An asterisk (*) deontes current workspace."
           (defun simpson-pretty-lambda()
             "make the word lambda the greek character in elisp files"
             (setq prettify-symbols-alist '(("lambda" . 955))))
-
           (add-hook 'emacs-lisp-mode-hook 'simpson-pretty-lambda)
           (add-hook 'emacs-lisp-mode-hook 'prettify-symbols-mode)
           (add-hook 'emacs-lisp-mode-hook 'aggressive-indent-mode)
+          (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
           (add-hook 'emacs-lisp-mode-hook (lambda () (setq mode-name "λ")))))
 
 
