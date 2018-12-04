@@ -339,7 +339,7 @@
   :defer 2
   :if (file-exists-p (concat simpson-dropbox-path "org/tasks.txt"))
   :pin org
-  :bind (("C-SPC c" . simpson-org-task-capture)
+  :bind (("C-SPC c" . org-capture)
          ("C-SPC k B" . simpson-org-blog-capture)
          ("C-SPC t" . org-todo-list)
          ("C-SPC a" . org-agenda)
@@ -354,6 +354,13 @@
             (setq org-refile-use-outline-path 'file)
             (setq org-outline-path-complete-in-steps nil)
             (setq org-export-with-toc nil)
+            (setq org-agenda-custom-commands '(("n" "Agenda and all TODOs"
+                                                ((agenda "")
+                                                 (alltodo "")))
+                                               ("w" "Work tasks" ((agenda "") (todo ""))
+                                                ((org-agenda-files `(,(concat simpson-dropbox-path "org/tasks.txt")))))
+                                               ("s" "side projects" ((agenda "") (todo ""))
+                                                ((org-agenda-files `(,(concat simpson-dropbox-path "org/side.txt")))))))
             (setq org-refile-targets '(
                                        (nil . (:level . 1))
                                        (nil . (:level . 2))
@@ -361,7 +368,7 @@
             (setq org-todo-keywords
                   '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
             (setq org-capture-templates
-                  `(("a" "My TODO task format." entry
+                  `(("a" "Add to tasks" entry
                      (file ,(concat simpson-dropbox-path "org/tasks.txt"))
                      "* TODO %? %^g
   :PROPERTIES:
@@ -386,7 +393,15 @@
                      "* %? %^g
   :PROPERTIES:
   :CREATED: %T
-  :END:")))
+  :END:")
+
+                    ("t" "Travel information" entry
+                     (file ,(concat simpson-dropbox-path "org/travel.txt"))
+                     "* %? %^G
+  :PROPERTIES:
+  :CREATED: %T
+  :END:
+** Email message: %a")))
             (setq org-agenda-restore-windows-after-quit t)
             (add-hook 'org-mode-hook (lambda () (flyspell-mode 1)))
             (add-hook 'org-mode-hook 'visual-line-mode)
