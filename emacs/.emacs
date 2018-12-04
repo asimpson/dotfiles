@@ -712,6 +712,7 @@
   :init (progn
           (add-hook 'js2-mode-hook #'yas-minor-mode)
           (add-hook 'rjsx-mode-hook #'yas-minor-mode)
+          (add-hook 'ruby-mode-hook #'yas-minor-mode)
           (add-hook 'org-mode-hook #'yas-minor-mode))
   :config (progn
             (yas-reload-all)
