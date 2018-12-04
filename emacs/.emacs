@@ -1212,27 +1212,55 @@ An asterisk (*) deontes current workspace."
   ("m" describe-mode "describe mode"))
 
 (use-package slime
-  :mode(("\\.lisp?\\'" . slime-mode)
-        ("\\.lisp?\\'" . common-lisp-mode))
-  :diminish ""
-  :config(progn
-           (add-hook 'slime-mode-hook (lambda () (setq mode-name "goo")))
-           (setq inferior-lisp-program "/usr/local/bin/sbcl")))
+             :mode(("\\.lisp?\\'" . slime-mode)
+                   ("\\.lisp?\\'" . common-lisp-mode))
+             :diminish ""
+             :after slime-company
+             :config(progn
+                      (add-hook 'slime-mode-hook (lambda () (setq mode-name "goo")))
+                      (setq slime-contribs '(slime-fancy slime-asdf slime-scratch slime-sprof slime-mdot-fu
+                                             slime-compiler-notes-tree slime-hyperdoc
+                                             slime-indentation slime-repl))
+                      (add-to-list 'slime-contribs 'slime-company)
+                      (slime-setup)
+                      (setq slime-auto-select-connection 'always)
+                      (setq slime-kill-without-query-p t)
+                      (setq slime-description-autofocus t)
+                      (setq slime-fuzzy-explanation "")
+                      (setq slime-asdf-collect-notes t)
+                      (setq slime-inhibit-pipelining nil)
+                      (setq slime-load-failed-fasl 'always)
+                      (setq slime-when-complete-filename-expand t)
+                      (setq slime-repl-history-remove-duplicates t)
+                      (setq slime-repl-history-trim-whitespaces t)
+                      (setq slime-export-symbol-representation-auto t)
+                      (setq lisp-indent-function 'common-lisp-indent-function)
+                      (setq lisp-loop-indent-subclauses nil)
+                      (setq lisp-loop-indent-forms-like-keywords t)
+                      (setq lisp-lambda-list-keyword-parameter-alignment t)
+                      (setq inferior-lisp-program "/usr/local/bin/sbcl")))
+
+(use-package slime-company
+             :defer 1)
+
+(use-package company-quickhelp
+             :defer 1
+             :config (company-quickhelp-mode))
 
 (defun simpson-org-to-todo()
   "Convert a line (or region) in an org file to a TODO."
   (interactive)
   (let ((heading "") (i 1) (number (read-number "What level?" 1)))
     (while (<= i number)
-      (setq heading (concat heading "*"))
-      (setq i (+ i 1)))
+           (setq heading (concat heading "*"))
+           (setq i (+ i 1)))
     (if (region-active-p)
         (let ((strings (seq-map (lambda(x) (concat heading " TODO " x))
                                 (split-string (buffer-substring-no-properties (region-beginning) (region-end)) "\n" t))))
           (delete-active-region)
           (insert (mapconcat 'identity strings "\n")))
-      (org-beginning-of-line)
-      (insert heading " TODO ") t)))
+        (org-beginning-of-line)
+        (insert heading " TODO ") t)))
 
 (defun eww-more-readable ()
   "Make eww more pleasant to use.
