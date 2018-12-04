@@ -1822,4 +1822,10 @@ Open the url in the default browser"
                        (define-key plantuml-mode-map (kbd "C-c C-c") 'simpson-plantuml-preview)))
 
   (message "Init time: %s" (emacs-init-time))
+(defun simpson-see-process-for-port()
+  "Prompt for port and view running process listening on that port."
+  (interactive)
+  (let ((port (read-string "Which port? ")))
+    (async-shell-command (concat "lsof -wni tcp:" port))))
+
 ;;; .emacs ends here
