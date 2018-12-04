@@ -1353,38 +1353,52 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 
 ;; mu4e-bookmarks, mu4e-contexts, mu4e-user-mail-address are all set in mu4e.gpg
 (use-package mu4e
-  :ensure nil
-  :defer 1
-  :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e"
-  :config (progn
-            (simpson-load-file "~/.dotfiles/emacs/mu4e.el.gpg")
-            (set-face-attribute 'mu4e-highlight-face nil :background "DarkRed" :foreground nil)
-            (setq mu4e-maildir "~/Mail")
-            (setq mu4e-view-show-images t)
-            (setq send-mail-function 'smtpmail-send-it)
-            (setq message-send-mail-function 'smtpmail-send-it)
-            (setq message-kill-buffer-on-exit t)
-            (setq mu4e-context-policy 'pick-first)
-            (setq mu4e-compose-format-flowed t)
-            (setq mu4e-view-show-addresses 't)
-            (setq smtpmail-stream-type 'ssl)
-            (setq mu4e-get-mail-command "true")
-            (setq mu4e-update-interval 300)
-            (setq smtpmail-smtp-service 465)
-            (setq user-full-name "Adam Simpson")
-            (setq mu4e-confirm-quit nil)
-            (setq mu4e~view-html-text 'text)
-            (setq mu4e-change-filenames-when-moving t)
-            (setq mu4e-headers-include-related nil)
-            (add-to-list 'mu4e-view-actions
-                         '("ViewInBrowser" . mu4e-action-view-in-browser) t)
-            (define-key mu4e-headers-mode-map (kbd "C-c C-u") 'mu4e-update-index)
-            (define-key mu4e-main-mode-map "q" 'simpson-mu4e-quit)
-            (add-hook 'mu4e-view-mode-hook (lambda() (text-scale-set 1)))
-            (simpson-make-neutral mu4e-headers-mode-map)
-            (simpson-make-neutral--keys mu4e-headers-mode-map)
-            (simpson-make-neutral--keys mu4e-view-mode-map)
-            (run-at-time 0 (* 60 3) #'simpson-check-mail)))
+             :ensure nil
+             :defer 1
+             :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e"
+             :config (progn
+                       (simpson-load-file "~/.dotfiles/emacs/mu4e.el.gpg")
+                       (set-face-attribute 'mu4e-highlight-face nil :background "DarkRed" :foreground nil)
+                       (setq mu4e-maildir "~/Mail")
+                       (setq mu4e-view-show-images t)
+                       (setq send-mail-function 'smtpmail-send-it)
+                       (setq message-send-mail-function 'smtpmail-send-it)
+                       (setq message-kill-buffer-on-exit t)
+                       (setq mu4e-context-policy 'pick-first)
+                       (setq mu4e-compose-format-flowed t)
+                       (setq mu4e-view-show-addresses 't)
+                       (setq smtpmail-stream-type 'ssl)
+                       (setq mu4e-get-mail-command "mbsync -a")
+                       (setq mu4e-update-interval 300)
+                       (setq smtpmail-smtp-service 465)
+                       (setq user-full-name "Adam Simpson")
+                       (setq mu4e-confirm-quit nil)
+                       (setq mu4e~view-html-text 'text)
+                       (setq mu4e-change-filenames-when-moving t)
+                       (setq mu4e-headers-include-related nil)
+                       (add-to-list 'mu4e-view-actions
+                                    '("ViewInBrowser" . mu4e-action-view-in-browser) t)
+                       (define-key mu4e-headers-mode-map (kbd "C-c C-u") 'mu4e-update-index)
+                       (define-key mu4e-main-mode-map "q" 'simpson-mu4e-quit)
+                       (add-hook 'mu4e-view-mode-hook (lambda() (text-scale-set 1)))
+                       (simpson-make-neutral mu4e-headers-mode-map)
+                       (simpson-make-neutral--keys mu4e-headers-mode-map)
+                       (simpson-make-neutral--keys mu4e-view-mode-map)
+                       ;; In my workflow, emails won't be moved at all. Only their flags/labels are
+                       ;; changed. Se we redefine the trash and refile marks not to do any moving.
+                       ;; However, the real magic happens in `+email|gmail-fix-flags'.
+                       ;;
+                       ;; Gmail will handle the rest.
+                       ;; (setq mu4e-marks (assq-delete-all 'delete mu4e-marks))
+                       ;; (setq mu4e-marks (assq-delete-all 'trash mu4e-marks))
+                       ;; (push '(trash :char ("d" . "▼")
+                       ;;               :prompt "dtrash"
+                       ;;               :dyn-target (lambda (target msg) (mu4e-get-trash-folder msg))
+                       ;;               :action
+                       ;;               (lambda (docid msg target)
+                       ;;                 (mu4e~proc-move docid (mu4e~mark-check-target target) "-N")))
+                       ;;       mu4e-marks)
+                       (run-at-time 0 (* 60 3) #'simpson-check-mail)))
 
 (defun simpson-mu4e-quit()
   "Quit mu4e and then update mail icon."
