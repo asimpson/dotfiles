@@ -13,8 +13,6 @@
 (package-initialize)
 (setq custom-file "~/.dotfiles/emacs/emacs-custom.el")
 (add-to-list 'load-path "~/.dotfiles/emacs/")
-(defvar simpson-helm nil
-  "Variable to enable or disable helm specific configurations.")
 (defvar simpson-evil t
   "Variable to enable or disable evil specific configurations.")
 (setq idle-update-delay 1)
@@ -135,59 +133,51 @@
             (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))))
 
 (use-package evil
-  :if simpson-evil
-  :diminish "vim"
-  :defer 1
-  :config (progn
-            (evil-mode t)
-            (setq-default evil-shift-width 2)
-            (setq evil-vsplit-window-right t)
-            (setq evil-split-window-below t)
-            (add-to-list 'evil-emacs-state-modes 'dired-mode)
-            (add-to-list 'evil-emacs-state-modes 'epa-key-list-mode)
-            (add-to-list 'evil-emacs-state-modes 'ivy-occur-mode)
-            (add-to-list 'evil-emacs-state-modes 'image-mode)
-            (add-to-list 'evil-emacs-state-modes 'comint-mode)
-            (add-to-list 'evil-emacs-state-modes 'eww-mode)
-            (add-to-list 'evil-emacs-state-modes 'circe-mode)
-            (add-to-list 'evil-emacs-state-modes 'circe-server-mode)
-            (add-to-list 'evil-emacs-state-modes 'circe-channel-mode)
-            (add-to-list 'evil-emacs-state-modes 'sql-interactive-mode)
-            (add-to-list 'evil-emacs-state-modes 'deadgrep-mode)
-            ;;http://spacemacs.org/doc/FAQ#orgheadline31
-            (fset 'evil-visual-update-x-selection 'ignore)
-            (define-key evil-normal-state-map (kbd "RET") 'save-buffer)
-            (simpson-make-neutral evil-normal-state-map)
-            (define-key evil-normal-state-map (kbd "gx") 'browse-url)
-            (when simpson-helm (define-key evil-normal-state-map "\C-p" 'helm-projectile-find-file))
-            (when simpson-helm (define-key evil-normal-state-map (kbd "SPC SPC") 'helm-projectile-find-file))
-            (unless simpson-helm (define-key evil-normal-state-map (kbd "SPC SPC") 'projectile-find-file-other-window))
-            (unless simpson-helm (define-key evil-normal-state-map (kbd "\C-p") 'projectile-find-file-other-window))
-            (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
-            (define-key evil-normal-state-map (kbd "C-n") 'evil-scroll-down)
-            (define-key evil-normal-state-map (kbd "C-b") 'projectile-switch-project)
-            (add-hook 'post-command-hook 'simpson-evil-mode)))
+             :if simpson-evil
+             :diminish "vim"
+             :defer 1
+             :config (progn
+                       (evil-mode t)
+                       (setq-default evil-shift-width 2)
+                       (setq evil-vsplit-window-right t)
+                       (setq evil-split-window-below t)
+                       (add-to-list 'evil-emacs-state-modes 'dired-mode)
+                       (add-to-list 'evil-emacs-state-modes 'epa-key-list-mode)
+                       (add-to-list 'evil-emacs-state-modes 'ivy-occur-mode)
+                       (add-to-list 'evil-emacs-state-modes 'image-mode)
+                       (add-to-list 'evil-emacs-state-modes 'comint-mode)
+                       (add-to-list 'evil-emacs-state-modes 'eww-mode)
+                       (add-to-list 'evil-emacs-state-modes 'circe-mode)
+                       (add-to-list 'evil-emacs-state-modes 'circe-server-mode)
+                       (add-to-list 'evil-emacs-state-modes 'circe-channel-mode)
+                       (add-to-list 'evil-emacs-state-modes 'sql-interactive-mode)
+                       (add-to-list 'evil-emacs-state-modes 'deadgrep-mode)
+                       (add-to-list 'evil-emacs-state-modes 'twittering-mode)
+                       ;;http://spacemacs.org/doc/FAQ#orgheadline31
+                       (fset 'evil-visual-update-x-selection 'ignore)
+                       (define-key evil-normal-state-map (kbd "RET") 'save-buffer)
+                       (simpson-make-neutral evil-normal-state-map)
+                       (define-key evil-normal-state-map (kbd "gx") 'browse-url)
+                       (define-key evil-normal-state-map (kbd "SPC SPC") 'projectile-find-file-other-window)
+                       (define-key evil-normal-state-map (kbd "\C-p") 'projectile-find-file-other-window)
+                       (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
+                       (define-key evil-normal-state-map (kbd "C-n") 'evil-scroll-down)
+                       (define-key evil-normal-state-map (kbd "C-b") 'projectile-switch-project)
+                       (add-hook 'post-command-hook 'simpson-evil-mode)))
 
 (eval-after-load 'image-mode (lambda() (simpson-make-neutral image-mode-map)))
 
 (use-package evil-leader
-  :if simpson-evil
-  :after evil
-  :defer 1
-  :config (progn
-            (global-evil-leader-mode)
-            (evil-leader/set-leader ",")
-            (if simpson-helm
-                (progn
-                  (evil-leader/set-key "f" 'helm-projectile-ag)
-                  (evil-leader/set-key "F" 'helm-do-ag))
-              (evil-leader/set-key "f" 'counsel-rg)
-              (evil-leader/set-key "s" 'hydra-searching/body)
-              (evil-leader/set-key "F" 'simpson-counsel-ag))
-            (evil-leader/set-key "c" 'fci-mode)
-            (evil-leader/set-key "t" 'hydra-mocha/body)
-            (evil-leader/set-key "v" 'simpson-vert-split)
-            (evil-leader/set-key "x" 'simpson-horizontal-split)))
+             :if simpson-evil
+             :after evil
+             :defer 1
+             :config (progn
+                       (global-evil-leader-mode)
+                       (evil-leader/set-leader ",")
+                       (evil-leader/set-key "c" 'fci-mode)
+                       (evil-leader/set-key "t" 'hydra-mocha/body)
+                       (evil-leader/set-key "v" 'simpson-vert-split)
+                       (evil-leader/set-key "x" 'simpson-horizontal-split)))
 
 (defun simpson-vert-split()
   (interactive)
@@ -222,69 +212,31 @@
     (comment-line 1)))
 
 (use-package god-mode
-  :if (not simpson-evil)
-  :defer 1
-  :config (progn
-            (when simpson-helm
-              (define-key god-local-mode-map (kbd "P") 'helm-projectile-find-file)
-              (define-key god-local-mode-map (kbd "F") 'helm-projectile-ag))))
+             :if (not simpson-evil)
+             :defer 1)
 
 (use-package evil-matchit
-  :if simpson-evil
-  :after evil
-  :config (progn
-            (global-evil-matchit-mode 1)
-            (plist-put evilmi-plugins 'handlebars-mode '((evilmi-simple-get-tag evilmi-simple-jump)))))
-
-(use-package helm
-  :if simpson-helm
-  :diminish ""
-  :bind (("M-x" . helm-M-x)
-         ("C-=" . helm-mini)
-         ("C-SPC f" . helm-find-files)
-         ("C-SPC k p" . simpson-projects-browser))
-  :config (progn
-            (helm-mode)
-            (when (string= (car custom-enabled-themes) "base16-ocean")
-              (set-face-background 'helm-ff-dotted-directory (plist-get base16-ocean-colors :base00))
-              (set-face-background 'helm-ff-dotted-symlink-directory (plist-get base16-ocean-colors :base00))
-              (set-face-foreground 'helm-ff-dotted-directory (plist-get base16-ocean-colors :base03))
-              (set-face-foreground 'helm-ff-dotted-symlink-directory (plist-get base16-ocean-colors :base03)))))
+             :if simpson-evil
+             :after evil
+             :defer 1
+             :config (progn
+                       (global-evil-matchit-mode 1)
+                       (plist-put evilmi-plugins 'handlebars-mode '((evilmi-simple-get-tag evilmi-simple-jump)))))
 
 (use-package projectile
-  :diminish ""
-  :bind (("C-SPC b" . projectile-switch-project)
-         ("C-c C-p" . projectile-find-file-other-window))
-  :config (progn
-            (projectile-global-mode)
-            (setq projectile-enable-caching nil)
-            (setq projectile-switch-project-action 'projectile-find-file)
-            (setq projectile-completion-system (if simpson-helm 'helm 'ivy))))
-
-(use-package helm-projectile
-  :after projectile
-  :if simpson-helm
-  :config (progn
-            (helm-projectile-on)
-            (setq projectile-switch-project-action 'projectile-find-file)
-            (setq projectile-completion-system (if simpson-helm 'helm 'ivy))))
-
-(use-package helm-ag
-  :if simpson-helm
-  :after helm
-  :init (setq helm-ag-base-command "ag --nocolor --nogroup"))
-
-(use-package helm-flyspell
-  :diminish "spell"
-  :if simpson-helm
-  :after helm
-  :bind ("C-SPC C" . helm-flyspell-correct))
+             :diminish ""
+             :bind (("C-SPC b" . projectile-switch-project)
+                    ("C-c C-p" . projectile-find-file))
+             :config (progn
+                       (projectile-mode)
+                       (setq projectile-enable-caching nil)
+                       (setq projectile-switch-project-action 'projectile-find-file)
+                       (setq projectile-completion-system 'ivy)))
 
 (use-package flyspell-correct-ivy
-  :diminish "spell"
-  :if (not simpson-helm)
-  :after ivy
-  :bind ("C-SPC C" . flyspell-correct-previous-word-generic))
+             :diminish "spell"
+             :after ivy
+             :bind ("C-SPC C" . flyspell-correct-previous-word-generic))
 
 (use-package magit
   :pin melpa-stable
@@ -868,24 +820,23 @@ If file is package.json run npm install."
   (setq auth-sources '("~/.dotfiles/emacs/authinfo.gpg")))
 
 (use-package ivy
-  :diminish ""
-  :defer 1
-  :if (not simpson-helm)
-  :config (progn
-            (ivy-mode)
-            (setq ivy-use-virtual-buffers t)
-            (setq ivy-height 20)
-            (setq ivy-count-format "")
-            (setq ivy-use-selectable-prompt t)
-            (global-set-key (kbd "C-SPC A") 'ivy-resume)
-            (define-key global-map (kbd "C-=") 'ivy-switch-buffer)
-            (delete '(counsel-M-x . "^") ivy-initial-inputs-alist)
-            (push '(counsel-M-x . "") ivy-initial-inputs-alist)
-            (simpson-make-neutral ivy-occur-mode-map)
-            (define-key dired-mode-map "r" 'counsel-rg)
-            (ivy-add-actions 'counsel-projectile-ag '(("O" simpson-other-window "open in new window")))
-            (ivy-add-actions 'counsel-ag '(("O" simpson-other-window "open in new window")))
-            (ivy-add-actions 'counsel-rg '(("O" simpson-other-window "open in new window")))))
+             :diminish ""
+             :defer 1
+             :config (progn
+                       (ivy-mode)
+                       (setq ivy-use-virtual-buffers t)
+                       (setq ivy-height 20)
+                       (setq ivy-count-format "")
+                       (setq ivy-use-selectable-prompt t)
+                       (global-set-key (kbd "C-SPC A") 'ivy-resume)
+                       (define-key global-map (kbd "C-=") 'ivy-switch-buffer)
+                       (delete '(counsel-M-x . "^") ivy-initial-inputs-alist)
+                       (push '(counsel-M-x . "") ivy-initial-inputs-alist)
+                       (simpson-make-neutral ivy-occur-mode-map)
+                       (define-key dired-mode-map "r" '(lambda() (interactive) (counsel-rg nil (file-truename dired-directory))))
+                       (ivy-add-actions 'counsel-projectile-ag '(("O" simpson-other-window "open in new window")))
+                       (ivy-add-actions 'counsel-ag '(("O" simpson-other-window "open in new window")))
+                       (ivy-add-actions 'counsel-rg '(("O" simpson-other-window "open in new window")))))
 
 (defun simpson-other-window(x)
   (let* ((string (split-string x ":"))
@@ -896,20 +847,18 @@ If file is package.json run npm install."
       (goto-line num))))
 
 (use-package counsel
-  :defer 1
-  :if (not simpson-helm)
-  :bind ("C-SPC f" . counsel-find-file)
-  :config (progn
-            (global-set-key (kbd "M-x") 'counsel-M-x)
-            (define-key dired-mode-map "f" 'counsel-find-file)
-            (ivy-add-actions 'counsel-find-file '(("D" simpson-delete "delete")))
-            (ivy-add-actions 'counsel-find-file '(("h" (lambda(file) (dired (file-name-directory file))) "Dired")))
-            (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-            (global-set-key (kbd "<f1> v") 'counsel-describe-variable)))
+             :defer 1
+             :bind ("C-SPC f" . counsel-find-file)
+             :config (progn
+                       (global-set-key (kbd "M-x") 'counsel-M-x)
+                       (define-key dired-mode-map "f" 'counsel-find-file)
+                       (ivy-add-actions 'counsel-find-file '(("D" simpson-delete "delete")))
+                       (ivy-add-actions 'counsel-find-file '(("h" (lambda(file) (dired (file-name-directory file))) "Dired")))
+                       (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+                       (global-set-key (kbd "<f1> v") 'counsel-describe-variable)))
 
 (use-package counsel-projectile
-  :if (not simpson-helm)
-  :defer 1)
+             :defer 1)
 
 (defun simpson-browse()
   "Fuzzy finding interface to eyebrowse workspaces.
@@ -965,14 +914,8 @@ An asterisk (*) deontes current workspace."
             (add-hook 'makefile-bsdmake-mode-hook (lambda () (setq mode-name "make")))))
 
 (use-package swiper
-  :defer 1
-  :if (not simpson-helm)
-  :bind ("C-SPC /" . swiper))
-
-(use-package swiper-helm
-  :defer 1
-  :if simpson-helm
-  :bind ("C-SPC /" . swiper-helm))
+             :defer 1
+             :bind ("C-SPC /" . swiper))
 
 (use-package command-log-mode)
 
