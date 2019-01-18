@@ -13,12 +13,9 @@ if [ -f ~/.dotfiles/bash/aliases ]; then
   source ~/.dotfiles/bash/aliases
 fi
 
-PATH="$PATH:/usr/local/share/npm/bin"
-PATH="$PATH:/usr/local/lib/node_modules"
 PATH="/usr/local/sbin:$PATH"
 PATH="/usr/local/bin:$PATH"
-PATH="/Users/asimpson/.better-npm/bin:$PATH"
-PATH="/Users/asimpson/.better-npm/lib/node_modules:$PATH"
+PATH="/Users/asimpson/.npm-global/bin:$PATH"
 
 ############################
 # gpg-agent
@@ -26,3 +23,4 @@ PATH="/Users/asimpson/.better-npm/lib/node_modules:$PATH"
 export GPG_TTY=$(tty)
 
 export PATH="$HOME/.cargo/bin:$PATH"
+export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
