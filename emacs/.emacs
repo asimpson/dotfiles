@@ -1792,6 +1792,12 @@ Open the url in the default browser"
                        (setq twittering-use-icon-storage t)
                        (defalias 'epa--decode-coding-string 'decode-coding-string)))
 
+(use-package vterm
+             :load-path "~/Projects/emacs-libvterm"
+             :defer 1
+             :ensure nil
+             :config (setq vterm-max-scrollback 10000))
+
 (defhydra hydra-twittering-lists()
   "
     Shortcuts to jump to different timelines
