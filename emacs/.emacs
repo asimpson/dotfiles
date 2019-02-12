@@ -816,7 +816,46 @@ If file is package.json run npm install."
                        (define-key dired-mode-map "r" '(lambda() (interactive) (counsel-rg nil (file-truename dired-directory))))
                        (ivy-add-actions 'counsel-projectile-ag '(("O" simpson-other-window "open in new window")))
                        (ivy-add-actions 'counsel-ag '(("O" simpson-other-window "open in new window")))
-                       (ivy-add-actions 'counsel-rg '(("O" simpson-other-window "open in new window")))))
+                       (ivy-add-actions 'counsel-rg '(("O" simpson-other-window "open in new window")))
+                       (ivy-set-actions 'links-for-region '(("e" (lambda(item) (browse-url item)) "Browse")))))
+
+(defun links-for-region()
+  "Return prompt of URLs for selected word(s).  Put selected URL on 'kill-ring'."
+  (interactive)
+  (let* ((prompt (use-region-p))
+         (query (if prompt
+                    (buffer-substring-no-properties (region-beginning) (region-end))
+                    (read-string "Search for: ")))
+         (buf (url-retrieve-synchronously (concat "https://duckduckgo.com/html/?q=" query) t))
+         (dom (with-current-buffer buf
+                (libxml-parse-html-region url-http-end-of-headers (point-max))))
+         (url-list (mapcar (lambda(x)
+                             (car (seq-filter
+                                   (lambda(x) (string-match "http" x))
+                                   (split-string (url-unhex-string (dom-attr x 'href)) "="))))
+                           (dom-by-class dom "result__a"))))
+    (ivy-read "Which URL? " url-list
+              :action (lambda(link) (kill-new link))
+              :caller 'links-for-region)
+
+    (ivy-set-actions
+     'links-for-region
+     '(("d" (lambda (url)
+              (let* ((desc (get-buffer-create "*desc*"))
+                     (buf (url-retrieve-synchronously url))
+                     (dom (with-current-buffer buf
+                            (libxml-parse-html-region url-http-end-of-headers (point-max)))))
+                (with-current-buffer desc
+                  (erase-buffer)
+                  (insert (cdr (assoc 'content (seq-filter
+                                                'identity
+                                                (mapcar
+                                                 (lambda (x) (assoc 'content (car (cdr x))))
+                                                 (dom-by-tag dom 'meta))))))
+                  (pop-to-buffer desc)))) "View description")))
+    (cond
+      ((string-equal "markdown-mode" major-mode) (markdown-insert-link))
+      ((string-equal "org-mode" major-mode) (org-insert-link)))))
 
 (defun simpson-other-window(x)
   (let* ((string (split-string x ":"))
