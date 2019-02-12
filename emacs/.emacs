@@ -1349,6 +1349,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
                        (simpson-make-neutral mu4e-headers-mode-map)
                        (simpson-make-neutral--keys mu4e-headers-mode-map)
                        (simpson-make-neutral--keys mu4e-view-mode-map)
+                       (setq mu4e-view-html-plaintext-ratio-heuristic most-positive-fixnum)
                        ;; In my workflow, emails won't be moved at all. Only their flags/labels are
                        ;; changed. Se we redefine the trash and refile marks not to do any moving.
                        ;; However, the real magic happens in `+email|gmail-fix-flags'.
