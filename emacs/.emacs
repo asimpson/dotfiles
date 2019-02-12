@@ -1280,7 +1280,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
              :defer 1
              :config (progn
                        (setq racer-cmd "~/.cargo/bin/racer")
-                       (setq racer-rust-src-path nil)
+                       (setq racer-rust-src-path (concat (car (split-string (shell-command-to-string "rustc --print sysroot") "\n")) "/lib/rustlib/src/rust/src"))
                        (add-hook 'rust-mode-hook 'racer-mode)
                        (add-hook 'racer-mode-hook 'eldoc-mode)
                        (add-hook 'racer-mode-hook 'company-mode)))
