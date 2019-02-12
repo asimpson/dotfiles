@@ -76,15 +76,15 @@
      (load-library ,file)))
 
 (use-package osx-trash
-  :if (eq system-type 'darwin)
-  :defer 1
-  :config (progn
-            (osx-trash-setup)
-            (setq delete-by-moving-to-trash t)))
+             :if (eq system-type 'darwin)
+             :defer 1
+             :config (progn
+                       (osx-trash-setup)
+                       (setq delete-by-moving-to-trash t)))
 
 (use-package base16-theme
-  :if (display-graphic-p)
-  :init (load-theme 'base16-dracula t))
+             :if (display-graphic-p)
+             :init (load-theme 'base16-dracula t))
 
 (use-package tomorrow-theme
   :ensure nil
@@ -123,14 +123,13 @@
   :config (vimish-fold-global-mode 1))
 
 (use-package flycheck
-  :diminish "lint"
-  :defer 1
-  :bind ("C-SPC '" . flycheck-mode)
-  :config (progn
-            (global-flycheck-mode)
-            (setq flycheck-global-modes '(rjsx-mode emacs-lisp-mode rust-mode ruby-mode common-lisp-mode))
-            ;;https://github.com/flycheck/flycheck/issues/1129#issuecomment-319600923
-            (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))))
+             :diminish "lint"
+             :defer 1
+             :bind ("C-SPC '" . flycheck-mode)
+             :config (progn
+                       (setq flycheck-global-modes '(rjsx-mode emacs-lisp-mode rust-mode ruby-mode common-lisp-mode))
+                       ;;https://github.com/flycheck/flycheck/issues/1129#issuecomment-319600923
+                       (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))))
 
 (use-package evil
              :if simpson-evil
@@ -153,6 +152,9 @@
                        (add-to-list 'evil-emacs-state-modes 'sql-interactive-mode)
                        (add-to-list 'evil-emacs-state-modes 'deadgrep-mode)
                        (add-to-list 'evil-emacs-state-modes 'twittering-mode)
+                       (add-to-list 'evil-emacs-state-modes 'epresent-mode)
+                       (add-to-list 'evil-emacs-state-modes 'slime-repl-mode)
+                       (add-to-list 'evil-emacs-state-modes 'sldb-mode)
                        ;;http://spacemacs.org/doc/FAQ#orgheadline31
                        (fset 'evil-visual-update-x-selection 'ignore)
                        (define-key evil-normal-state-map (kbd "RET") 'save-buffer)
@@ -177,6 +179,7 @@
                        (evil-leader/set-key "c" 'fci-mode)
                        (evil-leader/set-key "t" 'hydra-mocha/body)
                        (evil-leader/set-key "v" 'simpson-vert-split)
+                       (evil-leader/set-key "f" 'counsel-rg)
                        (evil-leader/set-key "x" 'simpson-horizontal-split)))
 
 (defun simpson-vert-split()
@@ -239,167 +242,156 @@
              :bind ("C-SPC C" . flyspell-correct-previous-word-generic))
 
 (use-package magit
-  :pin melpa-stable
-  :defer 1
-  :bind ("C-SPC g" . magit-status)
-  :config (progn
-            ;;https://github.com/magit/magit/pull/2513
-            ;;Users who use Tramp and experience delays, should consider setting
-            ;;the option to `magit-auto-revert-repository-buffer-p'.
-            (setq auto-revert-buffer-list-filter nil)
-            (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
-            (put 'magit-clean 'disabled nil)
-            (add-hook 'magit-status-sections-hook 'magit-insert-worktrees)
-            (setq magit-commit-show-diff nil)
-            (setq magit-log-section-commit-count 0)
-            (when (string= (car custom-enabled-themes) "base16-ocean")
-              (set-face-foreground 'magit-blame-date (plist-get base16-ocean-colors :base0A))
-              (set-face-foreground 'magit-blame-hash (plist-get base16-ocean-colors :base0A))
-              (set-face-foreground 'magit-blame-heading (plist-get base16-ocean-colors :base0A))
-              (set-face-foreground 'magit-blame-name (plist-get base16-ocean-colors :base0A))
-              (set-face-foreground 'magit-blame-summary (plist-get base16-ocean-colors :base0A))
-              (set-face-foreground 'magit-sequence-onto (plist-get base16-ocean-colors :base0A))
-              (set-face-foreground 'magit-sequence-done (plist-get base16-ocean-colors :base0A))
-              (set-face-foreground 'magit-hash (plist-get base16-ocean-colors :base0C))
-              (set-face-background 'magit-section-highlight (plist-get base16-ocean-colors :base01)))))
+             :pin melpa-stable
+             :defer 1
+             :bind ("C-SPC g" . magit-status)
+             :config (progn
+                       (setq auto-revert-buffer-list-filter nil)
+                       (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+                       (put 'magit-clean 'disabled nil)
+                       (add-hook 'magit-status-sections-hook 'magit-insert-worktrees)
+                       (setq magit-commit-show-diff nil)
+                       (setq magit-log-section-commit-count 0)
+                       (set-face-background 'magit-diff-hunk-heading-highlight "DarkMagenta")
+                       (set-face-background 'magit-diff-hunk-heading "DarkCyan")
+                       (when (string= (car custom-enabled-themes) "base16-ocean")
+                         (set-face-foreground 'magit-blame-date (plist-get base16-ocean-colors :base0A))
+                         (set-face-foreground 'magit-blame-hash (plist-get base16-ocean-colors :base0A))
+                         (set-face-foreground 'magit-blame-heading (plist-get base16-ocean-colors :base0A))
+                         (set-face-foreground 'magit-blame-name (plist-get base16-ocean-colors :base0A))
+                         (set-face-foreground 'magit-blame-summary (plist-get base16-ocean-colors :base0A))
+                         (set-face-foreground 'magit-sequence-onto (plist-get base16-ocean-colors :base0A))
+                         (set-face-foreground 'magit-sequence-done (plist-get base16-ocean-colors :base0A))
+                         (set-face-foreground 'magit-hash (plist-get base16-ocean-colors :base0C))
+                         (set-face-background 'magit-section-highlight (plist-get base16-ocean-colors :base01)))))
+
+(use-package forge)
 
 (use-package evil-magit
-  :pin melpa-stable
-  :defer 1
-  :after evil
-  :if simpson-evil)
+             :pin melpa-stable
+             :defer 1
+             :after evil
+             :if simpson-evil)
 
 (use-package diff-hl
-  :defer 1
-  :bind (("C-SPC r" . diff-hl-revert-hunk)
-         ("C-x p" . diff-hl-previous-hunk)
-         ("C-x n" . diff-hl-next-hunk)) :config (progn
-         (global-diff-hl-mode)
-         (cond
-          ((string= (car custom-enabled-themes) "base16-dracula") (progn
-                                                                    (set-face-background 'diff-hl-change (plist-get base16-dracula-colors :base0C))
-                                                                    (set-face-background 'diff-hl-insert (plist-get base16-dracula-colors :base0B))
-                                                                    (set-face-background 'diff-hl-delete (plist-get base16-dracula-colors :base09))))
-          ((string= (car custom-enabled-themes) "tomorrow-day") (progn
-                                                                  (set-face-background 'diff-hl-delete "red3")
-                                                                  (set-face-background 'diff-hl-insert "LightGreen")))
-          ((string= (car custom-enabled-themes) "base16-ocean") (progn
-                                                                  (set-face-background 'diff-hl-change (plist-get base16-ocean-colors :base0C))
-                                                                  (set-face-background 'diff-hl-insert (plist-get base16-ocean-colors :base0B))
-                                                                  (set-face-background 'diff-hl-delete (plist-get base16-ocean-colors :base09)))))))
+             :defer 1
+             :bind (("C-SPC r" . diff-hl-revert-hunk))
+             :config (progn
+                       (global-diff-hl-mode)
+                       (cond
+                         ((string= (car custom-enabled-themes) "base16-dracula") (progn
+                                                                                   (set-face-background 'diff-hl-change (plist-get base16-dracula-colors :base0C))
+                                                                                   (set-face-background 'diff-hl-insert (plist-get base16-dracula-colors :base0B))
+                                                                                   (set-face-background 'diff-hl-delete (plist-get base16-dracula-colors :base09))))
+                         ((string= (car custom-enabled-themes) "tomorrow-day") (progn
+                                                                                 (set-face-background 'diff-hl-delete "red3")
+                                                                                 (set-face-background 'diff-hl-insert "LightGreen")))
+                         ((string= (car custom-enabled-themes) "base16-ocean") (progn
+                                                                                 (set-face-background 'diff-hl-change (plist-get base16-ocean-colors :base0C))
+                                                                                 (set-face-background 'diff-hl-insert (plist-get base16-ocean-colors :base0B))
+                                                                                 (set-face-background 'diff-hl-delete (plist-get base16-ocean-colors :base09)))))))
 
 (use-package org
-  :defer 2
-  :if (file-exists-p (concat simpson-dropbox-path "org/tasks.txt"))
-  :pin org
-  :bind (("C-SPC c" . org-capture)
-         ("C-SPC k B" . simpson-org-blog-capture)
-         ("C-SPC t" . org-todo-list)
-         ("C-SPC a" . org-agenda)
-         ("C-SPC T" . org-tags-view))
-  :mode (("\\.txt\\'" . org-mode))
-  :config (progn
-            (require 'ox-md)
-            (setq org-agenda-file-regexp "\\`[^.].*\\.txt\\'")
-            (setq org-agenda-files `(,(concat simpson-dropbox-path "org")))
-            (setq org-log-done t)
-            (setq org-deadline-warning-days 3)
-            (setq org-refile-use-outline-path 'file)
-            (setq org-outline-path-complete-in-steps nil)
-            (setq org-export-with-toc nil)
-            (setq org-agenda-custom-commands '(("n" "Agenda and all TODOs"
-                                                ((agenda "")
-                                                 (alltodo "")))
-                                               ("w" "Work tasks" ((agenda "") (todo ""))
-                                                ((org-agenda-files `(,(concat simpson-dropbox-path "org/tasks.txt")))))
-                                               ("s" "side projects" ((agenda "") (todo ""))
-                                                ((org-agenda-files `(,(concat simpson-dropbox-path "org/side.txt")))))))
-            (setq org-refile-targets '(
-                                       (nil . (:level . 1))
-                                       (nil . (:level . 2))
-                                       (org-agenda-files . (:level . 1))))
-            (setq org-todo-keywords
-                  '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
-            (setq org-capture-templates
-                  `(("a" "Add to tasks" entry
-                     (file ,(concat simpson-dropbox-path "org/tasks.txt"))
-                     "* TODO %? %^g
+             :defer 2
+             :if (file-exists-p (concat simpson-dropbox-path "org/tasks.txt"))
+             :pin org
+             :bind (("C-SPC c" . org-capture)
+                    ("C-SPC k B" . simpson-org-blog-capture)
+                    ("C-SPC t" . org-todo-list)
+                    ("C-SPC a" . org-agenda)
+                    ("C-SPC T" . org-tags-view))
+             :mode (("\\.txt\\'" . org-mode))
+             :config (progn
+                       (require 'ox-md)
+                       (setq org-agenda-file-regexp "\\`[^.].*\\.txt\\'")
+                       (setq org-agenda-files `(,(concat simpson-dropbox-path "org")))
+                       (setq org-log-done t)
+                       (setq org-deadline-warning-days 3)
+                       (setq org-refile-use-outline-path 'file)
+                       (setq org-outline-path-complete-in-steps nil)
+                       (setq org-export-with-toc nil)
+                       (setq org-agenda-custom-commands '(("n" "Agenda and all TODOs"
+                                                           ((agenda "")
+                                                            (alltodo "")))
+                                                          ("w" "Work tasks" ((agenda "") (todo ""))
+                                                           ((org-agenda-files `(,(concat simpson-dropbox-path "org/tasks.txt")))))
+                                                          ("f" "side projects" ((agenda "") (todo ""))
+                                                           ((org-agenda-files `(,(concat simpson-dropbox-path "org/side.txt")))))))
+                       (setq org-refile-targets '(
+                                                  (nil . (:level . 1))
+                                                  (nil . (:level . 2))
+                                                  (org-agenda-files . (:level . 1))))
+                       (setq org-todo-keywords
+                             '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
+                       (setq org-capture-templates
+                             `(("a" "Add to tasks" entry
+                                    (file ,(concat simpson-dropbox-path "org/tasks.txt"))
+                                    "* TODO %? %^g
   :PROPERTIES:
   :CREATED: %T
   :END:")
 
-                    ("s" "Side projects tracker" entry
-                     (file ,(concat simpson-dropbox-path "org/side.txt"))
-                     "* TODO %? %^g
+                               ("s" "Side projects tracker" entry
+                                    (file ,(concat simpson-dropbox-path "org/side.txt"))
+                                    "* TODO %? %^g
   :PROPERTIES:
   :CREATED: %T
   :END:")
-                    ("b" "My blog post captures" entry
-                     (file ,(concat simpson-dropbox-path "org/reading.txt"))
-                     "* %? %^g
+                               ("b" "My blog post captures" entry
+                                    (file ,(concat simpson-dropbox-path "org/reading.txt"))
+                                    "* %? %^g
   :PROPERTIES:
   %(simpson-prompt-for-feedwrangler-url)
   :CREATED: %T
   :END:")
-                    ("p" "Personal: " entry
-                     (file ,(concat simpson-dropbox-path "org/personal.txt"))
-                     "* %? %^g
+                               ("p" "Personal: " entry
+                                    (file ,(concat simpson-dropbox-path "org/personal.txt"))
+                                    "* %? %^g
   :PROPERTIES:
   :CREATED: %T
   :END:")
 
-                    ("t" "Travel information" entry
-                     (file ,(concat simpson-dropbox-path "org/travel.txt"))
-                     "* %? %^G
+                               ("e" "Email log: " entry
+                                    (file ,(concat simpson-dropbox-path "org/email.txt"))
+                                    "* %A %?
+  :PROPERTIES:
+  :CREATED: %T
+  :END:")
+
+                               ("t" "Travel information" entry
+                                    (file ,(concat simpson-dropbox-path "org/travel.txt"))
+                                    "* %? %^G
   :PROPERTIES:
   :CREATED: %T
   :END:
 ** Email message: %a")))
-            (setq org-agenda-restore-windows-after-quit t)
-            (add-hook 'org-mode-hook (lambda () (flyspell-mode 1)))
-            (add-hook 'org-mode-hook 'visual-line-mode)
-            (add-hook 'org-mode-hook (lambda () (setq mode-name "org")))
-            (setq org-html-head "
-  <style>
-  body {
-  width: 800px;
-  margin: 0 auto;
-  font-family: sans-serif;
-  }
-  img {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  }
-  pre {
-  overflow-y: scroll !important;
-  }
-  </style>
-  ")
-            (setq exec-path (append exec-path '("/Library/TeX/texbin/latex")))
-            (global-set-key (kbd "C-SPC k f") 'org-footnote-new)
-            (global-set-key (kbd "C-SPC k l") 'org-toggle-link-display)
-            (setq org-export-backends '(ascii html icalendar latex md))
-            (org-babel-do-load-languages
-             'org-babel-load-languages
-             '((shell . t)
-               (emacs-lisp . t)
-               (plantuml . t)
-               (js . t)))
-            (setq org-plantuml-jar-path "/usr/local/Cellar/plantuml/1.2018.12/libexec/plantuml.jar")
-            (setq org-confirm-babel-evaluate (lambda (lang src) (not (string-equal lang "plantuml"))))
-            (add-to-list
-             'org-src-lang-modes '("plantuml" . plantuml))
-            (run-at-time 0 (* 60 15) #'simpson-org-refresh)
-            (if (string= (car custom-enabled-themes) "base16-ocean")
-                (progn
-                  (set-face-foreground 'org-link (plist-get base16-ocean-colors :base0B))
-                  (set-face-foreground 'org-tag (plist-get base16-ocean-colors :base0A))
-                  (set-face-foreground 'org-agenda-structure (plist-get base16-ocean-colors :base03))
-                  (set-face-attribute 'org-mode-line-clock nil :foreground (plist-get base16-ocean-colors :base0E) :background nil :box nil :inherit nil))
-              (set-face-attribute 'org-mode-line-clock nil :foreground nil :background nil :box nil :inherit nil))
-            (setq org-pretty-entities t)
-            (setq org-export-with-section-numbers nil)))
+                       (setq org-agenda-restore-windows-after-quit t)
+                       (add-hook 'org-mode-hook (lambda () (flyspell-mode 1)))
+                       (add-hook 'org-mode-hook 'visual-line-mode)
+                       (add-hook 'org-mode-hook (lambda () (setq mode-name "org")))
+                       (setq exec-path (append exec-path '("/Library/TeX/texbin/latex")))
+                       (global-set-key (kbd "C-SPC k f") 'org-footnote-new)
+                       (global-set-key (kbd "C-SPC k l") 'org-toggle-link-display)
+                       (org-babel-do-load-languages
+                        'org-babel-load-languages
+                        '((shell . t)
+                          (emacs-lisp . t)
+                          (plantuml . t)
+                          (js . t)))
+                       (setq org-plantuml-jar-path "/usr/local/Cellar/plantuml/1.2018.12/libexec/plantuml.jar")
+                       (setq org-confirm-babel-evaluate (lambda (lang src) (not (string-equal lang "plantuml"))))
+                       (add-to-list
+                        'org-src-lang-modes '("plantuml" . plantuml))
+                       (run-at-time 0 (* 60 15) #'simpson-org-refresh)
+                       (if (string= (car custom-enabled-themes) "base16-ocean")
+                           (progn
+                             (set-face-foreground 'org-link (plist-get base16-ocean-colors :base0B))
+                             (set-face-foreground 'org-tag (plist-get base16-ocean-colors :base0A))
+                             (set-face-foreground 'org-agenda-structure (plist-get base16-ocean-colors :base03))
+                             (set-face-attribute 'org-mode-line-clock nil :foreground (plist-get base16-ocean-colors :base0E) :background nil :box nil :inherit nil))
+                           (set-face-attribute 'org-mode-line-clock nil :foreground nil :background nil :box nil :inherit nil))
+                       (setq org-pretty-entities t)
+                       (setq org-export-with-section-numbers nil)))
 
 (defun simpson-prompt-for-feedwrangler-url()
   (if (y-or-n-p "Get feedwrangler url? ")
@@ -421,50 +413,39 @@
 (defun simpson-org-refresh()
   "Refreshes org buffers that change via dropbox to pull in tasks that have been added outside Emacs."
   (interactive)
-  (let ((buffers '("tasks.txt" "refile-beorg.txt")))
+  (let ((buffers (seq-filter (lambda (buf) (not (buffer-modified-p buf))) (mapcar 'get-buffer (mapcar 'f-filename (f-glob "*.txt" (car org-agenda-files)))))))
     (seq-each (lambda(buf)
-                (when (buffer-live-p (get-buffer buf))
-                  (set-buffer buf)
-                  (revert-buffer t t))) buffers)))
-
-(use-package multi-term
-  :config (progn
-            (setq multi-term-program "/bin/zsh")
-            (setq multi-term-program-switches "--login")
-            (define-key global-map (kbd "C-SPC p") 'term-paste)))
+                (set-buffer buf)
+                (revert-buffer t t)) buffers)))
 
 (use-package markdown-mode
-  :mode (("\\.md\\'" . markdown-mode))
-  :config (progn
-            ;;add custom fonts for markdown mode
-            (add-hook 'markdown-mode-hook 'markdown-fonts)
-            ;;toggle on visual line mode for writing
-            (add-hook 'markdown-mode-hook 'visual-line-mode)
-            ;;toggle on spell-check for writing
-            (add-hook 'markdown-mode-hook (lambda () (flyspell-mode 1)))
-            (add-hook 'markdown-mode-hook (lambda () (setq mode-name "md")))
-            (setq markdown-command "/usr/local/bin/pandoc")
-            (setq markdown-live-preview-delete-export t)
-            (setq markdown-open-command "/usr/local/bin/marked")))
+             :mode (("\\.md\\'" . markdown-mode))
+             :config (progn
+                       (add-hook 'markdown-mode-hook 'markdown-fonts)
+                       (add-hook 'markdown-mode-hook 'visual-line-mode)
+                       (add-hook 'markdown-mode-hook (lambda () (flyspell-mode 1)))
+                       (add-hook 'markdown-mode-hook (lambda () (setq mode-name "md")))
+                       (setq markdown-command "/usr/local/bin/pandoc")
+                       (setq markdown-live-preview-delete-export t)
+                       (setq markdown-open-command "/usr/local/bin/marked")))
 
 (use-package js2-mode
-  :disabled
-  :interpreter (("node" . js2-mode))
-  :config (progn
-            ;; (add-hook 'js2-mode-hook 'relative-line-numbers-mode)
-            (setq js2-basic-offset 2)
-            (setq js2-highlight-level 3)
-            (setq js2-bounce-indent-p t)
-            (electric-indent-mode -1)
-            (setq js2-mode-show-strict-warnings nil)
-            (add-hook 'js2-mode-hook (lambda() (setq show-trailing-whitespace t)))
-            (global-set-key (kbd "C-SPC k j") 'js2-mode-hide-warnings-and-errors)
-            (defcustom js2-strict-missing-semi-warning nil
-              "Non-nil to warn about semicolon auto-insertion after statement.
+             :disabled
+             :interpreter (("node" . js2-mode))
+             :config (progn
+                       (setq js2-basic-offset 2)
+                       (setq js2-highlight-level 3)
+                       (setq js2-bounce-indent-p t)
+                       (electric-indent-mode -1)
+                       (setq js2-mode-show-strict-warnings nil)
+                       (add-hook 'js2-mode-hook (lambda() (setq show-trailing-whitespace t)))
+                       (global-set-key (kbd "C-SPC k j") 'js2-mode-hide-warnings-and-errors)
+                       (defcustom js2-strict-missing-semi-warning nil
+                         "Non-nil to warn about semicolon auto-insertion after statement.
   Technically this is legal per Ecma-262, but some style guides disallow
   depending on it."
-              :type 'boolean
-              :group 'js2-mode)))
+                         :type 'boolean
+                         :group 'js2-mode)))
 
 (use-package rjsx-mode
   :interpreter (("node" . rjsx-mode))
@@ -486,7 +467,6 @@
 (set-face-attribute 'default nil :font "Hack-12" )
 (set-frame-font "Hack-12" nil t)
 
-;;modes w/ file extensions
 (add-to-list 'auto-mode-alist '("\\.scss\\'" . css-mode))
 
 (use-package yaml-mode
@@ -507,11 +487,13 @@
   (setq buffer-face-mode-face '(:family "Hack" :height 120))
   (buffer-face-mode))
 
+(use-package f)
+
 (use-package visual-fill-column
-  :defer 1
-  :config (progn
-            (add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
-            (setq-default visual-fill-column-width 160)))
+             :defer 1
+             :config (progn
+                       (add-hook 'visual-line-mode-hook 'visual-fill-column-mode)
+                       (setq-default visual-fill-column-width 160)))
 
 (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
 
@@ -565,9 +547,9 @@
                                                            'face display-time-mail-face
                                                            'help-echo (concat num " " "unread mail")
                                                            'keymap '(mode-line keymap
-                                                                               (mouse-1 . mu4e)))
+                                                                     (mouse-1 . mu4e)))
                                            " " num)))
-      (setq simpson-mail-count nil))))
+        (setq simpson-mail-count nil))))
 
 (defun simpson-update-check()
   "Process that check for software update on macOS."
@@ -575,14 +557,14 @@
 
 (defun simpson-update-check--sentinel(proc msg)
   "Search for word recommended in MSG in BUFFER output to determine update.
-  PROC is not used."
+PROC is not used."
   (when (and (string= msg "finished\n") (buffer-live-p (get-buffer "*softwareupdate*")))
     (if (with-current-buffer "*softwareupdate*"
           (goto-char (point-min))
           (search-forward "recommended" nil t))
         (setq simpson-software-update "*")
-      (setq simpson-software-update nil)
-      (kill-buffer "*softwareupdate*")))
+        (setq simpson-software-update nil)
+        (kill-buffer "*softwareupdate*")))
   (run-at-time (* 60 60) nil #'simpson-update-check))
 
 (run-at-time 0 nil #'simpson-update-check)
@@ -642,7 +624,7 @@
   :config (which-key-mode))
 
 (use-package fill-column-indicator
-  :config (setq fci-rule-column 80))
+             :config (setq fci-rule-column 100))
 
 (use-package avy
   :defer 1
@@ -694,24 +676,24 @@
   :ensure nil)
 
 (use-package sauron
-  :pin melpa-stable
-  :after sauron-ams-org
-  :config (progn
-            (setq sauron-modules '(sauron-erc sauron-ams-org))
-            (simpson-load-file "~/.dotfiles/emacs/irc-watch.gpg")
-            (when simpson-evil (add-to-list 'evil-emacs-state-modes 'sauron-mode))
-            (setq sauron-watch-nicks nil)
-            (when (boundp 'simpson-watch-patterns)
-              (setq sauron-watch-patterns simpson-watch-patterns))
-            (setq sauron-hide-mode-line t)
-            (setq sauron-separate-frame t)
-            (setq sauron-column-alist '((timestamp . 8)
-                                        (origin . 7)
-                                        (message)))
-            (setq sauron-timestamp-format "%H:%M:%S")
-            (add-hook 'sauron-event-added-functions 'sauron-alert-el-adapter)
-            (advice-add 'shell-command-sentinel :before #'simpson-shell-command-sentiel)
-            (sauron-start-hidden)))
+             :pin melpa-stable
+             :after sauron-ams-org
+             :config (progn
+                       (setq sauron-modules '(sauron-erc sauron-ams-org))
+                       (simpson-load-file "~/.dotfiles/emacs/irc-watch.gpg")
+                       (when simpson-evil (add-to-list 'evil-emacs-state-modes 'sauron-mode))
+                       (setq sauron-watch-nicks nil)
+                       (when (boundp 'simpson-watch-patterns)
+                         (setq sauron-watch-patterns simpson-watch-patterns))
+                       (setq sauron-hide-mode-line t)
+                       (setq sauron-separate-frame nil)
+                       (setq sauron-column-alist '((timestamp . 8)
+                                                   (origin . 7)
+                                                   (message)))
+                       (setq sauron-timestamp-format "%H:%M:%S")
+                       (add-hook 'sauron-event-added-functions 'sauron-alert-el-adapter)
+                       (advice-add 'shell-command-sentinel :before #'simpson-shell-command-sentiel)
+                       (sauron-start-hidden)))
 
 (defun jsxEmmet()
   (setq emmet-expand-jsx-className? t))
@@ -725,19 +707,20 @@
 ;;to open a file with sudo, invoke C-x C-f and then type /sudo::/path
 
 (use-package dired
-  :ensure nil
-  :demand t
-  :config (progn
-            (setq dired-dwim-target t)
-            (setq dired-recursive-deletes t)
-            (setq delete-by-moving-to-trash t)
-            (setq dired-use-ls-dired nil)
-            (define-key dired-mode-map "e" 'epa-dired-do-encrypt)
-            (define-key dired-mode-map (kbd "C-o") 'simpson-dired-open-at-point)
-            (define-key dired-mode-map (kbd "C-c !") 'simpson-dired-script-at-point)
-            (simpson-make-neutral dired-mode-map)
-            (simpson-make-neutral--keys dired-mode-map)
-            (define-key dired-mode-map "E" 'epa-dired-do-decrypt)))
+             :ensure nil
+             :demand t
+             :config (progn
+                       (setq dired-dwim-target t)
+                       (setq dired-recursive-deletes t)
+                       (setq delete-by-moving-to-trash t)
+                       (setq dired-use-ls-dired nil)
+                       (define-key dired-mode-map "e" 'epa-dired-do-encrypt)
+                       (define-key dired-mode-map (kbd "C-o") 'simpson-dired-open-at-point)
+                       (define-key dired-mode-map (kbd "C-c !") 'simpson-dired-script-at-point)
+                       (simpson-make-neutral dired-mode-map)
+                       (simpson-make-neutral--keys dired-mode-map)
+                       (define-key dired-mode-map "E" 'epa-dired-do-decrypt)
+                       (define-key dired-mode-map "A" 'upload-image-to-s3)))
 
 (defun simpson-dired-script-at-point()
   "Call 'async-shell-command' on file at point.
@@ -759,20 +742,17 @@ If file is package.json run npm install."
   :config (editorconfig-mode 1))
 
 (use-package prettier-js
-  :diminish "pretty"
-  :defer 1
-  :init (progn
-          (add-hook 'js2-mode-hook 'prettier-js-mode)
-          (add-hook 'rjsx-mode-hook 'prettier-js-mode))
-  :config (progn
-            (setq prettier-js-command "prettier-eslint")
-            (setq prettier-js-args '(
-                                     "--trailing-comma" "es5"
-                                     "--bracket-spacing" "true"
-                                     "--single-quote" "true"))))
-
-;; Mutt support.
-(setq auto-mode-alist (append '(("mutt-*" . mail-mode)) auto-mode-alist))
+             :diminish "pretty"
+             :defer 1
+             :init (progn
+                     (add-hook 'js2-mode-hook 'prettier-js-mode)
+                     (add-hook 'rjsx-mode-hook 'prettier-js-mode))
+             :config (progn
+                       (setq prettier-js-command "prettier-eslint")
+                       (setq prettier-js-args '(
+                                                "--trailing-comma" "es5"
+                                                "--bracket-spacing" "true"
+                                                "--single-quote" "true"))))
 
 (defun simpson-shell-command-sentiel(proc sig)
   (when (seq-filter (lambda(x)
@@ -784,7 +764,7 @@ If file is package.json run npm install."
                    '(exit))
              (not (string= (string-trim sig) "finished")))
     (sauron-add-event 'shell 3 sig (lambda() #'(switch-to-buffer-other-window
-                                                "*Async Shell Command*")))))
+                                           "*Async Shell Command*")))))
 
 (use-package erc
   :config (progn
@@ -876,28 +856,29 @@ An asterisk (*) deontes current workspace."
     (eyebrowse-switch-to-window-config (plist-get (cdr (assoc pane panes)) :number))))
 
 (use-package eyebrowse
-  :defer 1
-  :init (setq eyebrowse-keymap-prefix (kbd "C-SPC s"))
-  :config (progn
-            (when (string= (car custom-enabled-themes) "base16-ocean")
-              (set-face-foreground 'eyebrowse-mode-line-active (plist-get base16-ocean-colors :base0E)))
-            (eyebrowse-mode t)
-            (set-face-foreground 'eyebrowse-mode-line-active "green4")
-            (setq eyebrowse-mode-line-style nil)
-            (global-set-key (kbd "C-SPC s t") 'simpson-browse)
-            (setq eyebrowse-new-workspace t)))
+             :defer 1
+             :init (setq eyebrowse-keymap-prefix (kbd "C-SPC s"))
+             :config (progn
+                       (when (string= (car custom-enabled-themes) "base16-ocean")
+                         (set-face-foreground 'eyebrowse-mode-line-active (plist-get base16-ocean-colors :base0E)))
+                       (eyebrowse-mode t)
+                       (set-face-foreground 'eyebrowse-mode-line-active "green4")
+                       (setq eyebrowse-mode-line-style nil)
+                       (global-set-key (kbd "C-SPC s t") 'simpson-browse)
+                       (setq eyebrowse-new-workspace t)))
+
+(defun simpson-pretty-lambda()
+  "Make the word lambda the greek character in elisp files."
+  (setq prettify-symbols-alist '(("lambda" . 955))))
 
 (use-package elisp-mode
-  :ensure nil
-  :init (progn
-          (defun simpson-pretty-lambda()
-            "make the word lambda the greek character in elisp files"
-            (setq prettify-symbols-alist '(("lambda" . 955))))
-          (add-hook 'emacs-lisp-mode-hook 'simpson-pretty-lambda)
-          (add-hook 'emacs-lisp-mode-hook 'prettify-symbols-mode)
-          (add-hook 'emacs-lisp-mode-hook 'aggressive-indent-mode)
-          (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
-          (add-hook 'emacs-lisp-mode-hook (lambda () (setq mode-name "λ")))))
+             :ensure nil
+             :init (progn
+                     (add-hook 'emacs-lisp-mode-hook 'simpson-pretty-lambda)
+                     (add-hook 'emacs-lisp-mode-hook 'prettify-symbols-mode)
+                     (add-hook 'emacs-lisp-mode-hook 'aggressive-indent-mode)
+                     (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+                     (add-hook 'emacs-lisp-mode-hook (lambda () (setq mode-name "λ")))))
 
 
 ;;minor modes are set with diminish
@@ -976,7 +957,9 @@ An asterisk (*) deontes current workspace."
   :load-path "~/Projects/ivy-feedwrangler/")
 
 (use-package ox-jira
-  :after org)
+             :after org
+             :defer 1
+             :config (add-to-list 'org-export-backends 'jira))
 
 (use-package vlf)
 
@@ -1266,7 +1249,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (use-package helpful)
 
 (defun simpson-shell-history()
-  "Interact with shell-command-history through Ivy"
+  "Interact with 'shell-command-history' through Ivy."
   (interactive)
   (ivy-read "Run previous commands:"
             shell-command-history
@@ -1364,13 +1347,6 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   (let ((data (json-parse! (url-retrieve-synchronously "https://api.coinbase.com/v2/prices/LTC-USD/spot" t))))
     (message "LTC: $%s" (alist-get 'amount (car data)))))
 
-(defun new-ltc()
-  "Get LTC price from coinbase API via async url retrieve."
-  (interactive)
-  (with-temp-buffer (url-retrieve "https://api.coinbase.com/v2/prices/LTC-USD/spot"
-                                  (lambda(_) (let ((data (json-parse! (current-buffer))))
-                                               (message "LTC: $%s" (alist-get 'amount (car data))))))))
-
 (defun simpson-lambda(file)
   (interactive
    (list (read-file-name "Which lambda?" "/Users/asimpson/Projects/blog-admin/packages/node_modules/@lambdas")))
@@ -1393,9 +1369,9 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   ("p" smerge-prev "previous conflict"))
 
 (use-package sql
-  :ensure nil
-  :config (progn
-            (simpson-make-neutral sql-interactive-mode-map)))
+             :ensure nil
+             :config (progn
+                       (simpson-make-neutral sql-interactive-mode-map)))
 
 (use-package restclient)
 
@@ -1419,13 +1395,15 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (use-package inf-ruby)
 
 (use-package tide
-  :defer 3
-  :config (progn
-            (defun setup-tide-mode()
-              (tide-setup)
-              (eldoc-mode)
-              (tide-hl-identifier-mode))
-            (add-hook 'rjsx-mode-hook 'setup-tide-mode)))
+             :defer 3
+             :config (progn
+                       (defun setup-tide-mode()
+                         (tide-setup)
+                         (eldoc-mode)
+                         (tide-hl-identifier-mode))
+                       (add-hook 'typescript-mode-hook 'setup-tide-mode)
+                       (setq typescript-indent-level 2)
+                       (add-hook 'rjsx-mode-hook 'setup-tide-mode)))
 
 (use-package org-mime
   :config (require 'org-mime))
@@ -1434,10 +1412,10 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   :diminish "")
 
 (use-package persistent-scratch
-  :defer 1
-  :config (progn
-            (persistent-scratch-setup-default)
-            (persistent-scratch-autosave-mode)))
+             :defer 1
+             :config (progn
+                       (persistent-scratch-setup-default)
+                       (persistent-scratch-autosave-mode)))
 
 (setq warning-suppress-types '(undo discard-info))
 
@@ -1511,17 +1489,11 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   (interactive)
   (text-scale-set 0))
 
-(defun gen-multi-term ()
-  "Open up a mult-term in a new window."
-  (interactive)
-  (switch-to-buffer-other-window nil)
-  (multi-term))
-
 (defun simpson-pretty-json()
   "Ideal for getting pretty JSON from JSON that is copied from a XHR request."
   (interactive)
   (with-temp-buffer
-    (clipboard-yank)
+      (clipboard-yank)
     (json-pretty-print-buffer)
     (kill-new (buffer-string))))
 
@@ -1539,7 +1511,6 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (global-set-key (kbd "C-SPC k b") 'simpson-project-clone)
 (global-set-key (kbd "C-SPC B") 'simpson-get-git-url)
 (global-set-key (kbd "C-SPC k P") 'simpson-pretty-json)
-(global-set-key (kbd "C-SPC k t") 'gen-multi-term)
 (global-set-key (kbd "C-SPC k r") 'vc-revert-buffer)
 (global-set-key (kbd "C-SPC k v") 'visual-line-mode)
 (global-set-key (kbd "C-SPC k n") 'simpson-smart-shell)
@@ -1739,9 +1710,9 @@ Open the url in the default browser"
   :mode ("\\.html\\.erb\\'" . web-mode)
   :config (setq web-mode-markup-indent-offset 2))
 
+(display-battery-mode)
 (setq battery-mode-line-format "[%b%p%%/%t]")
 (setq battery-mode-line-limit 90)
-(display-battery-mode)
 
 (defun simpson-bump-migration()
   "Rename a conflicting migration to the current version + 1 or the user supplied number."
