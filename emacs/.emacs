@@ -1782,10 +1782,32 @@ Open the url in the default browser"
 
 (use-package twittering-mode
              :config (progn
-                       (setq twittering-icon-mode t)
+                       (setq twittering-icon-mode nil)
+                       (add-hook 'twittering-mode-hook 'visual-line-mode)
+                       (setq twittering-use-master-password t)
                        (setq twittering-display-remaining t)
                        (setq twittering-initial-timeline-spec-string "a_simpson/foss")
-                       (setq twittering-use-icon-storage t)))
+                       (setq twittering-connection-type-order '(wget urllib-http native urllib-https))
+                       (define-key twittering-mode-map "*" 'hydra-twittering-lists/body)
+                       (setq twittering-use-icon-storage t)
+                       (defalias 'epa--decode-coding-string 'decode-coding-string)))
+
+(defhydra hydra-twittering-lists()
+  "
+    Shortcuts to jump to different timelines
+    _s_ sparkbox peeps
+    _f_ open-source software folks
+    _r_ mjackson's react list
+    _a_ Replies
+    _n_ nba stuff
+    _c_ copy tweet URL
+  "
+  ("s" (twittering-visit-timeline "a_simpson/sparkbox") "Sparkbox list")
+  ("f" (twittering-visit-timeline "a_simpson/foss") "FOSS")
+  ("r" (twittering-visit-timeline "mjackson/react-js1") "MJackson React.js")
+  ("a" (twittering-visit-timeline '(mentions)) "Replie")
+  ("c" (lambda() (interactive) (kill-new (get-text-property (point) 'uri))) "Copy URL")
+  ("n" (twittering-visit-timeline "a_simpson/nba") "NBA"))
 
 (message "Init time: %s" (emacs-init-time))
 
