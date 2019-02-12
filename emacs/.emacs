@@ -1792,6 +1792,15 @@ Open the url in the default browser"
                        (setq twittering-use-icon-storage t)
                        (defalias 'epa--decode-coding-string 'decode-coding-string)))
 
+(use-package osx-lib)
+
+(defun simpson-normalize-vol()
+  "Set the system volume to my prefered level."
+  (interactive)
+  (osx-lib-set-volume 11))
+
+(use-package epresent)
+
 (use-package vterm
              :load-path "~/Projects/emacs-libvterm"
              :defer 1
@@ -1814,6 +1823,30 @@ Open the url in the default browser"
   ("a" (twittering-visit-timeline '(mentions)) "Replie")
   ("c" (lambda() (interactive) (kill-new (get-text-property (point) 'uri))) "Copy URL")
   ("n" (twittering-visit-timeline "a_simpson/nba") "NBA"))
+
+(defhydra hydra-diff-jump()
+  "
+    Shortcut to diff next and previous:
+    _n_ diff-next
+    _p_ diff-prev
+  "
+  ("n" diff-hl-next-hunk "next hunk")
+  ("p" diff-hl-previous-hunk "previous hunk"))
+
+(define-key global-map (kbd "C-x n") 'hydra-diff-jump/body)
+
+(use-package twig-mode
+             :mode ("\\.twig\\'" . twig-mode))
+
+(defun upload-image-to-s3()
+  "Upload an image to S3 for my blog."
+  (interactive)
+  (let ((buffer "*s3-upload-process*"))
+    (start-process "s3-upload" buffer "aws" "s3" "cp" (file-truename (dired-file-name-at-point)) "s3://ams-blog/images/")
+    (pop-to-buffer buffer)))
+
+(use-package counsel-osx-app
+             :defer 1)
 
 (message "Init time: %s" (emacs-init-time))
 
