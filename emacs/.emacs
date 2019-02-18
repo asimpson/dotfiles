@@ -1601,7 +1601,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
          (file (concat simpson-dropbox-path "Notational Data/" date "-" name ".txt")))
     (if use-buf
         (write-file file)
-      (write-region "" "" file))))
+        (write-region "" "" file))))
 
 (global-set-key (kbd "C-SPC d") (lambda() (interactive)
                                   (dired (concat simpson-dropbox-path "Notational Data/") "-laGht")))
@@ -1830,7 +1830,7 @@ Open the url in the default browser"
   ("s" (twittering-visit-timeline "a_simpson/sparkbox") "Sparkbox list")
   ("f" (twittering-visit-timeline "a_simpson/foss") "FOSS")
   ("r" (twittering-visit-timeline "mjackson/react-js1") "MJackson React.js")
-  ("a" (twittering-visit-timeline '(mentions)) "Replie")
+  ("a" (twittering-visit-timeline '(mentions)) "Replies")
   ("c" (lambda() (interactive) (kill-new (get-text-property (point) 'uri))) "Copy URL")
   ("n" (twittering-visit-timeline "a_simpson/nba") "NBA"))
 
