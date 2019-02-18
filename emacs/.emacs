@@ -299,6 +299,7 @@
                     ("C-SPC k B" . simpson-org-blog-capture)
                     ("C-SPC t" . org-todo-list)
                     ("C-SPC a" . org-agenda)
+                    ("C-c t" . simpson-temp-note)
                     ("C-SPC T" . org-tags-view))
              :mode (("\\.txt\\'" . org-mode))
              :config (progn
@@ -1583,6 +1584,14 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   "Shell out to date to return a formatted date string at point."
   (interactive)
   (shell-command "date +%Y-%m-%d-%I:%M" t))
+
+(defun simpson-temp-note()
+  "Dump a date-stamped file to /tmp."
+  (interactive)
+  (let* ((date (string-trim (shell-command-to-string "date +%Y-%m-%d-%I")))
+         (slug (read-string "Slug? "))
+         (file (concat "/tmp/" date "-" slug ".txt")))
+    (write-file file)))
 
 (defun simpson-new-note(name)
   "Create new file for nvAlt with NAME."
