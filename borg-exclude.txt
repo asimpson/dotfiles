@@ -1,0 +1,10 @@
+**/node_modules
+**/MobileSync
+**/Library/Caches
+**/Library/Containers
+**/Library/Developer
+**/.gem
+**/.npm
+**/.rustup
+**/.zoomus
+**/.cache
