@@ -265,8 +265,6 @@
                          (set-face-foreground 'magit-hash (plist-get base16-ocean-colors :base0C))
                          (set-face-background 'magit-section-highlight (plist-get base16-ocean-colors :base01)))))
 
-(use-package forge)
-
 (use-package evil-magit
              :pin melpa-stable
              :defer 1
@@ -315,7 +313,7 @@
                                                            ((agenda "")
                                                             (alltodo "")))
                                                           ("w" "Work tasks" ((agenda "") (todo ""))
-                                                           ((org-agenda-files `(,(concat simpson-dropbox-path "org/tasks.txt")))))
+                                                           ((org-agenda-files `(,(concat simpson-dropbox-path "org/refile-beorg.txt") ,(concat simpson-dropbox-path "org/tasks.txt")))))
                                                           ("f" "side projects" ((agenda "") (todo ""))
                                                            ((org-agenda-files `(,(concat simpson-dropbox-path "org/side.txt")))))))
                        (setq org-refile-targets '(
@@ -397,9 +395,9 @@
 (defun simpson-prompt-for-feedwrangler-url()
   (if (y-or-n-p "Get feedwrangler url? ")
       (concat ":URL:" " " ivy-feedwrangler--current-link)
-    (let (url)
-      (setq url (read-string "What url?: "))
-      (concat ":URL:" " " url))))
+      (let (url)
+        (setq url (read-string "What url?: "))
+        (concat ":URL:" " " url))))
 
 (defun simpson-org-task-capture ()
   "Capture a task with my default template."
@@ -936,7 +934,7 @@ An asterisk (*) deontes current workspace."
 
 (use-package swiper
              :defer 1
-             :bind ("C-SPC /" . swiper))
+             :bind ("C-SPC /" . swiper-isearch))
 
 (use-package command-log-mode)
 
@@ -1552,7 +1550,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (global-set-key (kbd "C-SPC k b") 'simpson-project-clone)
 (global-set-key (kbd "C-SPC B") 'simpson-get-git-url)
 (global-set-key (kbd "C-SPC k P") 'simpson-pretty-json)
-(global-set-key (kbd "C-SPC k r") 'vc-revert-buffer)
+(global-set-key (kbd "C-SPC k r") 'vc-revert)
 (global-set-key (kbd "C-SPC k v") 'visual-line-mode)
 (global-set-key (kbd "C-SPC k n") 'simpson-smart-shell)
 (global-set-key (kbd "C-SPC k N") 'kill-shell-buffer)
@@ -1857,6 +1855,23 @@ Open the url in the default browser"
 
 (use-package counsel-osx-app
              :defer 1)
+
+(defun reload-xcode()
+  (interactive)
+  (shell-command "osascript -e 'tell application \"Xcode\"
+	activate
+	tell application \"System Events\" to keystroke \"r\" using command down
+end tell'
+"))
+
+(global-set-key (kbd "s-r") 'reload-xcode)
+
+(use-package docker)
+
+(use-package dockerfile-mode)
+
+(use-package docker-compose-mode
+             :mode ("\\docker-compose.yml\\'" . docker-compose-mode))
 
 (message "Init time: %s" (emacs-init-time))
 
