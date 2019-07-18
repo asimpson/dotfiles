@@ -42,10 +42,10 @@
                            (invert-face 'mode-line)
                            (run-with-timer 0.1 nil 'invert-face 'mode-line)))
 
-(setq exec-path (append exec-path '("/Users/asimpson/.better-npm/lib/node_modules")))
-(setq exec-path (append exec-path '("/Users/asimpson/.better-npm/bin")))
-(setq exec-path (append exec-path '("/usr/local/bin")))
-(setenv "PATH" "/Users/asimpson/.better-npm/lib/node_modules:/Users/asimpson/.better-npm/bin:/usr/local/bin:/usr/local/sbin")
+(when (memq window-system '(mac ns))
+  (setq exec-path (append exec-path '("/Users/asimpson/.better-npm/lib/node_modules")))
+  (setq exec-path (append exec-path '("/Users/asimpson/.better-npm/bin")))
+  (setenv "PATH" "/Users/asimpson/.better-npm/lib/node_modules:/Users/asimpson/.better-npm/bin:/usr/local/bin:/usr/local/sbin"))
 
 (global-set-key (kbd "C-SPC") nil)
 
@@ -96,10 +96,10 @@
   (load-theme 'tomorrow-day t))
 
 (use-package exec-path-from-shell
-  :defer 2
-  :config (progn
-            (when (memq window-system '(mac ns))
-              (exec-path-from-shell-initialize))))
+             :defer 2
+             :config (progn
+                       (when (memq window-system '(mac ns x))
+                         (exec-path-from-shell-initialize))))
 
 (use-package dired-narrow
   :defer 1
@@ -413,9 +413,10 @@
   "Refreshes org buffers that change via dropbox to pull in tasks that have been added outside Emacs."
   (interactive)
   (let ((buffers (seq-filter (lambda (buf) (not (buffer-modified-p buf))) (mapcar 'get-buffer (mapcar 'f-filename (f-glob "*.txt" (car org-agenda-files)))))))
-    (seq-each (lambda(buf)
-                (set-buffer buf)
-                (revert-buffer t t)) buffers)))
+    (when buffers
+      (seq-each (lambda(buf)
+                  (set-buffer buf)
+                  (revert-buffer t t)) buffers))))
 
 (use-package markdown-mode
              :mode (("\\.md\\'" . markdown-mode))
@@ -463,8 +464,8 @@
 (setq-default tab-width 2)
 (setq-default css-indent-offset 2)
 
-(set-face-attribute 'default nil :font "Hack-12" )
-(set-frame-font "Hack-12" nil t)
+(set-face-attribute 'default nil :font "Hack-9")
+(set-frame-font "Hack-9" nil t)
 
 (add-to-list 'auto-mode-alist '("\\.scss\\'" . css-mode))
 
@@ -483,7 +484,7 @@
 (defun markdown-fonts ()
   "Use monospaced font faces in current buffer."
   (interactive)
-  (setq buffer-face-mode-face '(:family "Hack" :height 120))
+  (setq buffer-face-mode-face '(:family "Hack" :height 110))
   (buffer-face-mode))
 
 (use-package f)
@@ -552,7 +553,8 @@
 
 (defun simpson-update-check()
   "Process that check for software update on macOS."
-  (set-process-sentinel (start-process "softwareupdate" "*softwareupdate*" "softwareupdate" "-l") 'simpson-update-check--sentinel))
+  (when (memq window-system '(mac ns))
+    (set-process-sentinel (start-process "softwareupdate" "*softwareupdate*" "softwareupdate" "-l") 'simpson-update-check--sentinel)))
 
 (defun simpson-update-check--sentinel(proc msg)
   "Search for word recommended in MSG in BUFFER output to determine update.
@@ -975,24 +977,32 @@ An asterisk (*) deontes current workspace."
 (advice-add 'evil-quit :after #'balance-windows)
 
 (use-package ivy-lobsters
-  :ensure nil
-  :after ivy
-  :defer 1
-  :config (setq ivy-lobsters-keep-focus t)
-  :if (file-exists-p "~/Projects/ivy-lobsters/")
-  :load-path "~/Projects/ivy-lobsters/")
+             :ensure nil
+             :after ivy
+             :defer 1
+             :config (setq ivy-lobsters-keep-focus t)
+             :if (file-exists-p "~/Projects/ivy-lobsters/")
+             :load-path "~/Projects/ivy-lobsters/")
+
+(use-package ivy-reddit
+             :ensure nil
+             :after ivy
+             :defer 1
+             :commands ivy-reddit
+             :if (file-exists-p "~/Projects/ivy-reddit/")
+             :load-path "~/Projects/ivy-reddit/")
 
 (use-package pinboard-popular
-  :ensure nil
-  :commands pinboard-popular
-  :load-path "~/Projects/pinboard-popular/")
+             :ensure nil
+             :commands pinboard-popular
+             :load-path "~/Projects/pinboard-popular/")
 
 (use-package ivy-feedwrangler
-  :ensure nil
-  :after ivy
-  :commands ivy-feedwrangler
-  :if (file-exists-p "~/Projects/ivy-feedwrangler/")
-  :load-path "~/Projects/ivy-feedwrangler/")
+             :ensure nil
+             :after ivy
+             :commands ivy-feedwrangler
+             :if (file-exists-p "~/Projects/ivy-feedwrangler/")
+             :load-path "~/Projects/ivy-feedwrangler/")
 
 (use-package ox-jira
              :after org
@@ -1319,7 +1329,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (use-package mu4e
              :ensure nil
              :defer 1
-             :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e"
+             :load-path "/usr/local/share/emacs/site-lisp/mu4e"
              :config (progn
                        (simpson-load-file "~/.dotfiles/emacs/mu4e.el.gpg")
                        (set-face-attribute 'mu4e-highlight-face nil :background "DarkRed" :foreground nil)
@@ -1344,7 +1354,6 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
                                     '("ViewInBrowser" . mu4e-action-view-in-browser) t)
                        (define-key mu4e-headers-mode-map (kbd "C-c C-u") 'mu4e-update-index)
                        (define-key mu4e-main-mode-map "q" 'simpson-mu4e-quit)
-                       (add-hook 'mu4e-view-mode-hook (lambda() (text-scale-set 1)))
                        (simpson-make-neutral mu4e-headers-mode-map)
                        (simpson-make-neutral--keys mu4e-headers-mode-map)
                        (simpson-make-neutral--keys mu4e-view-mode-map)
@@ -1700,10 +1709,10 @@ Open the url in the default browser"
 (put 'narrow-to-region 'disabled nil)
 
 (use-package ivy-hacker-news
-  :load-path "~/Projects/ivy-hacker-news"
-  :commands ivy-hacker-news
-  :ensure nil
-  :after ivy)
+             :load-path "~/Projects/ivy-hacker-news"
+             :commands ivy-hacker-news
+             :ensure nil
+             :after ivy)
 
 (use-package pinboard-unread
   :load-path "~/Projects/pinboard-unread"
@@ -1810,10 +1819,14 @@ Open the url in the default browser"
 (use-package epresent)
 
 (use-package vterm
-             :load-path "~/Projects/emacs-libvterm"
+             :load-path "/home/asimpson/Source/emacs-libvterm"
              :defer 1
              :ensure nil
-             :config (setq vterm-max-scrollback 10000))
+             :after evil
+             :config (progn
+                       (setq vterm-max-scrollback 10000)
+                       (define-key evil-motion-state-map (kbd "C-v") 'vterm-yank)
+                       (define-key vterm-mode-map (kbd "C-v") 'vterm-yank)))
 
 (defhydra hydra-twittering-lists()
   "
@@ -1873,6 +1886,17 @@ end tell'
 (use-package docker-compose-mode
              :mode ("\\docker-compose.yml\\'" . docker-compose-mode))
 
+(defun simpson-insert-org-date()
+  "Insert the date with the org 3 heading level."
+  (interactive)
+  (insert (concat "*** " (shell-command-to-string "date +%m-%d-%y"))))
+
+(defun simpson-notif()
+  (interactive)
+  (let ((msg (read-from-minibuffer "Messsage: ")))
+    (call-process-shell-command (concat "zenity --notification --text='" msg "'"))))
+
 (message "Init time: %s" (emacs-init-time))
 
+(cua-mode)
 ;;; .emacs ends here
