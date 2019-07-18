@@ -84,3 +84,6 @@ alias ssh-pass='ssh -o PreferredAuthentications=password '
 alias ssh_on="sudo systemsetup -setremotelogin on && echo asimpson@$(ifconfig | grep 'inet 1' | cut -c 6- | awk 'NR==2 {print $1}')"
 alias ssh_off='sudo systemsetup -setremotelogin off'
 alias clean_ff='/Applications/Firefox.app/Contents/MacOS/firefox --new-instance --profile $(mktemp -d)'
+alias open='xdg-open '
+alias _copy='xclip -selection clipboard'
+alias _paste='xclip -selection clipboard -o'
