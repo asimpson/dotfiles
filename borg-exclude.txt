@@ -8,3 +8,4 @@
 **/.rustup
 **/.zoomus
 **/.cache
+**/.steam
