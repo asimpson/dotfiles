@@ -87,3 +87,4 @@ alias clean_ff='/Applications/Firefox.app/Contents/MacOS/firefox --new-instance 
 alias open='xdg-open '
 alias _copy='xclip -selection clipboard'
 alias _paste='xclip -selection clipboard -o'
+alias dsh='docker exec -it '
