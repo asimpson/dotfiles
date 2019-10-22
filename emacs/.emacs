@@ -723,7 +723,7 @@ PROC is not used."
                        (simpson-make-neutral dired-mode-map)
                        (simpson-make-neutral--keys dired-mode-map)
                        (define-key dired-mode-map "E" 'epa-dired-do-decrypt)
-                       (define-key dired-mode-map "A" 'upload-image-to-s3)))
+                       (define-key dired-mode-map "A" 'upload-to-s3)))
 
 (defun simpson-dired-script-at-point()
   "Call 'async-shell-command' on file at point.
@@ -1861,11 +1861,22 @@ Open the url in the default browser"
 (use-package twig-mode
              :mode ("\\.twig\\'" . twig-mode))
 
-(defun upload-image-to-s3()
-  "Upload an image to S3 for my blog."
+(defun s3-parser(&optional target)
+  "Run aws S3 ls command with an option bucket TARGET. Output is cut down to just names of objects."
+  (let ((cmd (if target
+                 (concat "aws s3 ls " target)
+                 "aws s3 ls")))
+    (mapcar (lambda(item) (last (split-string item " "))) (split-string (shell-command-to-string cmd) "\n"))))
+
+(defun upload-to-s3()
+  "Upload a file to S3."
   (interactive)
-  (let ((buffer "*s3-upload-process*"))
-    (start-process "s3-upload" buffer "aws" "s3" "cp" (file-truename (dired-file-name-at-point)) "s3://ams-blog/images/")
+  (let* ((buffer "*s3-upload-process*")
+         (buckets (s3-parser))
+         (bucket (ivy-read "Bucket: " buckets))
+         (dirs (seq-filter (lambda(dir) (string-match-p "/" (car dir))) (s3-parser bucket)))
+         (dir (ivy-read "Directory: " dirs)))
+    (start-process "s3-upload" buffer "aws" "s3" "cp" (file-truename (dired-file-name-at-point)) (concat "s3://" bucket "/" dir))
     (pop-to-buffer buffer)))
 
 (use-package counsel-osx-app
@@ -1897,8 +1908,6 @@ end tell'
   (interactive)
   (let ((msg (read-from-minibuffer "Messsage: ")))
     (call-process-shell-command (concat "zenity --notification --text='" msg "'"))))
-
-(message "Init time: %s" (emacs-init-time))
 
 (cua-mode)
 ;;; .emacs ends here
