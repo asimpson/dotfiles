@@ -1,0 +1,9 @@
+# The following settings were saved by Regolith when configuring Gnome. Execute this file or run the commands manually to restore them.
+gsettings set org.gnome.desktop.background show-desktop-icons true
+gsettings set org.gnome.gnome-flashback desktop-background true
+gsettings set org.gnome.desktop.wm.keybindings switch-input-source "['<Super>space', 'XF86Keyboard']"
+gsettings set org.gnome.desktop.wm.keybindings switch-input-source-backward "['<Shift><Super>space', '<Shift>XF86Keyboard']"
+gsettings set org.gnome.desktop.background picture-uri "'file:////usr/share/gnome-control-center/pixmaps/noise-texture-light.png'"
+gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-Slime-Dark'
+gsettings set org.gnome.desktop.wm.preferences theme 'Adwaita'
+gsettings set org.gnome.desktop.interface icon-theme 'Pop'
