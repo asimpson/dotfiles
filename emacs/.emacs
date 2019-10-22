@@ -531,7 +531,9 @@
                                                                 '(:eval simpson-software-update)
                                                                 " "
                                                                 mode-line-modes
-                                                                mode-line-misc-info))))
+                                                                mode-line-misc-info
+                                                                '(:eval (when (equal (car (split-string buffer-file-name ":")) "/ssh")
+                                                                          (propertize "TRAMP" 'face '(:foreground "#cd5c5c"))))))))
 
 (defvar simpson-mail-count nil)
 (defvar simpson-software-update nil)
