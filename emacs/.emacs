@@ -1241,6 +1241,23 @@ If file is package.json run npm install."
         (org-beginning-of-line)
         (insert heading " TODO ") t)))
 
+(defun simpson-org-to-headings()
+  "Convert a line (or region) in an org file to a headingj."
+  (interactive)
+  (let ((heading "")
+        (i 1)
+        (number (read-number "What level?" 1)))
+    (while (<= i number)
+           (setq heading (concat heading "*"))
+           (setq i (+ i 1)))
+    (if (region-active-p)
+        (let ((strings (seq-map (lambda(x) (concat heading " " x))
+                                (split-string (buffer-substring-no-properties (region-beginning) (region-end)) "\n" t))))
+          (delete-active-region)
+          (insert (mapconcat 'identity strings "\n")))
+        (org-beginning-of-line)
+        (insert heading " ") t)))
+
 (defun eww-more-readable ()
   "Make eww more pleasant to use.
 Run it after eww buffer is loaded.
