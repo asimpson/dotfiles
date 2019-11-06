@@ -484,7 +484,7 @@
 (defun markdown-fonts ()
   "Use monospaced font faces in current buffer."
   (interactive)
-  (setq buffer-face-mode-face '(:family "Hack" :height 110))
+  ;; (setq buffer-face-mode-face '(:family "Hack" :height 110))
   (buffer-face-mode))
 
 (use-package f)
@@ -1217,7 +1217,7 @@ If file is package.json run npm install."
                       (setq lisp-loop-indent-subclauses nil)
                       (setq lisp-loop-indent-forms-like-keywords t)
                       (setq lisp-lambda-list-keyword-parameter-alignment t)
-                      (setq inferior-lisp-program "/usr/local/bin/sbcl")))
+                      (setq inferior-lisp-program "/usr/bin/sbcl")))
 
 (use-package slime-company
              :defer 1)
@@ -1507,15 +1507,18 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (add-to-list 'default-frame-alist
              '(ns-appearance . dark))
 
+(add-to-list 'default-frame-alist
+             '(undecorated . t))
+
 (setq frame-title-format nil)
 
 (use-package org-preview-html
   :after org)
 
 (use-package alert
-  :config (progn
-            (setq alert-log-messages nil)
-            (setq alert-default-style 'notifier)))
+             :config (progn
+                       (setq alert-log-messages nil)
+                       (setq alert-default-style 'libnotify)))
 
 (use-package deadgrep
   :commands deadgrep
@@ -1686,7 +1689,7 @@ Open the url in the default browser"
   (let (url repo)
     (setq url (shell-command-to-string "git remote get-url origin"))
     (setq repo (nth 0 (split-string (nth 1 (split-string url ":")) "\\.")))
-    (shell-command (concat "open https://github.com/" repo) t)))
+    (shell-command (concat "firefox https://github.com/" repo) t)))
 
 (defun simpson-get-file-name()
   "Return the file name for a buffer."
