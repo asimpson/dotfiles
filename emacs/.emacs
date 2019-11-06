@@ -793,11 +793,12 @@ If file is package.json run npm install."
           (add-hook 'magit-mode-hook 'emoji-cheat-sheet-plus-display-mode)))
 
 (use-package flyspell
-  :diminish "spell"
-  :defer 1
-  :config (progn
-            (add-hook 'erc-mode-hook (lambda () (flyspell-mode 1)))
-            (setq flyspell-issue-message-flag nil)))
+             :diminish "spell"
+             :defer 1
+             :config (progn
+                       (add-hook 'erc-mode-hook (lambda () (flyspell-mode 1)))
+                       (add-hook 'message-mode-hook (lambda () (flyspell-mode 1)))
+                       (setq flyspell-issue-message-flag nil)))
 
 (when (file-exists-p "~/.dotfiles/emacs/authinfo.gpg")
   (setq auth-sources '("~/.dotfiles/emacs/authinfo.gpg")))
@@ -871,7 +872,9 @@ If file is package.json run npm install."
 (use-package counsel
              :defer 1
              :bind ("C-SPC f" . counsel-find-file)
+             :diminish "con"
              :config (progn
+                       (counsel-mode)
                        (global-set-key (kbd "M-x") 'counsel-M-x)
                        (define-key dired-mode-map "f" 'counsel-find-file)
                        (ivy-add-actions 'counsel-find-file '(("D" simpson-delete "delete")))
@@ -884,8 +887,8 @@ If file is package.json run npm install."
 
 (defun simpson-browse()
   "Fuzzy finding interface to eyebrowse workspaces.
-If the workspace is not tagged with a name, the number is used instead.
-An asterisk (*) deontes current workspace."
+             If the workspace is not tagged with a name, the number is used instead.
+             An asterisk (*) deontes current workspace."
   (interactive)
   (let* ((panes (map 'list (lambda (win)
                              (list (if (string-empty-p (car (last win)))
@@ -966,8 +969,8 @@ An asterisk (*) deontes current workspace."
 (defun simpson-sauron-toggle(&optional x)
   "A function to keep the sauron window visible and sized correctly.
 
-  Optional argument (X) to satisfy the various ways the evil-window-move-
-  functions are called."
+             Optional argument (X) to satisfy the various ways the evil-window-move-
+             functions are called."
   (interactive)
   (when (window-live-p (get-buffer-window "*Sauron*"))
     (sr-hide)
@@ -1035,13 +1038,13 @@ An asterisk (*) deontes current workspace."
 
 (defhydra hydra-mocha ()
   "
-  Mocha:
-  _a_ test at point
-  _f_ test file
-  _r_ reload local dir
-  _p_ test project
-  _c_ custom project scope
-  "
+             Mocha:
+             _a_ test at point
+             _f_ test file
+             _r_ reload local dir
+             _p_ test project
+             _c_ custom project scope
+             "
   ("a" mocha-test-at-point "file at point")
   ("p" mocha-test-project "project" :exit t)
   ("r" hack-dir-local-variables-non-file-buffer "reload local vars")
@@ -1064,15 +1067,15 @@ An asterisk (*) deontes current workspace."
 
 (defhydra hydra-searching (:exit t)
   "
-  ^Searching tools
-  ----------------------------------------------
-  _a_ ag without switches
-  _A_ ag with extra switches
-  _r_ rg without switches
-  _R_ rg with extra switches
+             ^Searching tools
+             ----------------------------------------------
+             _a_ ag without switches
+             _A_ ag with extra switches
+             _r_ rg without switches
+             _R_ rg with extra switches
 
-  ^silver searcher options
-  ----------------------------------------------
+             ^silver searcher options
+             ----------------------------------------------
   -Ghtml   - ag search by type
   --ignore - ag ignore file path
 
@@ -1310,20 +1313,12 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 
 (with-eval-after-load ".emacs"
   (with-temp-buffer
-    (insert-file-contents "~/.emacs.d/shell-history")
+      (insert-file-contents "~/.emacs.d/shell-history")
     (setq shell-command-history (split-string (buffer-string) "\n"))))
 
-(defun simpson-save-history()
-  "Write contents of 'shell-command-history' to ~/.emacs.d/shell-history."
-  (with-temp-buffer
-    (insert (mapconcat 'identity shell-command-history "\n"))
-    (write-file "~/.emacs.d/shell-history")))
-
-(add-hook 'kill-emacs-hook 'simpson-save-history)
-
 (use-package dockerfile-mode
-  :config (add-hook 'dockerfile-mode-hook (lambda() (setq mode-name "dockerfile")))
-  :mode ("Dockerfile\\'" . dockerfile-mode))
+             :config (add-hook 'dockerfile-mode-hook (lambda() (setq mode-name "dockerfile")))
+             :mode ("Dockerfile\\'" . dockerfile-mode))
 
 (use-package suggest)
 
@@ -1907,7 +1902,17 @@ end tell'
 (defun simpson-notif()
   (interactive)
   (let ((msg (read-from-minibuffer "Messsage: ")))
-    (call-process-shell-command (concat "zenity --notification --text='" msg "'"))))
+    (call-process-shell-command (concat "notify-send " msg))))
+
+(use-package savehist
+             :custom
+             (savehist-file "~/.emacs.d/savehist")
+             (savehist-save-minibuffer-history t)
+             (history-length 10000)
+             (savehist-additional-variables
+              '(shell-command-history))
+             :config
+             (savehist-mode +1))
 
 (cua-mode)
 ;;; .emacs ends here
