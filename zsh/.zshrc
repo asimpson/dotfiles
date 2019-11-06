@@ -53,5 +53,7 @@ bindkey '\e[B' history-beginning-search-forward
 
 export PATH="$HOME/.yarn/bin:$PATH"
 
-# ssh-add -A 2>/dev/null;
+# Fix for TRAMP
+[ $TERM = "dumb" ] && unsetopt zle && PS1='$ '
 
+# ssh-add -A 2>/dev/null;
