@@ -88,3 +88,4 @@ alias open='xdg-open '
 alias _copy='xclip -selection clipboard'
 alias _paste='xclip -selection clipboard -o'
 alias dsh='docker exec -it '
+alias redirects="curl -LSs -D - -o /dev/null -w 'Final URL: %{url_effective} \nNumber of Redirects: %{num_redirects} ' "
