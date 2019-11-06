@@ -1354,6 +1354,8 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
                        (setq message-kill-buffer-on-exit t)
                        (setq mu4e-context-policy 'pick-first)
                        (setq mu4e-compose-format-flowed t)
+                       ;;https://vxlabs.com/2019/08/25/format-flowed-with-long-lines/
+                       (setq fill-flowed-encode-column 998)
                        (setq mu4e-view-show-addresses 't)
                        (setq smtpmail-stream-type 'ssl)
                        (setq mu4e-get-mail-command "mbsync -a")
@@ -1386,7 +1388,8 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
                        ;;               (lambda (docid msg target)
                        ;;                 (mu4e~proc-move docid (mu4e~mark-check-target target) "-N")))
                        ;;       mu4e-marks)
-                       (run-at-time 0 (* 60 3) #'simpson-check-mail)))
+                       ;;(run-at-time 0 (* 60 3) #'simpson-check-mail)
+                       ))
 
 (defun simpson-mu4e-quit()
   "Quit mu4e and then update mail icon."
