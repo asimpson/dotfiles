@@ -1922,11 +1922,6 @@ end tell'
   (interactive)
   (insert (concat "*** " (shell-command-to-string "date +%m-%d-%y"))))
 
-(defun simpson-notif()
-  (interactive)
-  (let ((msg (read-from-minibuffer "Messsage: ")))
-    (call-process-shell-command (concat "notify-send " msg))))
-
 (use-package savehist
              :custom
              (savehist-file "~/.emacs.d/savehist")
