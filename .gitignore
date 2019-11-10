@@ -3,3 +3,4 @@
 *.gpg
 /emacs/emacs-custom.el
 *.elc
+/mail-check-queries.js
