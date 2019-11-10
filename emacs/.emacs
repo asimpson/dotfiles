@@ -484,7 +484,7 @@
 (defun markdown-fonts ()
   "Use monospaced font faces in current buffer."
   (interactive)
-  ;; (setq buffer-face-mode-face '(:family "Hack" :height 110))
+  (setq buffer-face-mode-face '(:family "Hack" :height 110))
   (buffer-face-mode))
 
 (use-package f)
