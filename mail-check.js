@@ -18,17 +18,14 @@ const computedContent = () =>
         st
           .toString()
           .split('\n')
-          .map(x => {
-            const lt = x.replace('<', '&lt;');
-            return lt.replace('>', '&gt;');
-          })
+          .map(x => x.replace('<', '&lt;').replace('>', '&gt;'))
       );
     });
   });
 
 computedContent()
   .then(content => {
-    if (count !== '0') {
+    if (computedCount !== '0') {
       console.log(
         `:mailbox_with_mail: ${computedCount.trim()} | size=11 usemarkup=false ansi=false`
       );
