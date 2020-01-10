@@ -527,13 +527,13 @@
                                                                           (propertize "*" 'face '(:foreground "#cd5c5c"))))
                                                                 " "
                                                                 '(:eval mode-line-position)
-                                                                '(:eval simpson-mail-count)
                                                                 '(:eval simpson-software-update)
                                                                 " "
                                                                 mode-line-modes
                                                                 mode-line-misc-info
-                                                                '(:eval (when (equal (car (split-string buffer-file-name ":")) "/ssh")
-                                                                          (propertize "TRAMP" 'face '(:foreground "#cd5c5c"))))))))
+                                                                '(:eval (when buffer-file-name
+                                                                          (when (equal (car (split-string buffer-file-name ":")) "/ssh")
+                                                                            (propertize "TRAMP" 'face '(:foreground "#cd5c5c")))))))))
 
 (defvar simpson-mail-count nil)
 (defvar simpson-software-update nil)
