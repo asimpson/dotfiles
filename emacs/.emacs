@@ -1025,16 +1025,16 @@ If file is package.json run npm install."
   :mode("\\.rkt?\\'" . racket-mode))
 
 (use-package hydra
-  :defer 1
-  :config (progn
-            (global-set-key (kbd "C-SPC M") 'hydra-mocha/body)
-            (global-set-key (kbd "C-SPC G") 'hydra-magit/body)
-            (global-set-key (kbd "C-SPC z") 'ivy-window-configuration--hydra/body)
-            (global-set-key (kbd "C-SPC x") 'hydra-js2/body)
-            (global-set-key (kbd "C-SPC ?") 'hydra-help/body)
-            (global-set-key (kbd "C-SPC v") 'hydra-vimish/body)
-            (global-set-key (kbd "C-SPC E") 'hydra-eww/body)
-            (global-set-key (kbd "C-SPC h") 'hydra-smerge/body)))
+             :defer 1
+             :config (progn
+                       (global-set-key (kbd "C-SPC M") 'hydra-mocha/body)
+                       (global-set-key (kbd "C-SPC G") 'hydra-magit/body)
+                       (global-set-key (kbd "C-SPC z") 'ivy-window-configuration--hydra/body)
+                       (global-set-key (kbd "C-SPC x") 'hydra-js2/body)
+                       (global-set-key (kbd "C-SPC ?") 'hydra-help/body)
+                       (global-set-key (kbd "C-SPC v") 'hydra-vimish/body)
+                       (global-set-key (kbd "C-SPC E") 'hydra-eww/body)
+                       (global-set-key (kbd "C-SPC h") 'hydra-smerge/body)))
 
 (defhydra hydra-mocha ()
   "
@@ -1155,10 +1155,10 @@ If file is package.json run npm install."
   ("x" vimish-fold-delete-all "delete all"))
 
 (use-package ivy-window-configuration
-  :ensure nil
-  :after ivy
-  :if (file-exists-p "~/Projects/ivy-window-configuration/")
-  :load-path "~/Projects/ivy-window-configuration/")
+             :ensure nil
+             :after '(ivy, hydra)
+             :if (file-exists-p "~/Projects/ivy-window-configuration/")
+             :load-path "~/Projects/ivy-window-configuration/")
 
 (use-package indium
   :after evil
