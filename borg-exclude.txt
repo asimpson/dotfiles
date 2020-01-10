@@ -9,3 +9,6 @@
 **/.zoomus
 **/.cache
 **/.steam
+**/VirtualBoxVMs
+**/MSEdge.Win10.VirtualBox
+**/*.ova
