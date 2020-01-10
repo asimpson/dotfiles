@@ -1935,6 +1935,15 @@ end tell'
              :config
              (savehist-mode +1))
 
+(use-package org-msg
+             :after mu4e
+             :defer 1
+             :config (progn
+                       (setq mail-user-agent 'mu4e-user-agent)
+                       (setq org-msg-options "html-postamble:nil H:5 num:nil ^:{} toc:nil")
+	                     (setq org-msg-startup "hidestars indent inlineimages")
+	                     (setq org-msg-greeting-name-limit 3)))
+
 (use-package vue-mode
              :config (set-face-background 'mmm-default-submode-face nil))
 
