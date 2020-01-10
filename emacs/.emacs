@@ -425,7 +425,7 @@
                        (add-hook 'markdown-mode-hook 'visual-line-mode)
                        (add-hook 'markdown-mode-hook (lambda () (flyspell-mode 1)))
                        (add-hook 'markdown-mode-hook (lambda () (setq mode-name "md")))
-                       (setq markdown-command "/usr/local/bin/pandoc")
+                       (setq markdown-command "/usr/bin/pandoc")
                        (setq markdown-live-preview-delete-export t)
                        (setq markdown-open-command "/usr/local/bin/marked")))
 
