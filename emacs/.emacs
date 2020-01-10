@@ -1516,6 +1516,10 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
                             (display-line-numbers-mode)
                             (setq display-line-numbers 'relative)))
 
+(add-hook 'vue-mode-hook (lambda()
+                           (display-line-numbers-mode)
+                           (setq display-line-numbers 'relative)))
+
 (set-face-background 'line-number nil)
 
 (pixel-scroll-mode)
@@ -1931,5 +1935,9 @@ end tell'
              :config
              (savehist-mode +1))
 
+(use-package vue-mode
+             :config (set-face-background 'mmm-default-submode-face nil))
+
+(use-package jest)
 (cua-mode)
 ;;; .emacs ends here
