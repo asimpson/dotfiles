@@ -1712,7 +1712,7 @@ Open the url in the default browser"
   (let (url repo)
     (setq url (shell-command-to-string "git remote get-url origin"))
     (setq repo (nth 0 (split-string (nth 1 (split-string url ":")) "\\.")))
-    (shell-command (concat "firefox https://github.com/" repo) t)))
+    (shell-command (concat "firefox https://github.com/" repo) nil)))
 
 (defun simpson-get-file-name()
   "Return the file name for a buffer."
