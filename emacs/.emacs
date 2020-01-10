@@ -1298,10 +1298,9 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
            (add-hook 'rust-mode-hook (lambda () (setq mode-name "rust")))))
 
 (use-package cargo
-  :defer 1
-  :config(progn
-           (setq cargo-process--command-fmt "fmt -- --force")
-           (add-hook 'rust-mode-hook 'cargo-minor-mode)))
+             :defer 1
+             :config(progn
+                      (add-hook 'rust-mode-hook 'cargo-minor-mode)))
 
 (use-package flycheck-rust
   :defer 1
