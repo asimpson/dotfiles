@@ -508,7 +508,7 @@
   (set-face-foreground 'vertical-border (plist-get base16-dracula-colors :base02))
   (set-face-background 'fringe (plist-get base16-dracula-colors :base00)))
 
-(setq epg-gpg-program "/usr/local/bin/gpg")
+(setq epg-gpg-program "/usr/bin/gpg")
 
 ;;http://pages.sachachua.com/.emacs.d/Sacha.html#orgheadline15
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -1533,10 +1533,10 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (add-to-list 'default-frame-alist
              '(undecorated . t))
 
-(setq frame-title-format nil)
+;; (setq frame-title-format nil)
 
 (use-package org-preview-html
-  :after org)
+             :after org)
 
 (use-package alert
              :config (progn
