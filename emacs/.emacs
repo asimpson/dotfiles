@@ -1634,7 +1634,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
         (write-region "" "" file))))
 
 (global-set-key (kbd "C-SPC d") (lambda() (interactive)
-                                  (dired (concat simpson-dropbox-path "Notational Data/") "-laGht")))
+                                  (dired (concat simpson-dropbox-path "Notational Data/") "-laht")))
 
 (defun kill-shell-buffer()
   "Kill the Async Shell Command buffer and then balance's the remaining windows."
