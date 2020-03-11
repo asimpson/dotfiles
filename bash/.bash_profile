@@ -1,7 +1,7 @@
-source /usr/local/share/chruby/chruby.sh
-source /usr/local/share/chruby/auto.sh
+#source /usr/local/share/chruby/chruby.sh
+#source /usr/local/share/chruby/auto.sh
 
-RUBIES+=(/usr/local/rubies/*)
+#RUBIES+=(/usr/local/rubies/*)
 
 [[ -s "$HOME/.profile" ]] && source "$HOME/.profile" # Load the default .profile
 
@@ -24,5 +24,13 @@ export GPG_TTY=$(tty)
 export NVM_DIR="$HOME/Source/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export PATH=$PATH:~/gopath/bin
+
+if [ -f ~/.bin ]; then
+  export PATH=~/.bin:$PATH
+fi
+
+# eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
+# export SSH_AUTH_SOCK
 
 export PATH="$HOME/.cargo/bin:$PATH"

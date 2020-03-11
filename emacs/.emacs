@@ -15,7 +15,6 @@
 (add-to-list 'load-path "~/.dotfiles/emacs/")
 (defvar simpson-evil t
   "Variable to enable or disable evil specific configurations.")
-(setq idle-update-delay 1)
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -796,7 +795,7 @@ If file is package.json run npm install."
              :diminish "spell"
              :defer 1
              :config (progn
-                       (add-hook 'erc-mode-hook (lambda () (flyspell-mode 1)))
+                       ;; (add-hook 'erc-mode-hook (lambda () (flyspell-mode 1)))
                        (add-hook 'message-mode-hook (lambda () (flyspell-mode 1)))
                        (setq flyspell-issue-message-flag nil)))
 
@@ -1342,7 +1341,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (use-package mu4e
              :ensure nil
              :defer 1
-             :load-path "/usr/local/share/emacs/site-lisp/mu4e"
+             :load-path "/usr/share/emacs/site-lisp/mu4e"
              :config (progn
                        (simpson-load-file "~/.dotfiles/emacs/mu4e.el.gpg")
                        (set-face-attribute 'mu4e-highlight-face nil :background "DarkRed" :foreground nil)
@@ -1399,7 +1398,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (use-package org-mu4e
   :ensure nil
   :defer 1
-  :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e")
+  :load-path "/usr/share/emacs/site-lisp/mu/mu4e")
 
 (defmacro json-parse! (buffer)
   "Parse and return JSON from BUFFER.  Ideally for the 'url-retrieve' family of funcs."
@@ -1948,5 +1947,9 @@ end tell'
              :config (set-face-background 'mmm-default-submode-face nil))
 
 (use-package jest)
+
+(add-hook 'magit-process-find-password-functions
+          'magit-process-password-auth-source)
+
 (cua-mode)
 ;;; .emacs ends here
