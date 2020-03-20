@@ -1,0 +1,8 @@
+{
+  "video_path": "__HOME/.cache/yts/videos",
+  "cache_path": "__HOME/.cache/yts/yts.json",
+  "youtubedl_format": "bestvideo[ext = mp4]",
+  "players": [
+    ["/usr/bin/mplayer"]
+  ]
+}

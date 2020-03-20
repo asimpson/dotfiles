@@ -1,0 +1,48 @@
+{
+    "layer": "top",
+    "position": "top",
+    "modules-left": ["sway/workspaces", "sway/mode"],
+    "modules-center": [],
+    "modules-right": ["battery", "custom/bt", "custom/mail", "cpu", "pulseaudio", "clock"],
+    "sway/window": {
+        "max-length": 50
+    },
+    "battery": {
+        "format": "{capacity}% {icon}",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "cpu": {
+        "interval": 5,
+        "format": "{usage}% "
+    },
+    "custom/bt": {
+        "interval": 5,
+        "format": "",
+        "tooltip": false,
+        "return-type": "json",
+        "on-click": "~/.config/waybar/bt-toggle.sh",
+        "exec": "~/.config/waybar/bt-status.sh"
+    },
+    "custom/mail": {
+        "interval": 5,
+        "format": " {}✉",
+        "exec": "mu find flag:unread AND maildir:/fast/Inbox 2> /dev/null | wc -l"
+    },
+    "custom/turbo": {
+        "format": "{}",
+        "interval": 5,
+        "exec": "~/.config/waybar/turbo-status.sh"
+    },
+    "clock": {
+        "format": "{:%I:%M}"
+    },
+    "pulseaudio": {
+      "format": "{icon}",
+      "format-bluetooth": " ",
+      "format-muted": "",
+      "format-icons": {
+        "default": ["", ""]
+      },
+      "on-click": "pavucontrol"
+    }
+}
