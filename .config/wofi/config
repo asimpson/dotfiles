@@ -1,0 +1,5 @@
+prompt=wofi
+width=600
+height=150
+mode=dmenu
+allow_images=true

@@ -1,0 +1,19 @@
+window {
+  background-color: #282a36;
+}
+
+#text {
+  color: #f8f8f2;
+}
+
+#input {
+  background-color: #f8f8f2;
+}
+
+#inner-box {
+  /* padding-left: 8px; */
+}
+
+#inner-box * {
+  /* padding-top: 5px; */
+}
