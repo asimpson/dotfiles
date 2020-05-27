@@ -127,7 +127,7 @@
              :defer 1
              :bind ("C-SPC '" . flycheck-mode)
              :config (progn
-                       (setq flycheck-global-modes '(rjsx-mode emacs-lisp-mode rust-mode ruby-mode common-lisp-mode))
+                       (setq flycheck-global-modes '(sh-mode rjsx-mode emacs-lisp-mode rust-mode ruby-mode common-lisp-mode))
                        ;;https://github.com/flycheck/flycheck/issues/1129#issuecomment-319600923
                        (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))))
 
@@ -377,7 +377,7 @@
                           (emacs-lisp . t)
                           (plantuml . t)
                           (js . t)))
-                       (setq org-plantuml-jar-path "/usr/local/Cellar/plantuml/1.2018.12/libexec/plantuml.jar")
+                       (setq org-plantuml-jar-path "/usr/local/plantuml.jar")
                        (setq org-confirm-babel-evaluate (lambda (lang src) (not (string-equal lang "plantuml"))))
                        (add-to-list
                         'org-src-lang-modes '("plantuml" . plantuml))
@@ -1599,12 +1599,12 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   (interactive)
   (let (path)
     (if (projectile-project-p)
-        (setq path (nth 1 (split-string (buffer-file-name) (projectile-project-name))))
-      (setq path (buffer-file-name)))
+        (setq path (nth 2 (split-string (buffer-file-name) (projectile-project-name))))
+        (setq path (buffer-file-name)))
 
     (if (y-or-n-p "Code formatting? ")
         (kill-new (concat "`"path"`"))
-      (kill-new path))))
+        (kill-new path))))
 
 (global-set-key (kbd "C-SPC D") 'dired-jump)
 
@@ -1811,7 +1811,7 @@ Open the url in the default browser"
 (use-package plantuml-mode
              :mode ("\\.plantuml?\\'" . plantuml-mode)
              :config (progn
-                       (setq plantuml-jar-path "/usr/local/Cellar/plantuml/1.2018.12/libexec/plantuml.jar")
+                       (setq plantuml-jar-path "/usr/local/plantuml.jar")
                        (define-key plantuml-mode-map (kbd "C-c C-c") 'simpson-plantuml-preview)))
 
 (defun simpson-see-process-for-port()
@@ -1847,9 +1847,9 @@ Open the url in the default browser"
              :ensure nil
              :after evil
              :config (progn
+                       (when simpson-evil (add-to-list 'evil-emacs-state-modes 'vterm-mode))
                        (setq vterm-max-scrollback 10000)
-                       (define-key evil-motion-state-map (kbd "C-v") 'vterm-yank)
-                       (define-key vterm-mode-map (kbd "C-v") 'vterm-yank)))
+                       (define-key vterm-mode-map (kbd "C-v") #'vterm-yank)))
 
 (defhydra hydra-twittering-lists()
   "
