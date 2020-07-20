@@ -57,3 +57,6 @@ export PATH="$HOME/.yarn/bin:$PATH"
 [ $TERM = "dumb" ] && unsetopt zle && PS1='$ '
 
 # ssh-add -A 2>/dev/null;
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/local/bin/terraform terraform

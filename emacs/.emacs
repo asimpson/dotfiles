@@ -644,18 +644,19 @@ PROC is not used."
 (use-package reveal-in-osx-finder)
 
 (use-package yasnippet
-  :diminish yas-minor-mode
-  :bind ("C-SPC e" . yas-expand)
-  :defer 1
-  :init (progn
-          (add-hook 'js2-mode-hook #'yas-minor-mode)
-          (add-hook 'rjsx-mode-hook #'yas-minor-mode)
-          (add-hook 'ruby-mode-hook #'yas-minor-mode)
-          (add-hook 'org-mode-hook #'yas-minor-mode))
-  :config (progn
-            (yas-reload-all)
-            (define-key yas-minor-mode-map (kbd "<tab>") nil)
-            (define-key yas-minor-mode-map (kbd "TAB") nil)))
+             :diminish yas-minor-mode
+             :bind ("C-SPC e" . yas-expand)
+             :defer 1
+             :init (progn
+                     (add-hook 'js2-mode-hook #'yas-minor-mode)
+                     (add-hook 'rjsx-mode-hook #'yas-minor-mode)
+                     (add-hook 'ruby-mode-hook #'yas-minor-mode)
+                     (add-hook 'org-mode-hook #'yas-minor-mode)
+                     (add-hook 'go-mode-hook #'yas-minor-mode))
+             :config (progn
+                       (yas-reload-all)
+                       (define-key yas-minor-mode-map (kbd "<tab>") nil)
+                       (define-key yas-minor-mode-map (kbd "TAB") nil)))
 
 (use-package emmet-mode
   :diminish "zen"
@@ -962,9 +963,14 @@ If file is package.json run npm install."
   :mode ("\\.json?\\'" . json-mode))
 
 (use-package company
-  :defer 1
-  :diminish ""
-  :config (global-company-mode))
+             :defer 1
+             :diminish ""
+             :config (global-company-mode))
+
+(use-package company-lsp
+             :defer 1
+             :after company
+             :config (push 'company-lsp company-backends))
 
 (defun simpson-sauron-toggle(&optional x)
   "A function to keep the sauron window visible and sized correctly.
@@ -1948,5 +1954,32 @@ end tell'
              :config (set-face-background 'mmm-default-submode-face nil))
 
 (use-package jest)
+
+(use-package go-mode
+             :mode ("\\.go\\'" . go-mode))
+
+(use-package terraform-mode
+             :mode ("\\.tf\\'" . terraform-mode))
+
+(use-package lsp-mode
+             :commands (lsp lsp-deferred)
+             :config (setq lsp-rust-server 'rust-analyzer)
+             :hook ((go-mode . lsp-deferred)
+                    (rust-mode . lsp-deferred)))
+;; Set up before-save hooks to format buffer and add/delete imports.
+;; Make sure you don't have other gofmt/goimports hooks enabled.
+(defun lsp-go-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+
+;; Optional - provides fancier overlays.
+(use-package lsp-ui
+             :commands lsp-ui-mode)
+
+(setq lsp-gopls-staticcheck t)
+(setq lsp-eldoc-render-all t)
+(setq lsp-gopls-complete-unimported t)
+
 (cua-mode)
 ;;; .emacs ends here
