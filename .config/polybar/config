@@ -398,6 +398,7 @@ type = custom/script
 
 ; Command to be executed (using "/bin/sh -c [command]")
 exec = "~/.bin/mail-count.sh"
+click-left="/usr/local/bin/mail-preview"
 
 ; Seconds to sleep between updates
 ; Default: 5 (0 if `tail = true`)
