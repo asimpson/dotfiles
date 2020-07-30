@@ -57,7 +57,7 @@ font-2 = siji:pixelsize=10;1
 
 modules-left = i3
 ;modules-center = mpd
-modules-right = email pulseaudio cpu temperature date powermenu
+modules-right = notif email pulseaudio cpu temperature date powermenu
 
 tray-position = right
 tray-padding = 3
@@ -254,7 +254,7 @@ label = "%date% | %time%"
 type = internal/pulseaudio
 
 format-volume = <label-volume> <bar-volume>
-label-volume = VOL %percentage%%
+label-volume = %percentage%%
 label-volume-foreground = ${root.foreground}
 
 label-muted = 🔇 muted
@@ -360,7 +360,7 @@ ramp-foreground = ${colors.foreground-alt}
 [module/powermenu]
 type = custom/menu
 
-expand-right = true
+expand-right = false
 
 format-spacing = 1
 
@@ -403,3 +403,9 @@ exec = "~/.bin/mail-count.sh"
 ; Default: 5 (0 if `tail = true`)
 interval = 120
 format-prefix = "✉ "
+
+[module/notif]
+type = custom/script
+
+; Command to be executed (using "/bin/sh -c [command]")
+exec = "[ -f /tmp/dunst-muted ] && echo '⬣'"
