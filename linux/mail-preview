@@ -8,20 +8,29 @@ mail=$(mu find \
           --reverse \
           --fields='f; s; l; i' \
           "${query:?}" 2>/dev/null)
-selection=$(echo "$mail" | rofi -fullscreen -kb-custom-1 'Alt+c' -dpi 1 -dmenu -p "Preview message:")
+selection=$(echo "${mail}" | rofi -fullscreen -kb-custom-1 'Alt+c' -dpi 1 -dmenu -p "Preview message:")
 rofi_code=$?
 
-if [ $rofi_code -eq 10 ]; then
-  id=$(echo "$selection" \
-           | cut -d ";" -f 4 \
-           | tr -d '[:space:]')
-  link="mu4e:msgid:$id"
-  emacsclient -e "(org-link-open-from-string \"$link\")"
-elif [ $rofi_code -eq 0 ]; then
-  file_path=$(echo "$selection" | cut -d ";" -f 3)
-  file=$(mailpreview-cli "$file_path")
+select_style() {
+    file_path=$(echo "${selection}" | cut -d ";" -f 3)
+    file=$(mailpreview-cli "${file_path}" "${1}")
+    file_code=$?
 
-  firefox --new-tab "file://$file"
-else
-  exit 0
-fi;
+    if [ "${file_code}" -eq 0 ]; then
+      firefox --new-tab "file://${file}"
+    fi
+}
+
+case ${rofi_code} in
+    10)
+        id=$(echo "${selection}" \
+                 | cut -d ";" -f 4 \
+                 | tr -d '[:space:]')
+        link="mu4e:msgid:${id}"
+        emacsclient -e "(org-link-open-from-string \"${link}\")";;
+    0)
+        format=$(printf "text/plain\ntext/html" | rofi -dpi 1 -dmenu -p "Format:")
+        select_style "${format}";;
+    *)
+        exit 0;
+esac
