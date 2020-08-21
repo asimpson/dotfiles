@@ -15,9 +15,16 @@ select_style() {
     file_path=$(echo "${selection}" | cut -d ";" -f 3)
     file=$(mailpreview-cli "${file_path}" "${1}")
     file_code=$?
+    browser=$(printf "Firefox\nqutebrowser" | rofi -dpi 1 -dmenu -p "Browser: ")
 
     if [ "${file_code}" -eq 0 ]; then
-      firefox --new-tab "file://${file}"
+      if [ "${browser}" = "Firefox" ]; then
+          firefox --new-tab "file://${file}"
+      fi
+
+      if [ "${browser}" = "qutebrowser" ]; then
+          qutebrowser "file://${file}"
+      fi
     fi
 }
 
