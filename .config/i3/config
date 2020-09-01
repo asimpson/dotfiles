@@ -183,3 +183,5 @@ bindsym Shift+Control+Down exec "pactl set-sink-volume $(pactl list short sinks 
 exec --no-startup-id "dropbox start"
 
 exec --no-startup-id "clipster -d"
+
+exec --no-startup-id "nm-applet"
