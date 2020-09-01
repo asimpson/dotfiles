@@ -154,6 +154,7 @@
                        (add-to-list 'evil-emacs-state-modes 'twittering-mode)
                        (add-to-list 'evil-emacs-state-modes 'epresent-mode)
                        (add-to-list 'evil-emacs-state-modes 'slime-repl-mode)
+                       (evil-set-initial-state 'slime-repl-mode 'emacs)
                        (add-to-list 'evil-emacs-state-modes 'sldb-mode)
                        ;;http://spacemacs.org/doc/FAQ#orgheadline31
                        (fset 'evil-visual-update-x-selection 'ignore)
@@ -1223,6 +1224,7 @@ If file is package.json run npm install."
                       (setq lisp-loop-indent-subclauses nil)
                       (setq lisp-loop-indent-forms-like-keywords t)
                       (setq lisp-lambda-list-keyword-parameter-alignment t)
+                      (simpson-make-neutral slime-repl-mode-map)
                       (setq inferior-lisp-program "/usr/bin/sbcl")))
 
 (use-package slime-company
