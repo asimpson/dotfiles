@@ -8,11 +8,11 @@ mail=$(mu find \
           --reverse \
           --fields='f; s; l; i' \
           "${query:?}" 2>/dev/null)
-selection=$(echo "${mail}" | rofi -fullscreen -kb-custom-1 'Alt+c' -dpi 1 -dmenu -p "Preview message:")
+selection=$(echo "${mail}" | rofi -fullscreen -kb-custom-1 'Alt+c' -kb-custom-2 'Alt+v' -dpi 1 -dmenu -p "Preview message:")
 rofi_code=$?
+file_path=$(echo "${selection}" | cut -d ";" -f 3)
 
 select_style() {
-    file_path=$(echo "${selection}" | cut -d ";" -f 3)
     file=$(mailpreview-cli "${file_path}" "${1}")
     file_code=$?
     browser=$(printf "Firefox\nqutebrowser" | rofi -dpi 1 -dmenu -p "Browser: ")
@@ -29,6 +29,8 @@ select_style() {
 }
 
 case ${rofi_code} in
+    11)
+        echo "${file_path}" | xclip -selection clipboard;;
     10)
         id=$(echo "${selection}" \
                  | cut -d ";" -f 4 \
