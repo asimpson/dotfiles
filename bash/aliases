@@ -44,4 +44,4 @@ alias dsh='docker exec -it '
 alias redirects="curl -LSs -D - -o /dev/null -w 'Final URL: %{url_effective} \nNumber of Redirects: %{num_redirects} ' "
 alias sprint="instance=sparkbox jirauser='adam@heysparkbox.com' password=$(gpg -qd ~/.jira-token.gpg) sprint-cli "
 alias mpd-cloud="ssh -NTf mpd-cloud"
-alias chill="mpv 'https://www.youtube.com/watch?v=hHW1oY26kxQ' --no-video"
+alias chill="mpv 'https://www.youtube.com/watch?v=5qap5aO4i9A' --no-video"
