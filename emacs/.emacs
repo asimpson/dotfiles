@@ -1981,4 +1981,6 @@ end tell'
 (setq lsp-gopls-complete-unimported t)
 
 (cua-mode)
+
+(load "~/quicklisp/clhs-use-local.el" t)
 ;;; .emacs ends here
