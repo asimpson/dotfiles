@@ -3,20 +3,20 @@
 # shellcheck source=/dev/null
 . ~/.dotfiles/linux/mail-query.sh
 
-width="60%"
+window_width="#window { width: 60%; }"
 mail=$(mu find \
           --sortfield=date \
           --reverse \
           --fields='f; s; l; i' \
           "${query:?}" 2>/dev/null)
-selection=$(echo "${mail}" | rofi -theme-str "#window { width: $width; }" -kb-custom-1 'Alt+c' -kb-custom-2 'Alt+v' -dpi 1 -dmenu -p "Preview message:")
+selection=$(echo "${mail}" | rofi -theme-str "${window_width}" -kb-custom-1 'Alt+c' -kb-custom-2 'Alt+v' -dpi 1 -dmenu -p "Preview message:")
 rofi_code=$?
 file_path=$(echo "${selection}" | cut -d ";" -f 3)
 
 select_style() {
     file=$(mailpreview-cli "${file_path}" "${1}")
     file_code=$?
-    browser=$(printf "Firefox\nqutebrowser" | rofi -theme-str "#window { width: $width; }" -dpi 1 -dmenu -p "Browser: ")
+    browser=$(printf "Firefox\nqutebrowser" | rofi -theme-str "${window_width}" -dpi 1 -dmenu -p "Browser: ")
 
     if [ "${file_code}" -eq 0 ]; then
       if [ "${browser}" = "Firefox" ]; then
@@ -39,7 +39,7 @@ case ${rofi_code} in
         link="mu4e:msgid:${id}"
         emacsclient -e "(org-link-open-from-string \"${link}\")";;
     0)
-        format=$(printf "text/plain\ntext/html" | rofi -theme-str "#window { width: $width; }" -dpi 1 -dmenu -p "Format:")
+        format=$(printf "text/plain\ntext/html" | rofi -theme-str "${window_width}" -dpi 1 -dmenu -p "Format:")
         select_style "${format}";;
     *)
         exit 0;
