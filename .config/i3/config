@@ -168,7 +168,7 @@ bindsym $mod+r mode "resize"
 
 exec_always --no-startup-id "/usr/bin/polybar main"
 
-gaps inner 8
+gaps inner 4
 
 for_window [class="^.*"] border pixel 2
 
