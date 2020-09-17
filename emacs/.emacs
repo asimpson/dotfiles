@@ -1983,4 +1983,29 @@ end tell'
 (cua-mode)
 
 (load "~/quicklisp/clhs-use-local.el" t)
+
+(use-package org-roam
+             :hook (after-init . org-roam-mode)
+             :diminish ""
+             :custom (org-roam-directory (concat simpson-dropbox-path "roam/"))
+             :bind (:map org-roam-mode-map
+                         (("C-c n l" . org-roam)
+                          ("C-c n f" . org-roam-find-file)
+                          ("C-c n g" . org-roam-graph-show))
+                         :map org-mode-map
+                         (("C-c n i" . org-roam-insert))
+                         (("C-c n I" . org-roam-insert-immediate)))
+             :config (progn
+                       (add-to-list 'org-roam-capture-templates
+                                    '("t"
+                                      "default with tags"
+                                      plain
+                                      #'org-roam-capture--get-point
+                                      "%?"
+                                      :file-name
+                                      "%<%Y%m%d%H%M%S>-${slug}"
+                                      :head
+                                      "#+TITLE: ${title}\n#+ROAM_TAGS: \n"
+                                      :unnarrowed t)
+                                    t)))
 ;;; .emacs ends here
