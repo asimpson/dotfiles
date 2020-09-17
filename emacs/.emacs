@@ -75,25 +75,9 @@
   `(when (file-exists-p ,file)
      (load-library ,file)))
 
-(use-package osx-trash
-             :if (eq system-type 'darwin)
-             :defer 1
-             :config (progn
-                       (osx-trash-setup)
-                       (setq delete-by-moving-to-trash t)))
-
 (use-package base16-theme
              :if (display-graphic-p)
              :init (load-theme 'base16-dracula t))
-
-(use-package tomorrow-theme
-  :ensure nil
-  :if (and (display-graphic-p) (file-exists-p "~/Projects/tomorrow-theme/GNU Emacs"))
-  :disabled
-  :load-path "~/Projects/tomorrow-theme/GNU Emacs"
-  :init (require 'tomorrow-day-theme)
-  :config (set-face-background 'highlight "lavender")
-  (load-theme 'tomorrow-day t))
 
 (use-package exec-path-from-shell
              :defer 2
@@ -213,11 +197,7 @@
   (interactive)
   (if (string= major-mode "magit-status-mode")
       (magit-commit)
-    (comment-line 1)))
-
-(use-package god-mode
-             :if (not simpson-evil)
-             :defer 1)
+      (comment-line 1)))
 
 (use-package evil-matchit
              :if simpson-evil
@@ -281,14 +261,7 @@
                          ((string= (car custom-enabled-themes) "base16-dracula") (progn
                                                                                    (set-face-background 'diff-hl-change (plist-get base16-dracula-colors :base0C))
                                                                                    (set-face-background 'diff-hl-insert (plist-get base16-dracula-colors :base0B))
-                                                                                   (set-face-background 'diff-hl-delete (plist-get base16-dracula-colors :base09))))
-                         ((string= (car custom-enabled-themes) "tomorrow-day") (progn
-                                                                                 (set-face-background 'diff-hl-delete "red3")
-                                                                                 (set-face-background 'diff-hl-insert "LightGreen")))
-                         ((string= (car custom-enabled-themes) "base16-ocean") (progn
-                                                                                 (set-face-background 'diff-hl-change (plist-get base16-ocean-colors :base0C))
-                                                                                 (set-face-background 'diff-hl-insert (plist-get base16-ocean-colors :base0B))
-                                                                                 (set-face-background 'diff-hl-delete (plist-get base16-ocean-colors :base09)))))))
+                                                                                   (set-face-background 'diff-hl-delete (plist-get base16-dracula-colors :base09)))))))
 
 (use-package org
              :defer 2
@@ -298,7 +271,6 @@
                     ("C-SPC k B" . simpson-org-blog-capture)
                     ("C-SPC t" . org-todo-list)
                     ("C-SPC a" . org-agenda)
-                    ("C-c t" . simpson-temp-note)
                     ("C-SPC T" . org-tags-view))
              :mode (("\\.txt\\'" . org-mode))
              :config (progn
@@ -383,13 +355,6 @@
                        (add-to-list
                         'org-src-lang-modes '("plantuml" . plantuml))
                        (run-at-time 0 (* 60 15) #'simpson-org-refresh)
-                       (if (string= (car custom-enabled-themes) "base16-ocean")
-                           (progn
-                             (set-face-foreground 'org-link (plist-get base16-ocean-colors :base0B))
-                             (set-face-foreground 'org-tag (plist-get base16-ocean-colors :base0A))
-                             (set-face-foreground 'org-agenda-structure (plist-get base16-ocean-colors :base03))
-                             (set-face-attribute 'org-mode-line-clock nil :foreground (plist-get base16-ocean-colors :base0E) :background nil :box nil :inherit nil))
-                           (set-face-attribute 'org-mode-line-clock nil :foreground nil :background nil :box nil :inherit nil))
                        (setq org-pretty-entities t)
                        (setq org-export-with-section-numbers nil)))
 
@@ -413,7 +378,11 @@
 (defun simpson-org-refresh()
   "Refreshes org buffers that change via dropbox to pull in tasks that have been added outside Emacs."
   (interactive)
-  (let ((buffers (seq-filter (lambda (buf) (not (buffer-modified-p buf))) (mapcar 'get-buffer (mapcar 'f-filename (f-glob "*.txt" (car org-agenda-files)))))))
+  (let ((buffers (seq-filter (lambda (buf)
+                               (not (buffer-modified-p buf)))
+                             (mapcar 'get-buffer
+                                     (mapcar 'f-filename
+                                             (f-glob "*.txt" (car org-agenda-files)))))))
     (when buffers
       (seq-each (lambda(buf)
                   (set-buffer buf)
@@ -422,17 +391,16 @@
 (use-package markdown-mode
              :mode (("\\.md\\'" . markdown-mode))
              :config (progn
-                       (add-hook 'markdown-mode-hook 'markdown-fonts)
                        (add-hook 'markdown-mode-hook 'visual-line-mode)
                        (add-hook 'markdown-mode-hook (lambda () (flyspell-mode 1)))
                        (add-hook 'markdown-mode-hook (lambda () (setq mode-name "md")))
                        (setq markdown-command "/usr/bin/pandoc")
-                       (setq markdown-live-preview-delete-export t)
-                       (setq markdown-open-command "/usr/local/bin/marked")))
+                       (setq markdown-live-preview-delete-export t)))
 
-(use-package js2-mode
-             :disabled
-             :interpreter (("node" . js2-mode))
+(use-package rjsx-mode
+             :interpreter (("node" . rjsx-mode))
+             :mode (("\\.js?\\'" . rjsx-mode)
+                    ("\\.jsx?\\'" . rjsx-mode))
              :config (progn
                        (setq js2-basic-offset 2)
                        (setq js2-highlight-level 3)
@@ -440,26 +408,7 @@
                        (electric-indent-mode -1)
                        (setq js2-mode-show-strict-warnings nil)
                        (add-hook 'js2-mode-hook (lambda() (setq show-trailing-whitespace t)))
-                       (global-set-key (kbd "C-SPC k j") 'js2-mode-hide-warnings-and-errors)
-                       (defcustom js2-strict-missing-semi-warning nil
-                         "Non-nil to warn about semicolon auto-insertion after statement.
-  Technically this is legal per Ecma-262, but some style guides disallow
-  depending on it."
-                         :type 'boolean
-                         :group 'js2-mode)))
-
-(use-package rjsx-mode
-  :interpreter (("node" . rjsx-mode))
-  :mode (("\\.js?\\'" . rjsx-mode)
-         ("\\.jsx?\\'" . rjsx-mode))
-  :config (progn
-            (setq js2-basic-offset 2)
-            (setq js2-highlight-level 3)
-            (setq js2-bounce-indent-p t)
-            (electric-indent-mode -1)
-            (setq js2-mode-show-strict-warnings nil)
-            (add-hook 'js2-mode-hook (lambda() (setq show-trailing-whitespace t)))
-            (add-hook 'rjsx-mode-hook (lambda() (setq mode-name "jsx")))))
+                       (add-hook 'rjsx-mode-hook (lambda() (setq mode-name "jsx")))))
 
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
@@ -471,9 +420,8 @@
 (add-to-list 'auto-mode-alist '("\\.scss\\'" . css-mode))
 
 (use-package yaml-mode
-  :mode (("\\.yml?\\'" . yaml-mode)))
+             :mode (("\\.yml?\\'" . yaml-mode)))
 
-;;each line gets one line
 (set-default 'truncate-lines t)
 
 (setq make-backup-files nil)
@@ -481,12 +429,6 @@
 (setq auto-save-default nil)
 
 (setq inhibit-splash-screen t)
-
-(defun markdown-fonts ()
-  "Use monospaced font faces in current buffer."
-  (interactive)
-  (setq buffer-face-mode-face '(:family "Hack" :height 110))
-  (buffer-face-mode))
 
 (use-package f)
 
@@ -500,10 +442,6 @@
 
 (setq header-line-format nil)
 (set-face-attribute 'header-line nil :background "white" :box nil)
-
-(when (string= (car custom-enabled-themes) "base16-ocean")
-  (set-face-foreground 'vertical-border (plist-get base16-ocean-colors :base02))
-  (set-face-background 'fringe (plist-get base16-ocean-colors :base00)))
 
 (when (string= (car custom-enabled-themes) "base16-dracula")
   (set-face-foreground 'vertical-border (plist-get base16-dracula-colors :base02))
@@ -528,7 +466,6 @@
                                                                           (propertize "*" 'face '(:foreground "#cd5c5c"))))
                                                                 " "
                                                                 '(:eval mode-line-position)
-                                                                '(:eval simpson-software-update)
                                                                 " "
                                                                 mode-line-modes
                                                                 mode-line-misc-info
@@ -539,57 +476,9 @@
 (defvar simpson-mail-count nil)
 (defvar simpson-software-update nil)
 
-(defun simpson-check-mail()
-  "Stolen from https://github.com/iqbalansari/mu4e-alert/blob/master/mu4e-alert.el#L288."
-  (let (num (output (shell-command-to-string simpson-mail-update-command)))
-    (if (> (length output) 0)
-        (progn
-          (setq num (number-to-string (length (split-string output "\n" t))))
-          (setq simpson-mail-count (concat " " (propertize "mail"
-                                                           'display display-time-mail-icon
-                                                           'face display-time-mail-face
-                                                           'help-echo (concat num " " "unread mail")
-                                                           'keymap '(mode-line keymap
-                                                                     (mouse-1 . mu4e)))
-                                           " " num)))
-        (setq simpson-mail-count nil))))
-
-(defun simpson-update-check()
-  "Process that check for software update on macOS."
-  (when (memq window-system '(mac ns))
-    (set-process-sentinel (start-process "softwareupdate" "*softwareupdate*" "softwareupdate" "-l") 'simpson-update-check--sentinel)))
-
-(defun simpson-update-check--sentinel(proc msg)
-  "Search for word recommended in MSG in BUFFER output to determine update.
-PROC is not used."
-  (when (and (string= msg "finished\n") (buffer-live-p (get-buffer "*softwareupdate*")))
-    (if (with-current-buffer "*softwareupdate*"
-          (goto-char (point-min))
-          (search-forward "recommended" nil t))
-        (setq simpson-software-update "*")
-        (setq simpson-software-update nil)
-        (kill-buffer "*softwareupdate*")))
-  (run-at-time (* 60 60) nil #'simpson-update-check))
-
-(run-at-time 0 nil #'simpson-update-check)
-
 (set-face-attribute 'mode-line nil :height 1.0 :box nil)
 
 (defun modeline-theme()
-  (when (string= (car custom-enabled-themes) "base16-ocean")
-    (set-face-attribute 'mode-line nil
-                        :background (plist-get base16-ocean-colors :base06)
-                        :foreground (plist-get base16-ocean-colors :base01)
-                        :box `(:line-width 3 :color ,(plist-get base16-ocean-colors :base06) :style nil))
-    (set-face-attribute 'mode-line-inactive nil
-                        :box `(:line-width 3 :color ,(plist-get base16-ocean-colors :base01) :style nil)))
-
-  (when (string= (car custom-enabled-themes) "tomorrow-day")
-    (set-face-attribute 'mode-line nil
-                        :background "khaki1" :box '(:line-width 5 :color "khaki1"))
-    (set-face-attribute 'mode-line-inactive nil
-                        :background "LightCyan2" :box '(:line-width 5 :color "LightCyan2")))
-
   (when (string= (car custom-enabled-themes) "base16-dracula")
     (set-face-attribute 'header-line nil
                         :background (plist-get base16-dracula-colors :base00)
@@ -617,9 +506,6 @@ PROC is not used."
 
 (setq confirm-kill-emacs 'yes-or-no-p)
 
-(when (string= (car custom-enabled-themes) "base16-ocean")
-  (set-face-background 'trailing-whitespace (plist-get base16-ocean-colors :base0F)))
-
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (use-package which-key
@@ -631,18 +517,16 @@ PROC is not used."
              :config (setq fci-rule-column 100))
 
 (use-package avy
-  :defer 1
-  :bind (
-         ("C-SPC j" . avy-goto-word-1)
-         ("C-SPC J" . avy-goto-char))
-  :config (progn
-            (when (string= (car custom-enabled-themes) "base16-ocean")
-              (set-face-background 'avy-lead-face (plist-get base16-ocean-colors :base08))
-              (set-face-background 'avy-lead-face-0 (plist-get base16-ocean-colors :base0C))
-              (set-face-background 'avy-lead-face-1 (plist-get base16-ocean-colors :base05))
-              (set-face-background 'avy-lead-face-2 (plist-get base16-ocean-colors :base0E)))))
-
-(use-package reveal-in-osx-finder)
+             :defer 1
+             :bind (
+                    ("C-SPC j" . avy-goto-word-1)
+                    ("C-SPC J" . avy-goto-char))
+             :config (progn
+                       (when (string= (car custom-enabled-themes) "base16-ocean")
+                         (set-face-background 'avy-lead-face (plist-get base16-ocean-colors :base08))
+                         (set-face-background 'avy-lead-face-0 (plist-get base16-ocean-colors :base0C))
+                         (set-face-background 'avy-lead-face-1 (plist-get base16-ocean-colors :base05))
+                         (set-face-background 'avy-lead-face-2 (plist-get base16-ocean-colors :base0E)))))
 
 (use-package yasnippet
              :diminish yas-minor-mode
@@ -707,9 +591,6 @@ PROC is not used."
   (setq emmet-expand-jsx-className? nil))
 
 (setq tramp-default-method "ssh")
-
-;;http://emacs.stackexchange.com/a/58
-;;to open a file with sudo, invoke C-x C-f and then type /sudo::/path
 
 (use-package dired
              :ensure nil
@@ -889,15 +770,15 @@ If file is package.json run npm install."
 
 (defun simpson-browse()
   "Fuzzy finding interface to eyebrowse workspaces.
-             If the workspace is not tagged with a name, the number is used instead.
-             An asterisk (*) deontes current workspace."
+   If the workspace is not tagged with a name, the number is used instead.
+   An asterisk (*) deontes current workspace."
   (interactive)
   (let* ((panes (map 'list (lambda (win)
                              (list (if (string-empty-p (car (last win)))
                                        (number-to-string (car win))
-                                     (if (equal (car win) (eyebrowse--get 'current-slot))
-                                         (concat (car (last win)) "*")
-                                       (car (last win)))) :number (car win)))
+                                       (if (equal (car win) (eyebrowse--get 'current-slot))
+                                           (concat (car (last win)) "*")
+                                           (car (last win)))) :number (car win)))
                      (eyebrowse--get 'window-configs)))
          (pane (completing-read "Jump to session: " panes)))
     (eyebrowse-switch-to-window-config (plist-get (cdr (assoc pane panes)) :number))))
@@ -906,8 +787,6 @@ If file is package.json run npm install."
              :defer 1
              :init (setq eyebrowse-keymap-prefix (kbd "C-SPC s"))
              :config (progn
-                       (when (string= (car custom-enabled-themes) "base16-ocean")
-                         (set-face-foreground 'eyebrowse-mode-line-active (plist-get base16-ocean-colors :base0E)))
                        (eyebrowse-mode t)
                        (set-face-foreground 'eyebrowse-mode-line-active "green4")
                        (setq eyebrowse-mode-line-style nil)
@@ -927,19 +806,18 @@ If file is package.json run npm install."
                      (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
                      (add-hook 'emacs-lisp-mode-hook (lambda () (setq mode-name "λ")))))
 
-
 ;;minor modes are set with diminish
 ;;major modes are changed in the mode hook using the variable mode-name
 (use-package diminish
-  :defer 1
-  :config (progn
-            (diminish 'smerge-mode "#$!&")
-            (diminish 'buffer-face-mode)
-            (eval-after-load "autorevert" '(diminish 'auto-revert-mode))
-            (eval-after-load "undo-tree" '(diminish 'undo-tree-mode))
-            (add-hook 'shell-mode-hook (lambda () (setq mode-name "shell")))
-            (add-hook 'image-mode-hook (lambda () (setq mode-name "image")))
-            (add-hook 'makefile-bsdmake-mode-hook (lambda () (setq mode-name "make")))))
+             :defer 1
+             :config (progn
+                       (diminish 'smerge-mode "#$!&")
+                       (diminish 'buffer-face-mode)
+                       (eval-after-load "autorevert" '(diminish 'auto-revert-mode))
+                       (eval-after-load "undo-tree" '(diminish 'undo-tree-mode))
+                       (add-hook 'shell-mode-hook (lambda () (setq mode-name "shell")))
+                       (add-hook 'image-mode-hook (lambda () (setq mode-name "image")))
+                       (add-hook 'makefile-bsdmake-mode-hook (lambda () (setq mode-name "make")))))
 
 (use-package swiper
              :defer 1
@@ -975,9 +853,8 @@ If file is package.json run npm install."
 
 (defun simpson-sauron-toggle(&optional x)
   "A function to keep the sauron window visible and sized correctly.
-
-             Optional argument (X) to satisfy the various ways the evil-window-move-
-             functions are called."
+   Optional argument (X) to satisfy the various ways the evil-window-move-
+   functions are called."
   (interactive)
   (when (window-live-p (get-buffer-window "*Sauron*"))
     (sr-hide)
@@ -1063,43 +940,6 @@ If file is package.json run npm install."
   (let ((dir (read-directory-name "Which dir?: ")) (string (read-string "What glob? :")))
     (setq mocha-project-test-directory (concat dir string))))
 
-(defun simpson-rg-switches(dir switches)
-  (interactive
-   (let (dir switches)
-     (list
-      (when (y-or-n-p "Pick dir? ")
-        (setq dir (read-directory-name "rg dir: ")))
-      (setq switches (read-string "rg switches: ")))
-     (counsel-rg nil dir switches))))
-
-(defhydra hydra-searching (:exit t)
-  "
-             ^Searching tools
-             ----------------------------------------------
-             _a_ ag without switches
-             _A_ ag with extra switches
-             _r_ rg without switches
-             _R_ rg with extra switches
-
-             ^silver searcher options
-             ----------------------------------------------
-  -Ghtml   - ag search by type
-  --ignore - ag ignore file path
-
-  ^ripgrep options
-  ----------------------------------------------
-  -g - search files matching glob, -g '*spec.js'
-  -M - limit lines to N
-  -t - search files matching type
-  - rg --type-list lists all types
-  -C - show context N lines
-  "
-  ("a" counsel-projectile-ag "projectile ag")
-  ("A" simpson-counsel-ag "ag with switches")
-  ("r" counsel-rg "projectile rg")
-  ("R" simpson-rg-switches "rg with switches"))
-
-
 (setq compilation-always-kill t)
 
 (defun create-scratch-buffer ()
@@ -1126,29 +966,10 @@ If file is package.json run npm install."
   ("b" magit-blame "view blame for file"))
 
 (use-package aggressive-indent
-  :mode("\\.lisp?\\'" . aggressive-indent-mode))
+             :mode("\\.lisp?\\'" . aggressive-indent-mode))
 
 (defun simpson-delete(x)
   (call-process "trash" nil nil nil x))
-
-(defun simpson-trash(file)
-  "Prompt for FILE and trash it."
-  (interactive
-   (list (read-file-name "Files to trash: ")))
-  (simpson-delete file))
-
-(defhydra hydra-js2 ()
-  "
-    JS2 Folding/Narrowing:
-    _n_ narrow to defun
-    _v_ fold
-    _o_ org narrow to sub tree
-    _d_ highlight defun
-  "
-  ("n" js2-narrow-to-defun "narrow to defun" :exit t)
-  ("v" vimish-fold "fold")
-  ("o" org-narrow-to-subtree "org narrow to subtree" :exit t)
-  ("d" js2-mark-defun "highlight defun"))
 
 (defhydra hydra-vimish (:exit t)
   "
@@ -1166,19 +987,6 @@ If file is package.json run npm install."
              :after '(ivy, hydra)
              :if (file-exists-p "~/Projects/ivy-window-configuration/")
              :load-path "~/Projects/ivy-window-configuration/")
-
-(use-package indium
-  :after evil
-  :config (progn
-            (when simpson-evil (add-to-list 'evil-emacs-state-modes 'indium-repl-mode))
-            (simpson-make-neutral indium-repl-mode-map)
-            (advice-add 'indium-scratch-setup-buffer :after #'simpson-indium-emacs)))
-
-(defun simpson-indium-emacs (buf)
-  "Run after the scratch BUF is setup and add 'use-strict' mode."
-  (with-current-buffer buf
-    (evil-emacs-state)
-    (insert "'use strict';")))
 
 (defhydra hydra-help (:exit t)
   "
@@ -1234,38 +1042,6 @@ If file is package.json run npm install."
              :defer 1
              :config (company-quickhelp-mode))
 
-(defun simpson-org-to-todo()
-  "Convert a line (or region) in an org file to a TODO."
-  (interactive)
-  (let ((heading "") (i 1) (number (read-number "What level?" 1)))
-    (while (<= i number)
-           (setq heading (concat heading "*"))
-           (setq i (+ i 1)))
-    (if (region-active-p)
-        (let ((strings (seq-map (lambda(x) (concat heading " TODO " x))
-                                (split-string (buffer-substring-no-properties (region-beginning) (region-end)) "\n" t))))
-          (delete-active-region)
-          (insert (mapconcat 'identity strings "\n")))
-        (org-beginning-of-line)
-        (insert heading " TODO ") t)))
-
-(defun simpson-org-to-headings()
-  "Convert a line (or region) in an org file to a headingj."
-  (interactive)
-  (let ((heading "")
-        (i 1)
-        (number (read-number "What level?" 1)))
-    (while (<= i number)
-           (setq heading (concat heading "*"))
-           (setq i (+ i 1)))
-    (if (region-active-p)
-        (let ((strings (seq-map (lambda(x) (concat heading " " x))
-                                (split-string (buffer-substring-no-properties (region-beginning) (region-end)) "\n" t))))
-          (delete-active-region)
-          (insert (mapconcat 'identity strings "\n")))
-        (org-beginning-of-line)
-        (insert heading " ") t)))
-
 (defun eww-more-readable ()
   "Make eww more pleasant to use.
 Run it after eww buffer is loaded.
@@ -1277,33 +1053,12 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   (redraw-display)
   (eww-reload 'local))
 
-(defhydra hydra-eww (:exit t)
-  "
-    Go forth and browse...text
-    _r_ eww-more-readable
-    _R_ eww-readable
-    _b_ eww-back-url
-    _h_ eww-history-browse
-    _c_ simpson-eww-external
-    _g_ eww
-  "
-  ("r" eww-more-readable "better readable")
-  ("R" eww-readable "default readable")
-  ("b" eww-back-url "eww back" :exit nil)
-  ("g" eww "eww")
-  ("c" simpson-eww-external "simpson-eww-external")
-  ("h" eww-history-browse "browse history"))
-
-(defun simpson-eww-external()
-  (interactive)
-  (browse-url-default-browser (get-text-property (point) 'shr-url)))
-
 (use-package rust-mode
-  :mode("\\.rs?\\'" . rust-mode)
-  :diminish ""
-  :config(progn
-           (setq rust-indent-offset 2)
-           (add-hook 'rust-mode-hook (lambda () (setq mode-name "rust")))))
+             :mode("\\.rs?\\'" . rust-mode)
+             :diminish ""
+             :config(progn
+                      (setq rust-indent-offset 2)
+                      (add-hook 'rust-mode-hook (lambda () (setq mode-name "rust")))))
 
 (use-package cargo
              :defer 1
@@ -1373,38 +1128,15 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
                        (add-to-list 'mu4e-view-actions
                                     '("ViewInBrowser" . mu4e-action-view-in-browser) t)
                        (define-key mu4e-headers-mode-map (kbd "C-c C-u") 'mu4e-update-index)
-                       (define-key mu4e-main-mode-map "q" 'simpson-mu4e-quit)
                        (simpson-make-neutral mu4e-headers-mode-map)
                        (simpson-make-neutral--keys mu4e-headers-mode-map)
                        (simpson-make-neutral--keys mu4e-view-mode-map)
-                       (setq mu4e-view-html-plaintext-ratio-heuristic most-positive-fixnum)
-                       ;; In my workflow, emails won't be moved at all. Only their flags/labels are
-                       ;; changed. Se we redefine the trash and refile marks not to do any moving.
-                       ;; However, the real magic happens in `+email|gmail-fix-flags'.
-                       ;;
-                       ;; Gmail will handle the rest.
-                       ;; (setq mu4e-marks (assq-delete-all 'delete mu4e-marks))
-                       ;; (setq mu4e-marks (assq-delete-all 'trash mu4e-marks))
-                       ;; (push '(trash :char ("d" . "▼")
-                       ;;               :prompt "dtrash"
-                       ;;               :dyn-target (lambda (target msg) (mu4e-get-trash-folder msg))
-                       ;;               :action
-                       ;;               (lambda (docid msg target)
-                       ;;                 (mu4e~proc-move docid (mu4e~mark-check-target target) "-N")))
-                       ;;       mu4e-marks)
-                       ;;(run-at-time 0 (* 60 3) #'simpson-check-mail)
-                       ))
-
-(defun simpson-mu4e-quit()
-  "Quit mu4e and then update mail icon."
-  (interactive)
-  (mu4e-quit)
-  (simpson-check-mail))
+                       (setq mu4e-view-html-plaintext-ratio-heuristic most-positive-fixnum)))
 
 (use-package org-mu4e
-  :ensure nil
-  :defer 1
-  :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e")
+             :ensure nil
+             :defer 1
+             :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e")
 
 (defmacro json-parse! (buffer)
   "Parse and return JSON from BUFFER.  Ideally for the 'url-retrieve' family of funcs."
@@ -1415,11 +1147,6 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   (interactive)
   (let ((data (json-parse! (url-retrieve-synchronously "https://api.coinbase.com/v2/prices/LTC-USD/spot" t))))
     (message "LTC: $%s" (alist-get 'amount (car data)))))
-
-(defun simpson-lambda(file)
-  (interactive
-   (list (read-file-name "Which lambda?" "/Users/asimpson/Projects/blog-admin/packages/node_modules/@lambdas")))
-  (async-shell-command (concat "node run.js " (file-name-base file))))
 
 (add-to-list 'auto-mode-alist '("\\.hbs\\'" . html-mode))
 
@@ -1496,17 +1223,10 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 
 (setq eshell-command-completion-function 'completion-at-point)
 
-(use-package elquery)
-
 (use-package package-lint)
 
 (use-package flymake-json
-  :init (add-hook 'json-mode-hook 'flymake-json-load))
-
-(use-package osx-clipboard
-  :defer 1
-  :if (eq system-type 'darwin)
-  :diminish "")
+             :init (add-hook 'json-mode-hook 'flymake-json-load))
 
 (defun simpson-cancel-timer()
   "Browse timer list by function name and cancel the selected timer."
@@ -1555,7 +1275,6 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
             (simpson-make-neutral deadgrep-mode-map)))
 
 (global-set-key (kbd "C-M-u") 'universal-argument)
-
 (global-set-key (kbd "s-=") 'text-scale-increase)
 (global-set-key (kbd "s--") 'text-scale-decrease)
 (global-set-key (kbd "C-SPC k !") 'simpson-restore-text)
@@ -1564,14 +1283,6 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   "Reset text size to default."
   (interactive)
   (text-scale-set 0))
-
-(defun simpson-pretty-json()
-  "Ideal for getting pretty JSON from JSON that is copied from a XHR request."
-  (interactive)
-  (with-temp-buffer
-      (clipboard-yank)
-    (json-pretty-print-buffer)
-    (kill-new (buffer-string))))
 
 (defun simpson-project-clone(url)
   "Clone a git repo given URL and then change to that project."
@@ -1585,8 +1296,6 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
     (dired (concat projectsDir name))))
 
 (global-set-key (kbd "C-SPC k b") 'simpson-project-clone)
-(global-set-key (kbd "C-SPC B") 'simpson-get-git-url)
-(global-set-key (kbd "C-SPC k P") 'simpson-pretty-json)
 (global-set-key (kbd "C-SPC k r") 'vc-revert)
 (global-set-key (kbd "C-SPC k v") 'visual-line-mode)
 (global-set-key (kbd "C-SPC k n") 'simpson-smart-shell)
@@ -1619,14 +1328,6 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   "Shell out to date to return a formatted date string at point."
   (interactive)
   (shell-command "date +%Y-%m-%d-%I:%M" t))
-
-(defun simpson-temp-note()
-  "Dump a date-stamped file to /tmp."
-  (interactive)
-  (let* ((date (string-trim (shell-command-to-string "date +%Y-%m-%d-%I")))
-         (slug (read-string "Slug? "))
-         (file (concat "/tmp/" date "-" slug ".txt")))
-    (write-file file)))
 
 (defun simpson-new-note(name)
   "Create new file for nvAlt with NAME."
@@ -1705,19 +1406,10 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   (let ((choice (completing-read "Which IRC Network? " '("freenode" "mozilla"))))
     (erc-tls :server (if (y-or-n-p "Home? ")
                          (plist-get znc-server :home)
-                       (plist-get znc-server :remote))
+                         (plist-get znc-server :remote))
              :port 6697
              :nick "asimpson"
              :password (concat "adam@erc/" choice ":"(cadr (auth-source-user-and-password "irc.znc.net"))))))
-
-(defun simpson-get-git-url()
-  "Grab the remote url for origin and assume it's a github url.
-Open the url in the default browser"
-  (interactive)
-  (let (url repo)
-    (setq url (shell-command-to-string "git remote get-url origin"))
-    (setq repo (nth 0 (split-string (nth 1 (split-string url ":")) "\\.")))
-    (shell-command (concat "firefox https://github.com/" repo) nil)))
 
 (defun simpson-get-file-name()
   "Return the file name for a buffer."
@@ -1825,25 +1517,6 @@ Open the url in the default browser"
   (let ((port (read-string "Which port? ")))
     (async-shell-command (concat "lsof -wni tcp:" port))))
 
-(use-package twittering-mode
-             :config (progn
-                       (setq twittering-icon-mode nil)
-                       (add-hook 'twittering-mode-hook 'visual-line-mode)
-                       (setq twittering-use-master-password t)
-                       (setq twittering-display-remaining t)
-                       (setq twittering-initial-timeline-spec-string "a_simpson/foss")
-                       (setq twittering-connection-type-order '(wget urllib-http native urllib-https))
-                       (define-key twittering-mode-map "*" 'hydra-twittering-lists/body)
-                       (setq twittering-use-icon-storage t)
-                       (defalias 'epa--decode-coding-string 'decode-coding-string)))
-
-(use-package osx-lib)
-
-(defun simpson-normalize-vol()
-  "Set the system volume to my prefered level."
-  (interactive)
-  (osx-lib-set-volume 11))
-
 (use-package epresent)
 
 (use-package vterm
@@ -1855,23 +1528,6 @@ Open the url in the default browser"
                        (when simpson-evil (add-to-list 'evil-emacs-state-modes 'vterm-mode))
                        (setq vterm-max-scrollback 10000)
                        (define-key vterm-mode-map (kbd "C-v") #'vterm-yank)))
-
-(defhydra hydra-twittering-lists()
-  "
-    Shortcuts to jump to different timelines
-    _s_ sparkbox peeps
-    _f_ open-source software folks
-    _r_ mjackson's react list
-    _a_ Replies
-    _n_ nba stuff
-    _c_ copy tweet URL
-  "
-  ("s" (twittering-visit-timeline "a_simpson/sparkbox") "Sparkbox list")
-  ("f" (twittering-visit-timeline "a_simpson/foss") "FOSS")
-  ("r" (twittering-visit-timeline "mjackson/react-js1") "MJackson React.js")
-  ("a" (twittering-visit-timeline '(mentions)) "Replies")
-  ("c" (lambda() (interactive) (kill-new (get-text-property (point) 'uri))) "Copy URL")
-  ("n" (twittering-visit-timeline "a_simpson/nba") "NBA"))
 
 (defhydra hydra-diff-jump()
   "
@@ -1905,9 +1561,6 @@ Open the url in the default browser"
     (start-process "s3-upload" buffer "aws" "s3" "cp" (file-truename (dired-file-name-at-point)) (concat "s3://" bucket "/" dir))
     (pop-to-buffer buffer)))
 
-(use-package counsel-osx-app
-             :defer 1)
-
 (defun reload-xcode()
   (interactive)
   (shell-command "osascript -e 'tell application \"Xcode\"
@@ -1925,11 +1578,6 @@ end tell'
 (use-package docker-compose-mode
              :mode ("\\docker-compose.yml\\'" . docker-compose-mode))
 
-(defun simpson-insert-org-date()
-  "Insert the date with the org 3 heading level."
-  (interactive)
-  (insert (concat "*** " (shell-command-to-string "date +%m-%d-%y"))))
-
 (use-package savehist
              :custom
              (savehist-file "~/.emacs.d/savehist")
@@ -1940,22 +1588,23 @@ end tell'
              :config
              (savehist-mode +1))
 
-(use-package org-msg
-             :after mu4e
-             :defer 1
-             :config (progn
-                       (setq mail-user-agent 'mu4e-user-agent)
-                       (setq org-msg-options "html-postamble:nil H:5 num:nil ^:{} toc:nil")
-	                     (setq org-msg-startup "hidestars indent inlineimages")
-	                     (setq org-msg-greeting-name-limit 3)))
-
 (use-package vue-mode
              :config (set-face-background 'mmm-default-submode-face nil))
 
 (use-package jest)
 
 (use-package go-mode
-             :mode ("\\.go\\'" . go-mode))
+             :mode ("\\.go\\'" . go-mode)
+             :hook (go-mode . go-setup))
+
+(defun go-setup()
+  (setq compile-command "go build -v && go test -v && golint")
+  (define-key go-mode-map (kbd "C-c C-c") 'compile)
+  (define-key go-mode-map (kbd "C-c C-r") 'run-go-build))
+
+(defun run-go-build()
+  (interactive)
+  (async-shell-command "go run main.go"))
 
 (use-package terraform-mode
              :mode ("\\.tf\\'" . terraform-mode))
