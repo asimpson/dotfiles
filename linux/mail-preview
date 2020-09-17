@@ -7,11 +7,11 @@ window_width="#window { width: 60%; }"
 mail=$(mu find \
           --sortfield=date \
           --reverse \
-          --fields='f; s; l; i' \
+          --fields='f	s	l	i' \
           "${query:?}" 2>/dev/null)
 selection=$(echo "${mail}" | rofi -theme-str "${window_width}" -kb-custom-1 'Alt+c' -kb-custom-2 'Alt+v' -dpi 1 -dmenu -p "Preview message:")
 rofi_code=$?
-file_path=$(echo "${selection}" | cut -d ";" -f 3)
+file_path=$(echo "${selection}" | cut -f 3)
 
 select_style() {
     file=$(mailpreview-cli "${file_path}" "${1}")
@@ -34,7 +34,7 @@ case ${rofi_code} in
         echo "${file_path}" | xclip -selection clipboard;;
     10)
         id=$(echo "${selection}" \
-                 | cut -d ";" -f 4 \
+                 | cut -f 4 \
                  | tr -d '[:space:]')
         link="mu4e:msgid:${id}"
         emacsclient -e "(org-link-open-from-string \"${link}\")";;
