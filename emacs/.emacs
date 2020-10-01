@@ -140,6 +140,7 @@
                        (add-to-list 'evil-emacs-state-modes 'slime-repl-mode)
                        (evil-set-initial-state 'slime-repl-mode 'emacs)
                        (add-to-list 'evil-emacs-state-modes 'sldb-mode)
+                       (add-to-list 'evil-emacs-state-modes 'elpher-mode)
                        ;;http://spacemacs.org/doc/FAQ#orgheadline31
                        (fset 'evil-visual-update-x-selection 'ignore)
                        (define-key evil-normal-state-map (kbd "RET") 'save-buffer)
@@ -1657,4 +1658,5 @@ end tell'
                                       "#+TITLE: ${title}\n#+ROAM_TAGS: \n"
                                       :unnarrowed t)
                                     t)))
+(use-package elpher)
 ;;; .emacs ends here
