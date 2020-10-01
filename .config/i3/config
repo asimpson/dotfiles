@@ -166,7 +166,8 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-exec_always --no-startup-id "/usr/bin/polybar main"
+exec_always --no-startup-id "/usr/bin/polybar lodpi"
+exec_always --no-startup-id "/usr/bin/polybar hidpi"
 
 gaps inner 4
 
@@ -174,7 +175,8 @@ for_window [class="^.*"] border pixel 2
 
 client.focused #f5a142 #f5a142 #000000 #f5a142 #f5a142
 
-exec --no-startup-id "feh --bg-scale ~/Downloads/kristaps-ungurs-6Xl_GxiMKSM-unsplash.jpg"
+# exec --no-startup-id "feh --bg-scale ~/Pictures/kristaps-ungurs-6Xl_GxiMKSM-unsplash.jpg"
+exec --no-startup-id "feh --bg-fill ~/Pictures/cactus-groot.jpg"
 
 bindsym Shift+Control+Up exec "pactl set-sink-volume $(pactl list short sinks | grep RUNNING | cut -f 2) +10%"
 
