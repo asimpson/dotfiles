@@ -7,8 +7,6 @@
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives
-             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 (package-initialize)
 (setq custom-file "~/.dotfiles/emacs/emacs-custom.el")
@@ -224,33 +222,26 @@
              :bind ("C-SPC C" . flyspell-correct-previous-word-generic))
 
 (use-package magit
-             :pin melpa-stable
              :defer 1
              :bind ("C-SPC g" . magit-status)
              :config (progn
                        (setq auto-revert-buffer-list-filter nil)
+                       (define-key magit-popup-mode-map (kbd "q") 'magit-mode-bury-buffer)
                        (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
                        (put 'magit-clean 'disabled nil)
                        (add-hook 'magit-status-sections-hook 'magit-insert-worktrees)
                        (setq magit-commit-show-diff nil)
                        (setq magit-log-section-commit-count 0)
                        (set-face-background 'magit-diff-hunk-heading-highlight "DarkMagenta")
-                       (set-face-background 'magit-diff-hunk-heading "DarkCyan")
-                       (when (string= (car custom-enabled-themes) "base16-ocean")
-                         (set-face-foreground 'magit-blame-date (plist-get base16-ocean-colors :base0A))
-                         (set-face-foreground 'magit-blame-hash (plist-get base16-ocean-colors :base0A))
-                         (set-face-foreground 'magit-blame-heading (plist-get base16-ocean-colors :base0A))
-                         (set-face-foreground 'magit-blame-name (plist-get base16-ocean-colors :base0A))
-                         (set-face-foreground 'magit-blame-summary (plist-get base16-ocean-colors :base0A))
-                         (set-face-foreground 'magit-sequence-onto (plist-get base16-ocean-colors :base0A))
-                         (set-face-foreground 'magit-sequence-done (plist-get base16-ocean-colors :base0A))
-                         (set-face-foreground 'magit-hash (plist-get base16-ocean-colors :base0C))
-                         (set-face-background 'magit-section-highlight (plist-get base16-ocean-colors :base01)))))
+                       (set-face-background 'magit-diff-hunk-heading "DarkCyan")))
+
+(use-package forge
+             :after magit
+             :config (setq magit-pull-or-fetch t))
 
 (use-package evil-magit
-             :pin melpa-stable
              :defer 1
-             :after evil
+             :after (:all magit evil)
              :if simpson-evil)
 
 (use-package diff-hl
@@ -566,7 +557,6 @@
   :ensure nil)
 
 (use-package sauron
-             :pin melpa-stable
              :after sauron-ams-org
              :config (progn
                        (setq sauron-modules '(sauron-erc sauron-ams-org))
@@ -1361,8 +1351,8 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   (interactive)
   (if (projectile-project-p)
       (projectile-with-default-dir (projectile-project-root)
-        (async-shell-command (car shell-command-history)))
-    (async-shell-command (car shell-command-history))))
+                                   (async-shell-command (car shell-command-history)))
+      (async-shell-command (car shell-command-history))))
 
 (global-set-key (kbd "C-SPC .") 'simpson-rerun)
 
@@ -1638,14 +1628,16 @@ end tell'
              :hook (after-init . org-roam-mode)
              :diminish ""
              :custom (org-roam-directory (concat simpson-dropbox-path "roam/"))
-             :bind (:map org-roam-mode-map
-                         (("C-c n l" . org-roam)
-                          ("C-c n f" . org-roam-find-file)
-                          ("C-c n g" . org-roam-graph-show))
-                         :map org-mode-map
-                         (("C-c n i" . org-roam-insert))
-                         (("C-c n I" . org-roam-insert-immediate)))
+             :bind (
+                    :map org-roam-mode-map
+                    (("C-c n l" . org-roam)
+                     ("C-c n f" . org-roam-find-file)
+                     ("C-c n g" . org-roam-graph-show))
+                    :map org-mode-map
+                    (("C-c n i" . org-roam-insert))
+                    (("C-c n I" . org-roam-insert-immediate)))
              :config (progn
+                       (setq org-roam-file-extensions '("txt"))
                        (add-to-list 'org-roam-capture-templates
                                     '("t"
                                       "default with tags"
