@@ -22,7 +22,8 @@ background = #222
 background-alt = #444
 ;foreground = ${xrdb:color7:#222}
 foreground = #dfdfdf
-foreground-alt = #555
+; foreground-alt = #555
+foreground-alt = #828282
 primary = #ffb52a
 secondary = #e60053
 alert = #bd2c40
@@ -40,7 +41,7 @@ padding-left = 0
 padding-right = 2
 module-margin-left = 1
 module-margin-right = 2
-font-0 = fixed:pixelsize=10;1
+font-0 = dejavu:pixelsize=10;1
 font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
 font-2 = siji:pixelsize=10;1
 modules-left = i3
@@ -231,7 +232,7 @@ date-alt = " %Y-%m-%d"
 time = %I:%M
 time-alt = %H:%M:%S
 
-format-prefix = 
+;format-prefix = 
 format-prefix-foreground = ${colors.foreground-alt}
 ; format-underline = #0a6cf5
 
@@ -240,7 +241,8 @@ label = "%date% | %time%"
 [module/pulseaudio]
 type = internal/pulseaudio
 
-format-volume = <label-volume> <bar-volume>
+; format-volume = <label-volume> <bar-volume>
+format-volume = <bar-volume>
 label-volume = %percentage%%
 label-volume-foreground = ${root.foreground}
 
@@ -330,9 +332,11 @@ type = internal/temperature
 thermal-zone = 0
 warn-temperature = 60
 
-format = <ramp> <label>
+; format = <ramp> <label>
+format = <label>
 ; format-underline = #f50a4d
-format-warn = <ramp> <label-warn>
+; format-warn = <ramp> <label-warn>
+format-warn = <label-warn>
 ; format-warn-underline = ${self.format-underline}
 
 label = %temperature-c%
