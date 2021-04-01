@@ -51,8 +51,9 @@
   "Variable that points to the proper Dropbox path.")
 
 (cond
- ((file-exists-p "~/Dropbox (Personal)/") (setq simpson-dropbox-path "~/Dropbox (Personal)/"))
- ((file-exists-p "~/Dropbox/") (setq simpson-dropbox-path "~/Dropbox/")))
+  ((file-exists-p "~/Dropbox (Personal)/") (setq simpson-dropbox-path "~/Dropbox (Personal)/"))
+  ((file-exists-p "~/Dropbox/") (setq simpson-dropbox-path "~/Dropbox/"))
+  ((file-exists-p "/c/Users/Adam/Dropbox/") (setq simpson-dropbox-path "/c/Users/Adam/Dropbox/")) )
 
 (defmacro simpson-make-neutral (map)
   "Create evil-style window movement for a given MAP."
@@ -1252,8 +1253,9 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (add-to-list 'default-frame-alist
              '(ns-appearance . dark))
 
-(add-to-list 'default-frame-alist
-             '(undecorated . t))
+(unless (equal (getenv "LINUX_TYPE") "WSL2")
+  (add-to-list 'default-frame-alist
+    '(undecorated . t)))
 
 (setq frame-title-format nil)
 
