@@ -1304,7 +1304,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   (interactive)
   (let (path)
     (if (projectile-project-p)
-        (setq path (nth 2 (split-string (buffer-file-name) (projectile-project-name))))
+        (setq path (nth 1 (split-string (buffer-file-name) (projectile-project-name))))
         (setq path (buffer-file-name)))
 
     (if (y-or-n-p "Code formatting? ")
