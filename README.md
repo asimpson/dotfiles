@@ -12,6 +12,8 @@ Symlink `~/.dotfiles/zsh/.zshrc` to `$HOME`:
 
   `ln -s ~/.dotfiles/zsh/.zshrc ~/.zshrc`
 
+Note I set a env variable `NAS_IP` pointing to my home NAS in `.zprofile`.
+
 ## OS X Conf
 * Run `~/.dotfiles/osx/set-defaults.sh` to set system-wide preferences after clean install or on a new machine.
 * Run `brew bundle` to install everything in `Brewfile`.

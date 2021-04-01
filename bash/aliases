@@ -45,3 +45,8 @@ alias redirects="curl -LSs -D - -o /dev/null -w 'Final URL: %{url_effective} \nN
 alias sprint="instance=sparkbox jirauser='adam@heysparkbox.com' password=$(gpg -qd ~/.jira-token.gpg) sprint-cli "
 alias mpd-cloud="ssh -NTf mpd-cloud"
 alias chill="mpv 'https://www.youtube.com/watch?v=5qap5aO4i9A' --no-video"
+# add -snapshot to the end for immutable mode https://wiki.archlinux.org/index.php/QEMU#Running_the_virtual_machine_in_immutable_mode
+alias win10="sudo qemu-system-x86_64 -enable-kvm -m 8G -drive file=./VMs/win-10-disk.qcow2,media=disk -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time -smp cores=4 "
+alias game="win-switch-rs switch --monitor \"S2719DGF\" --input \"DisplayPort 1\""
+alias music="ncmpcpp -h ${NAS_IP} -p 6601"
+alias shcheck="shellcheck -o all "
