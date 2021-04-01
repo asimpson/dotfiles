@@ -160,7 +160,7 @@
              :config (progn
                        (global-evil-leader-mode)
                        (evil-leader/set-leader ",")
-                       (evil-leader/set-key "c" 'fci-mode)
+                       (evil-leader/set-key "c" 'display-fill-column-indicator-mode)
                        (evil-leader/set-key "t" 'hydra-mocha/body)
                        (evil-leader/set-key "v" 'simpson-vert-split)
                        (evil-leader/set-key "f" 'counsel-rg)
@@ -501,12 +501,11 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (use-package which-key
-  :diminish ""
-  :defer 1
-  :config (which-key-mode))
+             :diminish ""
+             :defer 1
+             :config (which-key-mode))
 
-(use-package fill-column-indicator
-             :config (setq fci-rule-column 100))
+(setq fill-column 80)
 
 (use-package avy
              :defer 1
