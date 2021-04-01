@@ -1633,6 +1633,7 @@ end tell'
 (load "~/quicklisp/clhs-use-local.el" t)
 
 (use-package org-roam
+             :disabled
              :hook (after-init . org-roam-mode)
              :diminish ""
              :custom (org-roam-directory (concat simpson-dropbox-path "roam/"))
