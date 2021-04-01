@@ -347,7 +347,7 @@
                        (setq org-confirm-babel-evaluate (lambda (lang src) (not (string-equal lang "plantuml"))))
                        (add-to-list
                         'org-src-lang-modes '("plantuml" . plantuml))
-                       (run-at-time 0 (* 60 15) #'simpson-org-refresh)
+                       (run-at-time t (* 60 15) #'simpson-org-refresh)
                        (setq org-pretty-entities t)
                        (setq org-export-with-section-numbers nil)))
 
