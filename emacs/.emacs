@@ -1098,6 +1098,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
              :load-path "/usr/local/share/emacs/site-lisp/mu4e"
              :config (progn
                        (simpson-load-file "~/.dotfiles/emacs/mu4e.el.gpg")
+                       (define-key mu4e-view-mode-map (kbd "M") (if mu4e-view-use-gnus 'ignore 'mu4e-view-link-in-mpv))
                        (set-face-attribute 'mu4e-highlight-face nil :background "DarkRed" :foreground nil)
                        (setq mu4e-maildir "~/Mail")
                        (setq mu4e-view-show-images t)
@@ -1650,4 +1651,10 @@ end tell'
                                       :unnarrowed t)
                                     t)))
 (use-package elpher)
+(defun mu4e-view-link-in-mpv (&optional multi)
+  "Offer to view URLs in MPV if possible."
+  (interactive "P")
+  (mu4e~view-handle-urls "URL to watch"
+                         multi
+                         (lambda (url) (start-process "mpv" nil "mpv" url))))
 ;;; .emacs ends here
