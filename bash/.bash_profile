@@ -13,9 +13,6 @@ if [ -f ~/.dotfiles/bash/aliases ]; then
   source ~/.dotfiles/bash/aliases
 fi
 
-############################
-# gpg-agent
-############################
 export GPG_TTY=$(tty)
 
 # export PATH="$HOME/.cargo/bin:$PATH"

@@ -66,13 +66,6 @@ function filepath {
   git log -p --follow -- $1
 }
 
-function ip {
-  YELLOW="\033[33m"
-  IP=$(ifconfig | grep 'inet 1' | cut -c 6- | awk 'NR==2 {print $1}')
-  echo -e ${YELLOW}$IP
-  echo $IP | pbcopy
-}
-
 function logs {
   git log -p --grep $1
 }

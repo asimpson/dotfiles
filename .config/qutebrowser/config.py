@@ -5,7 +5,7 @@
 
 # Uncomment this to still load settings configured via autoconfig.yml
 # config.load_autoconfig()
-config.load_autoconfig(False)
+config.load_autoconfig()
 
 # Require a confirmation before quitting the application.
 # Type: ConfirmQuit

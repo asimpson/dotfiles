@@ -20,3 +20,4 @@ package-lock.json
 jsconfig.json
 fast.sh
 sql-scratch.sql
+json-modify.js
