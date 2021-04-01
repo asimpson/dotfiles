@@ -12,6 +12,8 @@
 set $mod Mod4
 
 exec "xrandr --output eDP-1 --off"
+#exec "xrandr --output HDMI-2 --primary"
+#exec "xrandr --output DP-1 --mode 1680x1050 --rotate left --right-of HDMI-2"
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -167,6 +169,7 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 exec_always --no-startup-id "/usr/bin/polybar lodpi"
+exec_always --no-startup-id "/usr/bin/polybar second"
 exec_always --no-startup-id "/usr/bin/polybar hidpi"
 
 gaps inner 4
@@ -176,7 +179,9 @@ for_window [class="^.*"] border pixel 2
 client.focused #f5a142 #f5a142 #000000 #f5a142 #f5a142
 
 # exec --no-startup-id "feh --bg-scale ~/Pictures/kristaps-ungurs-6Xl_GxiMKSM-unsplash.jpg"
-exec --no-startup-id "feh --bg-fill ~/Pictures/cactus-groot.jpg"
+# exec --no-startup-id "feh --bg-fill ~/Pictures/cactus-groot.jpg"
+#exec --no-startup-id "feh --bg-tile ~/Pictures/redturtle050.jpg"
+exec --no-startup-id "feh --bg-fill Pictures/dragon.jpg"
 
 bindsym Shift+Control+Up exec "pactl set-sink-volume $(pactl list short sinks | grep RUNNING | cut -f 2) +10%"
 

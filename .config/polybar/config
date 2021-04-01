@@ -45,7 +45,7 @@ font-0 = dejavu:pixelsize=10;1
 font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
 font-2 = siji:pixelsize=10;1
 modules-left = i3
-modules-right = notif email pulseaudio cpu temperature date powermenu
+modules-right = notif email cpu temperature date
 tray-position = right
 tray-padding = 3
 cursor-click = pointer
@@ -54,6 +54,12 @@ tray-scale = 1.0
 
 [bar/lodpi]
 monitor = HDMI-2
+inherit = section/general
+height = 25
+tray-maxsize = 16
+
+[bar/second]
+monitor = DP-1
 inherit = section/general
 height = 25
 tray-maxsize = 16
@@ -394,10 +400,18 @@ click-left="/usr/local/bin/mail-preview"
 ; Seconds to sleep between updates
 ; Default: 5 (0 if `tail = true`)
 interval = 120
-format-prefix = "✉ "
+; this is a mailbox icon in the siji font
+format-prefix = " "
+format-prefix-foreground = ${colors.foreground-alt}
 
 [module/notif]
 type = custom/script
 
 ; Command to be executed (using "/bin/sh -c [command]")
-exec = "[ -f /tmp/dunst-muted ] && echo '⬣'"
+format-prefix-foreground = #c608db
+exec = "[ -f /tmp/dunst-muted ] && echo ''"
+
+[module/gme]
+type = custom/script
+
+exec = "/home/asimpson/gme.sh"
