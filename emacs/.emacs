@@ -1139,6 +1139,12 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   (let ((data (json-parse! (url-retrieve-synchronously "https://api.coinbase.com/v2/prices/LTC-USD/spot" t))))
     (message "LTC: $%s" (alist-get 'amount (car data)))))
 
+(defun btc()
+  "Get BTC price from coinbase API via synchronous url retrieve."
+  (interactive)
+  (let ((data (json-parse! (url-retrieve-synchronously "https://api.coinbase.com/v2/prices/BTC-USD/spot" t))))
+    (message "BTC: $%s" (alist-get 'amount (car data)))))
+
 (add-to-list 'auto-mode-alist '("\\.hbs\\'" . html-mode))
 
 (eval-after-load 'eww (lambda()
