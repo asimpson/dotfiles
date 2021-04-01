@@ -3,6 +3,7 @@
 # shellcheck source=/dev/null
 . ~/.dotfiles/linux/mail-query.sh
 
+browser="firefox"
 window_width="#window { width: 60%; }"
 mail=$(mu find \
           --sortfield=date \
@@ -16,16 +17,9 @@ file_path=$(echo "${selection}" | cut -f 3)
 select_style() {
     file=$(mailpreview-cli "${file_path}" "${1}")
     file_code=$?
-    browser=$(printf "Firefox\nqutebrowser" | rofi -theme-str "${window_width}" -dpi 1 -dmenu -p "Browser: ")
 
     if [ "${file_code}" -eq 0 ]; then
-      if [ "${browser}" = "Firefox" ]; then
-          firefox --new-tab "file://${file}"
-      fi
-
-      if [ "${browser}" = "qutebrowser" ]; then
-          qutebrowser "file://${file}"
-      fi
+      "${browser}" "file://${file}"
     fi
 }
 
