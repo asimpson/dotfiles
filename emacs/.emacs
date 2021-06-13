@@ -118,6 +118,7 @@
              :if simpson-evil
              :diminish "vim"
              :defer 1
+             :init (setq evil-want-keybinding nil)
              :config (progn
                        (evil-mode t)
                        (setq-default evil-shift-width 2)
@@ -242,7 +243,14 @@
 
 (use-package evil-magit
              :defer 1
+             :disabled
              :after (:all magit evil)
+             :if simpson-evil)
+
+(use-package evil-collection
+             :defer 1
+             :after (:all magit evil)
+             :config (evil-collection-init 'magit)
              :if simpson-evil)
 
 (use-package diff-hl
