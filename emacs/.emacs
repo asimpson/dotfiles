@@ -221,7 +221,7 @@
 (use-package flyspell-correct-ivy
              :diminish "spell"
              :after ivy
-             :bind ("C-SPC C" . flyspell-correct-previous-word-generic))
+             :bind ("C-SPC C" . flyspell-correct-wrapper))
 
 (use-package magit
              :defer 1
@@ -678,6 +678,7 @@ If file is package.json run npm install."
              :diminish "spell"
              :defer 1
              :config (progn
+                       (setq ispell-dictionary "en_US")
                        (add-hook 'erc-mode-hook (lambda () (flyspell-mode 1)))
                        (add-hook 'message-mode-hook (lambda () (flyspell-mode 1)))
                        (setq flyspell-issue-message-flag nil)))
