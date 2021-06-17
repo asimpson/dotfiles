@@ -843,12 +843,9 @@ If file is package.json run npm install."
 (use-package company
              :defer 1
              :diminish ""
-             :config (global-company-mode))
-
-(use-package company-lsp
-             :defer 1
-             :after company
-             :config (push 'company-lsp company-backends))
+             :config (progn
+                       (global-company-mode)
+                       (setq lsp-completion-provider :capf)))
 
 (defun simpson-sauron-toggle(&optional x)
   "A function to keep the sauron window visible and sized correctly.
