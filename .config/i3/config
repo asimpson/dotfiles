@@ -168,11 +168,12 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-exec_always --no-startup-id "/usr/bin/polybar lodpi"
-exec_always --no-startup-id "/usr/bin/polybar second"
-exec_always --no-startup-id "/usr/bin/polybar hidpi"
+# gaps inner 4
 
-gaps inner 4
+bar {
+    status_command ~/.dotfiles/.config/i3status/custom-status
+    position top
+}
 
 for_window [class="^.*"] border pixel 2
 

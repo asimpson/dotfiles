@@ -1,0 +1,19 @@
+#!/bin/sh
+# shell script to prepend i3status with more stuff
+
+i3status | while :
+
+mail=$(/home/asimpson/.bin/mail-count.sh)
+
+ls /tmp | grep -q dunst-muted
+muteCode=$?
+mute=""
+
+if [ "${muteCode}" -eq 0 ]; then
+    mute="❌ |"
+fi
+
+do
+  read line
+  echo "${mute} ✉ ${mail} | ${line}" || exit 1
+done
