@@ -1194,15 +1194,16 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 
 (use-package inf-ruby)
 
+(defun setup-tide-mode()
+  (setq typescript-indent-level 2)
+  (tide-setup)
+  (eldoc-mode)
+  (tide-hl-identifier-mode))
+
 (use-package tide
              :defer 3
              :config (progn
-                       (defun setup-tide-mode()
-                         (tide-setup)
-                         (eldoc-mode)
-                         (tide-hl-identifier-mode))
                        (add-hook 'typescript-mode-hook 'setup-tide-mode)
-                       (setq typescript-indent-level 2)
                        (add-hook 'rjsx-mode-hook 'setup-tide-mode)))
 
 (use-package org-mime
@@ -1666,6 +1667,11 @@ end tell'
                                       :unnarrowed t)
                                     t)))
 (use-package elpher)
+
+(use-package ng2-mode)
+
+(use-package typescript-mode)
+
 (defun mu4e-view-link-in-mpv (&optional multi)
   "Offer to view URLs in MPV if possible."
   (interactive "P")
