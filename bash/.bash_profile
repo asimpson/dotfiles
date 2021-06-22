@@ -24,6 +24,5 @@ export NVM_DIR="$HOME/Source/nvm"
 
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="/usr/local/go/bin:$PATH"
-export GOPATH=$HOME/gopath
-export PATH="$GOPATH/bin:$PATH"
 export TERMINAL="/usr/bin/tilix"
+if [ -e /home/asimpson/.nix-profile/etc/profile.d/nix.sh ]; then . /home/asimpson/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

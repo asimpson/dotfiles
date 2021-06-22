@@ -25,9 +25,9 @@ if [ -f ~/.bash_profile ]; then
   source ~/.bash_profile
 fi
 
-export GOPATH=$HOME/gopath
+export GOPATH=$HOME/go
 # export GOROOT=/Users/asimpson/Projects
-# PATH="$PATH:$GOPATH"
+export PATH="$PATH:/usr/local/go/bin/:$GOPATH/bin"
 # PATH="$PATH:$GOROOT"
 
 precmd() {
