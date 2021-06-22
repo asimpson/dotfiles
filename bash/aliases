@@ -57,3 +57,4 @@ alias alpine="qemu-system-x86_64 \
     -nic user,hostfwd=tcp::9000-:22,hostfwd=tcp::2000-:2000,hostfwd=tcp::3500-:3500\
     -drive file=/home/asimpson/VMs/alpine.qcow2,media=disk,if=virtio \
     -display none"
+alias reset-audio="killall zoom && pulseaudio -k"
