@@ -60,3 +60,7 @@ export PATH="$HOME/.yarn/bin:$PATH"
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/terraform terraform
+
+export FLYCTL_INSTALL="/home/asimpson/.fly"
+export PATH="$FLYCTL_INSTALL/bin:$PATH"
+if [ -e /home/asimpson/.nix-profile/etc/profile.d/nix.sh ]; then . /home/asimpson/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
