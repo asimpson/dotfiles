@@ -182,9 +182,9 @@ client.focused #f5a142 #f5a142 #000000 #f5a142 #f5a142
 #exec --no-startup-id "feh --bg-tile ~/Pictures/redturtle050.jpg"
 exec --no-startup-id "feh --bg-fill Pictures/dragon.jpg"
 
-bindsym Shift+Control+Up exec "pactl set-sink-volume $(pactl list short sinks | grep RUNNING | cut -f 2) +10%"
+bindsym Shift+Control+Up exec "pactl set-sink-volume $(pactl list short sinks | grep RUNNING | cut -f 2) +5%"
 
-bindsym Shift+Control+Down exec "pactl set-sink-volume $(pactl list short sinks | grep RUNNING | cut -f 2) -10%"
+bindsym Shift+Control+Down exec "pactl set-sink-volume $(pactl list short sinks | grep RUNNING | cut -f 2) -5%"
 
 exec --no-startup-id "dropbox start"
 
@@ -193,3 +193,15 @@ exec --no-startup-id "clipster -d"
 exec --no-startup-id "nm-applet"
 
 exec --no-startup-id "xmodmap ~/.Xmodmap"
+
+exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
+
+exec --no-startup-id "solaar -w hide --restart-on-wake-up"
+
+bindsym XF86MonBrightnessUp exec light -A 5%
+
+bindsym XF86MonBrightnessDown exec light -U 5%
+
+bindsym XF86AudioRaiseVolume exec "pactl set-sink-volume $(pactl list short sinks | grep RUNNING | cut -f 2) +5%"
+
+bindsym XF86AudioLowerVolume exec "pactl set-sink-volume $(pactl list short sinks | grep RUNNING | cut -f 2) -5%"
