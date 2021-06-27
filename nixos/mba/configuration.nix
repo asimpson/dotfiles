@@ -200,11 +200,27 @@
       name "alsa-pipe"
     }
   '';
+
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+  networking.wg-quick.interfaces = {
+    wg0 = {
+      address = [ "172.16.14.9/32" ];
+      dns = [ "172.16.12.1" ];
+      privateKeyFile = "/home/adam/privatekey";
+
+      peers = [
+        {
+          publicKey = "of6hIl1rgajTt4PD1QwYMiE4+jgqmtar+D8XY8lLtks=";
+          allowedIPs = [ "0.0.0.0/0" "::/0" ];
+          endpoint = "home.simpsonfam.com:45340";
+        }
+      ];
+    };
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
