@@ -248,12 +248,14 @@ environment.systemPackages = with pkgs; [
   security.pam = {
     u2f.enable = true;
     u2f.cue = true;
+    u2f.authFile = "/home/adam/.config/Yubico/u2f_keys";
 
     services = {
       login.u2fAuth = true;
       lightdm.u2fAuth = true;
       sudo.u2fAuth = true;
       lightdm.enableGnomeKeyring = true;
+      login.enableGnomeKeyring = true;
     };
   };
 
