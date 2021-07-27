@@ -32,7 +32,7 @@ font pango:Hack Regular 8
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec tilix
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -194,7 +194,8 @@ exec --no-startup-id "nm-applet"
 
 exec --no-startup-id "xmodmap ~/.Xmodmap"
 
-exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
+#exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
+exec --no-startup-id /etc/polkit-gnome-authentication-agent-1 &
 
 exec --no-startup-id "solaar -w hide --restart-on-wake-up"
 
@@ -205,3 +206,9 @@ bindsym XF86MonBrightnessDown exec light -U 5%
 bindsym XF86AudioRaiseVolume exec "pactl set-sink-volume $(pactl list short sinks | grep RUNNING | cut -f 2) +5%"
 
 bindsym XF86AudioLowerVolume exec "pactl set-sink-volume $(pactl list short sinks | grep RUNNING | cut -f 2) -5%"
+
+bindsym XF86AudioPlay exec "mpc toggle"
+
+bindsym XF86AudioPrev exec "mpc prev"
+
+bindsym XF86AudioNext exec "mpc next"
