@@ -227,6 +227,17 @@ environment.systemPackages = with pkgs; [
         name "alsa-pipe"
       }
     '';
+    udev = {
+      extraRules = ''
+        ACTION!="add|change", GOTO="end_disable_infared"
+        ATTRS{idVendor}=="04f2", ATTRS{idProduct}=="b615", ATTR{bConfigurationValue}="0"
+        LABEL="end_disable_infared"
+        LABEL="gmk pro regular user access"
+        SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", TAG+="uaccess"
+        LABEL="i2c group permissions"
+        KERNEL=="i2c-[0-9]*", GROUP="i2c", MODE="0660"
+      '';
+    };
   };
 
   virtualisation.docker = {
