@@ -18,11 +18,11 @@
 
   nixpkgs.config.allowUnfree = true;
   boot = rec {
-    kernelPackages = pkgs.linuxPackages_5_11;
+    kernelPackages = pkgs.linuxPackages_5_10;
     kernelModules = [ "mba6x_bl" ];
     extraModulePackages = [kernelPackages.acpi_call kernelPackages.mba6x_bl kernelPackages.v4l2loopback];
     zfs.requestEncryptionCredentials = true;
-    kernelParams = ["acpi_backlight=native" "hid_apple.iso_layout=0" "acpi_osi=" "hid_apple.swap_opt_cmd=1"];
+    kernelParams = ["acpi_backlight=native" "hid_apple.iso_layout=0" "acpi_osi=" "hid_apple.swap_opt_cmd=1" "elevator=none"];
 
     loader = {
       # Use the systemd-boot EFI boot loader.
@@ -73,7 +73,7 @@
     # Give fonts to 32-bit binaries too (e.g. steam).
     fontconfig.cache32Bit = true;
     fonts = with pkgs; [
-        google-fonts liberation_ttf opensans-ttf roboto roboto-mono
+        hack-font google-fonts liberation_ttf opensans-ttf roboto roboto-mono
     ];
   };
 
@@ -129,6 +129,7 @@
     openssh.enable = true;
     blueman.enable = true;
     gnome.gnome-keyring.enable = true;
+    # resolved.enable = true;
 
     timesyncd = {
       enable = true;
@@ -168,7 +169,6 @@
     colord.enable = true;
     fprintd.enable = true;
     fwupd.enable = true;
-    geoip-updater.enable = true;
     pipewire = {
       enable = true;
       alsa.enable = true;
@@ -181,6 +181,8 @@
     enable = true;
     autoPrune.enable = true;
   };
+  system.autoUpgrade.enable = true;
+  system.autoUpgrade.allowReboot = true;
 
   security.pam = {
     u2f.enable = true;
@@ -191,6 +193,14 @@
       lightdm.u2fAuth = true;
       sudo.u2fAuth = true;
       lightdm.enableGnomeKeyring = true;
+    };
+  };
+
+  services.geoclue2 = {
+    enable = true;
+    appConfig.redshift = {
+      isAllowed = true;
+      isSystem = false;
     };
   };
 
