@@ -1116,7 +1116,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
                        (setq mu4e-compose-format-flowed t)
                        ;;https://vxlabs.com/2019/08/25/format-flowed-with-long-lines/
                        (setq mu4e-view-show-addresses 't)
-                       (setq mu4e-get-mail-command "mbsync -a")
+                       (setq mu4e-get-mail-command "true")
                        (setq mu4e-update-interval 300)
                        (setq user-full-name "Adam Simpson")
                        (setq mu4e-confirm-quit nil)
@@ -1678,4 +1678,8 @@ end tell'
   (mu4e~view-handle-urls "URL to watch"
                          multi
                          (lambda (url) (start-process "mpv" nil "mpv" url))))
+
+(setq browse-url-generic-program "firefox")
+(setq browse-url-browser-function 'browse-url-generic)
+
 ;;; .emacs ends here

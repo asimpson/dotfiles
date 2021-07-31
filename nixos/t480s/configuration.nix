@@ -21,8 +21,8 @@
     kernelPackages = pkgs.linuxPackages_5_10;
     extraModulePackages = [kernelPackages.v4l2loopback];
     zfs.requestEncryptionCredentials = true;
-    kernelParams = ["acpi_backlight=native"];
-    kernelModules = ["v4l2loopback"];
+    kernelParams = ["acpi_backlight=native" "elevator=none"]; #https://grahamc.com/blog/nixos-on-zfs
+    kernelModules = ["v4l2loopback" "kvm-intel"];
 
     loader = {
       # Use the systemd-boot EFI boot loader.
@@ -64,16 +64,17 @@
   sound.enable = true;
   # install via nix-env for pactl
   hardware.pulseaudio.enable = false;
+  hardware.i2c.enable = true;
   hardware.cpu.intel.updateMicrocode = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
   #services.xserver.libinput.enable = true;
-  
+
   hardware.bluetooth.enable = true;
 
   users.users.adam = {
     isNormalUser = true;
-    extraGroups = [ "docker" "wheel" "lp" "video" "audio"]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "docker" "wheel" "lp" "video" "audio" "libvirtd" ];
     shell = pkgs.zsh;
   };
 
@@ -123,6 +124,12 @@ environment.systemPackages = with pkgs; [
     gnome3.nautilus
     youtube-dl
     polkit_gnome
+    rofi-emoji
+    rofi-mpd
+    qemu_kvm
+    qemu
+    virt-manager
+    ripgrep
   ];
 
   security.polkit.enable = true;
@@ -175,11 +182,20 @@ environment.systemPackages = with pkgs; [
   # List services that you want to enable:
 
   services = {
+    wakeonlan.interfaces = [{
+      interface = "enp0s31f6";
+      method = "magicpacket";
+    }];
     gnome.sushi.enable = true;
     printing.enable = true;
     openssh.enable = true;
     blueman.enable = true;
     gnome.gnome-keyring.enable = true;
+
+    zfs = {
+      autoSnapshot.enable = true;
+      autoScrub.enable = true;
+    };
 
     timesyncd = {
       enable = true;
@@ -219,14 +235,11 @@ environment.systemPackages = with pkgs; [
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
+      config.pipewire = {
+        "api.alsa.ignore-dB" = true;
+      };
     };
 
-    mpd.extraConfig = ''
-      audio_output {
-        type "alsa"
-        name "alsa-pipe"
-      }
-    '';
     udev = {
       extraRules = ''
         ACTION!="add|change", GOTO="end_disable_infared"
@@ -234,11 +247,13 @@ environment.systemPackages = with pkgs; [
         LABEL="end_disable_infared"
         LABEL="gmk pro regular user access"
         SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", TAG+="uaccess"
-        LABEL="i2c group permissions"
-        KERNEL=="i2c-[0-9]*", GROUP="i2c", MODE="0660"
       '';
     };
   };
+
+  virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd.qemuRunAsRoot = true;
+  virtualisation.libvirtd.qemuPackage = pkgs.qemu_kvm;
 
   virtualisation.docker = {
     enable = true;
@@ -261,6 +276,12 @@ environment.systemPackages = with pkgs; [
 
   #polkit-gnome doesn't show up in the normal /usr location so I symlink it out of the store to /etc/polkit-gnome-authentication-agent-1
   environment.etc."polkit-gnome-authentication-agent-1".source = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+
+  networking.extraHosts =
+  ''
+    127.0.0.1 sparkbox.local
+  '';
+  system.autoUpgrade.enable = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

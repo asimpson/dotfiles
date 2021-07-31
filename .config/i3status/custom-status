@@ -3,7 +3,7 @@
 
 i3status | while :
 
-mail=$(/home/adam/.bin/mail-count.sh)
+mail=$(/home/adam/bin/mail-count.sh)
 
 ls /tmp | grep -q dunst-muted
 muteCode=$?
