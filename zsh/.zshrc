@@ -53,6 +53,8 @@ bindkey '\e[B' history-beginning-search-forward
 
 export PATH="$HOME/.yarn/bin:$PATH"
 
+export PATH="$HOME/bin:$PATH"
+
 # Fix for TRAMP
 [ $TERM = "dumb" ] && unsetopt zle && PS1='$ '
 

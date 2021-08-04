@@ -209,6 +209,6 @@ bindsym XF86AudioLowerVolume exec "pactl set-sink-volume $(pactl list short sink
 
 bindsym XF86AudioPlay exec "mpc toggle"
 
-bindsym XF86AudioPrev exec "mpc prev"
+bindsym Control+XF86AudioPrev exec "mpc prev"
 
-bindsym XF86AudioNext exec "mpc next"
+bindsym Control+XF86AudioNext exec "mpc next"

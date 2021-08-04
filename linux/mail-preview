@@ -15,7 +15,7 @@ rofi_code=$?
 file_path=$(echo "${selection}" | cut -f 3)
 
 select_style() {
-    file=$(mailpreview-cli "${file_path}" "${1}")
+    file=$(~/bin/mailpreview-cli "${file_path}" "${1}")
     file_code=$?
 
     if [ "${file_code}" -eq 0 ]; then

@@ -1682,4 +1682,6 @@ end tell'
 (setq browse-url-generic-program "firefox")
 (setq browse-url-browser-function 'browse-url-generic)
 
+(use-package counsel-jq)
+
 ;;; .emacs ends here

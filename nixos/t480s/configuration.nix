@@ -7,7 +7,10 @@
 {
   require = [
     ./crate.nix
+    ../scripts.nix
+    ../packages.nix
   ];
+
   imports =
     [ # Include the results of the hardware scan.
       <nixos-hardware/lenovo/thinkpad/t480s>
@@ -15,6 +18,17 @@
     ];
 
   nixpkgs.config.allowUnfree = true;
+
+  nix = {
+    autoOptimiseStore = true;
+    allowedUsers = [ "@wheel" ];
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 30d";
+    };
+  };
+
   # Use the systemd-boot EFI boot loader.
 
   boot = rec {
@@ -30,12 +44,12 @@
       efi.canTouchEfiVariables = true;
       grub.copyKernels = true;
     };
-    
+
     supportedFilesystems = ["zfs"];
   };
 
   networking.hostName = "simpson-nixos"; # Define your hostname.
-  networking.firewall.enable = false;
+  networking.firewall.enable = true;
   networking.hostId = "ed6bb572"; # head -c4 /dev/urandom | od -A none -t x4
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -77,60 +91,6 @@
     extraGroups = [ "docker" "wheel" "lp" "video" "audio" "libvirtd" ];
     shell = pkgs.zsh;
   };
-
-environment.systemPackages = with pkgs; [
-    vim
-    firefox
-    zoom-us
-    ffmpeg
-    mpv
-    slack
-    rofi
-    discord
-    google-chrome
-    mpd
-    tilix
-    _1password-gui
-    brightnessctl
-    acpid
-    desktop-file-utils
-    signal-desktop
-    flameshot
-    gnome.networkmanagerapplet
-    gnome.networkmanager-vpnc
-    emacs
-    git
-    hack-font
-    docker
-    bluez
-    bluez-tools
-    pavucontrol
-    hunspell
-    hunspellDicts.en-us
-    gopls
-    go
-    rustup
-    obs-studio
-    clipster
-    dunst
-    ncmpcpp
-    isync
-    calibre
-    mu
-    teams
-    mpc_cli
-    solaar
-    jq
-    gnome3.nautilus
-    youtube-dl
-    polkit_gnome
-    rofi-emoji
-    rofi-mpd
-    qemu_kvm
-    qemu
-    virt-manager
-    ripgrep
-  ];
 
   security.polkit.enable = true;
   programs.dconf.enable = true;
@@ -182,6 +142,7 @@ environment.systemPackages = with pkgs; [
   # List services that you want to enable:
 
   services = {
+    tailscale.enable = true;
     wakeonlan.interfaces = [{
       interface = "enp0s31f6";
       method = "magicpacket";
@@ -267,8 +228,10 @@ environment.systemPackages = with pkgs; [
 
     services = {
       login.u2fAuth = true;
+      login.fprintAuth = false;
       lightdm.u2fAuth = true;
       sudo.u2fAuth = true;
+      sudo.fprintAuth = false;
       lightdm.enableGnomeKeyring = true;
       login.enableGnomeKeyring = true;
     };
@@ -292,4 +255,3 @@ environment.systemPackages = with pkgs; [
   system.stateVersion = "21.05"; # Did you read the comment?
 
 }
-

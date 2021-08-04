@@ -7,6 +7,8 @@
 {
   require = [
     ./crate.nix
+    ../scripts.nix
+    ../packages.nix
   ];
 
   imports =
@@ -99,41 +101,6 @@
     isNormalUser = true;
     extraGroups = [ "docker" "wheel" "lp" "video" "audio"]; # Enable ‘sudo’ for the user.
   };
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    vim
-    firefox
-    zoom-us
-    ffmpeg
-    mpv
-    slack
-    rofi
-    discord
-    google-chrome
-    mpd
-    tilix
-    _1password-gui
-    brightnessctl
-    acpid
-    desktop-file-utils
-    signal-desktop
-    flameshot
-    gnome.networkmanagerapplet
-    emacs
-    git
-    hack-font
-    docker
-    bluez
-    bluez-tools
-    pavucontrol
-    hunspell
-    hunspellDicts.en-us
-    gopls
-    go
-    rustup
-  ];
 
   programs.dconf.enable = true;
   programs.ssh.startAgent = true;

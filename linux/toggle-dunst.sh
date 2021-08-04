@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
 
-if [[ -f "/tmp/dunst-muted" ]]; then
+if [ -f "/tmp/dunst-muted" ]; then
   notify-send "DUNST_COMMAND_RESUME";
   rm /tmp/dunst-muted;
 else
