@@ -48,22 +48,37 @@
     supportedFilesystems = ["zfs"];
   };
 
-  networking.hostName = "simpson-nixos"; # Define your hostname.
-  networking.firewall.enable = true;
-  networking.hostId = "ed6bb572"; # head -c4 /dev/urandom | od -A none -t x4
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  networking.networkmanager.enable = true;
-
   # Set your time zone.
   time.timeZone = "America/New_York";
 
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-  networking.useDHCP = false;
-  networking.interfaces.enp0s31f6.useDHCP = true;
-  networking.interfaces.wlp61s0.useDHCP = true;
+  networking = {
+    hostName = "simpson-nixos"; # Define your hostname.
+    firewall.enable = true;
+    wireless.iwd.enable = true;
+    hostId = "ed6bb572"; # head -c4 /dev/urandom | od -A none -t x4
+    # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
+    # The global useDHCP flag is deprecated, therefore explicitly set to false here.
+    # Per-interface useDHCP will be mandatory in the future, so this generated config
+    # replicates the default behaviour.
+    useDHCP = false;
+    interfaces.enp0s31f6.useDHCP = true;
+    interfaces.wlp61s0.useDHCP = true;
+
+    extraHosts =
+    ''
+      127.0.0.1 sparkbox.local
+    '';
+
+    networkmanager = {
+      enable = true;
+      wifi.powersave = true;
+      wifi.backend = "iwd";
+    };
+
+    iproute2.enable = true;
+    useHostResolvConf = false;
+  };
 
   fonts = {
     enableDefaultFonts = true;
@@ -142,6 +157,10 @@
   # List services that you want to enable:
 
   services = {
+    resolved = {
+      enable = true;
+      dnssec = "false";
+    };
     tailscale.enable = true;
     wakeonlan.interfaces = [{
       interface = "enp0s31f6";
@@ -240,10 +259,6 @@
   #polkit-gnome doesn't show up in the normal /usr location so I symlink it out of the store to /etc/polkit-gnome-authentication-agent-1
   environment.etc."polkit-gnome-authentication-agent-1".source = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
 
-  networking.extraHosts =
-  ''
-    127.0.0.1 sparkbox.local
-  '';
   system.autoUpgrade.enable = true;
 
   # This value determines the NixOS release from which the default

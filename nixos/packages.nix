@@ -55,5 +55,6 @@
     xclip
     mpdscribble
     tailscale
+    iwd
   ];
 }
