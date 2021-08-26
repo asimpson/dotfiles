@@ -186,11 +186,11 @@ bindsym Shift+Control+Up exec "pactl set-sink-volume $(pactl list short sinks | 
 
 bindsym Shift+Control+Down exec "pactl set-sink-volume $(pactl list short sinks | grep RUNNING | cut -f 2) -5%"
 
-exec --no-startup-id "dropbox start"
+#exec --no-startup-id "dropbox start"
 
 exec --no-startup-id "clipster -d"
 
-exec --no-startup-id "nm-applet"
+#exec --no-startup-id "nm-applet"
 
 exec --no-startup-id "xmodmap ~/.Xmodmap"
 
