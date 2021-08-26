@@ -12,7 +12,6 @@
     google-chrome
     mpd
     tilix
-    _1password-gui
     brightnessctl
     acpid
     desktop-file-utils

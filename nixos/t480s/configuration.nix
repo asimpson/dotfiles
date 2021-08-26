@@ -9,6 +9,7 @@
     ./crate.nix
     ../scripts.nix
     ../packages.nix
+    ../unstable.nix
   ];
 
   imports =
