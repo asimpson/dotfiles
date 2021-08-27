@@ -5,11 +5,10 @@ i3status | while :
 
 mail=$(/home/adam/bin/mail-count.sh)
 
-ls /tmp | grep -q dunst-muted
-muteCode=$?
+paused=$(dunstctl is-paused)
 mute=""
 
-if [ "${muteCode}" -eq 0 ]; then
+if [ "${paused}" = "true" ]; then
     mute="❌ |"
 fi
 
