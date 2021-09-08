@@ -19,7 +19,7 @@
   nixpkgs.config.allowUnfree = true;
   boot = rec {
     kernelPackages = pkgs.linuxPackages_5_10;
-    kernelModules = [ "mba6x_bl" ];
+    kernelModules = [ "mba6x_bl" "kvm-intel" ];
     extraModulePackages = [kernelPackages.acpi_call kernelPackages.mba6x_bl kernelPackages.v4l2loopback];
     zfs.requestEncryptionCredentials = true;
     kernelParams = ["acpi_backlight=native" "hid_apple.iso_layout=0" "acpi_osi=" "hid_apple.swap_opt_cmd=1" "elevator=none"];
@@ -177,9 +177,12 @@
     };
   };
 
-  virtualisation.docker = {
-    enable = true;
-    autoPrune.enable = true;
+  virtualisation = {
+    libvirtd.enable = true;
+    docker = {
+      enable = true;
+      autoPrune.enable = true;
+    };
   };
   system.autoUpgrade.enable = true;
   system.autoUpgrade.allowReboot = false;

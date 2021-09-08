@@ -1,11 +1,5 @@
 [core]
-  excludesfile = ~/.master_git_ignore
-	editor = vim
-[user]
-	email = adam@heysparkbox.com
-	name = Adam Simpson
-[commit]
-  template = ~/.gitmessage.txt
+  editor = vim
 [github]
 	user = asimpson
 [color]
