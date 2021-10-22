@@ -10,6 +10,7 @@
     ../scripts.nix
     ../packages.nix
     ../unstable.nix
+    ../local.nix
   ];
 
   imports =
@@ -158,9 +159,41 @@
   # List services that you want to enable:
 
   services = {
+    syncthing = {
+      enable = true;
+      user = "adam";
+      dataDir = "/home/adam/Sync";
+      configDir = "/home/adam/.config/syncthing";
+      declarative = {
+        devices = {
+          wemm = {
+            id = "A7BKRRY-5AIRT4B-YP4DXYX-RL7SKZ5-52TKEY2-NNJGBZ6-YF423ON-TCW7MQM";
+          };
+          ged = {
+            id = "GNI7GNS-BYK6EPE-4J7PJNF-D3EQ7DS-5OHVKF2-3RIB3UD-V6AYEK7-XLVKFQ5";
+          };
+        };
+        folders = {
+          "/home/adam/notes" = {
+            id = "qjwus-uru7t";
+            devices = [ "wemm" "ged" ];
+            label = "notes";
+          };
+        };
+      };
+    };
     resolved = {
       enable = true;
       dnssec = "false";
+    };
+    mpdscribble = {
+      enable = true;
+      endpoints = {
+        "last.fm" = {
+          username = "skimpson";
+          passwordFile = "/home/adam/lastfm-pass";
+        };
+      };
     };
     tailscale.enable = true;
     wakeonlan.interfaces = [{
@@ -228,6 +261,7 @@
         LABEL="end_disable_infared"
         LABEL="gmk pro regular user access"
         SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", TAG+="uaccess"
+        SUBSYSTEM=="drm", ACTION=="change", ENV{DISPLAY}=":0", ENV{XAUTHORITY}="/home/adam/.Xauthority", RUN+="${pkgs.bash}/bin/bash /home/adam/.dotfiles/linux/i3-monitor-change.sh"
       '';
     };
   };
@@ -256,6 +290,12 @@
       login.enableGnomeKeyring = true;
     };
   };
+
+  nixpkgs.overlays = [
+    (import (builtins.fetchTarball {
+      url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
+    }))
+  ];
 
   #polkit-gnome doesn't show up in the normal /usr location so I symlink it out of the store to /etc/polkit-gnome-authentication-agent-1
   environment.etc."polkit-gnome-authentication-agent-1".source = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";

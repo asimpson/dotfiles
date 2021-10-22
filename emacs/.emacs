@@ -51,6 +51,7 @@
   "Variable that points to the proper Dropbox path.")
 
 (cond
+  ((file-exists-p "~/notes/") (setq simpson-dropbox-path "~/notes/"))
   ((file-exists-p "~/Dropbox (Personal)/") (setq simpson-dropbox-path "~/Dropbox (Personal)/"))
   ((file-exists-p "~/Dropbox/") (setq simpson-dropbox-path "~/Dropbox/"))
   ((file-exists-p "/c/Users/Adam/Dropbox/") (setq simpson-dropbox-path "/c/Users/Adam/Dropbox/")) )
@@ -1339,14 +1340,16 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   "Create new file for nvAlt with NAME."
   (interactive "sName of file: ")
   (let* ((use-buf (y-or-n-p "Use this buffer? "))
-         (date (replace-regexp-in-string "\n$" "" (shell-command-to-string "date +%m-%d-%y")))
-         (file (concat simpson-dropbox-path "Notational Data/" date "-" name ".txt")))
+         (date (replace-regexp-in-string "\n$" "" (shell-command-to-string "date +%m-%d-%y"))) file)
+    (if (file-directory-p (concat simpson-dropbox-path "Notational Data"))
+        (setq file (concat simpson-dropbox-path "Notational Data/" date "-" name ".txt"))
+        (setq file (concat simpson-dropbox-path date "-" name ".txt")))
     (if use-buf
         (write-file file)
         (write-region "" "" file))))
 
 (global-set-key (kbd "C-SPC d") (lambda() (interactive)
-                                  (dired (concat simpson-dropbox-path "Notational Data/") "-laGht")))
+                                  (dired simpson-dropbox-path "-laGht")))
 
 (defun kill-shell-buffer()
   "Kill the Async Shell Command buffer and then balance's the remaining windows."

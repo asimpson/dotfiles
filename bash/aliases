@@ -58,3 +58,4 @@ alias alpine="qemu-system-x86_64 \
     -drive file=/home/asimpson/VMs/alpine.qcow2,media=disk,if=virtio \
     -display none"
 alias reset-audio="killall zoom && pulseaudio -k"
+alias email="e --eval \"(mu4e)\""

@@ -8,7 +8,6 @@
     mpv
     slack
     rofi
-    discord
     google-chrome
     mpd
     tilix
@@ -19,7 +18,7 @@
     flameshot
     gnome.networkmanagerapplet
     gnome.networkmanager-vpnc
-    emacs
+    emacsPgtkGcc
     git
     hack-font
     docker
@@ -52,8 +51,10 @@
     ripgrep
     dropbox
     xclip
-    mpdscribble
     tailscale
     iwd
+    nasc
+    xsettingsd
+    remmina
   ];
 }

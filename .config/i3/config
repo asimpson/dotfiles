@@ -11,7 +11,7 @@
 
 set $mod Mod4
 
-exec_always --no-startup-id "~/.dotfiles/linux/i3-monitor-change.sh"
+exec --no-startup-id "~/.dotfiles/linux/i3-monitor-change.sh"
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -37,7 +37,7 @@ bindsym $mod+Return exec tilix
 # kill focused window
 bindsym $mod+Shift+q kill
 
-bindsym $mod+space exec "rofi -combi-modi run,window,drun -show combi -modi combi -dpi 1"
+bindsym $mod+space exec "rofi -combi-modi run,window,drun -show combi -modi combi"
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
