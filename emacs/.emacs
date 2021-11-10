@@ -402,6 +402,7 @@
 (use-package rjsx-mode
              :interpreter (("node" . rjsx-mode))
              :mode (("\\.js?\\'" . rjsx-mode)
+                    ("\\.tsx?\\'" . rjsx-mode)
                     ("\\.jsx?\\'" . rjsx-mode))
              :config (progn
                        (setq js2-basic-offset 2)
@@ -1208,7 +1209,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
                        (add-hook 'rjsx-mode-hook 'setup-tide-mode)))
 
 (use-package org-mime
-  :config (require 'org-mime))
+             :config (require 'org-mime))
 
 (use-package rainbow-mode
   :diminish "")
@@ -1686,5 +1687,9 @@ end tell'
 (setq browse-url-browser-function 'browse-url-generic)
 
 (use-package counsel-jq)
+
+(use-package direnv
+             :config
+             (direnv-mode))
 
 ;;; .emacs ends here

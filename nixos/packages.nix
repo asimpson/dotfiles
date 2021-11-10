@@ -56,5 +56,6 @@
     nasc
     xsettingsd
     remmina
+    direnv
   ];
 }

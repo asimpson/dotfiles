@@ -65,7 +65,6 @@
     # replicates the default behaviour.
     useDHCP = false;
     interfaces.enp0s31f6.useDHCP = true;
-    interfaces.wlp61s0.useDHCP = true;
 
     extraHosts =
     ''
@@ -159,6 +158,9 @@
   # List services that you want to enable:
 
   services = {
+    lorri = {
+      enable = true;
+    };
     syncthing = {
       enable = true;
       user = "adam";
