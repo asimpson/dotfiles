@@ -1689,7 +1689,10 @@ end tell'
 (use-package counsel-jq)
 
 (use-package direnv
-             :config
-             (direnv-mode))
+             :defer 1
+             :config (progn
+                       (direnv-mode)
+                       (advice-add 'setup-tide-mode :before #'direnv-update-environment)
+                       (advice-add 'lsp :before #'direnv-update-environment)))
 
 ;;; .emacs ends here
