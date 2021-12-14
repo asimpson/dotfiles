@@ -35,6 +35,8 @@
 (show-paren-mode)
 (scroll-bar-mode -1)
 (setq visible-bell nil)
+(set-face-attribute 'mode-line-active nil :inherit 'mode-line)
+(set-face-attribute 'mode-line-inactive nil :inherit 'mode-line)
 
 (setq ring-bell-function (lambda ()
                            (invert-face 'mode-line)
