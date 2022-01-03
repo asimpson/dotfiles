@@ -3,7 +3,6 @@
   environment.systemPackages = with pkgs; [
     vim
     firefox
-    zoom-us
     ffmpeg
     mpv
     slack
@@ -18,7 +17,7 @@
     flameshot
     gnome.networkmanagerapplet
     gnome.networkmanager-vpnc
-    emacsPgtkGcc
+    emacsPgtk
     git
     hack-font
     docker

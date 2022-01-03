@@ -6,5 +6,6 @@ in {
   environment.systemPackages = with pkgs; [
     u.discord
     u._1password-gui
+    u.zoom-us
   ];
 }

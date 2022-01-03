@@ -64,7 +64,13 @@
     # Per-interface useDHCP will be mandatory in the future, so this generated config
     # replicates the default behaviour.
     useDHCP = false;
-    interfaces.enp0s31f6.useDHCP = true;
+
+    interfaces.enp0s31f6 = {
+      useDHCP = true;
+      wakeOnLan =  {
+        enable = true;
+      };
+    };
 
     extraHosts =
     ''
@@ -90,21 +96,13 @@
     ];
   };
 
-  # Enable sound.
   sound.enable = true;
-  # install via nix-env for pactl
-  hardware.pulseaudio.enable = false;
-  hardware.i2c.enable = true;
-  hardware.cpu.intel.updateMicrocode = true;
-
   # Enable touchpad support (enabled default in most desktopManager).
   #services.xserver.libinput.enable = true;
 
-  hardware.bluetooth.enable = true;
-
   users.users.adam = {
     isNormalUser = true;
-    extraGroups = [ "docker" "wheel" "lp" "video" "audio" "libvirtd" ];
+    extraGroups = [ "bluetooth" "docker" "wheel" "lp" "video" "audio" "libvirtd" ];
     shell = pkgs.zsh;
   };
 
@@ -113,14 +111,24 @@
   programs.zsh.enable = true;
   programs.ssh.startAgent = true;
   programs.light.enable = true;
-  hardware.enableRedistributableFirmware = true;
-  hardware.trackpoint.enable = true;
-  hardware.opengl = {
-    enable = true;
-    #extraPackages = with pkgs; [
-    #  intel-
-    #];
+
+  hardware = {
+    enableRedistributableFirmware = true;
+    trackpoint.enable = true;
+    opengl = {
+      enable = true;
+      #extraPackages = with pkgs; [
+      #  intel-
+      #];
+    };
+    logitech.wireless.enable = true;
+    # install via nix-env for pactl
+    pulseaudio.enable = false;
+    bluetooth.enable = true;
+    i2c.enable = true;
+    cpu.intel.updateMicrocode = true;
   };
+
   documentation.dev.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -198,10 +206,6 @@
       };
     };
     tailscale.enable = true;
-    wakeonlan.interfaces = [{
-      interface = "enp0s31f6";
-      method = "magicpacket";
-    }];
     gnome.sushi.enable = true;
     printing.enable = true;
     openssh.enable = true;
