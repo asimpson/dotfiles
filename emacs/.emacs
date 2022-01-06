@@ -987,8 +987,8 @@ If file is package.json run npm install."
   ("x" vimish-fold-delete-all "delete all"))
 
 (use-package ivy-window-configuration
-             :after '(ivy, hydra)
              :if (file-exists-p "~/Projects/ivy-window-configuration/")
+             :defer 1
              :load-path "~/Projects/ivy-window-configuration/")
 
 (defhydra hydra-help (:exit t)
