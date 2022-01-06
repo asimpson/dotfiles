@@ -117,6 +117,13 @@
                        ;;https://github.com/flycheck/flycheck/issues/1129#issuecomment-319600923
                        (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))))
 
+(defun project-find-file-other-window()
+  "Use project-find-file but open in another split."
+  (interactive)
+  (let ()
+    (defun find-file(name))
+    (switch-to-buffer-other-window (project-find-file))))
+
 (use-package evil
              :if simpson-evil
              :diminish "vim"
@@ -150,11 +157,12 @@
                        (define-key evil-normal-state-map (kbd "RET") 'save-buffer)
                        (simpson-make-neutral evil-normal-state-map)
                        (define-key evil-normal-state-map (kbd "gx") 'browse-url)
-                       (define-key evil-normal-state-map (kbd "SPC SPC") 'projectile-find-file-other-window)
-                       (define-key evil-normal-state-map (kbd "\C-p") 'projectile-find-file-other-window)
+                       (define-key evil-normal-state-map (kbd "SPC SPC") 'project-find-file-other-window)
+                       (define-key evil-normal-state-map (kbd "C-c C-p") 'project-find-file)
+                       (define-key evil-normal-state-map (kbd "C-b") 'project-switch-project)
                        (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
                        (define-key evil-normal-state-map (kbd "C-n") 'evil-scroll-down)
-                       (define-key evil-normal-state-map (kbd "C-b") 'projectile-switch-project)
+                       (define-key evil-normal-state-map (kbd "C-b") 'project-switch-project)
                        (add-hook 'post-command-hook 'simpson-evil-mode)))
 
 (eval-after-load 'image-mode (lambda() (simpson-make-neutral image-mode-map)))
@@ -211,16 +219,6 @@
              :config (progn
                        (global-evil-matchit-mode 1)
                        (plist-put evilmi-plugins 'handlebars-mode '((evilmi-simple-get-tag evilmi-simple-jump)))))
-
-(use-package projectile
-             :diminish ""
-             :bind (("C-SPC b" . projectile-switch-project)
-                    ("C-c C-p" . projectile-find-file))
-             :config (progn
-                       (projectile-mode)
-                       (setq projectile-enable-caching nil)
-                       (setq projectile-switch-project-action 'projectile-find-file)
-                       (setq projectile-completion-system 'ivy)))
 
 (use-package flyspell-correct-ivy
              :diminish "spell"
@@ -719,7 +717,6 @@ If file is package.json run npm install."
                        (push '(counsel-M-x . "") ivy-initial-inputs-alist)
                        (simpson-make-neutral ivy-occur-mode-map)
                        (define-key dired-mode-map "r" '(lambda() (interactive) (counsel-rg nil (file-truename dired-directory))))
-                       (ivy-add-actions 'counsel-projectile-ag '(("O" simpson-other-window "open in new window")))
                        (ivy-add-actions 'counsel-ag '(("O" simpson-other-window "open in new window")))
                        (ivy-add-actions 'counsel-rg '(("O" simpson-other-window "open in new window")))
                        (ivy-set-actions 'links-for-region '(("e" (lambda(item) (browse-url item)) "Browse")))))
@@ -782,9 +779,6 @@ If file is package.json run npm install."
                        (ivy-add-actions 'counsel-find-file '(("h" (lambda(file) (dired (file-name-directory file))) "Dired")))
                        (global-set-key (kbd "<f1> f") 'counsel-describe-function)
                        (global-set-key (kbd "<f1> v") 'counsel-describe-variable)))
-
-(use-package counsel-projectile
-             :defer 1)
 
 (defun simpson-browse()
   "Fuzzy finding interface to eyebrowse workspaces.
@@ -1345,9 +1339,10 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   "Copy the file path for the current buffer to the clipboard."
   (interactive)
   (let (path)
-    (if (projectile-project-p)
-        (setq path (nth 1 (split-string (buffer-file-name) (projectile-project-name))))
-        (setq path (buffer-file-name)))
+    ;;TODO factor out projectile
+    ;; (if (projectile-project-p)
+    ;;     (setq path (nth 1 (split-string (buffer-file-name) (projectile-project-name))))
+    ;;     (setq path (buffer-file-name)))
 
     (if (y-or-n-p "Code formatting? ")
         (kill-new (concat "`"path"`"))
@@ -1385,18 +1380,14 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   (balance-windows))
 
 (defun simpson-smart-shell()
-  "Run shell from projectile root or from current spot in system."
+  "Run shell from current spot in system."
   (interactive)
-  (unless (ignore-errors (projectile-run-async-shell-command-in-root))
-    (call-interactively 'async-shell-command)))
+  (call-interactively 'async-shell-command))
 
 (defun simpson-rerun()
-  "Rerun last shell command.  Respsects projectile."
+  "Rerun last shell command"
   (interactive)
-  (if (projectile-project-p)
-      (projectile-with-default-dir (projectile-project-root)
-                                   (async-shell-command (car shell-command-history)))
-      (async-shell-command (car shell-command-history))))
+  (async-shell-command (car shell-command-history)))
 
 (global-set-key (kbd "C-SPC .") 'simpson-rerun)
 
