@@ -406,6 +406,7 @@
              :interpreter (("node" . rjsx-mode))
              :mode (("\\.js?\\'" . rjsx-mode)
                     ("\\.tsx?\\'" . rjsx-mode)
+                    ("\\.ts?\\'" . rjsx-mode)
                     ("\\.jsx?\\'" . rjsx-mode))
              :config (progn
                        (setq js2-basic-offset 2)
@@ -414,7 +415,19 @@
                        (electric-indent-mode -1)
                        (setq js2-mode-show-strict-warnings nil)
                        (add-hook 'js2-mode-hook (lambda() (setq show-trailing-whitespace t)))
-                       (add-hook 'rjsx-mode-hook (lambda() (setq mode-name "jsx")))))
+                       (add-hook 'rjsx-mode-hook (lambda() (setq mode-name "jsx")))
+                       (setq
+                        js-chain-indent t
+                        ;; Don't mishighlight shebang lines
+                        js2-skip-preprocessor-directives t
+                        ;; let flycheck handle this
+                        js2-mode-show-parse-errors nil
+                        ;; Flycheck provides these features, so disable them: conflicting with
+                        ;; the eslint settings.
+                        js2-strict-missing-semi-warning nil
+                        ;; maximum fontification
+                        js2-highlight-level 3
+                        js2-idle-timer-delay 0.15)))
 
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
@@ -1209,7 +1222,16 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
              :defer 3
              :config (progn
                        (add-hook 'typescript-mode-hook 'setup-tide-mode)
-                       (add-hook 'rjsx-mode-hook 'setup-tide-mode)))
+                       (add-hook 'rjsx-mode-hook 'setup-tide-mode)
+                       (setq tide-completion-detailed t
+                             tide-always-show-documentation t
+                             ;; Fix #1792: by default, tide ignores payloads larger than 100kb. This
+                             ;; is too small for larger projects that produce long completion lists,
+                             ;; so we up it to 512kb.
+                             tide-server-max-response-length 524288
+                             ;; We'll handle it
+                             ;;tide-completion-setup-company-backend nil
+                             )))
 
 (use-package org-mime
              :config (require 'org-mime))
