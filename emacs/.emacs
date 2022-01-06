@@ -841,17 +841,12 @@ If file is package.json run npm install."
 
 (use-package gist)
 
-(use-package desktop
-  :defer 1
-  :if (display-graphic-p)
-  :config (desktop-save-mode))
-
 (use-package php-mode
-  :mode ("\\.php?\\'" . php-mode)
-  :config (add-hook 'php-mode-hook (lambda () (setq mode-name "php"))))
+             :mode ("\\.php?\\'" . php-mode)
+             :config (add-hook 'php-mode-hook (lambda () (setq mode-name "php"))))
 
 (use-package json-mode
-  :mode ("\\.json?\\'" . json-mode))
+             :mode ("\\.json?\\'" . json-mode))
 
 (use-package company
              :defer 1
@@ -992,7 +987,6 @@ If file is package.json run npm install."
   ("x" vimish-fold-delete-all "delete all"))
 
 (use-package ivy-window-configuration
-             :ensure nil
              :after '(ivy, hydra)
              :if (file-exists-p "~/Projects/ivy-window-configuration/")
              :load-path "~/Projects/ivy-window-configuration/")
@@ -1117,9 +1111,10 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
              :load-path "/usr/local/share/emacs/site-lisp/mu4e"
              :config (progn
                        (simpson-load-file "~/.dotfiles/emacs/mu4e.el.gpg")
-                       (define-key mu4e-view-mode-map (kbd "M") (if mu4e-view-use-gnus 'ignore 'mu4e-view-link-in-mpv))
+                       ;;(define-key mu4e-view-mode-map (kbd "M") (if mu4e-view-use-gnus 'ignore 'mu4e-view-link-in-mpv))
                        (set-face-attribute 'mu4e-highlight-face nil :background "DarkRed" :foreground nil)
                        (setq mu4e-maildir "~/Mail")
+                       (setq mu4e-main-buffer-hide-personal-addresses t)
                        (setq mu4e-view-show-images t)
                        (setq send-mail-function 'smtpmail-send-it)
                        (setq message-send-mail-function 'smtpmail-send-it)
@@ -1151,12 +1146,6 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (defmacro json-parse! (buffer)
   "Parse and return JSON from BUFFER.  Ideally for the 'url-retrieve' family of funcs."
   `(with-current-buffer ,buffer (json-read-from-string (buffer-substring-no-properties url-http-end-of-headers (point-max)))))
-
-(defun ltc()
-  "Get LTC price from coinbase API via synchronous url retrieve."
-  (interactive)
-  (let ((data (json-parse! (url-retrieve-synchronously "https://api.coinbase.com/v2/prices/LTC-USD/spot" t))))
-    (message "LTC: $%s" (alist-get 'amount (car data)))))
 
 (defun btc()
   "Get BTC price from coinbase API via synchronous url retrieve."
@@ -1454,16 +1443,10 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 
 (put 'narrow-to-region 'disabled nil)
 
-(use-package ivy-hacker-news
-             :load-path "~/Projects/ivy-hacker-news"
-             :commands ivy-hacker-news
-             :ensure nil
-             :after ivy)
-
 (use-package pinboard-unread
-  :load-path "~/Projects/pinboard-unread"
-  :commands pinboard-unread
-  :ensure nil)
+             :load-path "~/Projects/pinboard-unread"
+             :commands pinboard-unread
+             :ensure nil)
 
 (defun simpson-search-eslint()
   "Search the web for the eslint error at point."
@@ -1658,35 +1641,6 @@ end tell'
 (cua-mode)
 
 (load "~/quicklisp/clhs-use-local.el" t)
-
-(use-package org-roam
-             :disabled
-             :hook (after-init . org-roam-mode)
-             :diminish ""
-             :custom (org-roam-directory (concat simpson-dropbox-path "roam/"))
-             :bind (
-                    :map org-roam-mode-map
-                    (("C-c n l" . org-roam)
-                     ("C-c n f" . org-roam-find-file)
-                     ("C-c n g" . org-roam-graph-show))
-                    :map org-mode-map
-                    (("C-c n i" . org-roam-insert))
-                    (("C-c n I" . org-roam-insert-immediate)))
-             :config (progn
-                       (setq org-roam-file-extensions '("txt"))
-                       (add-to-list 'org-roam-capture-templates
-                                    '("t"
-                                      "default with tags"
-                                      plain
-                                      #'org-roam-capture--get-point
-                                      "%?"
-                                      :file-name
-                                      "%<%Y%m%d%H%M%S>-${slug}"
-                                      :head
-                                      "#+TITLE: ${title}\n#+ROAM_TAGS: \n"
-                                      :unnarrowed t)
-                                    t)))
-(use-package elpher)
 
 (use-package ng2-mode)
 
