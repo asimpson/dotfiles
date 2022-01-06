@@ -127,6 +127,7 @@
                        (setq-default evil-shift-width 2)
                        (setq evil-vsplit-window-right t)
                        (setq evil-split-window-below t)
+                       (evil-set-undo-system 'undo-redo)
                        (add-to-list 'evil-emacs-state-modes 'dired-mode)
                        (add-to-list 'evil-emacs-state-modes 'epa-key-list-mode)
                        (add-to-list 'evil-emacs-state-modes 'ivy-occur-mode)
