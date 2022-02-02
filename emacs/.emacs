@@ -118,9 +118,9 @@
 (defun project-find-file-other-window()
   "Use project-find-file but open in another split."
   (interactive)
-  (let ()
-    (defun find-file(name))
-    (switch-to-buffer-other-window (project-find-file))))
+  (let (buf (current-buffer))
+    (switch-to-buffer-other-window (project-find-file))
+    (switch-to-buffer buf)))
 
 (use-package evil
              :if simpson-evil
