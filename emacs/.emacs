@@ -26,9 +26,6 @@
  use-package-always-defer t
  use-package-always-ensure t)
 
-;;debug use-package 👇
-;;(setq use-package-verbose t)
-
 (tool-bar-mode -1)
 (server-start)
 (menu-bar-mode -1)
@@ -142,17 +139,12 @@
                        (add-to-list 'evil-emacs-state-modes 'image-mode)
                        (add-to-list 'evil-emacs-state-modes 'comint-mode)
                        (add-to-list 'evil-emacs-state-modes 'eww-mode)
-                       (add-to-list 'evil-emacs-state-modes 'circe-mode)
-                       (add-to-list 'evil-emacs-state-modes 'circe-server-mode)
-                       (add-to-list 'evil-emacs-state-modes 'circe-channel-mode)
                        (add-to-list 'evil-emacs-state-modes 'sql-interactive-mode)
                        (add-to-list 'evil-emacs-state-modes 'deadgrep-mode)
-                       (add-to-list 'evil-emacs-state-modes 'twittering-mode)
                        (add-to-list 'evil-emacs-state-modes 'epresent-mode)
                        (add-to-list 'evil-emacs-state-modes 'slime-repl-mode)
                        (evil-set-initial-state 'slime-repl-mode 'emacs)
                        (add-to-list 'evil-emacs-state-modes 'sldb-mode)
-                       (add-to-list 'evil-emacs-state-modes 'elpher-mode)
                        ;;http://spacemacs.org/doc/FAQ#orgheadline31
                        (fset 'evil-visual-update-x-selection 'ignore)
                        (define-key evil-normal-state-map (kbd "RET") 'save-buffer)
@@ -656,41 +648,6 @@ If file is package.json run npm install."
                                                 "--bracket-spacing" "true"
                                                 "--single-quote" "true"))))
 
-(defun simpson-shell-command-sentiel(proc sig)
-  (when (seq-filter (lambda(x)
-                      (or (string-match "npm install" x)
-                          (string-match "npm i" x)))
-                    (process-command proc))
-    (sauron-add-event 'shell 3 "npm install is finished" nil))
-  (when (and (memq (process-status proc)
-                   '(exit))
-             (not (string= (string-trim sig) "finished")))
-    (sauron-add-event 'shell 3 sig (lambda() #'(switch-to-buffer-other-window
-                                           "*Async Shell Command*")))))
-
-(use-package erc
-  :config (progn
-            (when simpson-evil (add-to-list 'evil-emacs-state-modes 'erc-mode)
-                  (evil-set-initial-state 'erc-mode 'emacs))
-            (setq erc-default-port 6667)
-            (setq erc-prompt-for-password nil)
-            (setq erc-kill-queries-on-quit t)
-            (setq erc-log-insert-log-on-open t)
-            (setq erc-log-channels-directory "~/.erc/logs/")
-            (setq erc-save-buffer-on-part t)
-            (setq erc-join-buffer "bury")
-            (simpson-make-neutral erc-mode-map)
-            (setq erc-modules '(autojoin button completion fill irccontrols list match menu move-to-prompt netsplit networks noncommands readonly ring stamp))
-            (simpson-load-file "~/.dotfiles/emacs/irc-accounts.gpg")
-            (add-hook 'erc-mode-hook 'visual-line-mode)
-            (add-hook 'erc-mode-hook (lambda () (setq mode-name "irc")))))
-
-(use-package emoji-cheat-sheet-plus
-  :defer 2
-  :init (progn
-          (add-hook 'erc-mode-hook 'emoji-cheat-sheet-plus-display-mode)
-          (add-hook 'magit-mode-hook 'emoji-cheat-sheet-plus-display-mode)))
-
 (use-package flyspell
              :diminish "spell"
              :defer 1
@@ -973,9 +930,6 @@ If file is package.json run npm install."
 (use-package aggressive-indent
              :mode("\\.lisp?\\'" . aggressive-indent-mode))
 
-(defun simpson-delete(x)
-  (call-process "trash" nil nil nil x))
-
 (defhydra hydra-vimish (:exit t)
   "
     Vimish Folding
@@ -1084,16 +1038,6 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 
 (use-package helpful)
 
-(defun simpson-shell-history()
-  "Interact with 'shell-command-history' through Ivy."
-  (interactive)
-  (ivy-read "Run previous commands:"
-            shell-command-history
-            :action (lambda(x)
-                      (push x shell-command-history)
-                      (delete-dups shell-command-history)
-                      (async-shell-command x))))
-
 (with-eval-after-load ".emacs"
   (with-temp-buffer
       (insert-file-contents "~/.emacs.d/shell-history")
@@ -1180,19 +1124,14 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (eval-after-load 'compilation-mode (lambda()
                                      (setq compilation-error-regexp-alist-alist
                                            (cons '(node "^[  ]+at \\(?:[^\(\n]+ \(\\)?\\([a-zA-Z\.0-9_/-]+\\):\\([0-9]+\\):\\([0-9]+\\)\)?$"
-                                                        1 ;; file
-                                                        2 ;; line
-                                                        3 ;; column
-                                                        )
+                                                   1 ;; file
+                                                   2 ;; line
+                                                   3 ;; column
+                                                   )
                                                  compilation-error-regexp-alist-alist))
 
                                      (setq compilation-error-regexp-alist
                                            (cons 'node compilation-error-regexp-alist))))
-
-(use-package emacs-micro-blog
-  :commands post-to-micro
-  :ensure nil
-  :load-path "~/Projects/emacs-micro-blog")
 
 (use-package inf-ruby)
 
@@ -1230,12 +1169,6 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
                        (persistent-scratch-autosave-mode)))
 
 (setq warning-suppress-types '(undo discard-info))
-
-(defun simpson-clean-shell()
-  (font-lock-mode)
-  (undo-tree-mode))
-
-(add-hook 'shell-mode-hook 'simpson-clean-shell)
 
 (use-package package-lint)
 
@@ -1313,15 +1246,8 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (global-set-key (kbd "C-SPC k b") 'simpson-project-clone)
 (global-set-key (kbd "C-SPC k r") 'vc-revert)
 (global-set-key (kbd "C-SPC k v") 'visual-line-mode)
-(global-set-key (kbd "C-SPC k n") 'simpson-smart-shell)
-(global-set-key (kbd "C-SPC k N") 'kill-shell-buffer)
 (global-set-key (kbd "C-SPC k g") 'ffap)
-(global-set-key (kbd "C-SPC k F") 'simpson-byte-compile)
 
-(defun simpson-byte-compile()
-  "Force byte compilation."
-  (interactive)
-  (byte-recompile-directory package-user-dir nil 'force))
 
 (defun simpson-copy-file-buffer-name()
   "Copy the file path for the current buffer to the clipboard."
@@ -1359,25 +1285,6 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 
 (global-set-key (kbd "C-SPC d") (lambda() (interactive)
                                   (dired simpson-dropbox-path "-laGht")))
-
-(defun kill-shell-buffer()
-  "Kill the Async Shell Command buffer and then balance's the remaining windows."
-  (interactive)
-  (switch-to-buffer-other-window "*Async Shell Command*")
-  (kill-buffer-and-window)
-  (balance-windows))
-
-(defun simpson-smart-shell()
-  "Run shell from current spot in system."
-  (interactive)
-  (call-interactively 'async-shell-command))
-
-(defun simpson-rerun()
-  "Rerun last shell command"
-  (interactive)
-  (async-shell-command (car shell-command-history)))
-
-(global-set-key (kbd "C-SPC .") 'simpson-rerun)
 
 ;;narrow region
 (global-set-key (kbd "C-SPC n") 'narrow-to-region)
@@ -1527,16 +1434,6 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 
 (use-package epresent)
 
-(use-package vterm
-             :load-path "/home/asimpson/Source/emacs-libvterm"
-             :defer 1
-             :ensure nil
-             :after evil
-             :config (progn
-                       (when simpson-evil (add-to-list 'evil-emacs-state-modes 'vterm-mode))
-                       (setq vterm-max-scrollback 10000)
-                       (define-key vterm-mode-map (kbd "C-v") #'vterm-yank)))
-
 (defhydra hydra-diff-jump()
   "
     Shortcut to diff next and previous:
@@ -1581,8 +1478,6 @@ end tell'
 
 (use-package docker)
 
-(use-package dockerfile-mode)
-
 (use-package docker-compose-mode
              :mode ("\\docker-compose.yml\\'" . docker-compose-mode))
 
@@ -1602,34 +1497,24 @@ end tell'
 (use-package jest)
 
 (use-package go-mode
-             :mode ("\\.go\\'" . go-mode)
-             :hook (go-mode . go-setup))
-
-(defun go-setup()
-  (setq compile-command "go build -v && go test -v && golint")
-  (define-key go-mode-map (kbd "C-c C-c") 'compile)
-  (define-key go-mode-map (kbd "C-c C-r") 'run-go-build))
-
-(defun run-go-build()
-  (interactive)
-  (async-shell-command "go run main.go"))
+             :mode ("\\.go\\'" . go-mode))
 
 (use-package terraform-mode
              :mode ("\\.tf\\'" . terraform-mode))
 
 (use-package lsp-mode
              :commands (lsp lsp-deferred)
-             :config (setq lsp-rust-server 'rust-analyzer)
              :hook ((go-mode . lsp-deferred)
                     (rust-mode . lsp-deferred)))
+
 ;; Set up before-save hooks to format buffer and add/delete imports.
 ;; Make sure you don't have other gofmt/goimports hooks enabled.
 (defun lsp-go-install-save-hooks ()
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
+
 (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
 
-;; Optional - provides fancier overlays.
 (use-package lsp-ui
              :commands lsp-ui-mode)
 
@@ -1653,6 +1538,7 @@ end tell'
                          (lambda (url) (start-process "mpv" nil "mpv" url))))
 
 (setq browse-url-generic-program "firefox")
+
 (setq browse-url-browser-function 'browse-url-generic)
 
 (use-package counsel-jq)
