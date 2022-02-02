@@ -114,6 +114,7 @@
              :bind ("C-SPC '" . flycheck-mode)
              :config (progn
                        (setq flycheck-global-modes '(sh-mode rjsx-mode emacs-lisp-mode rust-mode ruby-mode common-lisp-mode))
+                       (global-flycheck-mode)
                        ;;https://github.com/flycheck/flycheck/issues/1129#issuecomment-319600923
                        (advice-add 'flycheck-eslint-config-exists-p :override (lambda() t))))
 
@@ -1235,8 +1236,6 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   (undo-tree-mode))
 
 (add-hook 'shell-mode-hook 'simpson-clean-shell)
-
-(setq eshell-command-completion-function 'completion-at-point)
 
 (use-package package-lint)
 
