@@ -38,7 +38,7 @@ code=$?
 
 if [ "${code}" -eq 0 ]; then
   /run/current-system/sw/bin/xrandr --output eDP-1 --off
-  /run/current-system/sw/bin/xrandr --output HDMI-2 --auto
+  /run/current-system/sw/bin/xrandr --output HDMI-2 --auto --set "audio" on
   reload 108
 else
   /run/current-system/sw/bin/xrandr --output eDP-1 --auto
