@@ -393,33 +393,6 @@
                        (setq markdown-command "/usr/bin/pandoc")
                        (setq markdown-live-preview-delete-export t)))
 
-(use-package rjsx-mode
-             :interpreter (("node" . rjsx-mode))
-             :mode (("\\.js?\\'" . rjsx-mode)
-                    ("\\.tsx?\\'" . rjsx-mode)
-                    ("\\.ts?\\'" . rjsx-mode)
-                    ("\\.jsx?\\'" . rjsx-mode))
-             :config (progn
-                       (setq js2-basic-offset 2)
-                       (setq js2-highlight-level 3)
-                       (setq js2-bounce-indent-p t)
-                       (electric-indent-mode -1)
-                       (setq js2-mode-show-strict-warnings nil)
-                       (add-hook 'js2-mode-hook (lambda() (setq show-trailing-whitespace t)))
-                       (add-hook 'rjsx-mode-hook (lambda() (setq mode-name "jsx")))
-                       (setq
-                        js-chain-indent t
-                        ;; Don't mishighlight shebang lines
-                        js2-skip-preprocessor-directives t
-                        ;; let flycheck handle this
-                        js2-mode-show-parse-errors nil
-                        ;; Flycheck provides these features, so disable them: conflicting with
-                        ;; the eslint settings.
-                        js2-strict-missing-semi-warning nil
-                        ;; maximum fontification
-                        js2-highlight-level 3
-                        js2-idle-timer-delay 0.15)))
-
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 2)
 (setq-default css-indent-offset 2)
@@ -1135,26 +1108,30 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 
 (use-package inf-ruby)
 
+(use-package typescript-mode
+             :mode (("\\.ts?\\'" . typescript-mode)
+                    ("\\.tsx?\\'" . typescript-mode)
+                    ("\\.jsx?\\'" . typescript-mode)))
+
 (defun setup-tide-mode()
-  (setq typescript-indent-level 2)
+  (interactive)
   (tide-setup)
-  (eldoc-mode)
-  (tide-hl-identifier-mode))
+  (eldoc-mode +1)
+  (flycheck-mode +1)
+  (tide-hl-identifier-mode +1))
 
 (use-package tide
-             :defer 3
-             :config (progn
-                       (add-hook 'typescript-mode-hook 'setup-tide-mode)
-                       (add-hook 'rjsx-mode-hook 'setup-tide-mode)
-                       (setq tide-completion-detailed t
-                             tide-always-show-documentation t
-                             ;; Fix #1792: by default, tide ignores payloads larger than 100kb. This
-                             ;; is too small for larger projects that produce long completion lists,
-                             ;; so we up it to 512kb.
-                             tide-server-max-response-length 524288
-                             ;; We'll handle it
-                             ;;tide-completion-setup-company-backend nil
-                             )))
+             :after (typescript-mode company flycheck)
+             :defer 1
+             :config (setq tide-completion-detailed t
+                           tide-always-show-documentation t
+                           ;; Fix #1792: by default, tide ignores payloads larger than 100kb. This
+                           ;; is too small for larger projects that produce long completion lists,
+                           ;; so we up it to 512kb.
+                           tide-server-max-response-length 524288))
+
+(add-hook 'before-save-hook 'tide-format-before-save)
+(add-hook 'typescript-mode-hook #'setup-tide-mode)
 
 (use-package org-mime
              :config (require 'org-mime))
@@ -1527,8 +1504,6 @@ end tell'
 (load "~/quicklisp/clhs-use-local.el" t)
 
 (use-package ng2-mode)
-
-(use-package typescript-mode)
 
 (defun mu4e-view-link-in-mpv (&optional multi)
   "Offer to view URLs in MPV if possible."
