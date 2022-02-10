@@ -184,16 +184,14 @@
   (evil-window-down 1))
 
 (use-package key-chord
-  :defer 3
-  :config (progn
-            (key-chord-mode 1)
-            (setq key-chord-two-keys-delay 0.1)
-            (if simpson-evil
-                (progn (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
+             :defer 3
+             :config (progn
+                       (key-chord-mode 1)
+                       (setq key-chord-two-keys-delay 0.1)
+                       (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
                        (key-chord-define evil-normal-state-map "//" 'comment-region)
                        (key-chord-define evil-normal-state-map "??" 'uncomment-region)
-                       (key-chord-define evil-normal-state-map "cc" 'simpson-magit-comment))
-              (key-chord-define-global "jk" 'god-local-mode))))
+                       (key-chord-define evil-normal-state-map "cc" 'simpson-magit-comment)))
 
 (defun simpson-magit-comment()
   "A small wrapper around 'comment-line' keychord for magit.
