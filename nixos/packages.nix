@@ -3,7 +3,7 @@
   environment.systemPackages = with pkgs; [
     vim
     firefox
-    ffmpeg
+    ffmpeg-full
     mpv
     slack
     rofi
@@ -26,13 +26,9 @@
     pavucontrol
     hunspell
     hunspellDicts.en-us
-    gopls
-    go
-    rustup
     obs-studio
     clipster
     dunst
-    ncmpcpp
     isync
     calibre
     mu
@@ -40,7 +36,6 @@
     solaar
     jq
     gnome3.nautilus
-    youtube-dl
     polkit_gnome
     rofi-emoji
     rofi-mpd
@@ -48,7 +43,6 @@
     qemu
     virt-manager
     ripgrep
-    dropbox
     xclip
     tailscale
     iwd

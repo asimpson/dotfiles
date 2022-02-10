@@ -157,6 +157,14 @@
     '';
   };
 
+  systemd.network = {
+    networks."40-enp0s31f6" = {
+      networkConfig = {
+        MulticastDNS = true;
+      };
+    };
+  };
+
   #environment.loginShellInit = ''
   #  if [ -z $DISPLAY ] && [ "$(tty)" = "/dev/tty1" ]; then
   #    exec sway
@@ -166,35 +174,32 @@
   # List services that you want to enable:
 
   services = {
-    lorri = {
-      enable = true;
-    };
+    lorri.enable = true;
     syncthing = {
       enable = true;
       user = "adam";
       dataDir = "/home/adam/Sync";
       configDir = "/home/adam/.config/syncthing";
-      declarative = {
-        devices = {
-          wemm = {
-            id = "A7BKRRY-5AIRT4B-YP4DXYX-RL7SKZ5-52TKEY2-NNJGBZ6-YF423ON-TCW7MQM";
-          };
-          ged = {
-            id = "GNI7GNS-BYK6EPE-4J7PJNF-D3EQ7DS-5OHVKF2-3RIB3UD-V6AYEK7-XLVKFQ5";
-          };
+      devices = {
+        wemm = {
+          id = "A7BKRRY-5AIRT4B-YP4DXYX-RL7SKZ5-52TKEY2-NNJGBZ6-YF423ON-TCW7MQM";
         };
-        folders = {
-          "/home/adam/notes" = {
-            id = "qjwus-uru7t";
-            devices = [ "wemm" "ged" ];
-            label = "notes";
-          };
+        ged = {
+          id = "GNI7GNS-BYK6EPE-4J7PJNF-D3EQ7DS-5OHVKF2-3RIB3UD-V6AYEK7-XLVKFQ5";
+        };
+      };
+      folders = {
+        "/home/adam/notes" = {
+          id = "qjwus-uru7t";
+          devices = [ "wemm" "ged" ];
+          label = "notes";
         };
       };
     };
     resolved = {
       enable = true;
       dnssec = "false";
+      extraConfig = "MulticastDNS=true";
     };
     mpdscribble = {
       enable = true;
@@ -207,7 +212,11 @@
     };
     tailscale.enable = true;
     gnome.sushi.enable = true;
-    printing.enable = true;
+    printing = {
+      enable = true;
+      drivers = [ pkgs.brlaser ];
+    };
+    #avahi.enable = true;
     openssh.enable = true;
     blueman.enable = true;
     gnome.gnome-keyring.enable = true;
@@ -273,8 +282,8 @@
   };
 
   virtualisation.libvirtd.enable = true;
-  virtualisation.libvirtd.qemuRunAsRoot = true;
-  virtualisation.libvirtd.qemuPackage = pkgs.qemu_kvm;
+  virtualisation.libvirtd.qemu.runAsRoot = true;
+  virtualisation.libvirtd.qemu.package = pkgs.qemu_kvm;
 
   virtualisation.docker = {
     enable = true;
@@ -315,5 +324,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "21.05"; # Did you read the comment?
-
 }
