@@ -281,13 +281,25 @@
     };
   };
 
-  virtualisation.libvirtd.enable = true;
-  virtualisation.libvirtd.qemu.runAsRoot = true;
-  virtualisation.libvirtd.qemu.package = pkgs.qemu_kvm;
+  virtualisation = {
+    libvirtd.enable = true;
+    libvirtd.qemu = {
+      package = pkgs.qemu_kvm;
+      runAsRoot = true;
+      swtpm.enable = true;
+      ovmf = {
+        enable = true;
+        package = (pkgs.OVMFFull.override {
+          secureBoot = true;
+          tpmSupport = true;
+        });
+      };
+    };
 
-  virtualisation.docker = {
-    enable = true;
-    autoPrune.enable = true;
+    docker = {
+      enable = true;
+      autoPrune.enable = true;
+    };
   };
 
   security.pam = {
