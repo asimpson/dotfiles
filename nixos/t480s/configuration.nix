@@ -256,7 +256,7 @@
     tlp.enable = true;
     acpid.enable = true;
     colord.enable = true;
-    fprintd.enable = true;
+    fprintd.enable = false;
     fwupd.enable = true;
     cron.enable = true;
     pipewire = {
