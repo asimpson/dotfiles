@@ -17,6 +17,10 @@ exec --no-startup-id "~/.dotfiles/linux/i3-monitor-change.sh"
 # is used in the bar {} block below.
 font pango:Hack Regular 8
 
+# stacked === stacking, both keywords achieve the same result
+# https://github.com/i3/i3/blob/117fb13177824f008c86b827864fa6ebeeccb548/src/config_directives.c#L261
+workspace_layout stacked
+
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 #font pango:DejaVu Sans Mono 8
@@ -38,10 +42,6 @@ bindsym $mod+Return exec tilix
 bindsym $mod+Shift+q kill
 
 bindsym $mod+space exec "rofi -combi-modi run,window,drun -show combi -modi combi"
-# There also is the (new) i3-dmenu-desktop which only displays applications
-# shipping a .desktop file. It is a wrapper around dmenu, so you need that
-# installed.
-# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus
 bindsym $mod+h focus left
