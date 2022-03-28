@@ -1,6 +1,6 @@
 { pkgs, ... }: {
   fileSystems."/crate" = {
-      device = "//100.106.109.96/crate";
+      device = "//172.16.12.97/crate";
       fsType = "cifs";
       options = let
         # this line prevents hanging on network split
