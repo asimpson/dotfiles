@@ -134,6 +134,7 @@
                        (setq evil-split-window-below t)
                        (evil-set-undo-system 'undo-redo)
                        (add-to-list 'evil-emacs-state-modes 'dired-mode)
+                       (add-to-list 'evil-emacs-state-modes 'simple-mpc-mode)
                        (add-to-list 'evil-emacs-state-modes 'epa-key-list-mode)
                        (add-to-list 'evil-emacs-state-modes 'ivy-occur-mode)
                        (add-to-list 'evil-emacs-state-modes 'image-mode)
@@ -1522,5 +1523,7 @@ end tell'
                        (direnv-mode)
                        (advice-add 'setup-tide-mode :before #'direnv-update-environment)
                        (advice-add 'lsp :before #'direnv-update-environment)))
+
+(use-package simple-mpc)
 
 ;;; .emacs ends here
