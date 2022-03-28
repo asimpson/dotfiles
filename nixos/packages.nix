@@ -50,5 +50,6 @@
     xsettingsd
     remmina
     direnv
+    spice-gtk
   ];
 }
