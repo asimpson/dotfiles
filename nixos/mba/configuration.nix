@@ -55,8 +55,6 @@
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
-  networking.interfaces.enp0s31f6.useDHCP = true;
-  networking.interfaces.wlp61s0.useDHCP = true;
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -78,13 +76,6 @@
   };
 
 
-  # Enable the GNOME 3 Desktop Environment.
-  #services.xserver.displayManager.gdm.enable = true;
-  #services.xserver.desktopManager.gnome3.enable = true;
-
-  # Configure keymap in X11
-  # services.xserver.xkbOptions = "eurosign:e";
-
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
@@ -100,8 +91,10 @@
   users.users.adam = {
     isNormalUser = true;
     extraGroups = [ "docker" "wheel" "lp" "video" "audio"]; # Enable ‘sudo’ for the user.
+    shell = pkgs.zsh;
   };
 
+  programs.zsh.enable = true;
   programs.dconf.enable = true;
   programs.ssh.startAgent = true;
   programs.ssh.forwardX11 = true;
@@ -109,27 +102,20 @@
   hardware.trackpoint.enable = true;
   hardware.opengl = {
     enable = true;
-    #extraPackages = with pkgs; [
-    #  intel-
-    #];
   };
   documentation.dev.enable = true;
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
   programs.gnupg.agent = {
     enable = true;
-  #   enableSSHSupport = true;
   };
 
   # List services that you want to enable:
 
   services = {
+    lorri.enable = true;
     openssh.enable = true;
     blueman.enable = true;
     gnome.gnome-keyring.enable = true;
-    # resolved.enable = true;
 
     timesyncd = {
       enable = true;
@@ -232,6 +218,16 @@
           endpoint = "home.simpsonfam.com:45340";
         }
       ];
+    };
+  };
+
+  nix = {
+    autoOptimiseStore = true;
+    allowedUsers = [ "@wheel" ];
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 30d";
     };
   };
 
