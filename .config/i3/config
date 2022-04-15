@@ -11,11 +11,9 @@
 
 set $mod Mod4
 
-exec --no-startup-id "~/.dotfiles/linux/i3-monitor-change.sh"
-
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:Hack Regular 8
+font pango:Hack Regular 9
 
 # stacked === stacking, both keywords achieve the same result
 # https://github.com/i3/i3/blob/117fb13177824f008c86b827864fa6ebeeccb548/src/config_directives.c#L261
@@ -177,39 +175,24 @@ for_window [class="^.*"] border pixel 2
 
 client.focused #f5a142 #f5a142 #000000 #f5a142 #f5a142
 
-# exec --no-startup-id "feh --bg-scale ~/Pictures/kristaps-ungurs-6Xl_GxiMKSM-unsplash.jpg"
-# exec --no-startup-id "feh --bg-fill ~/Pictures/cactus-groot.jpg"
-#exec --no-startup-id "feh --bg-tile ~/Pictures/redturtle050.jpg"
-exec --no-startup-id "feh --bg-fill Pictures/dragon.jpg"
-
 bindsym Shift+Control+Up exec "pactl set-sink-volume $(pactl list short sinks | grep RUNNING | cut -f 2) +5%"
 
 bindsym Shift+Control+Down exec "pactl set-sink-volume $(pactl list short sinks | grep RUNNING | cut -f 2) -5%"
 
-#exec --no-startup-id "dropbox start"
-
 exec --no-startup-id "clipster -d"
 
-#exec --no-startup-id "nm-applet"
-
-exec --no-startup-id "xmodmap ~/.Xmodmap"
+exec --no-startup-id "lofibar"
 
 #exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
 exec --no-startup-id /etc/polkit-gnome-authentication-agent-1 &
 
 exec --no-startup-id "solaar -w hide --restart-on-wake-up"
 
-bindsym XF86MonBrightnessUp exec light -A 5%
-
-bindsym XF86MonBrightnessDown exec light -U 5%
-
 bindsym XF86AudioRaiseVolume exec "pactl set-sink-volume $(pactl info | grep Default\ Sink | cut -d ':' -f 2) +5%"
 
 bindsym XF86AudioLowerVolume exec "pactl set-sink-volume $(pactl info | grep Default\ Sink | cut -d ':' -f 2) -5%"
 
 bindsym XF86AudioPlay exec "mpc toggle"
-
-bindsym XF86Bluetooth exec "bluetooth toggle"
 
 bindsym Control+XF86AudioPrev exec "mpc prev"
 

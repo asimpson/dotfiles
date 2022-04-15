@@ -1,3 +1,5 @@
+# Fix for TRAMP
+[[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && return
 #http://stackoverflow.com/a/12575883/2344737
 autoload -Uz promptinit && promptinit
 autoload -Uz compinit && compinit
@@ -25,9 +27,9 @@ if [ -f ~/.bash_profile ]; then
   source ~/.bash_profile
 fi
 
-export GOPATH=$HOME/go
+# export GOPATH=$HOME/go
 # export GOROOT=/Users/asimpson/Projects
-export PATH="$PATH:/usr/local/go/bin/:$GOPATH/bin"
+# export PATH="$PATH:/usr/local/go/bin/:$GOPATH/bin"
 # PATH="$PATH:$GOROOT"
 
 precmd() {
@@ -55,15 +57,10 @@ export PATH="$HOME/.yarn/bin:$PATH"
 
 export PATH="$HOME/bin:$PATH"
 
-# Fix for TRAMP
-[ $TERM = "dumb" ] && unsetopt zle && PS1='$ '
-
 # ssh-add -A 2>/dev/null;
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/terraform terraform
 
-export FLYCTL_INSTALL="/home/asimpson/.fly"
-export PATH="$FLYCTL_INSTALL/bin:$PATH"
 if [ -e /home/asimpson/.nix-profile/etc/profile.d/nix.sh ]; then . /home/asimpson/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 eval "$(direnv hook zsh)"

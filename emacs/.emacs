@@ -41,11 +41,6 @@
                            (invert-face 'mode-line)
                            (run-with-timer 0.1 nil 'invert-face 'mode-line)))
 
-(when (memq window-system '(mac ns))
-  (setq exec-path (append exec-path '("/Users/asimpson/.better-npm/lib/node_modules")))
-  (setq exec-path (append exec-path '("/Users/asimpson/.better-npm/bin")))
-  (setenv "PATH" "/Users/asimpson/.better-npm/lib/node_modules:/Users/asimpson/.better-npm/bin:/usr/local/bin:/usr/local/sbin"))
-
 (global-set-key (kbd "C-SPC") nil)
 
 (defvar simpson-dropbox-path ""
@@ -262,13 +257,7 @@
 
 (use-package org
              :defer 2
-             :if (file-exists-p (concat simpson-dropbox-path "org/tasks.txt"))
              :pin org
-             :bind (("C-SPC c" . org-capture)
-                    ("C-SPC k B" . simpson-org-blog-capture)
-                    ("C-SPC t" . org-todo-list)
-                    ("C-SPC a" . org-agenda)
-                    ("C-SPC T" . org-tags-view))
              :mode (("\\.txt\\'" . org-mode))
              :config (progn
                        (require 'ox-md)
@@ -279,79 +268,12 @@
                        (setq org-refile-use-outline-path 'file)
                        (setq org-outline-path-complete-in-steps nil)
                        (setq org-export-with-toc nil)
-                       (setq org-agenda-custom-commands '(("n" "Agenda and all TODOs"
-                                                           ((agenda "")
-                                                            (alltodo "")))
-                                                          ("w" "Work tasks" ((agenda "") (todo ""))
-                                                           ((org-agenda-files `(,(concat simpson-dropbox-path "org/refile-beorg.txt") ,(concat simpson-dropbox-path "org/tasks.txt")))))
-                                                          ("f" "side projects" ((agenda "") (todo ""))
-                                                           ((org-agenda-files `(,(concat simpson-dropbox-path "org/side.txt")))))))
-                       (setq org-refile-targets '(
-                                                  (nil . (:level . 1))
-                                                  (nil . (:level . 2))
-                                                  (org-agenda-files . (:level . 1))))
                        (setq org-todo-keywords
                              '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
-                       (setq org-capture-templates
-                             `(("a" "Add to tasks" entry
-                                    (file ,(concat simpson-dropbox-path "org/tasks.txt"))
-                                    "* TODO %? %^g
-  :PROPERTIES:
-  :CREATED: %T
-  :END:")
-
-                               ("s" "Side projects tracker" entry
-                                    (file ,(concat simpson-dropbox-path "org/side.txt"))
-                                    "* TODO %? %^g
-  :PROPERTIES:
-  :CREATED: %T
-  :END:")
-                               ("b" "My blog post captures" entry
-                                    (file ,(concat simpson-dropbox-path "org/reading.txt"))
-                                    "* %? %^g
-  :PROPERTIES:
-  %(simpson-prompt-for-feedwrangler-url)
-  :CREATED: %T
-  :END:")
-                               ("p" "Personal: " entry
-                                    (file ,(concat simpson-dropbox-path "org/personal.txt"))
-                                    "* %? %^g
-  :PROPERTIES:
-  :CREATED: %T
-  :END:")
-
-                               ("e" "Email log: " entry
-                                    (file ,(concat simpson-dropbox-path "org/email.txt"))
-                                    "* %A %?
-  :PROPERTIES:
-  :CREATED: %T
-  :END:")
-
-                               ("t" "Travel information" entry
-                                    (file ,(concat simpson-dropbox-path "org/travel.txt"))
-                                    "* %? %^G
-  :PROPERTIES:
-  :CREATED: %T
-  :END:
-** Email message: %a")))
                        (setq org-agenda-restore-windows-after-quit t)
                        (add-hook 'org-mode-hook (lambda () (flyspell-mode 1)))
                        (add-hook 'org-mode-hook 'visual-line-mode)
                        (add-hook 'org-mode-hook (lambda () (setq mode-name "org")))
-                       (setq exec-path (append exec-path '("/Library/TeX/texbin/latex")))
-                       (global-set-key (kbd "C-SPC k f") 'org-footnote-new)
-                       (global-set-key (kbd "C-SPC k l") 'org-toggle-link-display)
-                       (org-babel-do-load-languages
-                        'org-babel-load-languages
-                        '((shell . t)
-                          (emacs-lisp . t)
-                          (plantuml . t)
-                          (js . t)))
-                       (setq org-plantuml-jar-path "/usr/local/plantuml.jar")
-                       (setq org-confirm-babel-evaluate (lambda (lang src) (not (string-equal lang "plantuml"))))
-                       (add-to-list
-                        'org-src-lang-modes '("plantuml" . plantuml))
-                       (run-at-time t (* 60 15) #'simpson-org-refresh)
                        (setq org-pretty-entities t)
                        (setq org-export-with-section-numbers nil)))
 
@@ -609,18 +531,9 @@ If file is package.json run npm install."
   :defer 1
   :config (editorconfig-mode 1))
 
-(use-package prettier-js
+(use-package prettier
              :diminish "pretty"
-             :defer 1
-             :init (progn
-                     (add-hook 'js2-mode-hook 'prettier-js-mode)
-                     (add-hook 'rjsx-mode-hook 'prettier-js-mode))
-             :config (progn
-                       (setq prettier-js-command "prettier-eslint")
-                       (setq prettier-js-args '(
-                                                "--trailing-comma" "es5"
-                                                "--bracket-spacing" "true"
-                                                "--single-quote" "true"))))
+             :defer 1)
 
 (use-package flyspell
              :diminish "spell"
@@ -1042,7 +955,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
                        (setq mu4e-compose-format-flowed t)
                        ;;https://vxlabs.com/2019/08/25/format-flowed-with-long-lines/
                        (setq mu4e-view-show-addresses 't)
-                       (setq mu4e-get-mail-command "true")
+                       (setq mu4e-get-mail-command "mbsync -a")
                        (setq mu4e-update-interval 300)
                        (setq user-full-name "Adam Simpson")
                        (setq mu4e-confirm-quit nil)
@@ -1055,12 +968,8 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
                        (simpson-make-neutral mu4e-headers-mode-map)
                        (simpson-make-neutral--keys mu4e-headers-mode-map)
                        (simpson-make-neutral--keys mu4e-view-mode-map)
+                       (run-with-timer 1 300 'mu4e-update-mail-and-index t)
                        (setq mu4e-view-html-plaintext-ratio-heuristic most-positive-fixnum)))
-
-(use-package org-mu4e
-             :ensure nil
-             :defer 1
-             :load-path "/usr/local/share/emacs/site-lisp/mu/mu4e")
 
 (defmacro json-parse! (buffer)
   "Parse and return JSON from BUFFER.  Ideally for the 'url-retrieve' family of funcs."
@@ -1114,31 +1023,8 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
                     ("\\.tsx?\\'" . typescript-mode)
                     ("\\.jsx?\\'" . typescript-mode)))
 
-(defun setup-tide-mode()
-  (interactive)
-  (tide-setup)
-  (eldoc-mode +1)
-  (flycheck-mode +1)
-  (tide-hl-identifier-mode +1))
-
-(use-package tide
-             :after (typescript-mode company flycheck)
-             :defer 1
-             :config (setq tide-completion-detailed t
-                           tide-always-show-documentation t
-                           ;; Fix #1792: by default, tide ignores payloads larger than 100kb. This
-                           ;; is too small for larger projects that produce long completion lists,
-                           ;; so we up it to 512kb.
-                           tide-server-max-response-length 524288))
-
-(add-hook 'before-save-hook 'tide-format-before-save)
-(add-hook 'typescript-mode-hook #'setup-tide-mode)
-
-(use-package org-mime
-             :config (require 'org-mime))
-
 (use-package rainbow-mode
-  :diminish "")
+             :diminish "")
 
 (use-package persistent-scratch
              :defer 1
@@ -1230,15 +1116,11 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (defun simpson-copy-file-buffer-name()
   "Copy the file path for the current buffer to the clipboard."
   (interactive)
-  (let (path)
-    ;;TODO factor out projectile
-    ;; (if (projectile-project-p)
-    ;;     (setq path (nth 1 (split-string (buffer-file-name) (projectile-project-name))))
-    ;;     (setq path (buffer-file-name)))
-
+  (let* ((path (buffer-file-name))
+         (relative (file-relative-name path (locate-dominating-file path ".git"))))
     (if (y-or-n-p "Code formatting? ")
-        (kill-new (concat "`"path"`"))
-        (kill-new path))))
+        (kill-new (concat "`" relative "`"))
+        (kill-new relative))))
 
 (global-set-key (kbd "C-SPC D") 'dired-jump)
 
@@ -1482,23 +1364,13 @@ end tell'
 
 (use-package lsp-mode
              :commands (lsp lsp-deferred)
-             :hook ((go-mode . lsp-deferred)
+             :hook ((typescript-mode . lsp-deferred)
                     (rust-mode . lsp-deferred)))
-
-;; Set up before-save hooks to format buffer and add/delete imports.
-;; Make sure you don't have other gofmt/goimports hooks enabled.
-(defun lsp-go-install-save-hooks ()
-  (add-hook 'before-save-hook #'lsp-format-buffer t t)
-  (add-hook 'before-save-hook #'lsp-organize-imports t t))
-
-(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
 
 (use-package lsp-ui
              :commands lsp-ui-mode)
 
-(setq lsp-gopls-staticcheck t)
 (setq lsp-eldoc-render-all t)
-(setq lsp-gopls-complete-unimported t)
 
 (cua-mode)
 
@@ -1523,8 +1395,15 @@ end tell'
              :defer 1
              :config (progn
                        (direnv-mode)
-                       (advice-add 'setup-tide-mode :before #'direnv-update-environment)
                        (advice-add 'lsp :before #'direnv-update-environment)))
+
+(use-package eglot
+             :defer 1
+             :config (progn
+                       (setq eglot-extend-to-xref t)
+                       (add-hook 'go-mode-hook (lambda()
+                                                 (add-hook 'before-save-hook 'eglot-format nil t)))
+                       (add-hook 'go-mode-hook 'eglot-ensure)))
 
 (use-package simple-mpc)
 

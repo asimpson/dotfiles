@@ -33,8 +33,6 @@ Launchd is OS X's replacement for `cron`.
 * Symlink all files in `~/.dotfiles/emacs` to `~/.emacs.d/`
 
   `ln -s ~/.dotfiles/emacs/.emacs ~/.emacs.d/`
-  `ln -s ~/.dotfiles/emacs/settings.el ~/.emacs.d/`
-  `ln -s ~/.dotfiles/emacs/keybinds.el ~/.emacs.d/`
 
 ## Vim Conf
 * Symlink `~/.dotfiles/.vimrc` to `$HOME`

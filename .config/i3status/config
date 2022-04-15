@@ -2,21 +2,34 @@ general {
   output_format = "none"
 }
 
-order += "battery all"
 order += "cpu_temperature 0"
 order += "cpu_usage"
+order += "tztime pacific"
+order += "tztime uk"
+order += "tztime europe"
 order += "tztime local"
 
 cpu_usage {
   format = "%usage"
 }
 
-tztime local {
-  format = "%m/%d %I:%M"
+tztime pacific {
+  format = "CA %I:%M%P"
+  timezone = 'America/Vancouver'
 }
 
-battery all {
-  format = "🔋 %remaining"
+tztime europe {
+  format = "EU %I:%M%P"
+  timezone = "Europe/Berlin"
+}
+
+tztime uk {
+  format = "UK %I:%M%P"
+  timezone = "Europe/London"
+}
+
+tztime local {
+  format = "%m/%d %I:%M"
 }
 
 cpu_temperature 0 {
