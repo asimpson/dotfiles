@@ -30,12 +30,17 @@
 (server-start)
 (menu-bar-mode -1)
 (show-paren-mode)
-(scroll-bar-mode -1)
+
+(if (equal system-type 'darwin)
+    (scroll-bar-mode "right")
+    (scroll-bar-mode -1))
+
 (setq visible-bell nil)
-(when (version<= "28" emacs-version)
-  (progn
-    (set-face-attribute 'mode-line-active nil :inherit 'mode-line)
-    (set-face-attribute 'mode-line-inactive nil :inherit 'mode-line)))
+
+(and (version<= "28" emacs-version) (not (equal system-type 'darwin))
+      (progn
+        (set-face-attribute 'mode-line-active nil :inherit 'mode-line)
+        (set-face-attribute 'mode-line-inactive nil :inherit 'mode-line)))
 
 (setq ring-bell-function (lambda ()
                            (invert-face 'mode-line)
@@ -320,8 +325,11 @@
 (setq-default tab-width 2)
 (setq-default css-indent-offset 2)
 
-(set-face-attribute 'default nil :font "Hack-9")
-(set-frame-font "Hack-9" nil t)
+(if (equal system-type 'darwin)
+    (progn (set-face-attribute 'default nil :font "Hack-12")
+           (set-frame-font "Hack-12" nil t))
+    (progn (set-face-attribute 'default nil :font "Hack-9")
+           (set-frame-font "Hack-9" nil t)))
 
 (add-to-list 'auto-mode-alist '("\\.scss\\'" . css-mode))
 
@@ -1066,9 +1074,9 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (add-to-list 'default-frame-alist
              '(ns-appearance . dark))
 
-(unless (equal (getenv "LINUX_TYPE") "WSL2")
+(unless (or (equal system-type 'darwin) (equal (getenv "LINUX_TYPE") "WSL2"))
   (add-to-list 'default-frame-alist
-    '(undecorated . t)))
+               '(undecorated . t)))
 
 (setq frame-title-format nil)
 
