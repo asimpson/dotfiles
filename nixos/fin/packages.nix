@@ -43,5 +43,7 @@
     spice-gtk
     fzf
     signal-desktop
+    fd
+    docker-compose
   ];
 }

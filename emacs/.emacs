@@ -628,7 +628,7 @@ If file is package.json run npm install."
                        (counsel-mode)
                        (global-set-key (kbd "M-x") 'counsel-M-x)
                        (define-key dired-mode-map "f" 'counsel-find-file)
-                       (ivy-add-actions 'counsel-find-file '(("D" simpson-delete "delete")))
+                       (ivy-add-actions 'counsel-find-file '(("D" (lambda(file) (delete-file file t)) "delete")))
                        (ivy-add-actions 'counsel-find-file '(("h" (lambda(file) (dired (file-name-directory file))) "Dired")))
                        (global-set-key (kbd "<f1> f") 'counsel-describe-function)
                        (global-set-key (kbd "<f1> v") 'counsel-describe-variable)))

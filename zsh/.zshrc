@@ -64,3 +64,8 @@ complete -o nospace -C /usr/local/bin/terraform terraform
 
 if [ -e /home/asimpson/.nix-profile/etc/profile.d/nix.sh ]; then . /home/asimpson/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 eval "$(direnv hook zsh)"
+
+if [ -n "${commands[fzf-share]}" ]; then
+    source "$(fzf-share)/key-bindings.zsh"
+      source "$(fzf-share)/completion.zsh"
+fi
