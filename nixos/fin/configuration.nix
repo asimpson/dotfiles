@@ -47,7 +47,11 @@ in
     };
 
     supportedFilesystems = ["zfs"];
-    kernel.sysctl = { "dev.i915.perf_stream_paranoid" = 0; };
+    kernel.sysctl = {
+      "dev.i915.perf_stream_paranoid" = 0;
+      "net.ipv4.ip_forward" = 1;
+      "net.ipv6.conf.all.forwarding" = 1;
+    };
   };
 
   nixpkgs.config.allowUnfree = true;
