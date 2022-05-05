@@ -1,5 +1,5 @@
 ;;; .emacs --- My Emacs customizations -*- lexical-binding: t; -*-
-
+(setq native-comp-deferred-compilation t)
 (setq gc-cons-threshold 64000000)
 (add-hook 'after-init-hook (lambda ()
                              ;; restore after startup
@@ -20,7 +20,9 @@
   (package-install 'use-package))
 
 (eval-when-compile
-  (require 'use-package))
+ (require 'use-package))
+
+(setq native-comp-async-report-warnings-errors 'silent)
 
 (setq-default
  use-package-always-defer t
@@ -37,7 +39,7 @@
 
 (setq visible-bell nil)
 
-(and (version<= "28" emacs-version) (not (equal system-type 'darwin))
+(and (version<= "28.2" emacs-version) (not (equal system-type 'darwin))
       (progn
         (set-face-attribute 'mode-line-active nil :inherit 'mode-line)
         (set-face-attribute 'mode-line-inactive nil :inherit 'mode-line)))
@@ -198,9 +200,9 @@
 
 (defun simpson-magit-comment()
   "A small wrapper around 'comment-line' keychord for magit.
-  Mashing cc in a magit-status window triggers my custom keybind
-  to (comment-line) this function checks what mode is current and then either
-  comments or commit"
+      Mashing cc in a magit-status window triggers my custom keybind
+      to (comment-line) this function checks what mode is current and then either
+      comments or commit"
   (interactive)
   (if (string= major-mode "magit-status-mode")
       (magit-commit)
@@ -522,7 +524,7 @@
 
 (defun simpson-dired-script-at-point()
   "Call 'async-shell-command' on file at point.
-If file is package.json run npm install."
+      If file is package.json run npm install."
   (interactive)
   (let ((file (dired-file-name-at-point)))
     (if (string-equal "package.json" (file-name-nondirectory file))
@@ -635,8 +637,8 @@ If file is package.json run npm install."
 
 (defun simpson-browse()
   "Fuzzy finding interface to eyebrowse workspaces.
-   If the workspace is not tagged with a name, the number is used instead.
-   An asterisk (*) deontes current workspace."
+      If the workspace is not tagged with a name, the number is used instead.
+      An asterisk (*) deontes current workspace."
   (interactive)
   (let* ((panes (map 'list (lambda (win)
                              (list (if (string-empty-p (car (last win)))
@@ -710,8 +712,8 @@ If file is package.json run npm install."
 
 (defun simpson-sauron-toggle(&optional x)
   "A function to keep the sauron window visible and sized correctly.
-   Optional argument (X) to satisfy the various ways the evil-window-move-
-   functions are called."
+      Optional argument (X) to satisfy the various ways the evil-window-move-
+      functions are called."
   (interactive)
   (when (window-live-p (get-buffer-window "*Sauron*"))
     (sr-hide)
@@ -779,13 +781,13 @@ If file is package.json run npm install."
 
 (defhydra hydra-mocha ()
   "
-             Mocha:
-             _a_ test at point
-             _f_ test file
-             _r_ reload local dir
-             _p_ test project
-             _c_ custom project scope
-             "
+      Mocha:
+      _a_ test at point
+      _f_ test file
+      _r_ reload local dir
+      _p_ test project
+      _c_ custom project scope
+      "
   ("a" mocha-test-at-point "file at point")
   ("p" mocha-test-project "project" :exit t)
   ("r" hack-dir-local-variables-non-file-buffer "reload local vars")
@@ -804,8 +806,8 @@ If file is package.json run npm install."
   (interactive)
   (switch-to-buffer (get-buffer-create "*scratch*"))
   (insert ";; This buffer is for text that is not saved, and for Lisp evaluation.
-  ;; To create a file, visit it with C-x C-f and enter text in its buffer.")
-  (lisp-interaction-mode))
+      ;; To create a file, visit it with C-x C-f and enter text in its buffer.")
+      (lisp-interaction-mode))
 
 (defhydra hydra-magit (:exit t)
   "
@@ -1078,10 +1080,8 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
   (add-to-list 'default-frame-alist
                '(undecorated . t)))
 
-(setq frame-title-format nil)
-
 (use-package org-preview-html
-  :after org)
+             :after org)
 
 (use-package alert
              :config (progn
@@ -1371,6 +1371,7 @@ end tell'
              :mode ("\\.tf\\'" . terraform-mode))
 
 (use-package lsp-mode
+             :bind ("C-SPC ," . lsp-workspace-restart)
              :commands (lsp lsp-deferred)
              :hook ((typescript-mode . lsp-deferred)
                     (rust-mode . lsp-deferred)))
