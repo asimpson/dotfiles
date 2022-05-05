@@ -1,5 +1,9 @@
 { pkgs, ... }:
-{
+let
+  myEmacs = import ../emacs.nix;
+  zutty = import ../zutty.nix;
+
+in {
   environment.systemPackages = with pkgs; [
     vim
     bash
@@ -13,7 +17,7 @@
     tilix
     desktop-file-utils
     flameshot
-    emacs
+    myEmacs
     git
     hack-font
     docker
@@ -45,5 +49,7 @@
     signal-desktop
     fd
     docker-compose
+    peek
+    zutty
   ];
 }

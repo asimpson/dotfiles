@@ -34,7 +34,8 @@ workspace_layout stacked
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec tilix
+# bindsym $mod+Return exec tilix
+bindsym $mod+Return exec "zutty -quiet -cr FFFFFF -bg 282936 -fg F8F8F2 -autoCopy -font Hack -fontsize 14 -fontpath /home/adam/.local/share/fonts -dwfont Hack"
 
 # kill focused window
 bindsym $mod+Shift+q kill

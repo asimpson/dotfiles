@@ -4,7 +4,7 @@ let master = import (fetchTarball {
 
 in {
   environment.systemPackages = with master; [
-    discord
+    # discord
     _1password-gui
     zoom-us
   ];
