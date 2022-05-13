@@ -1029,6 +1029,7 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (use-package inf-ruby)
 
 (use-package typescript-mode
+             :bind ("C-SPC F" . simpson-find-import)
              :mode (("\\.ts?\\'" . typescript-mode)
                     ("\\.tsx?\\'" . typescript-mode)
                     ("\\.jsx?\\'" . typescript-mode)))
@@ -1416,4 +1417,8 @@ end tell'
 
 (use-package simple-mpc)
 
+(defun simpson-find-import()
+  "Performa a ripgrep search for import + filename."
+  (interactive)
+  (counsel-rg (concat "import " (file-name-base (buffer-file-name)))))
 ;;; .emacs ends here
