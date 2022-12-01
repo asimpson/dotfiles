@@ -1,7 +1,8 @@
 { pkgs, ... }:
 let
-  myEmacs = import ../emacs.nix;
-  zutty = import ../zutty.nix;
+  myEmacs = import ../local-packages/emacs.nix;
+  zutty = import ../local-packages/zutty.nix;
+  mob = import ../local-packages/mob.nix;
 
 in {
   environment.systemPackages = with pkgs; [
@@ -51,5 +52,6 @@ in {
     docker-compose
     peek
     zutty
+    mob
   ];
 }

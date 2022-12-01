@@ -4,6 +4,7 @@ general {
 
 order += "cpu_temperature 0"
 order += "cpu_usage"
+order += "tztime utc"
 order += "tztime pacific"
 order += "tztime uk"
 order += "tztime europe"
@@ -11,6 +12,11 @@ order += "tztime local"
 
 cpu_usage {
   format = "%usage"
+}
+
+tztime utc {
+  format = "UTC %I:%M"
+  timezone = 'Etc/UTC'
 }
 
 tztime pacific {

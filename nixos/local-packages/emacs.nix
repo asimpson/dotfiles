@@ -24,7 +24,7 @@ with (import <nixpkgs> {});
     texinfo
     gnutls
     pkgconfig
-    gnome.gtk3
+    gtk3
     ncurses
     xorg.libXpm
     libungif

@@ -270,6 +270,7 @@ in
   };
 
   system.autoUpgrade.enable = true;
+  system.autoUpgrade.channel = https://nixos.org/channels/nixos-22.05;
 
   environment.etc."polkit-gnome-authentication-agent-1".source = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
 
