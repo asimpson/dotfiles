@@ -1,3 +1,24 @@
+" initialize plugins
+call plug#begin()
+" syntx highighting 
+Plug 'slim-template/vim-slim'
+Plug 'fatih/vim-go'
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'LnL7/vim-nix'
+" make searching more convenient
+Plug 'romainl/vim-cool'
+" needed for yarn berry with immutable flag
+Plug 'lbrayner/vim-rzip'
+" language server protocol
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" testing at point etc.
+Plug 'vim-test/vim-test'
+Plug 'airblade/vim-gitgutter'
+Plug 'zivyangll/git-blame.vim'
+call plug#end()
+
+set background=dark
 set ai                  " auto indenting
 set nowrap 
 set complete=.,b,u,]
@@ -6,23 +27,21 @@ set history=100         " keep 100 lines of history
 set ruler               " show the cursor position
 set hlsearch            " highlight the last searched term
 
-"resize pane
-nnoremap <leader>d :vertical resize -10<cr>
-nnoremap <leader>u :vertical resize +10<cr>
-nnoremap <leader>U :res +5<cr>
-nnoremap <leader>D :res -5<cr>
-nnoremap <leader>r :so $MYVIMRC<cr>
 noremap  <buffer> <silent> k gk
 noremap  <buffer> <silent> j gj
-nnoremap <leader>c :noh<cr> 
-nnoremap <leader>ss :set wrap<cr>
-nnoremap <leader>sm :set wm=2<cr>
-nnoremap <leader>h :set wm=2<cr>
-" set buffer to hidden, then create a vertical split with the contents of the
-" file at point
-nnoremap <leader>f :set hidden \| :vertical wincmd f<cr>
-"http://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
-nnoremap <CR> G
+nnoremap <leader>! :History:<cr>
+nnoremap <leader>f :grep!<Space>
+nmap <silent> <leader>t :TestNearest<CR>
+nmap <silent> <leader>T :TestFile<CR>
+nmap <silent> <leader>a :TestSuite<CR>
+nmap <silent> <leader>l :TestLast<CR>
+nmap <silent> <leader>q :copen<CR>
+nmap <silent> <leader>Q :ccl<CR>
+nmap <silent> <leader>d :Vex<CR>
+nmap <silent> <leader>s :<C-u>call gitblame#echo()<CR>
+
+autocmd QuickFixCmdPost *grep* cwindow
+
 " Due to internal representation, Vim has problems with long lines in general.
 " https://github.com/mhinz/vim-galore#editing-small-files-is-slow
 set synmaxcol=200
@@ -32,9 +51,6 @@ if (&tildeop)
 else
   nmap gcc guu~h
 endif
-
-" bind K to grep word under cursor
-nnoremap K :grep! "\b<C-R><C-W>\b"<cr>:cw<cr>:wincmd J<cr>
 
 "tab complete map
 inoremap <Tab> <c-r>=InsertTabWrapper()<cr>
@@ -47,20 +63,8 @@ inoremap <Tab> <c-r>=InsertTabWrapper()<cr>
 
 " imap <Tab>, <C-y>,
 
-"Keymap for zencoding
-" imap <Tab>p <C-p>
-
-"Leader keymapping for :Tabmerge
-nnoremap <leader>m :Tabmerge left<cr>
-
-"Leader keymapping for tab management
-nnoremap <leader>n :tabnew<cr>
-
-"Leader keymapping for next tab
-nnoremap <leader>t :tabn<cr>
-nnoremap <leader>y :tabp<cr>
-
 autocmd Filetype gitcommit setlocal spell textwidth=72
+autocmd FileType markdown setlocal spell
 set nocompatible
 set ignorecase
 set nobackup
@@ -71,29 +75,19 @@ set showcmd
 set incsearch  
 set laststatus=2
 set tabstop=2
-set relativenumber
+"set relativenumber
+set number
 set shiftwidth=2
 set expandtab
 
-filetype off      " use the file type plugins
-
 filetype plugin indent on  
 
-set clipboard+=unnamed " Yanks go on clipboard instead.
 syntax enable
-set background=dark
 
 set splitbelow
 set splitright
 
-au BufRead,BufNewFile *.txt set ft=markdown syntax=markdown
-au BufRead,BufNewFile *.md set ft=markdown syntax=markdown
-au BufRead,BufNewFile *.hbs set syntax=html
-
-"highlight StatusLine ctermfg=black ctermbg=White cterm=bold
-"highlight StatusLine cterm=reverse ctermfg=yellow  ctermbg=white
-" file path [line number] [encoding] [filetype]
-"[%{strlen(&fenc)?&fenc:&enc}]\
+set termguicolors
 set statusline=%F%m%r%h%w\ [%n]\%=\ [line\ %l\/%L]\ [%{&filetype}]
 
 " Tab completion
@@ -135,7 +129,6 @@ set guifont=Hack:h12
 set exrc
 
 command! -nargs=* Wrap set wrap linebreak nolist
-autocmd QuickFixCmdPost *grep* cwindow
 
 function! ToggleColumn()
     let test = &g:colorcolumn
@@ -160,3 +153,59 @@ set backspace=2 " make backspace work like most other apps
 
 "vim talk mods
 set wildmenu
+" If a file is changed outside of vim, automatically reload it without asking
+set autoread
+
+autocmd! FileType slim set sw=2 sts=2 et
+" Compute syntax highlighting from beginning of file. (By default, vim only
+" looks 200 lines back, which can make it highlight code incorrectly in some 
+" long files.)
+autocmd BufEnter * :syntax sync fromstart
+nnoremap <silent><cr> :<c-u>update<cr>
+augroup QuickFix
+     au FileType qf noremap <buffer> <cr> <cr>
+     au FileType qf noremap <buffer> <c-v> <C-w><Enter><C-w>L
+augroup END
+" automatically make quickfix window span the entire bottom split
+autocmd FileType qf wincmd J
+set clipboard=unnamedplus
+let g:coc_global_extensions = [
+  \ 'coc-tsserver',
+  \ 'coc-go',
+  \ 'coc-json',
+  \ 'coc-css'
+  \ ]
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gr <Plug>(coc-references)
+nnoremap <silent> K :call CocAction('doHover')<CR>
+
+"colors for completion
+hi Pmenu ctermbg=0 guibg=black
+hi PmenuSel ctermbg=0
+hi CocFloating ctermbg=0
+"clear out the signcolumn and gitgutter bgs
+hi clear SignColumn 
+hi clear GitGutterAdd 
+hi clear GitGutterChange
+hi clear GitGutterDelete
+hi clear LineNr
+hi LineNr ctermfg=248
+
+"list buffers via fzf
+nnoremap <silent><c-b> :<c-u>Buffers<cr>
+"set C-P to open fzf
+nnoremap <silent><c-p> :<c-u>FZF<cr> 
+
+nnoremap <silent><c-x> :<c-u>q!<cr> 
+
+nnoremap <leader>p :let @+ = expand("%")<cr>
+let g:test#javascript#jest#executable = 'yarn jest'
+let g:test#javascript#runner = 'jest'
+let g:gitgutter_show_msg_on_hunk_jumping = 0
+
+if executable("rg")
+    set grepprg=rg\ --vimgrep\ --no-heading\ --hidden
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
+let g:coc_disable_transparent_cursor = 1
