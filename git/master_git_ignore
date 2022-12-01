@@ -21,3 +21,11 @@ jsconfig.json
 fast.sh
 sql-scratch.sql
 json-modify.js
+.go
+.dir-*
+.envrc
+shell.nix
+.npm
+/conf/provisioning/datasources/azmonitor-ds.yaml
+/.log/
+cypress.nix

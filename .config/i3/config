@@ -34,8 +34,8 @@ workspace_layout stacked
 floating_modifier $mod
 
 # start a terminal
-# bindsym $mod+Return exec tilix
-bindsym $mod+Return exec "zutty -saveLines 10000 -quiet -cr FFFFFF -bg 282936 -fg F8F8F2 -autoCopy -font Hack -fontsize 14 -fontpath /home/adam/.local/share/fonts -dwfont Hack"
+bindsym $mod+Return exec tilix
+#bindsym $mod+Return exec "zutty -saveLines 10000 -quiet -cr FFFFFF -bg 282936 -fg F8F8F2 -autoCopy -font Hack -fontsize 14 -fontpath /home/adam/.local/share/fonts -dwfont Hack"
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -193,7 +193,7 @@ bindsym XF86AudioRaiseVolume exec "pactl set-sink-volume $(pactl info | grep Def
 
 bindsym XF86AudioLowerVolume exec "pactl set-sink-volume $(pactl info | grep Default\ Sink | cut -d ':' -f 2) -5%"
 
-bindsym XF86AudioPlay exec "mpc toggle"
+bindsym XF86AudioMute exec "mpc toggle"
 
 bindsym Control+XF86AudioPrev exec "mpc prev"
 

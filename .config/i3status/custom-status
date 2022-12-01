@@ -14,5 +14,5 @@ fi
 
 do
   read line
-  echo "${mute} ✉ ${mail} | ${line}" || exit 1
+  echo "${mute} ${line}" || exit 1
 done

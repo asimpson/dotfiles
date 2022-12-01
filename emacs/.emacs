@@ -1029,7 +1029,8 @@ Taken from http://acidwords.com/posts/2017-12-01-distraction-free-eww-surfing.ht
 (use-package inf-ruby)
 
 (use-package typescript-mode
-             :bind ("C-SPC F" . simpson-find-import)
+             :bind (("C-SPC F" . simpson-find-import)
+                    ("C-SPC ." . simpson-jest-for-file))
              :mode (("\\.ts?\\'" . typescript-mode)
                     ("\\.tsx?\\'" . typescript-mode)
                     ("\\.jsx?\\'" . typescript-mode)))
@@ -1421,4 +1422,11 @@ end tell'
   "Performa a ripgrep search for import + filename."
   (interactive)
   (counsel-rg (concat "import " (file-name-base (buffer-file-name)))))
+
+(defun simpson-jest-for-file()
+  "Run yarn jest for the current test file."
+  (interactive)
+  (let* ((path (buffer-file-name))
+         (file (file-relative-name path (locate-dominating-file path ".git"))))
+    (compile (concat "yarn jest -i --testPathPattern=" file))))
 ;;; .emacs ends here

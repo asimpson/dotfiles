@@ -24,7 +24,8 @@ alias github="open \`git remote -v | grep github.com | grep fetch | head -1 | fi
 alias assume='git update-index --assume-unchanged'
 alias unassume='git update-index --no-assume-unchanged'
 alias assumed="!git ls-files -v | grep ^h | cut -c 3-"
-alias gdiff='git diff --patience'
+#alias gdiff='git diff --patience'
+alias gdiff='nix-shell -p difftastic --run "GIT_EXTERNAL_DIFF=difft git diff"'
 alias glog='git log --format='\''%Cgreen%h%Creset %C(cyan)%an%Creset - %s'\'' --graph'
 alias gs='git status '
 alias gb='git branch '

@@ -118,3 +118,21 @@ function nb() {
 }
 
 alias fuck='$(thefuck $(fc -ln -1))'
+
+checkout_tag() {
+  git checkout tags/$(git tag | fzf)
+}
+
+checkout_branch() {
+  selection=$(git branch -la | fzf)
+  branch=$(echo "${selection}" | cut -d / -f 3 | xargs)
+  remote=$(echo "${selection}" | cut -d / -f 2 | xargs)
+
+  if [ "${branch}" = "${remote}" ]; then
+    echo "git checkout ${branch}"
+    git checkout "${branch}"
+  else
+    echo "git checkout -b ${branch} ${remote}/${branch}"
+    git checkout -b "${branch}" "${remote}/${branch}"
+  fi
+}
