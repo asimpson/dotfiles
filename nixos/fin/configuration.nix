@@ -21,6 +21,7 @@ in
   imports =
     [
       ./hardware-configuration.nix
+      (fetchTarball "https://github.com/msteen/nixos-vscode-server/tarball/master")
     ];
 
   fileSystems."/home/adam/Source" = {
@@ -35,8 +36,14 @@ in
 
   boot = rec {
     kernelPackages = pkgs.linuxPackages_latest;
+    #kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
     extraModulePackages = [kernelPackages.v4l2loopback];
     zfs.requestEncryptionCredentials = true;
+
+    #is required if you are running an newer kernel which is not yet officially supported by zfs
+    #otherwise the zfs module will refuse to evaluate and show up as broken
+    zfs.enableUnstable = true;
+
     kernelParams = ["elevator=none"]; #https://grahamc.com/blog/nixos-on-zfs
     kernelModules = ["v4l2loopback" "kvm-intel"];
 
@@ -55,10 +62,15 @@ in
   };
 
   nixpkgs.config.allowUnfree = true;
+  #nixpkgs.config.allowBroken = true;
 
   nix = {
-    autoOptimiseStore = true;
-    allowedUsers = [ "@wheel" ];
+    #autoOptimiseStore = true;
+    #allowedUsers = [ "@wheel" ];
+    settings = {
+      auto-optimise-store = true;
+      allowed-users = [ "@wheel" ];
+    };
     gc = {
       automatic = true;
       dates = "weekly";
@@ -70,21 +82,21 @@ in
   time.timeZone = "America/New_York";
 
   networking = {
-    useDHCP = false;
+    useDHCP = true;
     interfaces = {
       enp7s0 = {
-	      useDHCP = true;
-        wakeOnLan =  {
-          enable = true;
-        };
+        wakeOnLan.enable = true;
       };
     };
-    firewall.enable = true;
-    firewall.allowedTCPPorts = [ 3000 ];
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 3000 8080 ];
+      allowedUDPPorts = [ 41641 ];
+      checkReversePath = "loose";
+    };
     hostId = "47ffe1b9"; # head -c4 /dev/urandom | od -A none -t x4
     hostName = "fin";
     iproute2.enable = true;
-    useHostResolvConf = false;
   };
 
   fonts = {
@@ -92,7 +104,7 @@ in
     # Give fonts to 32-bit binaries too (e.g. steam).
     fontconfig.cache32Bit = true;
     fonts = with pkgs; [
-        hack-font google-fonts liberation_ttf opensans-ttf roboto roboto-mono
+        hack-font google-fonts liberation_ttf open-sans roboto roboto-mono
     ];
   };
 
@@ -125,6 +137,7 @@ in
   };
 
   services = {
+    vscode-server.enable = true;
     syncthing = {
       enable = true;
       user = "adam";
@@ -175,11 +188,6 @@ in
       '';
     };
     lorri.enable = true;
-    resolved = {
-      enable = true;
-      dnssec = "false";
-      extraConfig = "MulticastDNS=true";
-    };
     mpdscribble = {
       enable = true;
       endpoints = {
@@ -209,7 +217,6 @@ in
       servers = ["time.google.com"];
     };
 
-    tlp.enable = true;
     acpid.enable = true;
     colord.enable = true;
     fwupd.enable = true;
@@ -270,7 +277,8 @@ in
   };
 
   system.autoUpgrade.enable = true;
-  system.autoUpgrade.channel = https://nixos.org/channels/nixos-22.05;
+  #system.autoUpgrade.channel = https://nixos.org/channels/nixos-22.05;
+  system.autoUpgrade.channel = https://nixos.org/channels/nixos-unstable;
 
   environment.etc."polkit-gnome-authentication-agent-1".source = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
 

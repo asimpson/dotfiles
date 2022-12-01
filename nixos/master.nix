@@ -3,6 +3,15 @@ let master = import (fetchTarball {
     }) { config = { allowUnfree = true; }; };
 
 in {
+
+  programs = with master; {
+    _1password-gui = {
+      enable = true;
+      #gid = 4000;
+      polkitPolicyOwners = [ "adam" ];
+    };
+  };
+
   environment.systemPackages = with master; [
     # discord
     _1password-gui
