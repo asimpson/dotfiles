@@ -6,6 +6,8 @@ order += "cpu_temperature 0"
 order += "cpu_usage"
 order += "tztime utc"
 order += "tztime pacific"
+order += "tztime mountain"
+order += "tztime central"
 order += "tztime uk"
 order += "tztime europe"
 order += "tztime local"
@@ -15,13 +17,23 @@ cpu_usage {
 }
 
 tztime utc {
-  format = "UTC %I:%M"
+  format = "UTC %H:%M"
   timezone = 'Etc/UTC'
 }
 
 tztime pacific {
   format = "CA %I:%M%P"
   timezone = 'America/Vancouver'
+}
+
+tztime mountain {
+  format = "MTN %I:%M%P"
+  timezone = 'America/Denver'
+}
+
+tztime central {
+  format = "CT %I:%M%P"
+  timezone = 'America/Chicago'
 }
 
 tztime europe {
