@@ -93,6 +93,11 @@ in
     hostId = "47ffe1b9"; # head -c4 /dev/urandom | od -A none -t x4
     hostName = "fin";
     iproute2.enable = true;
+    wireless = {
+      iwd = {
+        enable = true;
+      };
+    };
   };
 
   fonts = {

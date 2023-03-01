@@ -61,5 +61,6 @@ in {
     gen-env
     vscode
     drag-share
+    iwgtk
   ];
 }
