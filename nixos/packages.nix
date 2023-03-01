@@ -8,7 +8,7 @@
     slack
     rofi
     google-chrome
-    mpd
+    #mpd
     tilix
     brightnessctl
     acpid

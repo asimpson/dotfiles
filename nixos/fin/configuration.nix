@@ -35,17 +35,17 @@ in
   };
 
   boot = rec {
-    kernelPackages = pkgs.linuxPackages_latest;
-    #kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+    kernelPackages = pkgs.linuxPackages_6_1;
     extraModulePackages = [kernelPackages.v4l2loopback];
     zfs.requestEncryptionCredentials = true;
 
     #is required if you are running an newer kernel which is not yet officially supported by zfs
     #otherwise the zfs module will refuse to evaluate and show up as broken
-    zfs.enableUnstable = true;
+    #zfs.enableUnstable = true;
 
-    kernelParams = ["elevator=none"]; #https://grahamc.com/blog/nixos-on-zfs
-    kernelModules = ["v4l2loopback" "kvm-intel"];
+    kernelParams = ["elevator=none" "intel_iommu=on"]; #https://grahamc.com/blog/nixos-on-zfs
+    kernelModules = ["v4l2loopback" "kvm-intel" "vfio_virqfd" "vfio_pci" "vfio_iommu_type1" "vfio"];
+    extraModprobeConfig = "options vfio-pci ids=10de:2487,10de:228b";
 
     loader = {
       systemd-boot.enable = true;
@@ -62,11 +62,8 @@ in
   };
 
   nixpkgs.config.allowUnfree = true;
-  #nixpkgs.config.allowBroken = true;
 
   nix = {
-    #autoOptimiseStore = true;
-    #allowedUsers = [ "@wheel" ];
     settings = {
       auto-optimise-store = true;
       allowed-users = [ "@wheel" ];
@@ -82,9 +79,8 @@ in
   time.timeZone = "America/New_York";
 
   networking = {
-    useDHCP = true;
     interfaces = {
-      enp7s0 = {
+      enp8s0 = {
         wakeOnLan.enable = true;
       };
     };

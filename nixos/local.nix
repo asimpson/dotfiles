@@ -7,5 +7,6 @@ in {
     u.discord
     #u._1password-gui
     u.zoom-us
+    u.mpd
   ];
 }
