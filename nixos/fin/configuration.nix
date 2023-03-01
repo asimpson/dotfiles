@@ -241,17 +241,18 @@ in
   };
 
   virtualisation = {
-    libvirtd.enable = true;
-    libvirtd.qemu = {
-      package = pkgs.qemu_kvm;
-      runAsRoot = true;
-      swtpm.enable = true;
-      ovmf = {
-        enable = true;
-        package = (pkgs.OVMFFull.override {
-          secureBoot = true;
-          tpmSupport = true;
-        });
+    spiceUSBRedirection.enable = true;
+    libvirtd = {
+      enable = true;
+
+      qemu = {
+        package = pkgs.qemu_kvm;
+        runAsRoot = true;
+        swtpm.enable = true;
+        ovmf = {
+          enable = true;
+          packages = [ pkgs.OVMFFull.fd ];
+        };
       };
     };
 
