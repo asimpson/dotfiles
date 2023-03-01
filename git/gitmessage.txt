@@ -1,5 +1,16 @@
 
 # when applied, this commit will…
+#
+# Grafana practices
+# Area: Capital summary
+# The area should use upper camel case, e.g. UpperCamelCase.
+# AzureMonitor: Fix parse issue
+#
+# For changes to data sources, the AREA is the name of the data source. 
+# For example, AzureMonitor, Graphite, or Prometheus.
+# For changes to panels, the AREA is the name of the panel, suffixed with Panel. 
+# For example, GraphPanel, SinglestatPanel, or TablePanel.
+#
 # feat:
 # fix:
 # docs:
