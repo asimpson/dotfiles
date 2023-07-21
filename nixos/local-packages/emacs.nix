@@ -1,7 +1,7 @@
 with (import <nixpkgs> {});
 
 (emacs.override {
-  nativeComp = true;
+  withNativeCompilation = true;
 }).overrideAttrs (old : {
   pname = "emacs";
   version = "28.1";

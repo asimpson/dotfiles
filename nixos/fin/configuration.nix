@@ -227,9 +227,6 @@ in
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
-      config.pipewire = {
-        "api.alsa.ignore-dB" = true;
-      };
     };
 
     udev = {

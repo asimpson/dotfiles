@@ -6,6 +6,7 @@ let
   mob = import ../local-packages/mob.nix;
   gen-env = import ../local-packages/gen-env.nix;
   drag-share = import ../local-packages/drag-share.nix;
+  merge-github-notifs = import ../local-packages/merge-github-notifs.nix;
 
 in {
   environment.systemPackages = with pkgs; [
@@ -62,5 +63,7 @@ in {
     vscode
     drag-share
     iwgtk
+    gh
+    merge-github-notifs
   ];
 }
