@@ -189,6 +189,8 @@ exec --no-startup-id /etc/polkit-gnome-authentication-agent-1 &
 
 exec --no-startup-id "solaar -w hide --restart-on-wake-up"
 
+exec --no-startup-id nix-shell -p feh --run "feh --bg-fill ~/Wallpapers/macOS-Catalina-Dark-Mode.jpg"
+
 bindsym XF86AudioRaiseVolume exec "pactl set-sink-volume $(pactl info | grep Default\ Sink | cut -d ':' -f 2) +5%"
 
 bindsym XF86AudioLowerVolume exec "pactl set-sink-volume $(pactl info | grep Default\ Sink | cut -d ':' -f 2) -5%"

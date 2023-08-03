@@ -43,7 +43,7 @@ in
     #otherwise the zfs module will refuse to evaluate and show up as broken
     #zfs.enableUnstable = true;
 
-    kernelParams = ["elevator=none" "intel_iommu=on"]; #https://grahamc.com/blog/nixos-on-zfs
+    kernelParams = ["elevator=none" "intel_iommu=on" "i915.force_probe=4680"]; #https://grahamc.com/blog/nixos-on-zfs
     kernelModules = ["v4l2loopback" "kvm-intel" "vfio_virqfd" "vfio_pci" "vfio_iommu_type1" "vfio"];
     extraModprobeConfig = "options vfio-pci ids=10de:2487,10de:228b";
 
@@ -179,14 +179,6 @@ in
           i3status # gives you the default i3 status bar
        ];
       };
-      extraConfig = ''
-        Section "OutputClass"
-          Identifier "Intel Graphics"
-          MatchDriver "i915"
-          Driver "intel"
-          Option "AccelMethod" "uxa"
-        EndSection
-      '';
     };
     lorri.enable = true;
     mpdscribble = {
