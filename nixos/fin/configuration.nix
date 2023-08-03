@@ -224,7 +224,7 @@ in
     udev = {
       extraRules = ''
         LABEL="gmk pro regular user access"
-        SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", TAG+="uaccess"
+        SUBSYSTEMS=="usb", ATTRS{idVendor}=="320f", ATTRS{idProduct}=="5044", TAG+="uaccess"
       '';
     };
   };
