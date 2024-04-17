@@ -2,7 +2,6 @@
 let
   myEmacs = import ../local-packages/emacs.nix;
   vim = import ../local-packages/vim.nix;
-  zutty = import ../local-packages/zutty.nix;
   mob = import ../local-packages/mob.nix;
   gen-env = import ../local-packages/gen-env.nix;
   drag-share = import ../local-packages/drag-share.nix;
@@ -24,7 +23,6 @@ in {
     tilix
     desktop-file-utils
     flameshot
-    myEmacs
     git
     hack-font
     docker
@@ -57,7 +55,6 @@ in {
     fd
     docker-compose
     peek
-    zutty
     mob
     gen-env
     vscode
@@ -65,5 +62,11 @@ in {
     iwgtk
     gh
     merge-github-notifs
+    #llm
+    getmail6
+    age
+    neovim
+    nerdfonts
+    notmuch
   ];
 }

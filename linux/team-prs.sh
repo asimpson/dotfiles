@@ -1,6 +1,12 @@
 #!/bin/bash
 
-start=$(date -d "2 weeks ago" +%Y-%m-%d)
+if [ "${1}" == "" ]; then
+  echo "Please supply a team name"
+  exit 1
+fi
+
+timeDuration=$2 || 2
+start=$(date -d "${timeDuration} weeks ago" +%Y-%m-%d)
 end=$(date +%Y-%m-%d)
 details=$(gh api /orgs/grafana/teams/$1 | jq -r '"\(.id),\(.organization.id)"')
 teamId=$(echo ${details} | cut -d , -f 1)

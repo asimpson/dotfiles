@@ -3,10 +3,13 @@
 
 i3status | while :
 
-mail=$(/home/adam/bin/mail-count.sh)
+#mail=$(/home/adam/bin/mail-count.sh)
 
 paused=$(dunstctl is-paused)
 mute=""
+#x="$(mpc status | rg paused)"
+#music="$(mpc -f %title% | head -n 1) - $(mpc -f %artist% | head -n 1) |"
+
 
 if [ "${paused}" = "true" ]; then
     mute="❌ |"

@@ -11,10 +11,12 @@ if [ -n "$INSIDE_EMACS" ]; then
 fi
 
 #http://zsh.sourceforge.net/Doc/Release/Options.html
-SAVEHIST=2000
-HISTSIZE=2000
+#https://martinheinz.dev/blog/110
+SAVEHIST=10000000
+HISTSIZE=10000000
 HISTFILE=~/.zsh_history
-setopt APPEND_HISTORY
+setopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY
 setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_ALL_DUPS
 setopt EXTENDED_HISTORY
@@ -65,7 +67,4 @@ complete -o nospace -C /usr/local/bin/terraform terraform
 if [ -e /home/asimpson/.nix-profile/etc/profile.d/nix.sh ]; then . /home/asimpson/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 eval "$(direnv hook zsh)"
 
-if [ -n "${commands[fzf-share]}" ]; then
-    source "$(fzf-share)/key-bindings.zsh"
-      source "$(fzf-share)/completion.zsh"
-fi
+eval "$(fzf --zsh)"

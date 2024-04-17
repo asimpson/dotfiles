@@ -69,6 +69,10 @@ bindsym $mod+Shift+Right move right
 # split in horizontal orientation
 bindsym $mod+Shift+h split h
 
+# scratchpad
+bindsym $mod+Shift+i move scratchpad
+bindsym $mod+Shift+o scratchpad show
+
 # split in vertical orientation
 bindsym $mod+v split v
 

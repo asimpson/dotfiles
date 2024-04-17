@@ -209,3 +209,5 @@ if executable("rg")
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 let g:coc_disable_transparent_cursor = 1
+
+nnoremap <leader>p :set paste<CR>"+p:set nopaste<CR>

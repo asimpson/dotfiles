@@ -108,7 +108,7 @@ function hack {
   done
 }
 
-function hg {
+function xhg {
   fc -lf 1 -1 | grep --color=auto $1
 }
 

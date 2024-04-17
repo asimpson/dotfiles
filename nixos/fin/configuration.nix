@@ -4,25 +4,24 @@
 
 { config, pkgs, ... }:
 
-let xmodmap = pkgs.writeText ".Xmodmap"
-  ''
+let
+  xmodmap = pkgs.writeText ".Xmodmap" ''
     keycode 66 = Multi_key
     clear Lock
   '';
-in
-{
-  require = [
-    ../scripts.nix
-    ./packages.nix
-    ./crate.nix
-    ../master.nix
+in {
+  require = [ ../scripts.nix ./packages.nix ./crate.nix ../master.nix ];
+
+  imports = [
+    ./hardware-configuration.nix
+    (fetchTarball
+      "https://github.com/nix-community/nixos-vscode-server/tarball/master")
   ];
 
-  imports =
-    [
-      ./hardware-configuration.nix
-      (fetchTarball "https://github.com/msteen/nixos-vscode-server/tarball/master")
-    ];
+  fileSystems."/home/adam/mail" = {
+    device = "shire/root/home/mail";
+    fsType = "zfs";
+  };
 
   fileSystems."/home/adam/Source" = {
     device = "shire/source";
@@ -36,15 +35,22 @@ in
 
   boot = rec {
     kernelPackages = pkgs.linuxPackages_6_1;
-    extraModulePackages = [kernelPackages.v4l2loopback];
+    extraModulePackages = [ kernelPackages.v4l2loopback ];
     zfs.requestEncryptionCredentials = true;
 
     #is required if you are running an newer kernel which is not yet officially supported by zfs
     #otherwise the zfs module will refuse to evaluate and show up as broken
     #zfs.enableUnstable = true;
 
-    kernelParams = ["elevator=none" "intel_iommu=on" "i915.force_probe=4680"]; #https://grahamc.com/blog/nixos-on-zfs
-    kernelModules = ["v4l2loopback" "kvm-intel" "vfio_virqfd" "vfio_pci" "vfio_iommu_type1" "vfio"];
+    kernelParams = [ "intel_iommu=on" "i915.force_probe=4680" ]; #quiet doesn't work
+    kernelModules = [
+      "v4l2loopback"
+      "kvm-intel"
+      "vfio_virqfd"
+      "vfio_pci"
+      "vfio_iommu_type1"
+      "vfio"
+    ];
     extraModprobeConfig = "options vfio-pci ids=10de:2487,10de:228b";
 
     loader = {
@@ -53,15 +59,34 @@ in
       grub.copyKernels = true;
     };
 
-    supportedFilesystems = ["zfs"];
+    supportedFilesystems = [ "zfs" ];
     kernel.sysctl = {
       "dev.i915.perf_stream_paranoid" = 0;
       "net.ipv4.ip_forward" = 1;
       "net.ipv6.conf.all.forwarding" = 1;
     };
+
+    #consoleLogLevel = 0;
+    #initrd.verbose = false;
   };
 
   nixpkgs.config.allowUnfree = true;
+
+  systemd.services = {
+    backupmail = {
+      path = [
+        pkgs.age
+      ];
+      script = ''
+        set -eu
+        ${pkgs.getmail6}/bin/getmail
+      '';
+      serviceConfig = {
+        User = "adam";
+      };
+      startAt = "hourly";
+    };
+  };
 
   nix = {
     settings = {
@@ -72,18 +97,13 @@ in
       automatic = true;
       dates = "weekly";
       options = "--delete-older-than 30d";
-   };
+    };
   };
-
 
   time.timeZone = "America/New_York";
 
   networking = {
-    interfaces = {
-      enp8s0 = {
-        wakeOnLan.enable = true;
-      };
-    };
+    interfaces = { enp8s0 = { wakeOnLan.enable = true; }; };
     firewall = {
       enable = true;
       allowedTCPPorts = [ 3000 8080 ];
@@ -93,19 +113,20 @@ in
     hostId = "47ffe1b9"; # head -c4 /dev/urandom | od -A none -t x4
     hostName = "fin";
     iproute2.enable = true;
-    wireless = {
-      iwd = {
-        enable = true;
-      };
-    };
+    wireless = { iwd = { enable = true; }; };
   };
 
   fonts = {
-    enableDefaultFonts = true;
+    enableDefaultPackages = true;
     # Give fonts to 32-bit binaries too (e.g. steam).
     fontconfig.cache32Bit = true;
-    fonts = with pkgs; [
-        hack-font google-fonts liberation_ttf open-sans roboto roboto-mono
+    packages = with pkgs; [
+      hack-font
+      google-fonts
+      liberation_ttf
+      open-sans
+      roboto
+      roboto-mono
     ];
   };
 
@@ -118,7 +139,7 @@ in
     enable = true;
     extraPackages = with pkgs; [
       intel-media-driver # LIBVA_DRIVER_NAME=iHD
-      vaapiIntel         # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
+      vaapiIntel # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
       vaapiVdpau
       libvdpau-va-gl
     ];
@@ -144,28 +165,31 @@ in
       user = "adam";
       dataDir = "/home/adam/Sync";
       configDir = "/home/adam/.config/syncthing";
-      devices = {
-        astromech = {
-          id = "ITT5GJ7-2YMQNSL-6L5WYRA-FC3YPAO-ON6WKRT-HO27JBK-WVZGPCT-UTCEJQO";
+      settings = {
+        devices = {
+          astromech = {
+            id =
+              "ITT5GJ7-2YMQNSL-6L5WYRA-FC3YPAO-ON6WKRT-HO27JBK-WVZGPCT-UTCEJQO";
+          };
         };
-      };
-      folders = {
-        "/home/adam/Shared" = {
-          id = "x2lgj-4mf6q";
-          devices = [ "astromech" ];
-          label = "Shared";
+        folders = {
+          "/home/adam/Shared" = {
+            id = "x2lgj-4mf6q";
+            devices = [ "astromech" ];
+            label = "Shared";
+          };
         };
       };
     };
 
     xserver = {
-      layout = "us";
+      xkb = {
+        layout = "us";
+      };
       enable = true;
       libinput.enable = true;
 
-      desktopManager = {
-        xterm.enable = false;
-      };
+      desktopManager = { xterm.enable = false; };
 
       displayManager = {
         defaultSession = "none+i3";
@@ -175,9 +199,9 @@ in
       windowManager.i3 = {
         enable = true;
         extraPackages = with pkgs; [
-          rofi #application launcher most people use
+          rofi # application launcher most people use
           i3status # gives you the default i3 status bar
-       ];
+        ];
       };
     };
     lorri.enable = true;
@@ -191,6 +215,7 @@ in
       };
     };
     tailscale.enable = true;
+    resolved.enable = true;
     gnome.sushi.enable = true;
     printing = {
       enable = true;
@@ -207,7 +232,7 @@ in
 
     timesyncd = {
       enable = true;
-      servers = ["time.google.com"];
+      servers = [ "time.google.com" ];
     };
 
     acpid.enable = true;
@@ -248,6 +273,7 @@ in
     docker = {
       enable = true;
       autoPrune.enable = true;
+      storageDriver = "overlay2";
     };
   };
 
@@ -268,11 +294,12 @@ in
   };
 
   system.autoUpgrade.enable = true;
-  #system.autoUpgrade.channel = https://nixos.org/channels/nixos-22.05;
-  system.autoUpgrade.channel = https://nixos.org/channels/nixos-unstable;
+  system.autoUpgrade.channel = "https://nixos.org/channels/nixos-unstable";
 
-  environment.etc."polkit-gnome-authentication-agent-1".source = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+  environment.etc."polkit-gnome-authentication-agent-1".source =
+    "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
 
+  #environment.etc."X11/xorg.conf.d/20-intel.conf" = {};
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
