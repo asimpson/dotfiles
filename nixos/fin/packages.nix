@@ -57,16 +57,16 @@ in {
     peek
     mob
     gen-env
-    vscode
     drag-share
     iwgtk
     gh
     merge-github-notifs
-    #llm
+    llm
     getmail6
     age
     neovim
     nerdfonts
     notmuch
+    wezterm
   ];
 }

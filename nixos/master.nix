@@ -13,8 +13,8 @@ in {
   };
 
   environment.systemPackages = with master; [
-    # discord
     _1password-gui
     zoom-us
+    vscode
   ];
 }

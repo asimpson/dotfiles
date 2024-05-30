@@ -159,6 +159,10 @@ in {
   };
 
   services = {
+    libinput.enable = true;
+    displayManager = {
+      defaultSession = "none+i3";
+    };
     vscode-server.enable = true;
     syncthing = {
       enable = true;
@@ -187,12 +191,10 @@ in {
         layout = "us";
       };
       enable = true;
-      libinput.enable = true;
 
       desktopManager = { xterm.enable = false; };
 
       displayManager = {
-        defaultSession = "none+i3";
         sessionCommands = "${pkgs.xorg.xmodmap}/bin/xmodmap ${xmodmap}";
       };
 
@@ -228,6 +230,7 @@ in {
     zfs = {
       autoSnapshot.enable = true;
       autoScrub.enable = true;
+      autoSnapshot.monthly = 3;
     };
 
     timesyncd = {
