@@ -7,18 +7,12 @@
 ## Shell Conf
 Source `~/.dotfiles/bash/functions` and `~/.dotfiles/bash/aliases` in one of these: `.bash_profile`, `.bashrc`, or `.zshrc`.
 
-## Zsh Conf
+### Zsh Conf
 Symlink `~/.dotfiles/zsh/.zshrc` to `$HOME`:
 
   `ln -s ~/.dotfiles/zsh/.zshrc ~/.zshrc`
 
-Note I set a env variable `NAS_IP` pointing to my home NAS in `.zprofile`.
-
-## OS X Conf
-* Run `~/.dotfiles/osx/set-defaults.sh` to set system-wide preferences after clean install or on a new machine.
-* Run `brew bundle` to install everything in `Brewfile`.
-
-### Launchd
+### launchd
 Launchd is OS X's replacement for `cron`.
 
 * Symlink each `.plist` file in `~/.dotfiles/launch-scripts/` into `~/Library/LaunchAgents`
@@ -34,11 +28,6 @@ Launchd is OS X's replacement for `cron`.
 
   `ln -s ~/.dotfiles/emacs/.emacs ~/.emacs.d/`
 
-## Vim Conf
-* Symlink `~/.dotfiles/.vimrc` to `$HOME`
-
-  `ln -s ~/.dotfiles/.vimrc ~/.vimrc`
-
 ## Git Conf
 * Symlink both `gitmessage.txt` and `master_git_ignore` to `$HOME`
 
@@ -49,31 +38,22 @@ Launchd is OS X's replacement for `cron`.
 * Add these files to `~/.gitconfig`:
 
 ```
-    [core]
-      excludesfile = /Users/asimpson/.master_git_ignore
-    [commit]
-      template = /Users/asimpson/.gitmessage.txt
+[core]
+    excludesfile = /Users/asimpson/.master_git_ignore
+[commit]
+    template = /Users/asimpson/.gitmessage.txt
 ```
 
 * Also add any local modifications to `.gitconfig` like so:
 
 ```
-    [include]
-        path = path/to/local/config/gitconfig.local
+[include]
+    path = path/to/local/config/gitconfig.local
 ```
 
-## GPG Conf
-
-- Install `pinentry-mac` and then tell GPG about it by adding it to `~/.gnupg/gpg-agent.conf` like this:
-`pinentry-program /usr/local/bin/pinentry-mac`
-
-- update `~/.gitconfig` with these two values to enable GPG signing:
+* Optionally add a SSH key as a signing key:
 
 ```
 [user]
-	signingkey = KEYID
-[commit]
-  gpgsign = true
+    signingkey = ssh-rsa SOMEKEY
 ```
-
-- `gpgconf --kill gpg-agent` kills the currently running `gpg-agent`. Use this to test config changes.
