@@ -59,3 +59,5 @@ alias alpine="qemu-system-x86_64 \
 alias reset-audio="killall zoom && pulseaudio -k"
 alias email="e --eval \"(mu4e)\""
 alias gf="cd ~/Projects/grafana"
+alias gfe="cd ~/Projects/grafana-enterprise"
+alias dt="cd ~/Projects/deployment_tools"

@@ -4,6 +4,7 @@ let
   toggle-dunst = pkgs.writeScriptBin "toggle-dunst" (builtins.readFile ../linux/toggle-dunst.sh);
   mpv-yt = pkgs.writeScriptBin "mpv-yt" (builtins.readFile ../linux/mpv-yt.sh);
   change-audio = pkgs.writeScriptBin "change-audio" (builtins.readFile ../linux/rofi-change-audio.sh);
+  kolide-vm = pkgs.writeScriptBin "kolide-vm" (builtins.readFile ../linux/kolide.sh);
 in
 {
   environment.systemPackages = [
@@ -11,5 +12,6 @@ in
     toggle-dunst
     mpv-yt
     change-audio
+    kolide-vm
   ];
 }

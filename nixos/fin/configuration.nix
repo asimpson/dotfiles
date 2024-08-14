@@ -9,6 +9,7 @@ let
     keycode 66 = Multi_key
     clear Lock
   '';
+  shared = import ../shared.nix;
 in {
   require = [ ../scripts.nix ./packages.nix ./crate.nix ../master.nix ];
 
@@ -16,6 +17,10 @@ in {
     ./hardware-configuration.nix
     (fetchTarball
       "https://github.com/nix-community/nixos-vscode-server/tarball/master")
+  ];
+
+  security.pki.certificates = [
+    shared.local_cert
   ];
 
   fileSystems."/home/adam/mail" = {
@@ -64,6 +69,7 @@ in {
       "dev.i915.perf_stream_paranoid" = 0;
       "net.ipv4.ip_forward" = 1;
       "net.ipv6.conf.all.forwarding" = 1;
+      "vm.swappiness" = 20;
     };
 
     #consoleLogLevel = 0;
@@ -130,12 +136,12 @@ in {
     ];
   };
 
-  sound.enable = true;
+  #sound.enable = true;
   hardware.pulseaudio.enable = false;
   hardware.logitech.wireless.enable = true;
   hardware.i2c.enable = true;
 
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
       intel-media-driver # LIBVA_DRIVER_NAME=iHD
@@ -282,8 +288,8 @@ in {
 
   security.pam = {
     u2f.enable = true;
-    u2f.cue = true;
-    u2f.authFile = "/home/adam/.config/Yubico/u2f_keys";
+    u2f.settings.cue = true;
+    u2f.settings.authFile = "/home/adam/.config/Yubico/u2f_keys";
 
     services = {
       login.u2fAuth = true;

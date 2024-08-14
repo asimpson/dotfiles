@@ -38,7 +38,7 @@ in {
     mpc_cli
     solaar
     jq
-    gnome3.nautilus
+    nautilus
     polkit_gnome
     qemu_kvm
     qemu
@@ -68,5 +68,8 @@ in {
     nerdfonts
     notmuch
     wezterm
+    openssl
+    rofimoji
+    virt-viewer
   ];
 }
