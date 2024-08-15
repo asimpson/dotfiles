@@ -71,5 +71,6 @@ in {
     openssl
     rofimoji
     virt-viewer
+    kubectl
   ];
 }

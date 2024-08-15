@@ -12,9 +12,9 @@ if [ $? -eq 0 ]; then
 
     # Open the graphical console using virt-viewer
     echo "Opening graphical console..."
-    virt-viewer $VM_NAME
+    virt-viewer $VM_NAME &
     sleep 2
-    i3-msg '[class="Virt-viewer"] move to workspace vmwk'
+    i3-msg '[title="(?i)kolide"] move to workspace vmwk'
 
 else
     echo "Failed to start $VM_NAME. Please check for errors."
