@@ -72,5 +72,6 @@ in {
     rofimoji
     virt-viewer
     kubectl
+    cider
   ];
 }
