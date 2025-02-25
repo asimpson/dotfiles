@@ -64,6 +64,7 @@ in {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
       grub.copyKernels = true;
+      grub.configurationLimit = 20;
     };
 
     supportedFilesystems = [ "zfs" ];
@@ -71,7 +72,7 @@ in {
       "dev.i915.perf_stream_paranoid" = 0;
       "net.ipv4.ip_forward" = 1;
       "net.ipv6.conf.all.forwarding" = 1;
-      "vm.swappiness" = 20;
+      "vm.swappiness" = 5;
     };
 
     #consoleLogLevel = 0;

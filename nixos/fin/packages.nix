@@ -65,9 +65,8 @@ in {
     getmail6
     age
     neovim
-    nerdfonts
+    nerd-fonts.symbols-only
     notmuch
-    wezterm
     openssl
     rofimoji
     virt-viewer
