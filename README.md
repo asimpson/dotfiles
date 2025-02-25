@@ -1,9 +1,5 @@
 ![logo](http://asimpson.github.io/dotfiles/logo.svg)
 
-# Install
-
-`git clone git@github.com:asimpson/dotfiles.git ~/.dotfiles`
-
 ## Shell Conf
 Source `~/.dotfiles/bash/functions` and `~/.dotfiles/bash/aliases` in one of these: `.bash_profile`, `.bashrc`, or `.zshrc`.
 
