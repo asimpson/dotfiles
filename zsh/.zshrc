@@ -38,7 +38,7 @@ precmd() {
   gitStatus="$(git symbolic-ref --short -q HEAD 2> /dev/null)"
   NEWLINE=$'\n'
 
-  PROMPT="%~ %{$fg[yellow]%}${gitStatus}${NEWLINE}%{$fg[magenta]%}❯ %{$reset_color%}"
+  PROMPT="%~ %{$fg[yellow]%}${gitStatus}${NEWLINE}%D{%I:%M}%{$fg[magenta]%}❯ %{$reset_color%}"
 }
 
 source ~/.dotfiles/zsh/plugins/ht.plugin.zsh
@@ -68,3 +68,24 @@ if [ -e /home/asimpson/.nix-profile/etc/profile.d/nix.sh ]; then . /home/asimpso
 eval "$(direnv hook zsh)"
 
 eval "$(fzf --zsh)"
+
+select_cluster() {
+    local clusters=$(kubectl config get-contexts -o name)
+    echo "$clusters" | fzf --height 40% --border --prompt="Select cluster: " --layout=reverse
+}
+
+insert_cluster() {
+    local selected=$(select_cluster)
+    if [ -n "$selected" ]; then
+        LBUFFER+="$selected"
+    fi
+    zle redisplay
+}
+
+zle -N insert_cluster
+bindkey '^k' insert_cluster
+
+# Optional helper for command substitution
+get_cluster() {
+    select_cluster
+}
