@@ -10,6 +10,8 @@ let
     clear Lock
   '';
   shared = import ../shared.nix;
+  hosts = import ./hosts.nix;
+
 in {
   require = [ ../scripts.nix ./packages.nix ./crate.nix ../master.nix ];
 
@@ -109,12 +111,16 @@ in {
   time.timeZone = "America/New_York";
 
   networking = {
-    interfaces = { enp8s0 = { wakeOnLan.enable = true; }; };
+    extraHosts = hosts.hosts;
+    interfaces = { 
+      enp8s0 = { wakeOnLan.enable = true; }; 
+    };
     firewall = {
       enable = true;
       allowedTCPPorts = [ 3000 8080 ];
       allowedUDPPorts = [ 41641 ];
       checkReversePath = "loose";
+      extraCommands = hosts.extra;
     };
     hostId = "47ffe1b9"; # head -c4 /dev/urandom | od -A none -t x4
     hostName = "fin";
