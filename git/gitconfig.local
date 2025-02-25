@@ -1,19 +1,64 @@
 [core]
   editor = vim
+  fsmonitor = true
+  untrackedCache = true
+  pager = bat
+
+[merge]
+  # (just 'diff3' if git version < 2.3)
+  conflictstyle = zdiff3 
+
 [github]
 	user = asimpson
+
 [color]
 	ui = true
+
 [color "branch"]
   local = yellow
   remote = red
+
 [mergetool]
 	keepBackup = true
+
 [push]
-	default = matching
+  default = simple
+  autoSetupRemote = true
+  followTags = true
+
 [filter "media"]
 	clean = git-media-clean %f
 	smudge = git-media-smudge %f
+
+[init]
+	templatedir = ~/.git-templates
+
+[column]
+  ui = auto
+
+[branch]
+  sort = -committerdate
+
+[tag]
+  sort = version:refname
+
+[diff]
+  algorithm = histogram
+  colorMoved = plain
+  mnemonicPrefix = true
+  renames = true
+
+[fetch]
+  prune = true
+  pruneTags = true
+  all = true
+
+[help]
+  autocorrect = prompt
+
+[commit]
+  verbose = true
+
 [alias]
   gre = rebase origin/master
   gpm = pull origin master
@@ -30,5 +75,14 @@
   development = !divshot push development
   updated = show --name-only --oneline
   gpno = push --no-verify
-[init]
-	templatedir = ~/.git-templates
+  nb = "!sh -c '\
+      git fetch && \
+      DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD | sed \"s@^refs/remotes/origin/@@\") && \
+      if [ $# -eq 0 ]; then \
+          echo \"Please provide a branch name\" && \
+          exit 1; \
+      fi && \
+      git checkout -b \"$1\" \"origin/$DEFAULT_BRANCH\"' -"
+  co = "!sh -c 'branch=$(git branch -a | sed \"s/^[* ]*//\" | sort -u | fzf --height 40% --prompt=\"Checkout branch > \") && if [[ $branch == remotes/origin/* ]]; then git checkout -t \"$branch\" ; else git checkout \"$branch\"; fi'"
+  out = "log @{u}.."
+
