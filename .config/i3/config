@@ -199,7 +199,7 @@ bindsym XF86AudioRaiseVolume exec "pactl set-sink-volume $(pactl info | grep Def
 
 bindsym XF86AudioLowerVolume exec "pactl set-sink-volume $(pactl info | grep Default\ Sink | cut -d ':' -f 2) -5%"
 
-bindsym XF86AudioMute exec "mpc toggle"
+bindsym XF86AudioMute exec "~/.dotfiles/linux/mouse.sh"
 
 bindsym Control+XF86AudioPrev exec "mpc prev"
 
