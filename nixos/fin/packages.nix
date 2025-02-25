@@ -33,7 +33,6 @@ in {
     clipster
     dunst
     isync
-    calibre
     mu
     mpc_cli
     solaar

@@ -36,7 +36,6 @@ floating_modifier $mod
 # start a terminal
 #bindsym $mod+Return exec tilix
 bindsym $mod+Return exec wezterm
-#bindsym $mod+Return exec "zutty -saveLines 10000 -quiet -cr FFFFFF -bg 282936 -fg F8F8F2 -autoCopy -font Hack -fontsize 14 -fontpath /home/adam/.local/share/fonts -dwfont Hack"
 
 # kill focused window
 bindsym $mod+Shift+q kill

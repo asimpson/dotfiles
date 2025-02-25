@@ -137,7 +137,6 @@ in {
   };
 
   #sound.enable = true;
-  hardware.pulseaudio.enable = false;
   hardware.logitech.wireless.enable = true;
   hardware.i2c.enable = true;
 
@@ -165,6 +164,7 @@ in {
   };
 
   services = {
+    pulseaudio.enable = false;
     libinput.enable = true;
     displayManager = {
       defaultSession = "none+i3";
