@@ -24,7 +24,6 @@ alias github="open \`git remote -v | grep github.com | grep fetch | head -1 | fi
 alias assume='git update-index --assume-unchanged'
 alias unassume='git update-index --no-assume-unchanged'
 alias assumed="!git ls-files -v | grep ^h | cut -c 3-"
-#alias gdiff='git diff --patience'
 alias gdiff='nix-shell -p difftastic --run "GIT_EXTERNAL_DIFF=difft git diff"'
 alias glog='git log --format='\''%Cgreen%h%Creset %C(cyan)%an%Creset - %s'\'' --graph'
 alias gs='git status '
@@ -44,9 +43,6 @@ alias _paste='xclip -selection clipboard -o'
 alias dsh='docker exec -it '
 alias redirects="curl -LSs -D - -o /dev/null -w 'Final URL: %{url_effective} \nNumber of Redirects: %{num_redirects} ' "
 alias mpd-cloud="ssh -NTf mpd-cloud"
-# add -snapshot to the end for immutable mode https://wiki.archlinux.org/index.php/QEMU#Running_the_virtual_machine_in_immutable_mode
-alias win10="sudo qemu-system-x86_64 -enable-kvm -m 8G -drive file=./VMs/win-10-disk.qcow2,media=disk -cpu host,hv_relaxed,hv_spinlocks=0x1fff,hv_vapic,hv_time -smp cores=4 "
-alias game="win-switch-rs switch --monitor \"S2719DGF\" --input \"DisplayPort 1\""
 alias music="ncmpcpp -h ${NAS_IP} -p 6601"
 alias shcheck="shellcheck -o all "
 alias alpine="qemu-system-x86_64 \
