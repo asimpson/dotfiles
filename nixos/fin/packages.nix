@@ -1,5 +1,6 @@
 { pkgs, ... }:
 let
+  fetchRev = import ../fetch-revision.nix { inherit pkgs; };
   myEmacs = import ../local-packages/emacs.nix;
   vim = import ../local-packages/vim.nix;
   mob = import ../local-packages/mob.nix;
