@@ -5,6 +5,7 @@ let
   mob = import ../local-packages/mob.nix;
   gen-env = import ../local-packages/gen-env.nix;
   drag-share = import ../local-packages/drag-share.nix;
+  new-meet = import ../local-packages/new-meet.nix;
   merge-github-notifs = import ../local-packages/merge-github-notifs.nix;
 
 in {
@@ -71,6 +72,11 @@ in {
     rofimoji
     virt-viewer
     kubectl
-    cider
+    wezterm
+    ncmpcpp
+    plexamp
+    difftastic
+    ghostty
+    new-meet
   ];
 }
