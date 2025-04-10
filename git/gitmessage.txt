@@ -1,6 +1,10 @@
 
 # when applied, this commit will…
 #
+# Co-authored-by: name <name@example.com>
+# Sarah Zinger <sarah.zinger@grafana.com>
+# Sam Jewell <sam.jewell@grafana.com>
+# Gábor Farkas <gabor.farkas@gmail.com>
 # Grafana practices
 # Area: Capital summary
 # The area should use upper camel case, e.g. UpperCamelCase.

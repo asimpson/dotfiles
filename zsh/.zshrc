@@ -36,9 +36,11 @@ fi
 
 precmd() {
   gitStatus="$(git symbolic-ref --short -q HEAD 2> /dev/null)"
+  k8sInfo="$(get_k8s_info)"
   NEWLINE=$'\n'
-
-  PROMPT="%~ %{$fg[yellow]%}${gitStatus}${NEWLINE}%D{%I:%M}%{$fg[magenta]%}❯ %{$reset_color%}"
+  PROMPT="%~ %{$fg[yellow]%}${gitStatus}%{$reset_color%} "
+  PROMPT+="$fg[cyan]%}${k8sInfo}%{$reset_color%}"
+  PROMPT+="${NEWLINE}%D{%I:%M}%{$fg[magenta]%}❯ %{$reset_color%}"
 }
 
 source ~/.dotfiles/zsh/plugins/ht.plugin.zsh
@@ -88,4 +90,23 @@ bindkey '^k' insert_cluster
 # Optional helper for command substitution
 get_cluster() {
     select_cluster
+}
+
+# Function to get current k8s context and namespace
+function get_k8s_info() {
+  # First check if kubectl is in PATH
+  if command -v kubectl &> /dev/null; then
+    KUBECTL="kubectl"
+  else
+    return
+  fi
+  
+  CONTEXT=$($KUBECTL config current-context 2>/dev/null)
+  if [[ $? -eq 0 ]]; then
+    NAMESPACE=$($KUBECTL config view --minify --output 'jsonpath={..namespace}' 2>/dev/null)
+    if [[ -z "$NAMESPACE" ]]; then
+      NAMESPACE="default"
+    fi
+    echo "$CONTEXT:$NAMESPACE"
+  fi
 }
