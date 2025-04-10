@@ -92,7 +92,7 @@ get_cluster() {
     select_cluster
 }
 
-# Function to get current k8s context and namespace
+# Function to get current k8s context and namespace 
 function get_k8s_info() {
   # First check if kubectl is in PATH
   if command -v kubectl &> /dev/null; then
@@ -110,3 +110,9 @@ function get_k8s_info() {
     echo "$CONTEXT:$NAMESPACE"
   fi
 }
+
+export DIRENV_LOG_FORMAT="$(printf "\033[2mdirenv: %%s\033[0m")"
+eval "$(direnv hook zsh)"
+_direnv_hook() {
+  eval "$(direnv export zsh 2> >(egrep -v -e '^....direnv: export' >&2))"
+};

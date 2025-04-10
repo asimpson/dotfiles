@@ -29,3 +29,4 @@ shell.nix
 /conf/provisioning/datasources/azmonitor-ds.yaml
 /.log/
 cypress.nix
+.direnv/*
