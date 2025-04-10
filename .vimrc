@@ -11,7 +11,7 @@ Plug 'romainl/vim-cool'
 " needed for yarn berry with immutable flag
 Plug 'lbrayner/vim-rzip'
 " language server protocol
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " testing at point etc.
 Plug 'vim-test/vim-test'
 Plug 'airblade/vim-gitgutter'
