@@ -11,7 +11,7 @@ Plug 'romainl/vim-cool'
 " needed for yarn berry with immutable flag
 Plug 'lbrayner/vim-rzip'
 " language server protocol
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " testing at point etc.
 Plug 'vim-test/vim-test'
 Plug 'airblade/vim-gitgutter'
@@ -40,6 +40,7 @@ nmap <silent> <leader>Q :ccl<CR>
 nmap <silent> <leader>d :Vex<CR>
 nmap <silent> <leader>s :<C-u>call gitblame#echo()<CR>
 
+let test#strategy = "vimterminal"
 autocmd QuickFixCmdPost *grep* cwindow
 
 " Due to internal representation, Vim has problems with long lines in general.
@@ -168,7 +169,7 @@ augroup QuickFix
 augroup END
 " automatically make quickfix window span the entire bottom split
 autocmd FileType qf wincmd J
-set clipboard=unnamedplus
+set clipboard=unnamed
 let g:coc_global_extensions = [
   \ 'coc-tsserver',
   \ 'coc-go',
