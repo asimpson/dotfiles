@@ -2,6 +2,11 @@ if [ -d ~/.nix-profile/share/zsh/site-functions ]; then
   fpath=(~/.nix-profile/share/zsh/site-functions $fpath)
 fi
 
+enable_auto_completes() {
+  eval "$(fzf --zsh)"
+  source <(tailscale completion zsh)
+}
+
 # Fix for TRAMP
 [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && return
 #http://stackoverflow.com/a/12575883/2344737
@@ -73,8 +78,6 @@ complete -o nospace -C /usr/local/bin/terraform terraform
 if [ -e /home/asimpson/.nix-profile/etc/profile.d/nix.sh ]; then . /home/asimpson/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 eval "$(direnv hook zsh)"
 
-eval "$(fzf --zsh)"
-
 select_cluster() {
     local clusters=$(kubectl config get-contexts -o name)
     echo "$clusters" | fzf --height 40% --border --prompt="Select cluster: " --layout=reverse
@@ -122,3 +125,4 @@ _direnv_hook() {
 };
 export NIXPKGS_ALLOW_UNFREE=1
 
+enable_auto_completes
