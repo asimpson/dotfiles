@@ -1,4 +1,6 @@
-#!/bin/bash
+#! /usr/bin/env /Users/adam/.nix-profile/bin/nix-shell
+#! nix-shell -i bash -p gh jq
+
 declare -A typeLookup
 typeLookup["PullRequest"]="pull"
 typeLookup["Issue"]="issues"

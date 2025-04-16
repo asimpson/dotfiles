@@ -117,3 +117,4 @@ _direnv_hook() {
   eval "$(direnv export zsh 2> >(egrep -v -e '^....direnv: export' >&2))"
 };
 export NIXPKGS_ALLOW_UNFREE=1
+
