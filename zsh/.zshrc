@@ -1,3 +1,7 @@
+if [ -d ~/.nix-profile/share/zsh/site-functions ]; then
+  fpath=(~/.nix-profile/share/zsh/site-functions $fpath)
+fi
+
 # Fix for TRAMP
 [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && return
 #http://stackoverflow.com/a/12575883/2344737
