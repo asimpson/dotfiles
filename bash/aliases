@@ -36,7 +36,7 @@ alias cleanup='remote prune origin && git gc && git clean -dfx && git stash clea
 alias v='/usr/local/bin/vim '
 alias lnpm='PATH=$(npm bin):$PATH'
 alias e='emacsclient -q -t -c '
-alias dired='emacsclient -e "(dired default-directory)" -c -t'
+#alias dired='emacsclient -e "(dired default-directory)" -c -t'
 alias ssh-pass='ssh -o PreferredAuthentications=password '
 alias _copy='xclip -selection clipboard'
 alias _paste='xclip -selection clipboard -o'

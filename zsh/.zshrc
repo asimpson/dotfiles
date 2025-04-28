@@ -1,3 +1,19 @@
+if [ -d /Users/adam/go/bin ]; then
+  export PATH=/Users/adam/go/bin:$PATH
+fi
+
+if [ -f ~/.nix-profile/etc/profile.d/nix.sh ]; then
+  source ~/.nix-profile/etc/profile.d/nix.sh
+fi
+
+if [ -f ~/.dotfiles/bash/functions ]; then
+  source ~/.dotfiles/bash/functions
+fi
+
+if [ -f ~/.dotfiles/bash/aliases ]; then
+  source ~/.dotfiles/bash/aliases
+fi
+
 if [ -d ~/.nix-profile/share/zsh/site-functions ]; then
   fpath=(~/.nix-profile/share/zsh/site-functions $fpath)
 fi
@@ -75,7 +91,6 @@ export PATH="$HOME/bin:$PATH"
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/terraform terraform
 
-if [ -e /home/asimpson/.nix-profile/etc/profile.d/nix.sh ]; then . /home/asimpson/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 eval "$(direnv hook zsh)"
 
 select_cluster() {
@@ -126,3 +141,5 @@ _direnv_hook() {
 export NIXPKGS_ALLOW_UNFREE=1
 
 enable_auto_completes
+
+ulimit -S -n 10000

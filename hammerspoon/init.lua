@@ -1,3 +1,4 @@
+hs.application.enableSpotlightForNameSearches(true)
 hs.loadSpoon("WindowHalfsAndThirds")
 spoon.WindowHalfsAndThirds:bindHotkeys(spoon.WindowHalfsAndThirds.defaultHotkeys)
 
@@ -37,3 +38,14 @@ hs.hotkey.bind({"cmd", "shift", "ctrl"}, "right", function()
     win:setFrame(f)
   end
 end)
+
+-- spawn new terminal like i3
+hs.hotkey.bind({"alt"}, "return", function()
+  local wezterm = hs.application.find("WezTerm")
+  if wezterm then
+    hs.eventtap.keyStroke({"shift", "ctrl"}, "n", 200, wezterm)
+  else
+    hs.application.launchOrFocus("WezTerm")
+  end
+end)
+

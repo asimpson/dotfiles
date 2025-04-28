@@ -3,6 +3,7 @@
   fsmonitor = true
   untrackedCache = true
   pager = bat
+  excludesfile = /Users/adam/.master_git_ignore
 
 [merge]
   # (just 'diff3' if git version < 2.3)
@@ -58,6 +59,11 @@
 
 [commit]
   verbose = true
+  gpgsign = true
+  template = /Users/adam/.gitmessage.txt
+
+[gpg]
+  format = ssh
 
 [alias]
   gre = rebase origin/master
@@ -86,3 +92,12 @@
   co = "!sh -c 'branch=$(git branch -a | sed \"s/^[* ]*//\" | sort -u | fzf --height 40% --prompt=\"Checkout branch > \") && if [[ $branch == remotes/origin/* ]]; then git checkout -t \"$branch\" ; else git checkout \"$branch\"; fi'"
   out = "log @{u}.."
 
+
+[url "ssh://git@github.com/"]
+insteadOf = https://github.com/
+
+[credential "https://github.com"]
+helper = !/Users/adam/.nix-profile/bin/gh auth git-credential
+
+[credential "https://gist.github.com"]
+helper = !/Users/adam/.nix-profile/bin/gh auth git-credential
