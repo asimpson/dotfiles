@@ -91,7 +91,7 @@
       git checkout -b \"$1\" \"origin/$DEFAULT_BRANCH\"' -"
   co = "!sh -c 'branch=$(git branch -a | sed \"s/^[* ]*//\" | sort -u | fzf --height 40% --prompt=\"Checkout branch > \") && if [[ $branch == remotes/origin/* ]]; then git checkout -t \"$branch\" ; else git checkout \"$branch\"; fi'"
   out = "log @{u}.."
-
+  showtag = "!f() { tag=$(git tag | fzf --height 40% --reverse); [ -n \"$tag\" ] && git show refs/tags/$tag; }; f"
 
 [url "ssh://git@github.com/"]
 insteadOf = https://github.com/
