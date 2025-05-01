@@ -53,3 +53,26 @@ Launchd is OS X's replacement for `cron`.
 [user]
     signingkey = ssh-rsa SOMEKEY
 ```
+
+## Nix profile packages
+
+`nix profile list --json | jq '.elements | keys | .[]'`
+
+```sh
+"age"
+"bat"
+"direnv"
+"fx"
+"fzf"
+"getmail6"
+"gh"
+"git"
+"kubectl"
+"nix" #installed by default
+"nix-direnv"
+"nix-zsh-completions"
+"nodejs_22"
+"nss-cacert"
+"ripgrep"
+"watch"
+```
