@@ -16,6 +16,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'vim-test/vim-test'
 Plug 'airblade/vim-gitgutter'
 Plug 'zivyangll/git-blame.vim'
+Plug 'google/vim-jsonnet'
 call plug#end()
 
 set background=dark
