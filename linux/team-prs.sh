@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p dateutils gh
+
 
 if [ "${1}" == "" ]; then
   echo "Please supply a team name"
