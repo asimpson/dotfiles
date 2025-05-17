@@ -1,8 +1,10 @@
 -- Pull in the wezterm API
 local wezterm = require 'wezterm'
+local act = wezterm.action
 
 -- This will hold the configuration.
 local config = wezterm.config_builder()
+local modkey = 'ALT'
 
 -- This is where you actually apply your config choices
 
@@ -10,16 +12,53 @@ local config = wezterm.config_builder()
 config.color_scheme = 'Dracula'
 config.font = wezterm.font 'Hack'
 config.font_size = 14.0
---config.enable_tab_bar = false
+config.enable_tab_bar = false
 config.default_cwd = wezterm.home_dir
 config.keys = {
     -- Override the default Ctrl+Shift+n (or CMD+n on macOS) shortcut
     {
       key = 'n',
       mods = 'CMD', -- Use 'CMD' instead on macOS
-      action = wezterm.action.SpawnCommandInNewWindow {
+      action = act.SpawnCommandInNewWindow {
         cwd = wezterm.home_dir
       }
+    },
+    --i3 pane movement
+    {
+      key = 'h',
+      mods = modkey,
+      action = act.ActivatePaneDirection 'Left',
+    },
+    {
+      key = 'l',
+      mods = modkey,
+      action = act.ActivatePaneDirection 'Right',
+    },
+    {
+      key = 'k',
+      mods = modkey,
+      action = act.ActivatePaneDirection 'Up',
+    },
+    {
+      key = 'j',
+      mods = modkey,
+      action = act.ActivatePaneDirection 'Down',
+    },
+    {
+      key = 'f',
+      mods = modkey,
+      action = act.TogglePaneZoomState,
+    },
+    --easier new pane combo
+    {
+      key = '\\',
+      mods = modkey,
+      action = act.SplitHorizontal { domain = 'CurrentPaneDomain' },
+    },
+    {
+      key = '-',
+      mods = modkey,
+      action = act.SplitVertical { domain = 'CurrentPaneDomain' },
     },
   }
 
