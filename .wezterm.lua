@@ -6,14 +6,16 @@ local act = wezterm.action
 local config = wezterm.config_builder()
 local modkey = 'ALT'
 
--- This is where you actually apply your config choices
-
--- For example, changing the color scheme:
 config.color_scheme = 'Dracula'
 config.font = wezterm.font 'Hack'
 config.font_size = 14.0
 config.enable_tab_bar = false
 config.default_cwd = wezterm.home_dir
+config.scrollback_lines = 20000
+config.inactive_pane_hsb = {
+  saturation = 0.4,
+  --brightness = 0.1,
+}
 config.keys = {
     -- Override the default Ctrl+Shift+n (or CMD+n on macOS) shortcut
     {
@@ -60,7 +62,22 @@ config.keys = {
       mods = modkey,
       action = act.SplitVertical { domain = 'CurrentPaneDomain' },
     },
+    {
+        key = ',',
+        mods = modkey,
+        action = act.SpawnCommandInNewTab {
+          cwd = os.getenv('WEZTERM_CONFIG_DIR'),
+          set_environment_variables = {
+            PATH = os.getenv('PATH') .. ":/Users/adam/.nix-profile/bin/",
+          },
+          args = {
+            'vim',
+            os.getenv('WEZTERM_CONFIG_FILE'),
+          },
+        },
+      },
   }
+
 
 -- Tab title customization to include current working directory
 wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)

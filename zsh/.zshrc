@@ -143,3 +143,8 @@ export NIXPKGS_ALLOW_UNFREE=1
 enable_auto_completes
 
 ulimit -S -n 10000
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/adam/.lmstudio/bin"
+# End of LM Studio CLI section
+
