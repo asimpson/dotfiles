@@ -84,8 +84,6 @@ export PATH="$HOME/bin:$PATH"
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/terraform terraform
 
-eval "$(direnv hook zsh)"
-
 select_cluster() {
     local clusters=$(kubectl config get-contexts -o name)
     echo "$clusters" | fzf --height 40% --border --prompt="Select cluster: " --layout=reverse
