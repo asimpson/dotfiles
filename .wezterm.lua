@@ -8,7 +8,7 @@ local modkey = 'ALT'
 
 config.color_scheme = 'Dracula'
 config.font = wezterm.font 'Hack'
-config.font_size = 14.0
+config.font_size = 13.0
 config.enable_tab_bar = false
 config.default_cwd = wezterm.home_dir
 config.scrollback_lines = 20000

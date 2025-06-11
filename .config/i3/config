@@ -13,7 +13,7 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:Hack Regular 9
+font pango:Hack Regular 10
 
 # stacked === stacking, both keywords achieve the same result
 # https://github.com/i3/i3/blob/117fb13177824f008c86b827864fa6ebeeccb548/src/config_directives.c#L261

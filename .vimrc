@@ -170,7 +170,8 @@ augroup QuickFix
 augroup END
 " automatically make quickfix window span the entire bottom split
 autocmd FileType qf wincmd J
-set clipboard=unnamed
+"set clipboard=unnamed
+set clipboard=unnamedplus
 let g:coc_global_extensions = [
   \ 'coc-tsserver',
   \ 'coc-go',

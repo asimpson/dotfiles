@@ -3,7 +3,7 @@
   fsmonitor = true
   untrackedCache = true
   pager = bat
-  excludesfile = /Users/adam/.master_git_ignore
+  excludesfile = /home/adam/master_git_ignore
 
 [merge]
   # (just 'diff3' if git version < 2.3)
@@ -11,6 +11,11 @@
 
 [github]
 	user = asimpson
+
+[user]
+  email = adam@adamsimpson.net
+  name = Adam Simpson
+  signingkey = ~/.ssh/github-graf.pub
 
 [color]
 	ui = true
@@ -60,7 +65,7 @@
 [commit]
   verbose = true
   gpgsign = true
-  template = /Users/adam/.gitmessage.txt
+  template = /home/adam/gitmessage.txt
 
 [gpg]
   format = ssh
@@ -97,7 +102,7 @@
 insteadOf = https://github.com/
 
 [credential "https://github.com"]
-helper = !/Users/adam/.nix-profile/bin/gh auth git-credential
+helper = !/home/adam/.nix-profile/bin/gh auth git-credential
 
 [credential "https://gist.github.com"]
-helper = !/Users/adam/.nix-profile/bin/gh auth git-credential
+helper = !/home/adam/.nix-profile/bin/gh auth git-credential
