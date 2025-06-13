@@ -204,3 +204,5 @@ bindsym XF86AudioMute exec "~/.dotfiles/linux/mouse.sh"
 bindsym Control+XF86AudioPrev exec "mpc prev"
 
 bindsym Control+XF86AudioNext exec "mpc next"
+
+exec --no-startup-id lxqt-policykit-agent

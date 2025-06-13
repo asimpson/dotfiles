@@ -53,6 +53,7 @@ in
     feh
     pulseaudio
     bat
+    lxqt.lxqt-policykit
   ];
 
   system.activationScripts.binbash = {
@@ -65,10 +66,7 @@ in
   };
 
   boot = {
-    # ZFS support
-    zfs.requestEncryptionCredentials = true;
     supportedFilesystems = [ "zfs" ];
-
     # Bootloader
     loader = {
       systemd-boot.enable = true;
@@ -78,10 +76,10 @@ in
     };
 
     # v4l2loopback for virtual camera
-    extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
+    extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback corefreq ];
 
     # Kernel modules (updated for AMD)
-    kernelModules = [ "v4l2loopback" "kvm-amd" ];
+    kernelModules = [ "v4l2loopback" "kvm-amd" "corefreqk" ];
 
     # System tuning
     kernel.sysctl = {
@@ -115,6 +113,11 @@ in
   programs.zsh.enable = true;
   programs.ssh.startAgent = true;
   programs.light.enable = true;
+  programs._1password-gui = {
+    enable = true;
+    polkitPolicyOwners = [ "adam" ];
+  };
+  #programs.corefreq.enable = true;
 
   security.pam = {
     u2f.enable = true;
@@ -182,8 +185,6 @@ in
     docker = {
       enable = true;
       autoPrune.enable = true;
-      storageDriver = "zfs";
-      extraOptions = "--data-root=/var/lib/docker";
     };
   };
 
@@ -214,7 +215,7 @@ in
     serviceConfig = {
       Type = "simple";
       ExecStart =
-        "${pkgs.steam-run}/bin/steam-run /opt/kolide-k2/bin/launcher --config=/opt/kolide-k2/etc/launcher.flags"; # Use full path
+        "${pkgs.steam-run}/bin/steam-run /opt/kolide/usr/local/kolide-k2/bin/launcher --config=/opt/kolide/etc/kolide-k2/launcher.flags"; # Use full path
       Restart = "always";
       User = "root";
       RemainAfterExit = false;
@@ -237,7 +238,7 @@ in
       displayManager = {
         #sessionCommands = "${pkgs.xorg.xmodmap}/bin/xmodmap ${xmodmap}";
       };
-
+      enableTearFree = true;
       windowManager.i3 = {
         enable = true;
         extraPackages = with pkgs; [
@@ -245,13 +246,6 @@ in
           i3status # gives you the default i3 status bar
         ];
       };
-    };
-    zfs = {
-      autoScrub.enable = true;
-      autoScrub.interval = "weekly";
-      autoSnapshot.enable = true;
-      trim.enable = true;
-      trim.interval = "weekly";
     };
     displayManager = { defaultSession = "none+i3"; };
     openssh = {

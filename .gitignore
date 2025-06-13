@@ -28,5 +28,5 @@
 #    iptables -I INPUT -s LAN.IP/12 -j ACCEPT
 #  '';
 #}
-nixos/fin/hosts.nix
+nixos/*/hosts.nix
 .npmrc
