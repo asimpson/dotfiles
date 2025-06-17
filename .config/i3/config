@@ -40,7 +40,7 @@ bindsym $mod+Return exec wezterm
 # kill focused window
 bindsym $mod+Shift+q kill
 
-bindsym $mod+space exec "rofi -combi-modi run,window,drun -show combi -modi combi"
+bindsym $mod+space exec "rofi -show combi"
 
 # change focus
 bindsym $mod+h focus left

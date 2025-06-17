@@ -1,0 +1,75 @@
+* {
+  background-color: rgba(40, 44, 51, 0.5);/*#282C33;*/
+  border-color: #2e343f;
+  text-color: #8ca0aa;
+  spacing: 0;
+  width: 720px;
+  font: "Hack 12";
+}
+
+configuration {
+  combi-modi: "run,window,drun";
+  display-combi: "";
+  display-drun: "";
+  display-window: "";
+  display-run: "";
+}
+
+window {
+  border-radius: 10px;
+  anchor: north;
+  y-offset: -350px;
+}
+
+inputbar {
+  border: 0 0 1px 0;
+  children: [prompt,entry];
+}
+
+prompt {
+  padding: 16px;
+  border: 0 1px 0 0;
+  enabled: false;
+}
+
+textbox {
+  background-color: rgba(46, 52, 63, 0.5); /*#2e343f;*/
+  border: 0 0 1px 0;
+  border-color: rgba(40, 44, 51, 0.5);/*#282C33;*/
+  padding: 8px 16px;
+}
+
+entry {
+  padding: 16px;
+}
+
+listview {
+  cycle: false;
+  margin: 0 0 -1px 0;
+  scrollbar: false;
+
+  dynamic: true;
+  fixed-height: false;
+}
+
+element {
+  border: 0 0 1px 0;
+  padding: 16px;
+  background-color: transparent; /* Add this to make elements transparent */
+}
+
+element-text {
+  background-color: transparent; /* Add this too */
+}
+
+element-text selected {
+  /*background-color: #2e343f;*/
+  background-color: rgba(128, 255, 234, 0.5); /*#80ffea;*/
+  color: #2e343f;
+}
+
+element selected {
+  /*background-color: #2e343f;*/
+  background-color: #80ffea;
+  /*background-color: rgba(128, 255, 234, 0.5); //#80ffea;*/
+}
