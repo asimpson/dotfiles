@@ -3,8 +3,6 @@
 
 i3status | while :
 
-#timer=$(/home/adam/timer.sh)
-
 paused=$(dunstctl is-paused)
 mute=""
 
@@ -12,7 +10,13 @@ if [ "${paused}" = "true" ]; then
     mute="❌ |"
 fi
 
+audio_icon=$(case "$(pactl info | rg "Default Sink" | cut -d ":" -f 2 | xargs)" in
+    "alsa_output.pci-0000_0c_00.6.analog-stereo") echo "🔊" ;;
+    "alsa_output.usb-Audio-Technica_ATR_USB_microphone-00.analog-stereo") echo "🎧" ;;
+    *) echo "🔇" ;;
+esac)
+
 do
   read line
-  echo "${mute} ${line}" || exit 1
+  echo "${mute} ${line} | ${audio_icon}" || exit 1
 done

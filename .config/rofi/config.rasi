@@ -1,3 +1,11 @@
-configuration {}
+configuration {
+  modi: "combi,drun,calc,window,run,emoji";
+  combi-modi: "run,window,drun";
+  display-combi: "";
+  display-drun: "";
+  display-window: "";
+  display-run: "";
+  dpi: 110;
+}
 
 @theme "slate"

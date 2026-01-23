@@ -2,7 +2,6 @@
 call plug#begin()
 " syntx highighting 
 Plug 'slim-template/vim-slim'
-Plug 'fatih/vim-go'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'LnL7/vim-nix'
@@ -17,6 +16,7 @@ Plug 'vim-test/vim-test'
 Plug 'airblade/vim-gitgutter'
 Plug 'zivyangll/git-blame.vim'
 Plug 'google/vim-jsonnet'
+Plug 'sebdah/vim-delve'
 call plug#end()
 
 set background=dark

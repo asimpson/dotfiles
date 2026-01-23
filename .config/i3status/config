@@ -4,12 +4,11 @@ general {
 
 order += "cpu_temperature 0"
 order += "cpu_usage"
-order += "tztime utc"
-order += "tztime pacific"
 order += "tztime mountain"
 order += "tztime central"
 order += "tztime uk"
 order += "tztime europe"
+order += "tztime utc"
 order += "tztime local"
 
 cpu_usage {

@@ -7,18 +7,12 @@
   font: "Hack 12";
 }
 
-configuration {
-  combi-modi: "run,window,drun";
-  display-combi: "";
-  display-drun: "";
-  display-window: "";
-  display-run: "";
-}
-
 window {
   border-radius: 10px;
   anchor: north;
   y-offset: -350px;
+  border-color: rgba(128, 255, 234, 0.5);
+  border: 1px;
 }
 
 inputbar {
@@ -54,6 +48,7 @@ listview {
 
 element {
   border: 0 0 1px 0;
+  border-color: transparent;
   padding: 16px;
   background-color: transparent; /* Add this to make elements transparent */
 }

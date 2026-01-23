@@ -97,6 +97,11 @@
   co = "!sh -c 'branch=$(git branch -a | sed \"s/^[* ]*//\" | sort -u | fzf --height 40% --prompt=\"Checkout branch > \") && if [[ $branch == remotes/origin/* ]]; then git checkout -t \"$branch\" ; else git checkout \"$branch\"; fi'"
   out = "log @{u}.."
   showtag = "!f() { tag=$(git tag | fzf --height 40% --reverse); [ -n \"$tag\" ] && git show refs/tags/$tag; }; f"
+  cpref = "!f() { commit=$(git log --reflog --author='Adam Simpson' --color=always --format='%C(auto)%h %C(blue)%an%C(reset) %s %C(dim)%ar%C(reset)' | fzf --ansi --no-sort --reverse --preview 'git show --color=always {1}' | awk '{print $1}'); [ -n \"$commit\" ] && git cherry-pick \"$commit\"; }; f"
+  nuke = "!sh -c '\
+      git fetch --all && \
+      DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD | sed \"s@^refs/remotes/origin/@@\") && \
+      git reset --hard \"origin/$DEFAULT_BRANCH\"' -"
 
 [url "ssh://git@github.com/"]
 insteadOf = https://github.com/

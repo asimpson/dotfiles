@@ -54,11 +54,6 @@ if [ -f ~/.bash_profile ]; then
   source ~/.bash_profile
 fi
 
-# export GOPATH=$HOME/go
-# export GOROOT=/Users/asimpson/Projects
-# export PATH="$PATH:/usr/local/go/bin/:$GOPATH/bin"
-# PATH="$PATH:$GOROOT"
-
 precmd() {
   gitStatus="$(git symbolic-ref --short -q HEAD 2> /dev/null)"
   k8sInfo="$(get_k8s_info)"
@@ -85,8 +80,6 @@ bindkey '\e[B' history-beginning-search-forward
 export PATH="$HOME/.yarn/bin:$PATH"
 
 export PATH="$HOME/bin:$PATH"
-
-# ssh-add -A 2>/dev/null;
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/terraform terraform
@@ -146,5 +139,10 @@ ulimit -S -n 10000
 
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/Users/adam/.lmstudio/bin"
+# End of LM Studio CLI section
+
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/home/adam/.lmstudio/bin"
 # End of LM Studio CLI section
 

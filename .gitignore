@@ -30,3 +30,9 @@
 #}
 nixos/*/hosts.nix
 .npmrc
+
+#enrollment key for kolide
+#{
+#  kolide-key = "<KEY>";
+#}
+/nixos/kolide-key.nix

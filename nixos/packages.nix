@@ -8,7 +8,6 @@
     slack
     rofi
     google-chrome
-    #mpd
     tilix
     brightnessctl
     acpid
@@ -32,13 +31,11 @@
     isync
     calibre
     mu
-    mpc_cli
+    mpc
     solaar
     jq
     gnome3.nautilus
     polkit_gnome
-    rofi-emoji
-    rofi-mpd
     qemu_kvm
     qemu
     virt-manager

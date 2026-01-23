@@ -5,6 +5,7 @@ let
   mpv-yt = pkgs.writeScriptBin "mpv-yt" (builtins.readFile ../linux/mpv-yt.sh);
   change-audio = pkgs.writeScriptBin "change-audio" (builtins.readFile ../linux/rofi-change-audio.sh);
   kolide-vm = pkgs.writeScriptBin "kolide-vm" (builtins.readFile ../linux/kolide.sh);
+  provision-nix = pkgs.writeScriptBin "provision-nix" (builtins.readFile ../linux/provision-nix.sh);
 in
 {
   environment.systemPackages = [
@@ -13,5 +14,6 @@ in
     mpv-yt
     change-audio
     kolide-vm
+    provision-nix
   ];
 }

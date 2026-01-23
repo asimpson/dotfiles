@@ -1,4 +1,4 @@
-#! /usr/bin/env /Users/adam/.nix-profile/bin/nix-shell
+#! /usr/bin/env nix-shell
 #! nix-shell -i bash -p gh jq
 
 declare -A typeLookup

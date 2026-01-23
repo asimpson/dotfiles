@@ -36,7 +36,7 @@ in {
     dunst
     isync
     mu
-    mpc_cli
+    mpc
     solaar
     jq
     nautilus
@@ -47,12 +47,11 @@ in {
     ripgrep
     xclip
     tailscale
-    #nasc
     remmina
     direnv
     spice-gtk
     fzf
-    signal-desktop
+    #signal-desktop
     fd
     docker-compose
     peek
@@ -76,7 +75,9 @@ in {
     ncmpcpp
     plexamp
     difftastic
-    ghostty
     new-meet
+    zed-editor
+    delve
+    opencode
   ];
 }

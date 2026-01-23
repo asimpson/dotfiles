@@ -30,3 +30,6 @@ shell.nix
 /.log/
 cypress.nix
 .direnv/*
+.claude/settings.local.json
+broken-rules
+personal
