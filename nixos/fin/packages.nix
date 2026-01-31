@@ -1,7 +1,6 @@
 { pkgs, ... }:
 let
   fetchRev = import ../fetch-revision.nix { inherit pkgs; };
-  myEmacs = import ../local-packages/emacs.nix;
   vim = import ../local-packages/vim.nix;
   mob = import ../local-packages/mob.nix;
   gen-env = import ../local-packages/gen-env.nix;
@@ -79,5 +78,9 @@ in {
     zed-editor
     delve
     opencode
+    ((pkgs.emacsPackagesFor pkgs.emacs).emacsWithPackages (epkgs: [
+      epkgs.treesit-grammars.with-all-grammars
+      epkgs.vterm
+    ]))
   ];
 }

@@ -113,6 +113,7 @@ in
         script = ''
           set -eu
           ${pkgs.getmail6}/bin/getmail
+          ${pkgs.notmuch}/bin/notmuch new
         '';
         serviceConfig = {
           User = "adam";
@@ -283,7 +284,10 @@ in
       };
     };
     displayManager = { defaultSession = "none+i3"; };
-    openssh.enable = true;
+    openssh = {
+      enable = true;
+      ports = [ 2222 ];
+    };
     tailscale.enable = true;
     resolved.enable = true;
     gnome.sushi.enable = true;
