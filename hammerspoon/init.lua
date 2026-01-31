@@ -41,17 +41,17 @@ end)
 
 -- spawn new terminal like i3
 hs.hotkey.bind({"alt"}, "return", function()
-  local wezterm = hs.application.find("WezTerm")
+  local term = hs.application.find("Ghostty")
 
-  if wezterm == nil then
-    hs.application.launchOrFocus("WezTerm")
+  if term == nil then
+    hs.application.launchOrFocus("Ghostty")
     return
   end
 
-  if wezterm:name() ~= "WezTerm" then
-    hs.application.launchOrFocus("WezTerm")
+  if term:name() ~= "Ghostty" then
+    hs.application.launchOrFocus("Ghostty")
   else
-    hs.eventtap.keyStroke({"shift", "ctrl"}, "n", 200, wezterm)
+    hs.eventtap.keyStroke({"cmd"}, "n", 200, term)
   end
 end)
 
