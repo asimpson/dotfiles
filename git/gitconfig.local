@@ -15,7 +15,7 @@
 [user]
   email = adam@adamsimpson.net
   name = Adam Simpson
-  signingkey = ~/.ssh/github-graf.pub
+  signingkey = ~/.ssh/github.pub
 
 [color]
 	ui = true
