@@ -25,8 +25,12 @@
 (setq-default tab-width 2)
 (setq-default css-indent-offset 2)
 
-(set-face-attribute 'default nil :font "Hack-12")
-(set-frame-font "Hack-12" nil t)
+(if (equal system-type 'darwin)
+    (progn (set-face-attribute 'default nil :font "Hack-14")
+           (set-frame-font "Hack-14" nil t))
+  (progn (set-face-attribute 'default nil :font "Hack-12")
+         (set-frame-font "Hack-12" nil t)))
+
 (scroll-bar-mode -1)
 
 (use-package yaml-mode
