@@ -1,5 +1,6 @@
 (add-to-list 'exec-path "/Users/adam/.nix-profile/bin")
 (setq custom-file "~/.dotfiles/emacs/emacs-custom.el")
+(load custom-file 'noerror)
 
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
@@ -89,11 +90,14 @@
             (add-to-list 'evil-emacs-state-modes 'flymake-project-diagnostics-mode)
             (fset 'evil-visual-update-x-selection 'ignore)
             (simpson-make-neutral evil-normal-state-map)
+            (define-key evil-window-map "=" 'balance-windows-area)
             (define-key evil-normal-state-map (kbd "RET") 'save-buffer)
+            (define-key evil-normal-state-map (kbd "C-b") 'project-switch-project)
             (define-key evil-normal-state-map (kbd "SPC SPC") 'simpson-other-project-window)
             (define-key evil-normal-state-map (kbd "C-c C-p") 'project-find-file)
             (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
-            (define-key evil-normal-state-map (kbd "C-n") 'evil-scroll-down)))
+            (define-key evil-normal-state-map (kbd "C-n") 'evil-scroll-down)
+            (add-hook 'post-command-hook 'simpson-evil-mode)))
 
 (defun eglot-go-save-hooks ()
   (add-hook 'before-save-hook #'eglot-format-buffer -10 t)
@@ -123,6 +127,7 @@
             (evil-leader/set-key "r" 'xref-find-references)
             (evil-leader/set-key "d" 'xref-find-definitions)
             (evil-leader/set-key "p" 'flymake-show-buffer-diagnostics)
+            (evil-leader/set-key "P" 'flymake-show-project-diagnostics)
             (evil-leader/set-key "x" 'simpson-horizontal-split)))
 
 (defun simpson-vert-split()
@@ -244,9 +249,12 @@
                        '(dlv port 55878 :request "attach" :mode "remote")))
 
 (use-package diff-hl
-  :bind (("C-SPC r" . diff-hl-revert-hunk))
-  :config (progn
-            (global-diff-hl-mode)))
+  :demand t
+  :init
+  (global-diff-hl-mode)
+  (diff-hl-margin-mode)
+  (evil-define-key 'normal 'global (kbd "] c") 'diff-hl-next-hunk)
+  (evil-define-key 'normal 'global (kbd "[ c") 'diff-hl-previous-hunk))
 
 (defun my/dlv-attach-by-name ()
   "Attach dlv to a process selected via completion."
@@ -289,6 +297,10 @@
 (global-set-key (kbd "s-=") 'text-scale-increase)
 (global-set-key (kbd "s--") 'text-scale-decrease)
 (global-set-key (kbd "C-SPC k !") 'simpson-restore-text)
+(global-set-key (kbd "C-SPC t") 'tab-bar-switch-to-tab)
+(global-set-key (kbd "C-SPC c") 'tab-bar-new-tab)
+(global-set-key (kbd "C-SPC d") 'tab-bar-close-tab)
+(global-set-key (kbd "C-SPC r") 'tab-bar-rename-tab)
 
 (defun simpson-restore-text()
   "Reset text size to default."
@@ -301,6 +313,7 @@
             (setq auto-revert-buffer-list-filter nil)
             (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
             (put 'magit-clean 'disabled nil)
+            (setq magit-log-section-commit-count 0)
             (add-hook 'magit-status-sections-hook 'magit-insert-worktrees)
             (set-face-background 'magit-diff-hunk-heading-highlight "DarkMagenta")
             (set-face-background 'magit-diff-hunk-heading "DarkCyan")))
@@ -319,7 +332,12 @@
                                             '(:eval mode-line-position)
                                             " "
                                             mode-line-modes
-                                            mode-line-misc-info))))
+                                            mode-line-misc-info
+                                            '(:eval (simpson-current-tab))))))
+
+(defun simpson-current-tab ()
+  "Return current tab"
+  (concat "[" (cdr (assq 'name (cdr (tab-bar--current-tab)))) "]"))
 
 (use-package gotest)
 
@@ -356,3 +374,26 @@
 
 (use-package scss-mode
   :mode "\\.scss\\'")
+
+(defun simpson-evil-mode ()
+  "Change mode line color based on evil state."
+  (cond
+   ((evil-insert-state-p) (set-face-attribute 'mode-line nil :background "#ea51b2" :foreground "white" :box '(:line-width 5 :color "#ea51b2")))
+   ((evil-normal-state-p) (modeline-theme))))
+
+(set-face-background 'fringe nil)
+
+(defun modeline-theme()
+  (when (string= (car custom-enabled-themes) "base16-dracula")
+    (set-face-attribute 'header-line nil
+                        :background (plist-get base16-dracula-theme-colors :base00)
+                        :box `(:color ,(plist-get base16-dracula-theme-colors :base00)))
+    (set-face-attribute 'mode-line nil
+                        :background (plist-get base16-dracula-theme-colors :base0D)
+                        :foreground (plist-get base16-dracula-theme-colors :base01)
+                        :box `(:line-width 5 :color ,(plist-get base16-dracula-theme-colors :base0D) :style nil))
+    (set-face-attribute 'mode-line-inactive nil
+                        :background (plist-get base16-dracula-theme-colors :base01)
+                        :foreground (plist-get base16-dracula-theme-colors :base06)
+                        :box `(:line-width 5 :color ,(plist-get base16-dracula-theme-colors :base01) :style nil))))
+(modeline-theme)
