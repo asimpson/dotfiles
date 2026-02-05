@@ -153,13 +153,13 @@
 
 (defun simpson-other-project-window()
   (interactive)
-  (let ((f (completing-read
-            "Project file:"
-            (project--files-in-directory
-             (project-root (project-current t)) vc-directory-exclusion-list))))
+  (let* ((root (project-root (project-current t)))
+         (files (project-files (project-current t)))
+         (relative-files (mapcar (lambda (f) (file-relative-name f root)) files))
+         (f (completing-read "Project file: " relative-files)))
     (split-window-right)
     (evil-window-right 1)
-    (find-file f)
+    (find-file (expand-file-name f root))
     (balance-windows)))
 
 (defun simpson-other-buffer-window()
