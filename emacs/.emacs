@@ -84,6 +84,7 @@
             (setq evil-split-window-below t)
             (evil-set-undo-system 'undo-redo)
             (add-to-list 'evil-emacs-state-modes 'dired-mode)
+            (add-to-list 'evil-emacs-state-modes 'vterm-mode)
             (add-to-list 'evil-emacs-state-modes 'deadgrep-mode)
             (add-to-list 'evil-emacs-state-modes 'xref--xref-buffer-mode)
             (add-to-list 'evil-emacs-state-modes 'flymake-diagnostics-buffer-mode)
@@ -97,6 +98,8 @@
             (define-key evil-normal-state-map (kbd "C-c C-p") 'project-find-file)
             (define-key evil-normal-state-map (kbd "C-u") 'evil-scroll-up)
             (define-key evil-normal-state-map (kbd "C-n") 'evil-scroll-down)
+            (global-set-key (kbd "C-SPC k g") 'ffap)
+            (global-set-key (kbd "C-SPC k v") 'visual-line-mode)
             (add-hook 'post-command-hook 'simpson-evil-mode)))
 
 (defun eglot-go-save-hooks ()
@@ -109,10 +112,19 @@
   :hook ((go-mode . eglot-ensure)
          (go-mode . eglot-go-save-hooks)))
 
+(use-package jsonnet-mode
+  :hook ((jsonnet-mode . eglot-ensure)
+         (jsonnet-mode . eglot-go-save-hooks)
+         (jsonnet-mode . (lambda () (setq mode-name "jsonnet"))))
+  :mode (("\.jsonnet?\'" . jsonnet-mode)
+         ("\.libsonnet?\'" . jsonnet-mode)))
+
 (use-package eglot
   :config
   (setq eglot-autoshutdown t)  ; shutdown server when last buffer closed
   (evil-define-key 'normal eglot-mode-map (kbd "K") 'eldoc-doc-buffer)
+  (add-to-list 'eglot-server-programs
+               `(jsonnet-mode . ("jsonnet-language-server")))
   (setq eglot-events-buffer-size 0))  ; disable events logging for performance
 
 (use-package evil-leader
@@ -230,6 +242,7 @@
 (eval-after-load "flymake" '(simpson-make-neutral flymake-project-diagnostics-mode-map))
 (eval-after-load "xref" '(simpson-make-neutral xref--xref-buffer-mode-map))
 (eval-after-load "xref" '(simpson-make-neutral--keys xref--xref-buffer-mode-map))
+(eval-after-load "vterm" '(simpson-make-neutral vterm-mode-map))
 
 (use-package diminish
   :defer 1
@@ -397,3 +410,20 @@
                         :foreground (plist-get base16-dracula-theme-colors :base06)
                         :box `(:line-width 5 :color ,(plist-get base16-dracula-theme-colors :base01) :style nil))))
 (modeline-theme)
+
+(defun simpson-copy-flymake-diagnostic ()
+  "Copy the Flymake diagnostic message at point to the kill ring."
+  (interactive)
+  (let ((diag (flymake-diagnostics (point))))
+    (if diag
+        (let ((msg (flymake-diagnostic-text (car diag))))
+          (kill-new msg)
+          (message "Copied diagnostic"))
+      (message "No diagnostic at point."))))
+
+(use-package github-notes
+  :load-path "~/Projects/github-notes-el/"
+  :custom
+  (github-notes-repo "asimpson/working-notes")
+  :bind
+  ("C-c g n" . github-notes))
