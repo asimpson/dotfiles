@@ -3,8 +3,10 @@
 let
   shared = import ../shared.nix;
   kolide-key = import ../kolide-key.nix;
+  fleet-key = import ../fleet-key.nix;
   hosts = import ./hosts.nix;
   rofi-clipster = import ../local-packages/rofi-clipster.nix { inherit pkgs; };
+  fleet-orbit = import ../local-packages/fleet-orbit-grafana.nix { inherit pkgs; };
   flake-compat = import (fetchTarball "https://github.com/edolstra/flake-compat/archive/master.tar.gz");
   ghostty-flake = flake-compat {
     src = fetchTarball "https://github.com/ghostty-org/ghostty/archive/main.tar.gz";
@@ -12,6 +14,33 @@ let
   kolide-flake = flake-compat {
     src = fetchTarball "https://github.com/kolide/nix-agent/archive/main.tar.gz";
   };
+  orbitBinaryPath = "/var/lib/orbit/bin/orbit/orbit";
+  fleetOrbitEnv = ''
+    ORBIT_ROOT_DIR=/var/lib/orbit
+    ORBIT_UPDATE_URL=https://updates.fleetdm.com
+    ORBIT_ORBIT_CHANNEL=stable
+    ORBIT_OSQUERYD_CHANNEL=stable
+    ORBIT_UPDATE_INTERVAL=15m0s
+    ORBIT_FLEET_DESKTOP=true
+    ORBIT_DESKTOP_CHANNEL=stable
+    ORBIT_FLEET_URL=https://grafanalabs.cloud.fleetdm.com
+    ORBIT_ENROLL_SECRET=${fleet-key.enroll-secret}
+    ORBIT_ENABLE_SCRIPTS=true
+    ORBIT_DISABLE_SETUP_EXPERIENCE=true
+  '';
+  orbit-bootstrap = pkgs.writeShellScript "orbit-bootstrap" ''
+    set -eu
+    install -d -m 0755 /var/lib/orbit/bin/orbit
+    install -d -m 0755 /var/lib/orbit/bin/orbit/linux/stable
+
+    if [ ! -x /var/lib/orbit/bin/orbit/linux/stable/orbit ]; then
+      ln -sf ${fleet-orbit}/bin/orbit /var/lib/orbit/bin/orbit/linux/stable/orbit
+    fi
+
+    if [ ! -x /var/lib/orbit/bin/orbit/orbit ]; then
+      ln -sf /var/lib/orbit/bin/orbit/linux/stable/orbit /var/lib/orbit/bin/orbit/orbit
+    fi
+  '';
 in
 {
   imports = [ ./hardware-configuration.nix ../scripts.nix ../fin/packages.nix ../display-config/4k-32in.nix kolide-flake.defaultNix.nixosModules.kolide-launcher ];
@@ -34,6 +63,10 @@ in
     mode = "0600";
     text = kolide-key.kolide-key;
   };
+  environment.etc."default/orbit" = {
+    mode = "0600";
+    text = fleetOrbitEnv;
+  };
 
   environment.systemPackages = with pkgs; [
     _1password-gui
@@ -46,6 +79,7 @@ in
     bat
     lxqt.lxqt-policykit
     impala
+    fleet-orbit
     ghostty-flake.defaultNix.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
@@ -54,6 +88,13 @@ in
       if [ ! -f "/bin/bash" ]; then
         ln -sf ${pkgs.bash}/bin/bash /bin/bash
       fi
+    '';
+  };
+
+  system.activationScripts.fleetCompatLinks = {
+    text = ''
+      mkdir -p /usr/bin
+      ln -sf ${pkgs.xdg-utils}/bin/xdg-open /usr/bin/xdg-open
     '';
   };
 
@@ -106,6 +147,26 @@ in
       };
     };
     services = {
+      orbit = {
+        description = "Fleet Orbit osquery";
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" "syslog.target" ];
+        wantedBy = [ "multi-user.target" ];
+        path = with pkgs; [ sudo xdg-utils ];
+        serviceConfig = {
+          TimeoutStartSec = 0;
+          EnvironmentFile = "/etc/default/orbit";
+          ExecStartPre = "${orbit-bootstrap}";
+          ExecStart = orbitBinaryPath;
+          Restart = "always";
+          RestartSec = 1;
+          KillMode = "control-group";
+          KillSignal = "SIGTERM";
+          CPUQuota = "20%";
+          StateDirectory = "orbit";
+          LogsDirectory = [ "orbit" "osquery" ];
+        };
+      };
       backupmail = {
         path = [
           pkgs.age
@@ -147,6 +208,18 @@ in
     pulse.enable = true;
   };
   security.polkit.enable = true;
+  programs.nix-ld = {
+    enable = true;
+    libraries = with pkgs; [
+      glibc
+      stdenv.cc.cc.lib
+      zlib
+      openssl
+      curl
+      xz
+      bzip2
+    ];
+  };
   programs.dconf.enable = true;
   programs.zsh.enable = true;
   programs.ssh.startAgent = true;

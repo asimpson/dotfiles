@@ -36,3 +36,9 @@ nixos/*/hosts.nix
 #  kolide-key = "<KEY>";
 #}
 /nixos/kolide-key.nix
+
+#enrollment key for fleet
+#{
+#  enroll-secret = "<KEY>";
+#}
+/nixos/fleet-key.nix
