@@ -5,7 +5,7 @@ configuration {
   display-drun: "";
   display-window: "";
   display-run: "";
-  dpi: 130;
+  dpi: 140;
 }
 
 @theme "slate"
