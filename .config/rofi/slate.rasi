@@ -3,7 +3,7 @@
   border-color: #2e343f;
   text-color: #8ca0aa;
   spacing: 0;
-  width: 720px;
+  width: 850px;
   font: "Hack 12";
 }
 

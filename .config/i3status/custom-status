@@ -20,5 +20,5 @@ kolide=$(jq -r 'if .icon == "triangle-exclamation" then "⚠ " + (.tooltip | cap
 
 do
   read line
-  echo "${mute} ${line} | ${kolide} ${audio_icon}" || exit 1
+  echo "${mute} ${line} |${kolide} ${audio_icon}" || exit 1
 done

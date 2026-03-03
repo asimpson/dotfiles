@@ -14,7 +14,7 @@ let
   };
 in
 {
-  imports = [ ./hardware-configuration.nix ../scripts.nix ../fin/packages.nix ../display-config/1440p.nix kolide-flake.defaultNix.nixosModules.kolide-launcher ];
+  imports = [ ./hardware-configuration.nix ../scripts.nix ../fin/packages.nix ../display-config/4k-32in.nix kolide-flake.defaultNix.nixosModules.kolide-launcher ];
 
 #  specialisation."fix-amd-crash".configuration = {
 #    system.nixos.tags = [ "old-firmware" ];
