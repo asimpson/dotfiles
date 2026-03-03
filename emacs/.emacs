@@ -243,6 +243,9 @@
 (eval-after-load "xref" '(simpson-make-neutral xref--xref-buffer-mode-map))
 (eval-after-load "xref" '(simpson-make-neutral--keys xref--xref-buffer-mode-map))
 (eval-after-load "vterm" '(simpson-make-neutral vterm-mode-map))
+(eval-after-load "vterm"
+  '(define-key vterm-mode-map (kbd "<S-return>");;for some reason this doesn't work by default
+               (lambda () (interactive) (vterm-send-key "j" nil nil t))))
 
 (use-package diminish
   :defer 1
