@@ -147,6 +147,10 @@ in
             Restart = "always";
           };
         };
+        sunshine.environment = {
+          XDG_DATA_DIRS = lib.mkForce "${pkgs.sunshine}/share:${pkgs.hicolor-icon-theme}/share";
+          GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
+        };
       };
     };
     services = {
@@ -305,6 +309,7 @@ in
     ];
   };
   hardware.logitech.wireless.enable = true;
+  hardware.i2c.enable = true; #needed for ddc
 
   # Docker configuration
   virtualisation = {
@@ -382,7 +387,7 @@ in
   users.users.adam = {
     isNormalUser = true;
     shell = pkgs.zsh;
-    extraGroups = [ "audio" "video" "libvirtd" "lp" "wheel" "docker" ];
+    extraGroups = [ "audio" "video" "libvirtd" "lp" "wheel" "docker" "i2c" ];
   };
 
   system.autoUpgrade.enable = true;

@@ -82,5 +82,6 @@ in {
       epkgs.treesit-grammars.with-all-grammars
       epkgs.vterm
     ]))
+    hicolor-icon-theme
   ];
 }
