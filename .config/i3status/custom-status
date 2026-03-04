@@ -12,13 +12,14 @@ fi
 
 audio_icon=$(case "$(pactl info | rg "Default Sink" | cut -d ":" -f 2 | xargs)" in
     "alsa_output.pci-0000_0c_00.6.analog-stereo") echo "🔊" ;;
+    "alsa_output.pci-0000_0c_00.1.hdmi-stereo") echo "🖥️" ;;
     "alsa_output.usb-Audio-Technica_ATR_USB_microphone-00.analog-stereo") echo "🎧" ;;
     *) echo "🔇" ;;
 esac)
 
-kolide=$(jq -r 'if .icon == "triangle-exclamation" then "⚠ " + (.tooltip | capture("(?<d>In [0-9]+ Days?)") | .d) else "" end' /var/kolide-k2/k2device.kolide.com/menu.json 2>/dev/null)
-
+kolide=$(jq -r 'if .icon == "triangle-exclamation" then " ⚠ " + (.tooltip | capture("(?<d>In [0-9]+ Days?)") | .d) else "" end' /var/kolide-k2/k2device.kolide.com/menu.json 2>/dev/null)
+fleet=$(fleet-status | jq -r 'if .status == "green" then "✅" else "☠️" end')
 do
   read line
-  echo "${mute} ${line} |${kolide} ${audio_icon}" || exit 1
+  echo "${mute} ${line} |${kolide} ${fleet} ${audio_icon}" || exit 1
 done

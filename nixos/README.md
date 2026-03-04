@@ -94,3 +94,13 @@ Fleet side is healthy when logs show:
 - `Found osquery version: ...`
 - no repeated `exec: "sudo": executable file not found` errors
 - no repeated `NixOS cannot run dynamically linked executables` errors
+- no repeated `certificate verify failed` from `osqueryd`
+
+If you see repeated `certificate verify failed` plus
+`Cannot read TLS server certificate(s): /opt/osquery/share/osquery/certs/certs.pem`,
+apply latest config and restart Orbit:
+
+```bash
+sudo nixos-rebuild switch
+sudo systemctl restart orbit.service
+```

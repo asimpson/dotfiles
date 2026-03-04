@@ -95,6 +95,9 @@ in
     text = ''
       mkdir -p /usr/bin
       ln -sf ${pkgs.xdg-utils}/bin/xdg-open /usr/bin/xdg-open
+
+      mkdir -p /opt/osquery/share/osquery/certs
+      ln -sf /etc/ssl/certs/ca-certificates.crt /opt/osquery/share/osquery/certs/certs.pem
     '';
   };
 
