@@ -17,7 +17,7 @@ audio_icon=$(case "$(pactl info | rg "Default Sink" | cut -d ":" -f 2 | xargs)" 
     *) echo "🔇" ;;
 esac)
 
-kolide=$(jq -r 'if .icon == "triangle-exclamation" then " ⚠ " + (.tooltip | capture("(?<d>In [0-9]+ Days?)") | .d) else "" end' /var/kolide-k2/k2device.kolide.com/menu.json 2>/dev/null)
+kolide=$(jq -r 'if .icon == "triangle-exclamation" then " ⚠️ " + (.tooltip | capture("(?<d>In [0-9]+ Days?)") | .d) else "" end' /var/kolide-k2/k2device.kolide.com/menu.json 2>/dev/null)
 fleet=$(fleet-status | jq -r 'if .status == "green" then "✅" else "☠️" end')
 do
   read line
