@@ -55,3 +55,15 @@ hs.hotkey.bind({"alt"}, "return", function()
   end
 end)
 
+-- toggle github notes like i3 scratchpad
+hs.hotkey.bind({"alt", "shift"}, "o", function()
+  local win = hs.window.focusedWindow()
+  local ghwin = hs.application("Emacs"):getWindow("*github-notes-view*")
+
+  if win ~= ghwin then
+    ghwin:focus()
+  else
+    hs.application.frontmostApplication():hide()
+    --ghwin:sendToBack()
+  end
+end)
