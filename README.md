@@ -24,6 +24,17 @@ Launchd is OS X's replacement for `cron`.
 
   `ln -s ~/.dotfiles/emacs/.emacs ~/.emacs.d/`
 
+### non NixOS install
+
+```sh
+nix profile install --impure --expr '
+let pkgs = import <nixpkgs> {};
+in ((pkgs.emacsPackagesFor pkgs.emacs).treesit-grammars.with-all-grammars)
+'
+```
+
+Then symlink things in
+
 ## Git Conf
 * Symlink both `gitmessage.txt` and `master_git_ignore` to `$HOME`
 

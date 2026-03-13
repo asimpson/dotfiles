@@ -26,7 +26,7 @@
 (setq-default css-indent-offset 2)
 
 (if (equal system-type 'darwin)
-    (progn (set-face-attribute 'default nil :font "Hack-14")
+    (progn (set-face-attribute 'default nil :font "Hack-15")
            (set-frame-font "Hack-14" nil t))
   (progn (set-face-attribute 'default nil :font "Hack-12")
          (set-frame-font "Hack-12" nil t)))
@@ -126,6 +126,8 @@
 (use-package eglot
   :config
   (setq eglot-autoshutdown t)  ; shutdown server when last buffer closed
+  (add-to-list 'eglot-server-programs
+               '((typescript-mode) "typescript-language-server" "--stdio"))
   (evil-define-key 'normal eglot-mode-map (kbd "K") 'eldoc-doc-buffer)
   (add-to-list 'eglot-server-programs
                `(jsonnet-mode . ("jsonnet-language-server")))
