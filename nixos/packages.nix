@@ -1,4 +1,7 @@
 { pkgs, ... }:
+let
+  nasc = import ./nasc.nix { inherit pkgs; };
+in
 {
   environment.systemPackages = with pkgs; [
     vim
@@ -43,10 +46,10 @@
     xclip
     tailscale
     iwd
-    nasc
     xsettingsd
     remmina
     direnv
     spice-gtk
+    nasc
   ];
 }
