@@ -67,6 +67,11 @@ in
     mode = "0600";
     text = fleetOrbitEnv;
   };
+  environment.etc."fleet/${fleet-orbit.packageName}" = {
+    # Keep the manually-added Fleet bootstrap artifact in the system closure so
+    # auto-upgrade doesn't fail after garbage collection removes the build input.
+    source = fleet-orbit.source;
+  };
 
   environment.systemPackages = with pkgs; [
     _1password-gui

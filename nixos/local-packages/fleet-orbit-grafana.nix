@@ -21,6 +21,10 @@ pkgs.stdenvNoCC.mkDerivation {
   pname = "fleet-orbit-grafana";
   inherit version;
   src = packageSrc;
+  passthru = {
+    source = packageSrc;
+    inherit packageName sourceHash;
+  };
 
   nativeBuildInputs = [ pkgs.zstd pkgs.gnutar ];
 

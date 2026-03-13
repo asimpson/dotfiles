@@ -6,7 +6,6 @@ let
   change-audio = pkgs.writeScriptBin "change-audio" (builtins.readFile ../linux/rofi-change-audio.sh);
   kolide-vm = pkgs.writeScriptBin "kolide-vm" (builtins.readFile ../linux/kolide.sh);
   provision-nix = pkgs.writeScriptBin "provision-nix" (builtins.readFile ../linux/provision-nix.sh);
-  fleet-status = pkgs.writeScriptBin "fleet-status" (builtins.readFile ../linux/fleet-status.sh);
 in
 {
   environment.systemPackages = [
@@ -16,6 +15,5 @@ in
     change-audio
     kolide-vm
     provision-nix
-    fleet-status
   ];
 }

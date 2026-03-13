@@ -26,9 +26,9 @@ case "$selected" in
         dunstify "$(playerctl metadata -f '{{title}} - {{artist}}')"
         ;;
     "🔅 set brightness")
-        current=$(win-switch-rs brightness -m "DELL S3225QS" | cut -d ":" -f 2)
-        win-switch-rs brightness -m 'DELL S3225QS' -v $(rofi -dmenu -mesg $current) && \
-            dunstify "🔅 $(win-switch-rs brightness -m 'DELL S3225QS')"
+        current=$(win-switch-rs brightness | cut -d ":" -f 2)
+        win-switch-rs brightness -v $(rofi -dmenu -mesg $current) && \
+            dunstify "🔅 $(win-switch-rs brightness)"
         ;;
     *)
         # If no valid selection was made, exit

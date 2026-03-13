@@ -93,6 +93,8 @@
             (add-to-list 'evil-emacs-state-modes 'xref--xref-buffer-mode)
             (add-to-list 'evil-emacs-state-modes 'flymake-diagnostics-buffer-mode)
             (add-to-list 'evil-emacs-state-modes 'flymake-project-diagnostics-mode)
+            (define-key evil-ex-completion-map (kbd "C-r") #'previous-matching-history-element)
+            (define-key evil-ex-completion-map (kbd "C-s") #'next-matching-history-element)
             (fset 'evil-visual-update-x-selection 'ignore)
             (simpson-make-neutral evil-normal-state-map)
             (define-key evil-window-map "=" 'balance-windows-area)
@@ -329,14 +331,40 @@
   (interactive)
   (text-scale-set 0))
 
+(defun simpson/magit-fetch-all-reset-main-and-open-reflog ()
+  "Fetch all remotes, hard reset to origin/main or origin/master, then open reflog."
+  (interactive)
+  (when (yes-or-no-p "Fetch --all and hard reset to origin/main|origin/master? ")
+    (magit-call-git "fetch" "--all")
+    (let ((target (cond
+                   ((magit-git-success "show-ref" "--verify" "--quiet"
+                                       "refs/remotes/origin/main")
+                    "origin/main")
+                   ((magit-git-success "show-ref" "--verify" "--quiet"
+                                       "refs/remotes/origin/master")
+                    "origin/master")
+                   (t (user-error "Neither origin/main nor origin/master exists")))))
+      (magit-call-git "reset" "--hard" target))
+    (magit-reflog-head)
+    (magit-refresh)))
+
 (use-package magit
   :bind ("C-SPC g" . magit-status)
   :config (progn
+            (global-set-key (kbd "C-SPC F") 'magit-find-file-other-window)
             (setq auto-revert-buffer-list-filter nil)
             (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
             (put 'magit-clean 'disabled nil)
             (setq magit-log-section-commit-count 0)
             (add-hook 'magit-status-sections-hook 'magit-insert-worktrees)
+            (define-key magit-status-mode-map (kbd "C-c C-r")
+                        #'simpson/magit-fetch-all-reset-main-and-open-reflog)
+
+            (unless (ignore-errors (transient-get-suffix 'magit-dispatch "x"))
+              (transient-append-suffix
+                'magit-dispatch "X"
+                '("x" "Reset + cherry pick"
+                  simpson/magit-fetch-all-reset-main-and-open-reflog)))
             (set-face-background 'magit-diff-hunk-heading-highlight "DarkMagenta")
             (set-face-background 'magit-diff-hunk-heading "DarkCyan")))
 
@@ -345,7 +373,6 @@
 (use-package shrink-path
   :config (progn
             (setq-default mode-line-format (list
-                                            " "
                                             '(:eval (when (buffer-file-name)
                                                       (propertize (shrink-path-file (buffer-file-name) t) 'help-echo (buffer-file-name))))
                                             '(:eval (when (buffer-modified-p)
@@ -436,3 +463,11 @@
   (github-notes-repo "asimpson/working-notes")
   :bind
   ("C-c g n" . github-notes))
+
+(setq frame-title-format
+      '((:eval
+         (when (project-current)
+           (concat (car (last (split-string (car (last (project-current))) "/" t))) "/")))
+        "%b emacs"))
+
+(setq icon-title-format frame-title-format)

@@ -74,6 +74,10 @@ nix-store --add-fixed sha256 /path/to/fleet-osquery-<new-version>-x86_64.pkg.tar
 sudo nixos-rebuild switch
 ```
 
+The first rebuild after adding a new Fleet artifact is important: this config
+pins the `.zst` into the system closure so `nixos-upgrade.service` will still
+find it later, even after garbage collection.
+
 ## Enrollment and SSO
 
 If logs show:
