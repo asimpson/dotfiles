@@ -1,18 +1,19 @@
 hs.application.enableSpotlightForNameSearches(true)
 hs.loadSpoon("WindowHalfsAndThirds")
+hs.loadSpoon("EmmyLua")
 spoon.WindowHalfsAndThirds:bindHotkeys(spoon.WindowHalfsAndThirds.defaultHotkeys)
 
-hs.hotkey.bind({"cmd", "shift", "ctrl"}, "left", function()
+hs.hotkey.bind({ "cmd", "shift", "ctrl" }, "left", function()
   local win = hs.window.focusedWindow()
   local f = win:frame()
   local screen = win:screen():frame()
-  
+
   -- Calculate distance to screen edge
   local distanceToEdge = f.x - screen.x
-  
+
   -- Move by 15px or to edge, whichever is smaller
   local moveAmount = math.min(50, distanceToEdge)
-  
+
   -- Only move if there's space
   if moveAmount > 0 then
     f.x = f.x - moveAmount
@@ -21,17 +22,17 @@ hs.hotkey.bind({"cmd", "shift", "ctrl"}, "left", function()
 end)
 
 -- Move current window right by 15px or until screen edge
-hs.hotkey.bind({"cmd", "shift", "ctrl"}, "right", function()
+hs.hotkey.bind({ "cmd", "shift", "ctrl" }, "right", function()
   local win = hs.window.focusedWindow()
   local f = win:frame()
   local screen = win:screen():frame()
-  
+
   -- Calculate distance to screen edge
   local distanceToEdge = screen.x + screen.w - (f.x + f.w)
-  
+
   -- Move by 15px or to edge, whichever is smaller
   local moveAmount = math.min(50, distanceToEdge)
-  
+
   -- Only move if there's space
   if moveAmount > 0 then
     f.x = f.x + moveAmount
@@ -40,7 +41,7 @@ hs.hotkey.bind({"cmd", "shift", "ctrl"}, "right", function()
 end)
 
 -- spawn new terminal like i3
-hs.hotkey.bind({"alt"}, "return", function()
+hs.hotkey.bind({ "alt" }, "return", function()
   local term = hs.application.find("Ghostty")
 
   if term == nil then
@@ -51,19 +52,20 @@ hs.hotkey.bind({"alt"}, "return", function()
   if term:name() ~= "Ghostty" then
     hs.application.launchOrFocus("Ghostty")
   else
-    hs.eventtap.keyStroke({"cmd"}, "n", 200, term)
+    hs.eventtap.keyStroke({ "cmd" }, "n", 200, term)
   end
 end)
 
+local wf = hs.window.filter
+local ghAppFilter = wf.new(false):setAppFilter('Emacs', { allowTitles = "github%-notes" })
 -- toggle github notes like i3 scratchpad
-hs.hotkey.bind({"alt", "shift"}, "o", function()
-  local win = hs.window.focusedWindow()
-  local ghwin = hs.application("Emacs"):getWindow("*github-notes-view*")
-
-  if win ~= ghwin then
-    ghwin:focus()
-  else
-    hs.application.frontmostApplication():hide()
-    --ghwin:sendToBack()
+hs.hotkey.bind({ "alt", "shift" }, "o", function()
+  local wins = ghAppFilter:getWindows()
+  if wins[1] ~= nil then
+    if wins[1] ~= hs.window.focusedWindow() then
+      wins[1]:focus()
+    elseif wins[1] == hs.window.focusedWindow() then
+      hs.application.frontmostApplication():hide()
+    end
   end
 end)

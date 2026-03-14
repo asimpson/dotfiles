@@ -36,6 +36,11 @@
 (use-package yaml-mode
   :mode (("\.yml?\'" . yaml-mode)))
 
+(use-package lua-mode
+  :hook ((lua-mode . eglot-ensure)
+         (lua-mode . eglot-go-save-hooks))
+  :mode (("\.lua?\'" . lua-mode)))
+
 (set-default 'truncate-lines t)
 
 (setq make-backup-files nil)
@@ -129,7 +134,8 @@
   :config
   (setq eglot-autoshutdown t)  ; shutdown server when last buffer closed
   (add-to-list 'eglot-server-programs
-               '((typescript-mode) "typescript-language-server" "--stdio"))
+               '((typescript-mode) "typescript-language-server" "--stdio")
+               '((lua-mode) "lua-language-server" (if (file-exists-p "/Users/adam/.dotfiles/emacs/luaconfig.json") "--configpath=/Users/adam/.dotfiles/emacs/luaconfig.json")))
   (evil-define-key 'normal eglot-mode-map (kbd "K") 'eldoc-doc-buffer)
   (add-to-list 'eglot-server-programs
                `(jsonnet-mode . ("jsonnet-language-server")))
