@@ -49,6 +49,14 @@
 
 (setq inhibit-splash-screen t)
 
+(setq ispell-program-name (expand-file-name "~/.nix-profile/bin/hunspell"))
+(setenv "DICPATH" (expand-file-name "~/.nix-profile/share/hunspell"))
+(setq ispell-hunspell-dict-paths-alist
+      `(("en_US" ,(expand-file-name "en_US.aff" (expand-file-name "~/.nix-profile/share/hunspell")))))
+(setq ispell-dictionary "en_US")
+(setq ispell-personal-dictionary
+      (expand-file-name "~/.dotfiles/emacs/hunspell-personal.en_US"))
+
 (use-package base16-theme
   :if (display-graphic-p)
   :config (load-theme 'base16-dracula t))
@@ -360,6 +368,7 @@
             (global-set-key (kbd "C-SPC F") 'magit-find-file-other-window)
             (setq auto-revert-buffer-list-filter nil)
             (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+            (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
             (put 'magit-clean 'disabled nil)
             (setq magit-log-section-commit-count 0)
             (add-hook 'magit-status-sections-hook 'magit-insert-worktrees)
@@ -419,6 +428,14 @@
 (use-package json-ts-mode
   :ensure nil
   :mode "\\.json\\'")
+
+
+(use-package flyspell
+  :ensure nil
+  :hook (markdown-mode . flyspell-mode)
+  :config (progn
+            (setq flyspell-issue-message-flag nil)
+            (define-key flyspell-mode-map (kbd "C-SPC x") 'flyspell-correct-word-before-point)))
 
 (use-package markdown-mode
   :mode "\\.md\\'")
