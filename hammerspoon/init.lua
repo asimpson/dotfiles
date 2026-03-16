@@ -67,5 +67,7 @@ hs.hotkey.bind({ "alt", "shift" }, "o", function()
     elseif wins[1] == hs.window.focusedWindow() then
       hs.application.frontmostApplication():hide()
     end
+  elseif wins[1] == nil then
+    hs.notify.show("No github notes window", "", "")
   end
 end)

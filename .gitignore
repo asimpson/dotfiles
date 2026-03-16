@@ -42,3 +42,4 @@ nixos/*/hosts.nix
 #  enroll-secret = "<KEY>";
 #}
 /nixos/fleet-key.nix
+.DS_Store
