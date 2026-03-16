@@ -49,10 +49,16 @@
 
 (setq inhibit-splash-screen t)
 
-(setq ispell-program-name (expand-file-name "~/.nix-profile/bin/hunspell"))
-(setenv "DICPATH" (expand-file-name "~/.nix-profile/share/hunspell"))
+(setq hunspell-path (expand-file-name (car (seq-filter 'file-exists-p '("~/.nix-profile/bin/hunspell"
+                                                                        "/run/current-system/sw/bin/hunspell")))))
+
+(setq hunspell-dicts (expand-file-name (car (seq-filter 'file-exists-p '("~/.nix-profile/share/hunspell"
+                                                                         "/run/current-system/sw/share/hunspell")))))
+
+(setq ispell-program-name hunspell-path)
+(setenv "DICPATH" hunspell-path)
 (setq ispell-hunspell-dict-paths-alist
-      `(("en_US" ,(expand-file-name "en_US.aff" (expand-file-name "~/.nix-profile/share/hunspell")))))
+      `(("en_US" ,(expand-file-name "en_US.aff" hunspell-dicts))))
 (setq ispell-dictionary "en_US")
 (setq ispell-personal-dictionary
       (expand-file-name "~/.dotfiles/emacs/hunspell-personal.en_US"))

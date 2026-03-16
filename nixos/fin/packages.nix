@@ -83,5 +83,8 @@ in {
       epkgs.vterm
     ]))
     hicolor-icon-theme
+    lua-language-server
+    hunspell
+    hunspellDicts.en_US-large
   ];
 }

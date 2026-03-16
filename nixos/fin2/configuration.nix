@@ -8,9 +8,6 @@ let
   rofi-clipster = import ../local-packages/rofi-clipster.nix { inherit pkgs; };
   fleet-orbit = import ../local-packages/fleet-orbit-grafana.nix { inherit pkgs; };
   flake-compat = import (fetchTarball "https://github.com/edolstra/flake-compat/archive/master.tar.gz");
-  ghostty-flake = flake-compat {
-    src = fetchTarball "https://github.com/ghostty-org/ghostty/archive/main.tar.gz";
-  };
   kolide-flake = flake-compat {
     src = fetchTarball "https://github.com/kolide/nix-agent/archive/main.tar.gz";
   };
@@ -85,7 +82,7 @@ in
     lxqt.lxqt-policykit
     impala
     fleet-orbit
-    ghostty-flake.defaultNix.packages.${pkgs.stdenv.hostPlatform.system}.default
+    ghostty
   ];
 
   system.activationScripts.binbash = {
