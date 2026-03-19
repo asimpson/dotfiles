@@ -1,23 +1,9 @@
 ![logo](http://asimpson.github.io/dotfiles/logo.svg)
 
-## Shell Conf
-Source `~/.dotfiles/bash/functions` and `~/.dotfiles/bash/aliases` in one of these: `.bash_profile`, `.bashrc`, or `.zshrc`.
-
 ### Zsh Conf
 Symlink `~/.dotfiles/zsh/.zshrc` to `$HOME`:
 
   `ln -s ~/.dotfiles/zsh/.zshrc ~/.zshrc`
-
-### launchd
-Launchd is OS X's replacement for `cron`.
-
-* Symlink each `.plist` file in `~/.dotfiles/launch-scripts/` into `~/Library/LaunchAgents`
-
-  `ln -s ~/.dotfiles/launch-scripts/com.some-file.plist ~/Library/LaunchAgents/com.some-file.plist`
-
-* Load each daemon by running `launchctl load` for each one:
-
-  `launchctl load ~/Library/LaunchAgents/com.some-name.plist`
 
 ## Emacs Conf
 * Symlink all files in `~/.dotfiles/emacs` to `~/.emacs.d/`
@@ -33,7 +19,7 @@ in ((pkgs.emacsPackagesFor pkgs.emacs).treesit-grammars.with-all-grammars)
 '
 ```
 
-Then symlink things in
+Then symlink the tree-sitter libs into `~/.emacs.d/tree-sitter/`
 
 ## Git Conf
 * Symlink both `gitmessage.txt` and `master_git_ignore` to `$HOME`
@@ -73,17 +59,12 @@ Then symlink things in
 "age"
 "bat"
 "direnv"
-"fx"
 "fzf"
-"getmail6"
 "gh"
 "git"
-"kubectl"
-"nix" #installed by default
 "nix-direnv"
 "nix-zsh-completions"
-"nodejs_22"
-"nss-cacert"
+"nodejs"
 "ripgrep"
 "watch"
 ```
