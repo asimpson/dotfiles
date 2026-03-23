@@ -510,3 +510,6 @@
         "%b emacs"))
 
 (setq icon-title-format frame-title-format)
+
+;;without this emacs will find /usr/bin/git which doesn't work
+(setq vc-git-program (executable-find "git"))
