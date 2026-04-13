@@ -43,3 +43,5 @@ nixos/*/hosts.nix
 #}
 /nixos/fleet-key.nix
 .DS_Store
+/nixos/vms/llm-sandbox/result
+.codex
