@@ -8,6 +8,7 @@
 
   networking = {
     hostName = "llm-jail";
+    #set a hosts entry for a specific IP in libvirt
     useDHCP = true;
     firewall = {
       enable = false;
@@ -64,6 +65,8 @@
 
       cat > /home/agent/.bash_profile <<'EOF'
       export PATH="$PATH:/home/agent/.npm-global/bin"
+      alias claude="claude --dangerously-skip-permissions"
+      alias codex="codex --dangerously-bypass-approvals-and-sandbox"
       EOF
 
       chown agent:users /home/agent/.npmrc /home/agent/.bash_profile

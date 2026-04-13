@@ -12,4 +12,6 @@ virsh attach-device llm-jail --file /dev/stdin <<EOF
   </filesystem>
 EOF
 
-echo "Attached ${DIR} — mount in guest with: mount -t virtiofs -o ro ${NAME} /mnt/${NAME}"
+echo "Attached ${DIR} — mount in guest with:"
+echo "sudo mkdir -p /mnt/${NAME}
+sudo mount -t virtiofs -o ro ${NAME} /mnt/${NAME}"
