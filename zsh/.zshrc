@@ -20,7 +20,9 @@ fi
 
 enable_auto_completes() {
   eval "$(fzf --zsh)"
-  source <(tailscale completion zsh)
+  if command -v tailscale &> /dev/null; then
+    source <(tailscale completion zsh)
+  fi
 }
 
 # Fix for TRAMP
@@ -63,7 +65,9 @@ precmd() {
   PROMPT+="${NEWLINE}%D{%I:%M}%{$fg[magenta]%}❯ %{$reset_color%}"
 }
 
-source ~/.dotfiles/zsh/plugins/ht.plugin.zsh
+if [ -f ~/.dotfiles/zsh/plugins/ht.plugin.zsh ]; then
+  source ~/.dotfiles/zsh/plugins/ht.plugin.zsh
+fi
 
 export EDITOR='vim '
 
@@ -105,7 +109,7 @@ get_cluster() {
     select_cluster
 }
 
-# Function to get current k8s context and namespace 
+# Function to get current k8s context and namespace
 function get_k8s_info() {
   # First check if kubectl is in PATH
   if command -v kubectl &> /dev/null; then
@@ -113,7 +117,7 @@ function get_k8s_info() {
   else
     return
   fi
-  
+
   CONTEXT=$($KUBECTL config current-context 2>/dev/null)
   if [[ $? -eq 0 ]]; then
     NAMESPACE=$($KUBECTL config view --minify --output 'jsonpath={..namespace}' 2>/dev/null)
@@ -124,8 +128,11 @@ function get_k8s_info() {
   fi
 }
 
-export DIRENV_LOG_FORMAT="$(printf "\033[2mdirenv: %%s\033[0m")"
-eval "$(direnv hook zsh)"
+if command -v direnv &> /dev/null; then
+  export DIRENV_LOG_FORMAT="$(printf "\033[2mdirenv: %%s\033[0m")"
+  eval "$(direnv hook zsh)"
+fi
+
 _direnv_hook() {
   eval "$(direnv export zsh 2> >(egrep -v -e '^....direnv: export' >&2))"
 };
@@ -134,13 +141,3 @@ export NIXPKGS_ALLOW_UNFREE=1
 enable_auto_completes
 
 ulimit -S -n 10000
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/adam/.lmstudio/bin"
-# End of LM Studio CLI section
-
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/home/adam/.lmstudio/bin"
-# End of LM Studio CLI section
-

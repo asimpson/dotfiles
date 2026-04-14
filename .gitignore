@@ -45,3 +45,10 @@ nixos/*/hosts.nix
 .DS_Store
 /nixos/vms/llm-sandbox/result
 .codex
+
+#read-only github pat token for gh cli
+#{
+#  ro = "TOKEN";
+#}
+pat.nix
+/nixos/vms/llm-sandbox/ssh/
