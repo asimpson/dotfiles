@@ -1,11 +1,10 @@
 { modulesPath, lib, pkgs, ... }:
 
 let
-  pat = import ./pat.nix;
   md = builtins.readFile ./AGENTS.md;
   zshrc = builtins.readFile "/home/adam/.zshrc";
   agents = pkgs.writeText "AGENTS.md" ''${md}'';
-  claude = pkgs.writeText "CLAUDE.md" ''@AGENTS.md'';
+  claude = pkgs.writeText "CLAUDE.md" ''${md}'';
   npmPrefix = "/home/agent/.npm-global";
   home = "/home/agent";
   npmGlobals = [
@@ -87,6 +86,7 @@ in
     gopls
     gh
     fzf
+    bat
   ];
 
   system.activationScripts.npmsetup = {
@@ -100,9 +100,9 @@ in
       ${zshrc}
       HISTFILE=/persist/zsh/history
       export PATH="$PATH:${npmPrefix}/bin"
-      export GH_TOKEN=${pat.ro}
-      alias claude="claude --dangerously-skip-permissions"
-      alias codex="codex --dangerously-bypass-approvals-and-sandbox"
+      export GH_TOKEN=$(cat /persist/gh_token)
+      alias claude="claude --dangerously-skip-permissions "
+      alias codex="codex --dangerously-bypass-approvals-and-sandbox "
       precmd() {
         PROMPT="%~ %{$fg[yellow]%}=jail=%{$reset_color%} "
         PROMPT+="%D{%I:%M}%{$fg[magenta]%}❯ %{$reset_color%}"
@@ -116,9 +116,8 @@ in
   system.activationScripts.agentMarkdown = {
     deps = [];
     text = ''
-      install -Dm644 ${agents} ${home}/AGENTS.md
-      install -Dm644 ${claude} ${home}/CLAUDE.md
-      chown agent:users ${home}/*.md
+      install -Dm644 ${agents} ${home}/.codex/AGENTS.md
+      install -Dm644 ${claude} ${home}/.claude/CLAUDE.md
     '';
   };
 
