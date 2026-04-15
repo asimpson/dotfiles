@@ -6,6 +6,9 @@ let
   agents = pkgs.writeText "AGENTS.md" ''${md}'';
   claude = pkgs.writeText "CLAUDE.md" ''${md}'';
   npmPrefix = "/home/agent/.npm-global";
+  sendPatch = pkgs.writeShellScriptBin "sendPatch" ''
+    git format-patch -1 --stdout | curl -s --url smtp://192.168.122.1:25 --mail-from agent@llm-jail --mail-rcpt patches@localhost -T -
+  '';
   home = "/home/agent";
   npmGlobals = [
       "@anthropic-ai/claude-code"
@@ -54,6 +57,13 @@ in
   };
 
   programs.zsh.enable = true;
+  programs.git = {
+    enable = true;
+    config = {
+      user.name = "agent";
+      user.email = "agent@llm-jail";
+    };
+  };
 
   services.qemuGuest.enable = true;
 
@@ -87,6 +97,7 @@ in
     gh
     fzf
     bat
+    sendPatch
   ];
 
   system.activationScripts.npmsetup = {

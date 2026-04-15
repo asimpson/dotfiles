@@ -56,6 +56,13 @@ in
 #    ];
 #  };
 
+  environment.etc."smtpd/aliases" = {
+    text = ''
+      root: adam
+      patches: adam
+    '';
+  };
+
   environment.etc."kolide-k2/secret" = {
     mode = "0600";
     text = kolide-key.kolide-key;
@@ -135,6 +142,17 @@ in
 
   services.playerctld.enable = true;
 
+  services.opensmtpd = {
+    enable = true;
+    serverConfiguration = ''
+      table aliases file:/etc/smtpd/aliases
+      listen on 192.168.122.1 port 25
+      action "local_delivery" maildir "~/mail/patches" alias <aliases>
+      match from src 192.168.122.0/24 for local action "local_delivery"
+      match from any reject
+    '';
+  };
+
   systemd = {
     user = {
       services = {
@@ -189,6 +207,27 @@ in
           User = "adam";
         };
         startAt = "hourly";
+      };
+      notmuch-patches = {
+        description = "Index agent patches into notmuch";
+        conflicts = [ "backupmail.service" ];
+        script = ''
+          ${pkgs.notmuch}/bin/notmuch new
+          ${pkgs.notmuch}/bin/notmuch tag +patch -new -- folder:patches and not tag:patch
+        '';
+        serviceConfig = {
+          User = "adam";
+          Type = "oneshot";
+        };
+      };
+    };
+    timers = {
+      notmuch-patches = {
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnUnitActiveSec = "5m";
+          OnBootSec = "1m";
+        };
       };
     };
   };
@@ -267,7 +306,9 @@ in
       allowedTCPPorts = [ 3000 8080 ];
       allowedUDPPorts = [ 41641 ];
       checkReversePath = "loose";
-      extraCommands = hosts.extra;
+      extraCommands = hosts.extra + ''
+        iptables -A nixos-fw -p tcp -s 192.168.122.0/24 --dport 25 -j nixos-fw-accept
+      '';
     };
     hostName = "fin2";
     hostId = "5a488f19";
@@ -323,6 +364,7 @@ in
         package = pkgs.qemu_kvm;
         runAsRoot = true;
         swtpm.enable = true;
+        vhostUserPackages = [ pkgs.virtiofsd ];
       };
     };
     docker = {
