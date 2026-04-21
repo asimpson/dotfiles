@@ -3,16 +3,16 @@
 let
   md = builtins.readFile ./AGENTS.md;
   zshrc = builtins.readFile "/home/adam/.zshrc";
+  sendPatchSrc = builtins.readFile ./sendPatch.sh;
   agents = pkgs.writeText "AGENTS.md" ''${md}'';
   claude = pkgs.writeText "CLAUDE.md" ''${md}'';
   npmPrefix = "/home/agent/.npm-global";
-  sendPatch = pkgs.writeShellScriptBin "sendPatch" ''
-    git format-patch -1 --stdout | curl -s --url smtp://192.168.122.1:25 --mail-from agent@llm-jail --mail-rcpt patches@localhost -T -
-  '';
+  sendPatch = pkgs.writeShellScriptBin "sendPatch" ''${sendPatchSrc}'';
   home = "/home/agent";
   npmGlobals = [
       "@anthropic-ai/claude-code"
       "@openai/codex"
+      "@mariozechner/pi-coding-agent"
   ];
 in
 {
@@ -89,11 +89,8 @@ in
     jq
     ripgrep
     rsync
-    tmux
     vim
     nodejs
-    go
-    gopls
     gh
     fzf
     bat
@@ -129,11 +126,12 @@ in
     text = ''
       install -Dm644 ${agents} ${home}/.codex/AGENTS.md
       install -Dm644 ${claude} ${home}/.claude/CLAUDE.md
+      install -Dm644 ${agents} ${home}/.pi/agent/AGENTS.md
     '';
   };
 
   systemd.services.agent-npm-globals = {
-    description = "Install claude and codex";
+    description = "Install various harness";
     wantedBy = [ "multi-user.target" ];
     wants = [ "network-online.target" ];
     after = [ "network-online.target" ];
@@ -169,6 +167,7 @@ in
     "L+ ${home}/.codex - - - - /persist/.codex"
     "L+ ${home}/.claude - - - - /persist/.claude"
     "L+ ${home}/.claude.json - - - - /persist/.claude.json"
+    "L+ ${home}/.pi - - - - /persist/.pi"
     "d /mnt - - - -"
   ];
 
