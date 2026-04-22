@@ -4,11 +4,14 @@ let
   md = builtins.readFile ./AGENTS.md;
   zshrc = builtins.readFile "/home/adam/.zshrc";
   sendPatchSrc = builtins.readFile ./sendPatch.sh;
-  agents = pkgs.writeText "AGENTS.md" ''${md}'';
-  claude = pkgs.writeText "CLAUDE.md" ''${md}'';
+  sendPatchPiExt = builtins.readFile ./send-patch.ts;
+  agents = pkgs.writeText "AGENTS.md" md;
+  claude = pkgs.writeText "CLAUDE.md" md;
+  sendPatchPiText = pkgs.writeText "send-patch.ts" sendPatchPiExt;
   npmPrefix = "/home/agent/.npm-global";
   sendPatch = pkgs.writeShellScriptBin "sendPatch" sendPatchSrc;
   home = "/home/agent";
+  extensionPath = "${home}/.pi/agent/extensions";
   npmGlobals = [
       "@anthropic-ai/claude-code"
       "@openai/codex"
@@ -127,6 +130,13 @@ in
       install -Dm644 ${agents} ${home}/.codex/AGENTS.md
       install -Dm644 ${claude} ${home}/.claude/CLAUDE.md
       install -Dm644 ${agents} ${home}/.pi/agent/AGENTS.md
+    '';
+  };
+
+  system.activationScripts.extensions = {
+    deps = [];
+    text = ''
+      install -Dm644 ${sendPatchPiText} ${extensionPath}/send-patch.ts
     '';
   };
 
