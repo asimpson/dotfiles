@@ -6,10 +6,9 @@ For getting information from Github use the `gh` cli.
 
 This is nixOS so feel free to use nix-shell or other nix tools.
 
-# Patches
+# Steps for making code changes
 
-Generate changes as git patches and email them for review.
-
-Use `sendPatch` to generate the diff and email the patch in one step.
-
-For multi-commit changes, generate one email per commit with `sendPatch`.
+1. Make changes.
+2. Git commit changes.
+3. Use the `sendPatch` command to generate the diff and email the patch.
+4. For multi-commit changes, generate one email per commit with `sendPatch`.

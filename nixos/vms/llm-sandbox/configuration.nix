@@ -7,7 +7,7 @@ let
   agents = pkgs.writeText "AGENTS.md" ''${md}'';
   claude = pkgs.writeText "CLAUDE.md" ''${md}'';
   npmPrefix = "/home/agent/.npm-global";
-  sendPatch = pkgs.writeShellScriptBin "sendPatch" ''${sendPatchSrc}'';
+  sendPatch = pkgs.writeShellScriptBin "sendPatch" sendPatchSrc;
   home = "/home/agent";
   npmGlobals = [
       "@anthropic-ai/claude-code"
@@ -117,7 +117,7 @@ in
       }
       EOF
 
-      chown agent:users ${home}/.npmrc ${home}/.bash_profile
+      chown agent:users ${home}/.npmrc
     '';
   };
 
