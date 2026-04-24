@@ -1,17 +1,16 @@
 { modulesPath, lib, pkgs, ... }:
 
 let
-  md = builtins.readFile ./AGENTS.md;
   zshrc = builtins.readFile "/home/adam/.zshrc";
-  sendPatchSrc = builtins.readFile ./sendPatch.sh;
-  sendPatchPiExt = builtins.readFile ./send-patch.ts;
+  npmPrefix = "/home/agent/.npm-global";
+  home = "/home/agent";
+  piExt = /home/adam/.dotfiles/pi-extensions;
+  extensionPath = "${home}/.pi/agent/extensions";
+  md = builtins.readFile ./AGENTS.md;
   agents = pkgs.writeText "AGENTS.md" md;
   claude = pkgs.writeText "CLAUDE.md" md;
-  sendPatchPiText = pkgs.writeText "send-patch.ts" sendPatchPiExt;
-  npmPrefix = "/home/agent/.npm-global";
+  sendPatchSrc = builtins.readFile ./sendPatch.sh;
   sendPatch = pkgs.writeShellScriptBin "sendPatch" sendPatchSrc;
-  home = "/home/agent";
-  extensionPath = "${home}/.pi/agent/extensions";
   npmGlobals = [
       "@anthropic-ai/claude-code"
       "@openai/codex"
@@ -136,7 +135,9 @@ in
   system.activationScripts.extensions = {
     deps = [];
     text = ''
-      install -Dm644 ${sendPatchPiText} ${extensionPath}/send-patch.ts
+      install -d ${extensionPath}
+      cp -R ${piExt}/. ${extensionPath}/
+      chown -R agent:users ${extensionPath}
     '';
   };
 

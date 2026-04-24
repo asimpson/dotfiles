@@ -344,8 +344,6 @@
           (add-hook 'emacs-lisp-mode-hook 'company-mode)
           (add-hook 'emacs-lisp-mode-hook (lambda () (setq mode-name "λ")))))
 
-(fido-vertical-mode 1)
-
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (global-set-key (kbd "s-=") 'text-scale-increase)
@@ -513,3 +511,45 @@
 
 ;;without this emacs will find /usr/bin/git which doesn't work
 (setq vc-git-program (executable-find "git"))
+
+(defun simpson-jest-test-file ()
+  "Test the current file"
+  (interactive)
+  (compilation-start (concat "yarn jest --runTestsByPath " (buffer-file-name)) t nil nil nil))
+
+(use-package notmuch
+  :config
+  (setq notmuch-show-mark-read-tags nil)
+  (setq notmuch-saved-searches '((:name "patches" :query "from:agent@llm-jail tag:inbox" :key "p")
+                                 (:name "seen patches" :query "from:agent@llm-jail -tag:inbox" :key "i"))))
+
+(use-package swiper)
+
+(use-package ivy
+  :diminish ""
+  :config (progn
+            (ivy-mode)
+            (setq ivy-use-virtual-buffers t)
+            (setq ivy-height 20)
+            (setq ivy-count-format "")
+            (setq ivy-use-selectable-prompt t)
+            (global-set-key (kbd "C-SPC A") 'ivy-resume)
+            (define-key global-map (kbd "C-=") 'ivy-switch-buffer)
+            (delete '(counsel-M-x . "^") ivy-initial-inputs-alist)
+            (push '(counsel-M-x . "") ivy-initial-inputs-alist)
+            (simpson-make-neutral ivy-occur-mode-map)
+            (define-key dired-mode-map "r" '(lambda() (interactive) (counsel-rg nil (file-truename dired-directory))))
+            (ivy-set-actions 'links-for-region '(("e" (lambda(item) (browse-url item)) "Browse")))))
+
+(use-package counsel
+  :defer 1
+  :bind ("C-SPC f" . counsel-find-file)
+  :diminish "con"
+  :config (progn
+            (counsel-mode)
+            (global-set-key (kbd "M-x") 'counsel-M-x)
+            (define-key dired-mode-map "f" 'counsel-find-file)
+            (ivy-add-actions 'counsel-find-file '(("D" (lambda(file) (delete-file file t)) "delete")))
+            (ivy-add-actions 'counsel-find-file '(("h" (lambda(file) (dired (file-name-directory file))) "Dired")))
+            (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+            (global-set-key (kbd "<f1> v") 'counsel-describe-variable)))
