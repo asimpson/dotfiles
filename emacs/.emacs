@@ -233,7 +233,8 @@
 
 (use-package which-key
   :diminish ""
-  :config (which-key-mode))
+  :config (which-key-mode)
+  (setq which-key-side-window-location 'bottom))
 
 (use-package direnv
   :after dash
@@ -320,7 +321,6 @@
 
 (defun my/dlv-attach (pid)
   "Attach dlv to PID and start dape."
-  (interactive "nPID: ")
   (let ((default-directory (project-root (project-current t))))
     (start-process "dlv" "dlv" "dlv" "attach" (number-to-string pid)
                    "--headless" "--listen" "127.0.0.1:55878"))
@@ -553,3 +553,24 @@
             (ivy-add-actions 'counsel-find-file '(("h" (lambda(file) (dired (file-name-directory file))) "Dired")))
             (global-set-key (kbd "<f1> f") 'counsel-describe-function)
             (global-set-key (kbd "<f1> v") 'counsel-describe-variable)))
+
+(defun simpson-apply-patch (file)
+  (interactive
+   (list (read-string "Patch file: " (current-kill 0 t))))
+  (magit-patch-apply (expand-file-name (string-trim file))))
+
+(defun simpson-make-side()
+  (interactive)
+  (let ((buf (current-buffer)))
+    (display-buffer-in-side-window
+     buf
+     '((side . right)
+       (slot . 0)
+       (window-width . 40)
+       (preserve-size . (t . nil))))
+    (with-current-buffer buf
+      (setq-local window-size-fixed 'width)))
+  (delete-window))
+
+(global-set-key (kbd "C-SPC D t") 'dape-breakpoint-toggle)
+(global-set-key (kbd "C-SPC D d") 'my/dlv-attach-by-name)
