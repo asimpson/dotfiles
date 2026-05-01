@@ -1,3 +1,11 @@
+# Nixos
+
+To check what patch kernel version is present:
+
+```nix
+nix-instantiate --eval --strict -E '(import <nixpkgs> {}).linuxPackages_6_12.kernel.version'
+```
+
 # Fleet Operations (fin2)
 
 This is the minimum runbook for keeping Fleet Orbit working on `fin2`.
