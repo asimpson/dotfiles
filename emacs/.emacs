@@ -8,14 +8,12 @@
 (setq native-comp-async-report-warnings-errors 'silent)
 (setq native-comp-deferred-compilation t)
 (setq gc-cons-threshold 64000000)
-(add-hook 'after-init-hook (lambda ()
-                             ;; restore after startup
-                             (setq gc-cons-threshold 800000)))
+;; restore shortly after startup
+(run-with-idle-timer 1 nil (lambda () (setq gc-cons-threshold 800000)))
 
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (show-paren-mode)
-(require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
 
@@ -268,12 +266,6 @@
   "Parse and return JSON from BUFFER.  Ideally for the 'url-retrieve' family of funcs."
   `(with-current-buffer ,buffer (json-read-from-string (buffer-substring-no-properties url-http-end-of-headers (point-max)))))
 
-(defun btc()
-  "Get BTC price from coinbase API via synchronous url retrieve."
-  (interactive)
-  (let ((data (json-parse! (url-retrieve-synchronously "https://api.coinbase.com/v2/prices/BTC-USD/spot" t))))
-    (message "BTC: $%s" (alist-get 'amount (car data)))))
-
 (eval-after-load "flymake" '(diminish 'flymake-mode "fly"))
 (eval-after-load "flymake" '(simpson-make-neutral--keys flymake-diagnostics-buffer-mode-map))
 (eval-after-load "flymake" '(simpson-make-neutral flymake-diagnostics-buffer-mode-map))
@@ -300,6 +292,7 @@
                            (run-with-timer 0.1 nil 'invert-face 'mode-line)))
 
 (use-package dape
+  :commands (dape dape-breakpoint-toggle)
   :config (add-to-list 'dape-configs
                        '(dlv port 55878 :request "attach" :mode "remote")))
 
@@ -518,6 +511,7 @@
   (compilation-start (concat "yarn jest --runTestsByPath " (buffer-file-name)) t nil nil nil))
 
 (use-package notmuch
+  :commands (notmuch notmuch-hello notmuch-search notmuch-show)
   :config
   (setq notmuch-show-mark-read-tags nil)
   (setq notmuch-saved-searches '((:name "patches" :query "from:agent@llm-jail tag:inbox" :key "p")
