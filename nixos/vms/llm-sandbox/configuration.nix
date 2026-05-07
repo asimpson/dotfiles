@@ -113,6 +113,7 @@ in
       export GH_TOKEN=$(cat /persist/gh_token)
       alias claude="claude --dangerously-skip-permissions "
       alias codex="codex --dangerously-bypass-approvals-and-sandbox "
+      alias piro="pi --tools read,grep,find,ls"
       precmd() {
         PROMPT="%~ %{$fg[yellow]%}=jail=%{$reset_color%} "
         PROMPT+="%D{%I:%M}%{$fg[magenta]%}❯ %{$reset_color%}"
