@@ -7,18 +7,6 @@ let
   hosts = import ./hosts.nix;
   rofi-clipster = import ../local-packages/rofi-clipster.nix { inherit pkgs; };
   fleet-orbit = import ../local-packages/fleet-orbit-grafana.nix { inherit pkgs; };
-  # Temporary pin for copy-fail CVE mitigations; remove once the channel's
-  # 6.12 LTS kernel is >= 6.12.85.
-  linux_6_12_85 = pkgs.linux_6_12.override {
-    argsOverride = rec {
-      version = "6.12.85";
-      modDirVersion = version;
-      src = pkgs.fetchurl {
-        url = "mirror://kernel/linux/kernel/v6.x/linux-${version}.tar.xz";
-        hash = "sha256:1v8a0z6znmr2m26l4744wndaimsh24zz6q4d7m4p8s0ayjcwjnp3";
-      };
-    };
-  };
   flake-compat = import (fetchTarball "https://github.com/edolstra/flake-compat/archive/master.tar.gz");
   kolide-flake = flake-compat {
     src = fetchTarball "https://github.com/kolide/nix-agent/archive/main.tar.gz";
@@ -123,7 +111,6 @@ in
   };
 
   boot = {
-    kernelPackages = pkgs.linuxPackagesFor linux_6_12_85;
     supportedFilesystems = [ "zfs" ];
 
     # Bootloader
@@ -141,6 +128,18 @@ in
       "net.ipv4.ip_forward" = 1;
       "net.ipv6.conf.all.forwarding" = 1;
     };
+
+    extraModprobeConfig = ''
+      install esp4 ${pkgs.coreutils}/bin/false
+      install esp6 ${pkgs.coreutils}/bin/false
+      install rxrpc ${pkgs.coreutils}/bin/false
+    '';
+
+    blacklistedKernelModules = [
+      "esp4"
+      "esp6"
+      "rxrpc"
+    ];
   };
 
   nixpkgs.config.allowUnfree = true;
