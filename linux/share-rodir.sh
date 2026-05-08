@@ -14,6 +14,7 @@ EOF
 
 ssh llmjail "sudo -n mkdir -p /mnt/${BASE}"
 ssh llmjail "sudo -n mount -t virtiofs -o ro ${BASE} /mnt/${BASE}"
+ssh llmjail "sudo rm -rf /tmp/${BASE}"
 ssh llmjail "git clone /mnt/${BASE} /tmp/${BASE}"
 
 echo "Attached ${DIR}"

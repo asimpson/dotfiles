@@ -14,7 +14,7 @@ let
   npmGlobals = [
       "@anthropic-ai/claude-code"
       "@openai/codex"
-      "@mariozechner/pi-coding-agent"
+      "@earendil-works/pi-coding-agent"
   ];
 in
 {
