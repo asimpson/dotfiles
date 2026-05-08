@@ -16,13 +16,27 @@
 import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 import { Type } from "@sinclair/typebox";
 
+type SendPatchOptions = {
+  signal?: AbortSignal;
+  sessionId?: string;
+  cwd?: string;
+};
+
 function formatOutput(stdout: string, stderr: string): string {
   const parts = [stdout.trim(), stderr.trim()].filter(Boolean);
   return parts.length > 0 ? parts.join("\n") : "sendPatch finished successfully.";
 }
 
-async function runSendPatch(pi: ExtensionAPI, signal?: AbortSignal) {
-  const result = await pi.exec("sendPatch", [], { signal });
+async function runSendPatch(pi: ExtensionAPI, options: SendPatchOptions = {}) {
+  const args: string[] = [];
+  if (options.sessionId && options.cwd) {
+    args.push("--session-id", options.sessionId, "--cwd", options.cwd);
+  }
+
+  const result = await pi.exec("sendPatch", args, {
+    signal: options.signal,
+    cwd: options.cwd,
+  });
   const message = formatOutput(result.stdout, result.stderr);
 
   if (result.code !== 0) {
@@ -35,6 +49,8 @@ async function runSendPatch(pi: ExtensionAPI, signal?: AbortSignal) {
       code: result.code,
       stdout: result.stdout,
       stderr: result.stderr,
+      sessionId: options.sessionId,
+      cwd: options.cwd,
     },
   };
 }
@@ -44,7 +60,11 @@ export default function (pi: ExtensionAPI) {
     description: "Email the most recent git commit (HEAD) using sendPatch",
     handler: async (_args, ctx) => {
       try {
-        const result = await runSendPatch(pi, ctx.signal);
+        const result = await runSendPatch(pi, {
+          signal: ctx.signal,
+          sessionId: ctx.sessionManager.getSessionId(),
+          cwd: ctx.cwd,
+        });
         ctx.ui.notify(result.message, "info");
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
@@ -62,11 +82,15 @@ export default function (pi: ExtensionAPI) {
       "Use this only after the requested changes are committed and ready to be emailed for review.",
     ],
     parameters: Type.Object({}),
-    async execute(_toolCallId, _params, signal) {
-      const result = await runSendPatch(pi, signal);
+    async execute(_toolCallId, _params, signal, _onUpdate, ctx) {
+      const result = await runSendPatch(pi, {
+        signal,
+        sessionId: ctx.sessionManager.getSessionId(),
+        cwd: ctx.cwd,
+      });
       return {
-              content: [{ type: "text", text: result.message }],
-              details: result.details,
+        content: [{ type: "text", text: result.message }],
+        details: result.details,
       };
     },
   });

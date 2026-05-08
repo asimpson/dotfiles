@@ -11,10 +11,29 @@ let
   claude = pkgs.writeText "CLAUDE.md" md;
   sendPatchSrc = builtins.readFile ./sendPatch.sh;
   sendPatch = pkgs.writeShellScriptBin "sendPatch" sendPatchSrc;
+  piMailReceiver = pkgs.stdenv.mkDerivation {
+    pname = "pi-mail-receiver";
+    version = "0.1.0";
+    src = ./pi-mail-receiver;
+    nativeBuildInputs = [ pkgs.go ];
+    buildPhase = ''
+      runHook preBuild
+      export HOME=$TMPDIR
+      export GOCACHE=$TMPDIR/go-cache
+      export GOPATH=$TMPDIR/go
+      go build -trimpath -ldflags "-s -w" -o pi-mail-receiver .
+      runHook postBuild
+    '';
+    installPhase = ''
+      runHook preInstall
+      install -Dm755 pi-mail-receiver $out/bin/pi-mail-receiver
+      runHook postInstall
+    '';
+  };
   npmGlobals = [
-      "@anthropic-ai/claude-code"
-      "@openai/codex"
-      "@earendil-works/pi-coding-agent"
+    "@anthropic-ai/claude-code"
+    "@openai/codex"
+    "@earendil-works/pi-coding-agent"
   ];
 in
 {
@@ -97,6 +116,7 @@ in
     fzf
     bat
     sendPatch
+    piMailReceiver
   ];
 
   system.activationScripts.npmsetup = {
@@ -164,6 +184,33 @@ in
     };
 
     script = ''npm install -g ${lib.escapeShellArgs npmGlobals}'';
+  };
+
+  systemd.services.pi-mail-receiver = {
+    description = "Receive reply mail and enqueue prompts into pi sessions";
+    wantedBy = [ "multi-user.target" ];
+    wants = [ "network-online.target" "agent-npm-globals.service" ];
+    after = [ "network-online.target" "agent-npm-globals.service" ];
+
+    serviceConfig = {
+      Type = "simple";
+      User = "agent";
+      Group = "users";
+      WorkingDirectory = home;
+      Restart = "always";
+      RestartSec = "5s";
+      ExecStart =
+        "${piMailReceiver}/bin/pi-mail-receiver"
+        + " --listen 0.0.0.0:2525"
+        + " --session-root ${home}/.pi/agent/sessions"
+        + " --pi-bin ${npmPrefix}/bin/pi"
+        + " --hash-length 48"
+        + " --routing-prefix patches+";
+      Environment = [
+        "HOME=${home}"
+        "PATH=${npmPrefix}/bin:/run/current-system/sw/bin"
+      ];
+    };
   };
 
   virtualisation = {
