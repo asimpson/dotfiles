@@ -279,6 +279,7 @@ in
       curl
       xz
       bzip2
+      systemd
     ];
   };
   programs.dconf.enable = true;

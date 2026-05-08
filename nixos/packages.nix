@@ -1,6 +1,7 @@
 { pkgs, ... }:
 let
   nasc = import ./nasc.nix { inherit pkgs; };
+  win-switch-rs = import ./local-packages/win-switch-rs.nix { inherit pkgs; };
 in
 {
   environment.systemPackages = with pkgs; [
@@ -50,6 +51,7 @@ in
     remmina
     direnv
     spice-gtk
+    win-switch-rs
     nasc
   ];
 }

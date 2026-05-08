@@ -7,6 +7,7 @@ let
   drag-share = import ../local-packages/drag-share.nix;
   new-meet = import ../local-packages/new-meet.nix;
   merge-github-notifs = import ../local-packages/merge-github-notifs.nix;
+  win-switch-rs = import ../local-packages/win-switch-rs.nix { inherit pkgs; };
 
 in {
   environment.systemPackages = with pkgs; [
@@ -68,6 +69,7 @@ in {
     notmuch
     openssl
     rofimoji
+    win-switch-rs
     virt-viewer
     kubectl
     wezterm
