@@ -444,8 +444,20 @@
             (setq flyspell-issue-message-flag nil)
             (define-key flyspell-mode-map (kbd "C-SPC x") 'flyspell-correct-word-before-point)))
 
+(defun simpson-markdown-buffer-font ()
+  "Make Markdown editing feel closer to iA Writer."
+  (setq-local buffer-face-mode-face '(:family "iA Writer Quattro S" :height 150))
+  (setq-local line-spacing 0.15)
+  (setq-local markdown-hide-markup t)
+  (setq-local markdown-fontify-code-blocks-natively t)
+  (buffer-face-mode 1)
+  (visual-line-mode 1)
+  (font-lock-flush))
+
 (use-package markdown-mode
-  :mode "\\.md\\'")
+  :mode "\\.md\\'"
+  :hook ((markdown-mode . simpson-markdown-buffer-font)
+         (markdown-mode . visual-line-mode)))
 
 (use-package editorconfig
   :diminish ""
