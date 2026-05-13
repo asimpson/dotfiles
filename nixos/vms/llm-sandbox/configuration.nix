@@ -14,7 +14,7 @@ let
   piMailReceiver = pkgs.stdenv.mkDerivation {
     pname = "pi-mail-receiver";
     version = "0.1.0";
-    src = ./pi-mail-receiver;
+    src = /home/adam/Projects/pi-mail-receiver;
     nativeBuildInputs = [ pkgs.go ];
     buildPhase = ''
       runHook preBuild

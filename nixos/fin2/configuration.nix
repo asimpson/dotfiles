@@ -206,6 +206,20 @@ in
           LogsDirectory = [ "orbit" "osquery" ];
         };
       };
+      weather = {
+        path = [
+          pkgs.curl
+        ];
+        after = [ "network-online.target" ];
+        script = ''
+          set -eu
+          ${pkgs.curl}/bin/curl -Ls "https://wttr.in/?format=%c%t" > /tmp/wthr
+        '';
+        serviceConfig = {
+          User = "adam";
+        };
+        startAt = "10m";
+      };
       backupmail = {
         path = [
           pkgs.age
