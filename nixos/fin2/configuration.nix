@@ -210,7 +210,7 @@ in
         path = [
           pkgs.curl
         ];
-        after = [ "network-online.target" ];
+        requires = [ "network-online.target" ];
         script = ''
           set -eu
           ${pkgs.curl}/bin/curl -Ls "https://wttr.in/?format=%c%t" > /tmp/wthr
@@ -218,7 +218,7 @@ in
         serviceConfig = {
           User = "adam";
         };
-        startAt = "10m";
+        startAt = "*:0/10";
       };
       backupmail = {
         path = [
