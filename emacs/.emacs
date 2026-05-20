@@ -156,8 +156,12 @@
   :config
   (setq eglot-autoshutdown t)  ; shutdown server when last buffer closed
   (add-to-list 'eglot-server-programs
-               '((typescript-mode) "typescript-language-server" "--stdio")
-               '((lua-mode) "lua-language-server" (if (file-exists-p "/Users/adam/.dotfiles/emacs/luaconfig.json") "--configpath=/Users/adam/.dotfiles/emacs/luaconfig.json")))
+               '((typescript-ts-mode tsx-ts-mode typescript-mode js-ts-mode js-mode)
+                 . ("typescript-language-server" "--stdio")))
+  (add-to-list 'eglot-server-programs
+               `((lua-mode) . ("lua-language-server"
+                               ,@(when (file-exists-p "/Users/adam/.dotfiles/emacs/luaconfig.json")
+                                   '("--configpath=/Users/adam/.dotfiles/emacs/luaconfig.json")))))
   (evil-define-key 'normal eglot-mode-map (kbd "K") 'eldoc-doc-buffer)
   (add-to-list 'eglot-server-programs
                `(jsonnet-mode . ("jsonnet-language-server")))
@@ -239,7 +243,8 @@
   :config (progn
             (direnv-mode)
             (setq direnv-always-show-summary nil)
-            (advice-add 'eglot :before #'direnv-update-environment)))
+            (advice-add 'eglot :before #'direnv-update-environment)
+            (advice-add 'eglot-ensure :before #'direnv-update-environment)))
 
 (use-package company
   :hook (eglot-managed-mode . company-mode)
@@ -501,6 +506,8 @@
 
 (use-package github-notes
   :load-path "~/Projects/github-notes-el/"
+  :defer 1
+  :commands (github-notes)
   :custom
   (github-notes-repo "asimpson/working-notes")
   :bind
