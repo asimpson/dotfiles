@@ -6,10 +6,13 @@ let
   fleet-key = import ../fleet-key.nix;
   hosts = import ./hosts.nix;
   rofi-clipster = import ../local-packages/rofi-clipster.nix { inherit pkgs; };
-  fleet-orbit = import ../local-packages/fleet-orbit-grafana.nix { inherit pkgs; };
-  flake-compat = import (fetchTarball "https://github.com/edolstra/flake-compat/archive/master.tar.gz");
+  fleet-orbit =
+    import ../local-packages/fleet-orbit-grafana.nix { inherit pkgs; };
+  flake-compat = import (fetchTarball
+    "https://github.com/edolstra/flake-compat/archive/master.tar.gz");
   kolide-flake = flake-compat {
-    src = fetchTarball "https://github.com/kolide/nix-agent/archive/main.tar.gz";
+    src =
+      fetchTarball "https://github.com/kolide/nix-agent/archive/main.tar.gz";
   };
   orbitBinaryPath = "/var/lib/orbit/bin/orbit/orbit";
   fleetOrbitEnv = ''
@@ -38,23 +41,28 @@ let
       ln -sf /var/lib/orbit/bin/orbit/linux/stable/orbit /var/lib/orbit/bin/orbit/orbit
     fi
   '';
-in
-{
-  imports = [ ./hardware-configuration.nix ../scripts.nix ../fin/packages.nix ../display-config/4k-32in.nix kolide-flake.defaultNix.nixosModules.kolide-launcher ];
+in {
+  imports = [
+    ./hardware-configuration.nix
+    ../scripts.nix
+    ../fin/packages.nix
+    ../display-config/4k-32in.nix
+    kolide-flake.defaultNix.nixosModules.kolide-launcher
+  ];
 
-#  specialisation."fix-amd-crash".configuration = {
-#    system.nixos.tags = [ "old-firmware" ];
-#
-#    hardware.firmware = [
-#      (pkgs.linux-firmware.overrideAttrs (old: {
-#        version = "20251111";
-#        src = pkgs.fetchurl {
-#          url = "https://www.kernel.org/pub/linux/kernel/firmware/linux-firmware-20251111.tar.gz";
-#          sha256 = "0rp2ah8drcnl7fh9vbawa8p8c9lhvn1d8zkl48ckj20vba0maz2g";
-#        };
-#      }))
-#    ];
-#  };
+  #  specialisation."fix-amd-crash".configuration = {
+  #    system.nixos.tags = [ "old-firmware" ];
+  #
+  #    hardware.firmware = [
+  #      (pkgs.linux-firmware.overrideAttrs (old: {
+  #        version = "20251111";
+  #        src = pkgs.fetchurl {
+  #          url = "https://www.kernel.org/pub/linux/kernel/firmware/linux-firmware-20251111.tar.gz";
+  #          sha256 = "0rp2ah8drcnl7fh9vbawa8p8c9lhvn1d8zkl48ckj20vba0maz2g";
+  #        };
+  #      }))
+  #    ];
+  #  };
 
   environment.etc."smtpd/aliases" = {
     text = ''
@@ -135,11 +143,7 @@ in
       install rxrpc ${pkgs.coreutils}/bin/false
     '';
 
-    blacklistedKernelModules = [
-      "esp4"
-      "esp6"
-      "rxrpc"
-    ];
+    blacklistedKernelModules = [ "esp4" "esp6" "rxrpc" ];
   };
 
   nixpkgs.config.allowUnfree = true;
@@ -180,8 +184,10 @@ in
           };
         };
         sunshine.environment = {
-          XDG_DATA_DIRS = lib.mkForce "${pkgs.sunshine}/share:${pkgs.hicolor-icon-theme}/share";
-          GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
+          XDG_DATA_DIRS = lib.mkForce
+            "${pkgs.sunshine}/share:${pkgs.hicolor-icon-theme}/share";
+          GDK_PIXBUF_MODULE_FILE =
+            "${pkgs.librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
         };
       };
     };
@@ -207,31 +213,23 @@ in
         };
       };
       weather = {
-        path = [
-          pkgs.curl
-        ];
+        path = [ pkgs.curl ];
         requires = [ "network-online.target" ];
         script = ''
           set -eu
           ${pkgs.curl}/bin/curl -Ls "https://wttr.in/?format=%c%t" > /tmp/wthr
         '';
-        serviceConfig = {
-          User = "adam";
-        };
+        serviceConfig = { User = "adam"; };
         startAt = "*:0/10";
       };
       backupmail = {
-        path = [
-          pkgs.age
-        ];
+        path = [ pkgs.age ];
         script = ''
           set -eu
           ${pkgs.getmail6}/bin/getmail
           ${pkgs.notmuch}/bin/notmuch new
         '';
-        serviceConfig = {
-          User = "adam";
-        };
+        serviceConfig = { User = "adam"; };
         startAt = "hourly";
       };
       notmuch-patches = {
@@ -264,9 +262,7 @@ in
     settings = {
       auto-optimise-store = true;
       allowed-users = [ "@wheel" ];
-      trusted-substituters = [
-        "file:///var/nix-cache"
-      ];
+      trusted-substituters = [ "file:///var/nix-cache" ];
     };
     gc = {
       automatic = true;
@@ -320,9 +316,7 @@ in
     };
   };
 
-  security.pki.certificates = [
-    shared.local_cert
-  ];
+  security.pki.certificates = [ shared.local_cert ];
 
   networking = {
     useNetworkd = true;
@@ -356,12 +350,8 @@ in
 
     networks."20-wan" = {
       matchConfig.Name = "wan";
-      networkConfig = {
-        DHCP = "yes";
-      };
-      dhcpV4Config = {
-        RouteMetric = 100;
-      };
+      networkConfig = { DHCP = "yes"; };
+      dhcpV4Config = { RouteMetric = 100; };
     };
   };
 
@@ -379,7 +369,7 @@ in
     ];
   };
   hardware.logitech.wireless.enable = true;
-  hardware.i2c.enable = true; #needed for ddc
+  hardware.i2c.enable = true; # needed for ddc
 
   # Docker configuration
   virtualisation = {
@@ -430,9 +420,10 @@ in
 
       windowManager.i3 = {
         enable = true;
-        extraPackages = with pkgs; [
-          i3status # gives you the default i3 status bar
-        ];
+        extraPackages = with pkgs;
+          [
+            i3status # gives you the default i3 status bar
+          ];
       };
     };
     displayManager = { defaultSession = "none+i3"; };
@@ -443,7 +434,8 @@ in
     tailscale.enable = true;
     resolved.enable = true;
     gnome.sushi.enable = true;
-    gnome.gcr-ssh-agent.enable = false; #https://search.nixos.org/options?channel=25.11&show=services.gnome.gcr-ssh-agent.enable&query=services.gnome.gcr-ssh-agent.enable
+    gnome.gcr-ssh-agent.enable =
+      false; # https://search.nixos.org/options?channel=25.11&show=services.gnome.gcr-ssh-agent.enable&query=services.gnome.gcr-ssh-agent.enable
     printing = {
       enable = true;
       drivers = [ pkgs.brlaser ];
