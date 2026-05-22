@@ -9,7 +9,7 @@ type Rule = {
 	kind: "file" | "dir";
 };
 
-const STRICT_ALLOWED_TOOLS = new Set(["read", "grep", "find", "ls", "edit", "write"]);
+const STRICT_ALLOWED_TOOLS = new Set(["read", "grep", "find", "ls", "edit", "write", "gcx"]);
 const STATE_TYPE = "sniper-allowlist";
 const SNIPER_ADD_COMMAND = "sniper-add";
 const SNIPER_REMOVE_COMMAND = "sniper-remove";
@@ -206,6 +206,7 @@ export default function sniper(pi: ExtensionAPI) {
 
 		if (enabled) {
 			// Strict mode: remove the agent bash tool and unknown/custom tools from the active set.
+			// Explicitly allowed custom tools (such as gcx) remain available.
 			// Otherwise a shell command or custom tool could write outside the allowlist.
       const availableTools = new Set(pi.getAllTools().map((tool) => tool.name));
       pi.setActiveTools([...STRICT_ALLOWED_TOOLS].filter((name) => availableTools.has(name)));
@@ -372,7 +373,7 @@ export default function sniper(pi: ExtensionAPI) {
 			systemPrompt:
 				event.systemPrompt +
 				`\n\nSNIPER MODE is active. ${writeScope}` +
-				"Use edit/write only for allowed paths. The agent bash tool and unknown mutating tools are blocked. " +
+				"Use edit/write only for allowed paths. The agent bash tool and unknown/custom tools are blocked except explicitly allowed tools such as gcx. " +
 				"If you need to modify another path, stop and ask the user to run /sniper-add <path>.",
 		};
 	});
@@ -380,7 +381,7 @@ export default function sniper(pi: ExtensionAPI) {
 	pi.on("tool_call", (event, ctx) => {
 		if (!enabled) return undefined;
 
-		// Block the agent bash tool and custom tools to preserve the guarantee.
+		// Block the agent bash tool and custom tools unless explicitly allowed above.
 		if (!STRICT_ALLOWED_TOOLS.has(event.toolName)) {
 			return {
 				block: true,
