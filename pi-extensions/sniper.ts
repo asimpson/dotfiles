@@ -9,7 +9,7 @@ type Rule = {
 	kind: "file" | "dir";
 };
 
-const STRICT_ALLOWED_TOOLS = new Set(["read", "grep", "find", "ls", "edit", "write", "gcx"]);
+const STRICT_ALLOWED_TOOLS = new Set(["read", "grep", "find", "ls", "edit", "write", "gcx", "gh"]);
 const STATE_TYPE = "sniper-allowlist";
 const SNIPER_ADD_COMMAND = "sniper-add";
 const SNIPER_REMOVE_COMMAND = "sniper-remove";
@@ -83,17 +83,30 @@ function ruleKey(rule: Pick<Rule, "kind" | "path">): string {
 }
 
 // specs is an array of paths that are files or directories
-function parseRulesFromSpecs(specs: string[], cwd: string): Rule[] {
+function parseRulesFromSpecs(specs: string[], cwd: string, ctx?: ExtensionContext): Rule[] {
 	const rules: Rule[] = [];
 	const seen = new Set<string>();
 
 	for (const raw of specs) {
 		const abs = resolvePath(cwd, raw);
 
+    var isDir
+    var absStat
+
+    try {
+      absStat = statSync(abs)
+    } catch {
+      if (ctx && ctx.hasUI) {
+        ctx.ui.notify(`${abs} doesn't exist`, "warning");
+      }
+      continue
+    }
+
+    isDir = absStat?.isDirectory()
 		const rule: Rule = {
 			raw,
 			path: canonicalize(abs),
-			kind: (statSync(abs).isDirectory()) ? "dir" : "file",
+			kind: isDir ? "dir" : "file",
 		};
 
 		const key = ruleKey(rule);
@@ -200,7 +213,7 @@ export default function sniper(pi: ExtensionAPI) {
 	let display = "(none)";
 
 	function rebuild(ctx: ExtensionContext) {
-		rules = parseRulesFromSpecs([...baseSpecs, ...addedSpecs], ctx.cwd);
+		rules = parseRulesFromSpecs([...baseSpecs, ...addedSpecs], ctx.cwd, ctx);
 		display = formatDisplay(rules);
 		enabled = sniperRequested;
 
