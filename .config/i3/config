@@ -206,4 +206,8 @@ bindsym Control+XF86AudioNext exec "mpc next"
 
 exec --no-startup-id lxqt-policykit-agent
 
+exec --no-startup-id "snixembed"
+
+exec --no-startup-id "tailscale systray"
+
 bindsym $mod+Mod1+c exec rofi-clipster

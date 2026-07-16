@@ -88,5 +88,6 @@ in {
     lua-language-server
     hunspell
     hunspellDicts.en_US-large
+    snixembed
   ];
 }

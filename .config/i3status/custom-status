@@ -17,10 +17,11 @@ audio_icon=$(case "$(pactl info | rg "Default Sink" | cut -d ":" -f 2 | xargs)" 
     *) echo "🔇" ;;
 esac)
 
-kolide=$(jq -r 'if .icon == "triangle-exclamation" then " ⚠️ " + (.tooltip | capture("(?<d>In [0-9]+ Days?)") | .d) else "" end' /var/kolide-k2/k2device.kolide.com/menu.json 2>/dev/null)
-fleet=$(/home/adam/.dotfiles/linux/fleet-status.sh | jq -r 'if .status == "green" then "✅" else "☠️" end')
+#kolide=$(jq -r 'if .icon == "triangle-exclamation" then " ⚠️ " + .tooltip else "" end' /var/kolide-k2/k2device.kolide.com/menu.json 2>/dev/null | cut -f 2 -d ':')
+#fleet=$(/home/adam/.dotfiles/linux/fleet-status.sh | jq -r 'if .status == "green" then "✅" else "☠️" end')
 weather=$(if [ -e /tmp/wthr ]; then cat /tmp/wthr; fi)
+#ko=" |${kolide}"
 do
   read line
-  echo "${mute} ${line} |${weather}${kolide} ${fleet} ${audio_icon}" || exit 1
+  echo "${mute} ${line} |${weather} ${audio_icon}" || exit 1
 done
