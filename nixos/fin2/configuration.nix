@@ -120,6 +120,7 @@ in {
 
   boot = {
     supportedFilesystems = [ "zfs" ];
+    zfs.forceImportRoot = false;
 
     # Bootloader
     loader = {
@@ -294,7 +295,6 @@ in {
   programs.dconf.enable = true;
   programs.zsh.enable = true;
   programs.ssh.startAgent = true;
-  programs.light.enable = true;
   programs._1password-gui = {
     enable = true;
     polkitPolicyOwners = [ "adam" ];
@@ -400,6 +400,7 @@ in {
       enable = true;
       vSync = true;
       backend = "glx";
+      settings.unredir-if-possible = true;
     };
     timesyncd = {
       enable = true;

@@ -8,6 +8,10 @@ in
 {
   services.xserver = {
     dpi = dpi;
+    # deviceSection = ''
+    #   ${pkgs.xorg.xrandr}/bin/xrandr --output HDMI-1 --mode 3840x2160 --rate 120
+    #   Option "VariableRefresh" "true"
+    # '';
     displayManager.sessionCommands = ''
       ${pkgs.xorg.xrdb}/bin/xrdb -merge <<EOF
       Xft.dpi: ${toString dpi}

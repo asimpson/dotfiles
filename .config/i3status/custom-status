@@ -23,5 +23,5 @@ weather=$(if [ -e /tmp/wthr ]; then cat /tmp/wthr; fi)
 #ko=" |${kolide}"
 do
   read line
-  echo "${mute} ${line} |${weather} ${audio_icon}" || exit 1
+  echo "${mute} ${line} | ${weather} ${audio_icon}" || exit 1
 done

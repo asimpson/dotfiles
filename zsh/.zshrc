@@ -134,8 +134,9 @@ if command -v direnv &> /dev/null; then
 fi
 
 _direnv_hook() {
+  (( ${+compstate} )) && return 0
   eval "$(direnv export zsh 2> >(egrep -v -e '^....direnv: export' >&2))"
-};
+}
 export NIXPKGS_ALLOW_UNFREE=1
 
 enable_auto_completes
