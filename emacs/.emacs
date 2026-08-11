@@ -536,7 +536,8 @@
   (setq notmuch-saved-searches '((:name "patches" :query "from:agent@llm-jail tag:inbox" :key "p")
                                  (:name "seen patches" :query "from:agent@llm-jail -tag:inbox" :key "i"))))
 
-(use-package swiper)
+(use-package swiper
+  :config (evil-define-key 'normal 'global (kbd "/") 'swiper))
 
 (use-package ivy
   :diminish ""
