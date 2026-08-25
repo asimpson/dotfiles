@@ -142,3 +142,5 @@ export NIXPKGS_ALLOW_UNFREE=1
 enable_auto_completes
 
 ulimit -S -n 10000
+
+if [ -e /Users/adam/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/adam/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
