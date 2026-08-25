@@ -3,7 +3,7 @@
   fsmonitor = true
   untrackedCache = true
   pager = bat
-  excludesfile = /home/adam/master_git_ignore
+  excludesfile = ~/master_git_ignore
 
 [merge]
   # (just 'diff3' if git version < 2.3)
@@ -65,7 +65,7 @@
 [commit]
   verbose = true
   gpgsign = true
-  template = /home/adam/gitmessage.txt
+  template = ~/gitmessage.txt
 
 [gpg]
   format = ssh
