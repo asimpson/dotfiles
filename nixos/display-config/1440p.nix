@@ -4,7 +4,7 @@
   services.xserver = {
     dpi = 110;
     displayManager.sessionCommands = ''
-      ${pkgs.xorg.xrdb}/bin/xrdb -merge <<EOF
+      ${pkgs.xrdb}/bin/xrdb -merge <<EOF
       Xft.dpi: 110
       Xft.autohint: 0
       Xft.lcdfilter: lcddefault

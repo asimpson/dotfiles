@@ -13,7 +13,7 @@ in
     #   Option "VariableRefresh" "true"
     # '';
     displayManager.sessionCommands = ''
-      ${pkgs.xorg.xrdb}/bin/xrdb -merge <<EOF
+      ${pkgs.xrdb}/bin/xrdb -merge <<EOF
       Xft.dpi: ${toString dpi}
       Xft.autohint: 0
       Xft.lcdfilter: lcddefault

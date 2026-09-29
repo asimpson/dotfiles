@@ -52,3 +52,4 @@ nixos/*/hosts.nix
 #}
 pat.nix
 /nixos/vms/llm-sandbox/ssh/
+gcx.token

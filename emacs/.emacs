@@ -165,6 +165,10 @@
   (evil-define-key 'normal eglot-mode-map (kbd "K") 'eldoc-doc-buffer)
   (add-to-list 'eglot-server-programs
                `(jsonnet-mode . ("jsonnet-language-server")))
+  (add-to-list 'eglot-server-programs
+               `(qml-mode . ("qmlls"
+                             "-I" "/run/current-system/sw/lib/qt-6/qml"
+                             "-I" ,(expand-file-name "~/.config/quickshell"))))
   (setq eglot-events-buffer-size 0))  ; disable events logging for performance
 
 (use-package evil-leader
@@ -588,3 +592,19 @@
 
 (global-set-key (kbd "C-SPC D t") 'dape-breakpoint-toggle)
 (global-set-key (kbd "C-SPC D d") 'my/dlv-attach-by-name)
+
+(use-package notmuch-tui-el
+  :defer 1
+  :commands (notmuch-tui-el)
+  :load-path "~/Projects/notmuch-tui/")
+
+(define-derived-mode tiltfile-mode
+  python-mode "tiltfile"
+  "Major mode for Tilt Dev."
+  (setq-local case-fold-search nil))
+
+(add-to-list 'auto-mode-alist '("Tiltfile$" . tiltfile-mode))
+
+(use-package qml-mode
+  :mode (("\\.qml?\\'" . qml-mode))
+  :hook (qml-mode . eglot-ensure))

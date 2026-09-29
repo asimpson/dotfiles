@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   shared = import ../shared.nix;
@@ -6,13 +11,12 @@ let
   fleet-key = import ../fleet-key.nix;
   hosts = import ./hosts.nix;
   rofi-clipster = import ../local-packages/rofi-clipster.nix { inherit pkgs; };
-  fleet-orbit =
-    import ../local-packages/fleet-orbit-grafana.nix { inherit pkgs; };
-  flake-compat = import (fetchTarball
-    "https://github.com/edolstra/flake-compat/archive/master.tar.gz");
+  fleet-orbit = import ../local-packages/fleet-orbit-grafana.nix { inherit pkgs; };
+  flake-compat = import (
+    fetchTarball "https://github.com/edolstra/flake-compat/archive/master.tar.gz"
+  );
   kolide-flake = flake-compat {
-    src =
-      fetchTarball "https://github.com/kolide/nix-agent/archive/main.tar.gz";
+    src = fetchTarball "https://github.com/kolide/nix-agent/archive/main.tar.gz";
   };
   orbitBinaryPath = "/var/lib/orbit/bin/orbit/orbit";
   fleetOrbitEnv = ''
@@ -41,7 +45,8 @@ let
       ln -sf /var/lib/orbit/bin/orbit/linux/stable/orbit /var/lib/orbit/bin/orbit/orbit
     fi
   '';
-in {
+in
+{
   imports = [
     ./hardware-configuration.nix
     ../scripts.nix
@@ -89,7 +94,7 @@ in {
     _1password-gui
     zoom-us
     vscode
-    nixfmt-rfc-style
+    nixfmt
     rofi-clipster
     feh
     pulseaudio
@@ -98,6 +103,7 @@ in {
     impala
     fleet-orbit
     ghostty
+    qt6.qtdeclarative
   ];
 
   system.activationScripts.binbash = {
@@ -131,7 +137,12 @@ in {
     # v4l2loopback for virtual camera
     extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
 
-    kernelModules = [ "v4l2loopback" "kvm-amd" "corefreqk" "sg" ];
+    kernelModules = [
+      "v4l2loopback"
+      "kvm-amd"
+      "corefreqk"
+      "sg"
+    ];
 
     kernel.sysctl = {
       "net.ipv4.ip_forward" = 1;
@@ -144,7 +155,11 @@ in {
       install rxrpc ${pkgs.coreutils}/bin/false
     '';
 
-    blacklistedKernelModules = [ "esp4" "esp6" "rxrpc" ];
+    blacklistedKernelModules = [
+      "esp4"
+      "esp6"
+      "rxrpc"
+    ];
   };
 
   nixpkgs.config.allowUnfree = true;
@@ -152,8 +167,26 @@ in {
   nixpkgs.overlays = [
     (self: super: {
       rofi = super.rofi.override {
-        plugins = [ super.rofi-mpd super.rofi-emoji super.rofi-calc ];
+        plugins = [
+          super.rofi-mpd
+          super.rofi-emoji
+          super.rofi-calc
+        ];
       };
+      # nixos-26.05's 6.19.12 crashes while selecting IMAP mailboxes with spaces.
+      getmail6 =
+        if lib.versionAtLeast super.getmail6.version "6.20.01" then
+          super.getmail6
+        else
+          super.getmail6.overrideAttrs (_: {
+            version = "6.20.01";
+            src = super.fetchFromGitHub {
+              owner = "getmail6";
+              repo = "getmail6";
+              tag = "v6.20.01";
+              hash = "sha256-U5/vOpVVuPc1ITn0SCr7bnDFUwSBqFr51dUsyiMbORM=";
+            };
+          });
     })
   ];
 
@@ -185,20 +218,32 @@ in {
           };
         };
         sunshine.environment = {
-          XDG_DATA_DIRS = lib.mkForce
-            "${pkgs.sunshine}/share:${pkgs.hicolor-icon-theme}/share";
-          GDK_PIXBUF_MODULE_FILE =
-            "${pkgs.librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
+          XDG_DATA_DIRS = lib.mkForce "${pkgs.sunshine}/share:${pkgs.hicolor-icon-theme}/share";
+          GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
         };
       };
     };
     services = {
+      opensmtpd = {
+        wants = [ "libvirtd.service" ];
+        after = [ "libvirtd.service" ];
+        serviceConfig = {
+          Restart = "on-failure";
+          RestartSec = "2s";
+        };
+      };
       orbit = {
         description = "Fleet Orbit osquery";
         wants = [ "network-online.target" ];
-        after = [ "network-online.target" "syslog.target" ];
+        after = [
+          "network-online.target"
+          "syslog.target"
+        ];
         wantedBy = [ "multi-user.target" ];
-        path = with pkgs; [ sudo xdg-utils ];
+        path = with pkgs; [
+          sudo
+          xdg-utils
+        ];
         serviceConfig = {
           TimeoutStartSec = 0;
           EnvironmentFile = "/etc/default/orbit";
@@ -210,18 +255,11 @@ in {
           KillSignal = "SIGTERM";
           CPUQuota = "20%";
           StateDirectory = "orbit";
-          LogsDirectory = [ "orbit" "osquery" ];
+          LogsDirectory = [
+            "orbit"
+            "osquery"
+          ];
         };
-      };
-      weather = {
-        path = [ pkgs.curl ];
-        requires = [ "network-online.target" ];
-        script = ''
-          set -eu
-          ${pkgs.curl}/bin/curl -Ls "https://wttr.in/?format=%c%t" > /tmp/wthr
-        '';
-        serviceConfig = { User = "adam"; };
-        startAt = "*:0/10";
       };
       backupmail = {
         path = [ pkgs.age ];
@@ -230,7 +268,9 @@ in {
           ${pkgs.getmail6}/bin/getmail
           ${pkgs.notmuch}/bin/notmuch new
         '';
-        serviceConfig = { User = "adam"; };
+        serviceConfig = {
+          User = "adam";
+        };
         startAt = "hourly";
       };
       notmuch-patches = {
@@ -324,7 +364,10 @@ in {
     extraHosts = hosts.hosts;
     firewall = {
       enable = true;
-      allowedTCPPorts = [ 3000 8080 ];
+      allowedTCPPorts = [
+        3000
+        8080
+      ];
       allowedUDPPorts = [ 41641 ];
       checkReversePath = "loose";
       extraCommands = hosts.extra + ''
@@ -334,7 +377,11 @@ in {
     hostName = "fin2";
     hostId = "5a488f19";
     iproute2.enable = true;
-    wireless = { iwd = { enable = true; }; };
+    wireless = {
+      iwd = {
+        enable = true;
+      };
+    };
   };
 
   systemd.network = {
@@ -350,8 +397,12 @@ in {
 
     networks."20-wan" = {
       matchConfig.Name = "wan";
-      networkConfig = { DHCP = "yes"; };
-      dhcpV4Config = { RouteMetric = 100; };
+      networkConfig = {
+        DHCP = "yes";
+      };
+      dhcpV4Config = {
+        RouteMetric = 100;
+      };
     };
   };
 
@@ -415,19 +466,24 @@ in {
       '';
     };
     xserver = {
-      xkb = { layout = "us"; };
+      xkb = {
+        layout = "us";
+      };
       enable = true;
-      desktopManager = { xterm.enable = false; };
+      desktopManager = {
+        xterm.enable = false;
+      };
 
       windowManager.i3 = {
         enable = true;
-        extraPackages = with pkgs;
-          [
-            i3status # gives you the default i3 status bar
-          ];
+        extraPackages = with pkgs; [
+          i3status # gives you the default i3 status bar
+        ];
       };
     };
-    displayManager = { defaultSession = "none+i3"; };
+    displayManager = {
+      defaultSession = "none+i3";
+    };
     openssh = {
       enable = true;
       ports = [ 2222 ];
@@ -435,8 +491,7 @@ in {
     tailscale.enable = true;
     resolved.enable = true;
     gnome.sushi.enable = true;
-    gnome.gcr-ssh-agent.enable =
-      false; # https://search.nixos.org/options?channel=25.11&show=services.gnome.gcr-ssh-agent.enable&query=services.gnome.gcr-ssh-agent.enable
+    gnome.gcr-ssh-agent.enable = false; # https://search.nixos.org/options?channel=25.11&show=services.gnome.gcr-ssh-agent.enable&query=services.gnome.gcr-ssh-agent.enable
     printing = {
       enable = true;
       drivers = [ pkgs.brlaser ];
@@ -451,13 +506,20 @@ in {
   users.users.adam = {
     isNormalUser = true;
     shell = pkgs.zsh;
-    extraGroups = [ "audio" "video" "libvirtd" "lp" "wheel" "docker" "i2c" ];
+    extraGroups = [
+      "audio"
+      "video"
+      "libvirtd"
+      "lp"
+      "wheel"
+      "docker"
+      "i2c"
+    ];
   };
 
   system.autoUpgrade.enable = true;
 
-  hardware.cpu.amd.updateMicrocode =
-    config.hardware.enableRedistributableFirmware;
+  hardware.cpu.amd.updateMicrocode = config.hardware.enableRedistributableFirmware;
 
   hardware.enableRedistributableFirmware = true;
 

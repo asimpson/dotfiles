@@ -169,13 +169,6 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-bar {
-   status_command ~/.dotfiles/.config/i3status/custom-status
-   position top
-
-   tray_padding 4
-}
-
 # Set default border for all windows
 for_window [class="^.*"] border pixel 2
 for_window [instance="github-notes"] move scratchpad
@@ -206,7 +199,7 @@ bindsym Control+XF86AudioNext exec "mpc next"
 
 exec --no-startup-id lxqt-policykit-agent
 
-exec --no-startup-id "snixembed"
+exec_always --no-startup-id "quickshell kill; quickshell -d"
 
 exec --no-startup-id "tailscale systray"
 

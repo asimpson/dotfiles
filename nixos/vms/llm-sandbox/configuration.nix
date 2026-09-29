@@ -1,4 +1,9 @@
-{ modulesPath, lib, pkgs, ... }:
+{
+  modulesPath,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   zshrc = builtins.readFile "/home/adam/.zshrc";
@@ -7,6 +12,7 @@ let
   piExt = /home/adam/.dotfiles/pi-extensions;
   extensionPath = "${home}/.pi/agent/extensions";
   md = builtins.readFile ./AGENTS.md;
+  gcxToken = builtins.readFile ./gcx.token;
   agents = pkgs.writeText "AGENTS.md" md;
   claude = pkgs.writeText "CLAUDE.md" md;
   sendPatchSrc = builtins.readFile ./sendPatch.sh;
@@ -92,7 +98,10 @@ in
   users.users.agent = {
     isNormalUser = true;
     description = "Sandbox operator";
-    extraGroups = [ "wheel" "docker" ];
+    extraGroups = [
+      "wheel"
+      "docker"
+    ];
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
       "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDJPyPjtPWFcMjjaeW3ts3nfBOYRHnZkyGhgcOUr/gvGv/z1xb2KyrfXgpTIfWU7b5ZHNoS28c/s7gqMAlylROe/N4dYQXeORxuuTO473fdveuUgRoHAu6NlMzKWuELI9KwOyASQibQt9GS0M41bVHHg33JxQhyM5jbif06ynW8qSsT8h7xM+wvq3YD+4IDZcIPOKn4AlRxOc5FHauJMaLwQMMk6RcFKUcxOUDdqMwC2xb5t1OKEM/2A686OopXZY21QuYJoWBrXLxFVpfCdf+2/6+2CnFDaxwv+oLbrZRnsJglIGhMN4T8gj4AnyKniIUMMMHFkwDyLbmjxzrhFNU5MTSKUtx1k4b6+Z2hkMgkf3biyZW1rafxZ4B/6TJxFPxWzF4ayTdf+Yu27n4Z5kx44jiojfDaUSTp0mg3w2Gf1ozcwW4KHMjGPtIUs3U71ZtFsxliZMY5/7osRAwt/kwuLGx9YqWz+bmoPUEcp9YHukw+Pv3hUPxNKVIA42E+J+0= adam@nix-grafana"
@@ -117,10 +126,30 @@ in
     bat
     sendPatch
     piMailReceiver
+    gcx
   ];
 
+  system.activationScripts.gcx = {
+    deps = [ ];
+    text = ''
+      mkdir -p ${home}/.config/gcx
+      cat > ${home}/.config/gcx/config.yaml <<'EOF'
+      contexts:
+        default: {}
+        ops-ops:
+          grafana:
+            server: https://ops.grafana-ops.net/
+            token: ${gcxToken}
+            auth-method: token
+          cloud:
+            stack: ops-ops
+      current-context: ops-ops
+      EOF
+    '';
+  };
+
   system.activationScripts.npmsetup = {
-    deps = [];
+    deps = [ ];
     text = ''
       cat > ${home}/.npmrc <<'EOF'
       prefix=${npmPrefix}
@@ -130,7 +159,6 @@ in
       ${zshrc}
       HISTFILE=/persist/zsh/history
       export PATH="$PATH:${npmPrefix}/bin"
-      export GH_TOKEN=$(cat /persist/gh_token)
       alias claude="claude --dangerously-skip-permissions "
       alias codex="codex --dangerously-bypass-approvals-and-sandbox "
       alias piro="pi --tools read,grep,find,ls"
@@ -144,8 +172,17 @@ in
     '';
   };
 
+  system.activationScripts.tokenSetup = {
+    deps = [ ];
+    text = ''
+      mkdir -p ${home}/.ro-tokens
+      ln -sf /persist/gh_token ${home}/.ro-tokens/gf-token
+      ln -sf /persist/personal_token ${home}/.ro-tokens/personal-token
+    '';
+  };
+
   system.activationScripts.agentMarkdown = {
-    deps = [];
+    deps = [ ];
     text = ''
       install -Dm644 ${agents} ${home}/.codex/AGENTS.md
       install -Dm644 ${claude} ${home}/.claude/CLAUDE.md
@@ -154,7 +191,7 @@ in
   };
 
   system.activationScripts.extensions = {
-    deps = [];
+    deps = [ ];
     text = ''
       install -d ${extensionPath}
       cp -R ${piExt}/. ${extensionPath}/
@@ -183,14 +220,20 @@ in
       ];
     };
 
-    script = ''npm install -g ${lib.escapeShellArgs npmGlobals}'';
+    script = "npm install -g ${lib.escapeShellArgs npmGlobals}";
   };
 
   systemd.services.pi-mail-receiver = {
     description = "Receive reply mail and enqueue prompts into pi sessions";
     wantedBy = [ "multi-user.target" ];
-    wants = [ "network-online.target" "agent-npm-globals.service" ];
-    after = [ "network-online.target" "agent-npm-globals.service" ];
+    wants = [
+      "network-online.target"
+      "agent-npm-globals.service"
+    ];
+    after = [
+      "network-online.target"
+      "agent-npm-globals.service"
+    ];
 
     serviceConfig = {
       Type = "simple";
