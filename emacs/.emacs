@@ -91,6 +91,33 @@
     (switch-to-buffer-other-window (project-find-file))
     (switch-to-buffer buf)))
 
+(defun simpson-project-first-changed-file (root)
+  "Return the first existing changed Git file under ROOT, or nil."
+  (let ((default-directory (file-name-as-directory root)))
+    (with-temp-buffer
+      (when (zerop (process-file (or (bound-and-true-p vc-git-program) "git")
+                                 nil t nil
+                                 "status" "-z" "--untracked-files=no"
+                                 "--no-renames"))
+        (seq-find #'file-regular-p
+                  (mapcar (lambda (entry)
+                            (expand-file-name (substring entry 3) root))
+                          (split-string (buffer-string) "\0" t)))))))
+
+(defun simpson-project-open-preferred-file ()
+  "Open a changed file, the root README.md, or the project file picker."
+  (interactive)
+  (let* ((project (project-current t))
+         (root (project-root project))
+         (changed-file (simpson-project-first-changed-file root))
+         (readme (expand-file-name "README.md" root)))
+    (cond
+     (changed-file (find-file changed-file))
+     ((file-regular-p readme) (find-file readme))
+     (t (project-find-file)))))
+
+(setq project-switch-commands #'simpson-project-open-preferred-file)
+
 (defmacro simpson-make-neutral (map)
   "Create evil-style window movement for a given MAP."
   `(progn
