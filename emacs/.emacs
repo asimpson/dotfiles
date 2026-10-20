@@ -560,13 +560,6 @@
   (interactive)
   (compilation-start (concat "yarn jest --runTestsByPath " (buffer-file-name)) t nil nil nil))
 
-(use-package notmuch
-  :commands (notmuch notmuch-hello notmuch-search notmuch-show)
-  :config
-  (setq notmuch-show-mark-read-tags nil)
-  (setq notmuch-saved-searches '((:name "patches" :query "from:agent@llm-jail tag:inbox" :key "p")
-                                 (:name "seen patches" :query "from:agent@llm-jail -tag:inbox" :key "i"))))
-
 (use-package swiper
   :config (evil-define-key 'normal 'global (kbd "/") 'swiper))
 
@@ -599,11 +592,6 @@
             (global-set-key (kbd "<f1> f") 'counsel-describe-function)
             (global-set-key (kbd "<f1> v") 'counsel-describe-variable)))
 
-(defun simpson-apply-patch (file)
-  (interactive
-   (list (read-string "Patch file: " (current-kill 0 t))))
-  (magit-patch-apply (expand-file-name (string-trim file))))
-
 (defun simpson-make-side()
   (interactive)
   (let ((buf (current-buffer)))
@@ -619,11 +607,6 @@
 
 (global-set-key (kbd "C-SPC D t") 'dape-breakpoint-toggle)
 (global-set-key (kbd "C-SPC D d") 'my/dlv-attach-by-name)
-
-(use-package notmuch-tui-el
-  :defer 1
-  :commands (notmuch-tui-el)
-  :load-path "~/Projects/notmuch-tui/")
 
 (define-derived-mode tiltfile-mode
   python-mode "tiltfile"
