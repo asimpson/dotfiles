@@ -6,10 +6,7 @@
  * review/tweak before submitting.
  */
 
-import { readFile, readdir } from "node:fs/promises";
-import { homedir } from "node:os";
-import { join } from "node:path";
-import type { ExecResult, ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { DynamicBorder } from "@earendil-works/pi-coding-agent";
 import {
 	Container,
@@ -81,147 +78,20 @@ interface PrInfo {
 	title: string;
 }
 
-type ReadOnlyToken = {
-	token: string;
-	source: string;
-};
-
-const TOKEN_DIR = "~/.ro-tokens";
-let ghEnvLock: Promise<void> = Promise.resolve();
-
-function expandHome(path: string): string {
-	if (path === "~") return homedir();
-	if (path.startsWith("~/")) return join(homedir(), path.slice(2));
-	return path;
-}
-
-function errorCode(error: unknown): string | undefined {
-	if (!error || typeof error !== "object") return undefined;
-	const code = (error as { code?: unknown }).code;
-	return typeof code === "string" ? code : undefined;
-}
-
-function parseTokenContent(content: string): string | undefined {
-	return content
-		.split(/\r?\n/)
-		.map((line) => line.trim())
-		.find((line) => line.length > 0 && !line.startsWith("#"));
-}
-
-async function getReadOnlyTokens(): Promise<ReadOnlyToken[]> {
-	const tokenDir = expandHome(TOKEN_DIR);
-	let entries;
-	try {
-		entries = await readdir(tokenDir, { withFileTypes: true });
-	} catch (error) {
-		if (errorCode(error) === "ENOENT") return [];
-		throw error;
-	}
-
-	const tokens: ReadOnlyToken[] = [];
-	const seen = new Set<string>();
-	const files = entries
-		.filter((entry) => entry.isFile() || entry.isSymbolicLink())
-		.sort((a, b) => a.name.localeCompare(b.name));
-
-	for (const entry of files) {
-		const source = join(tokenDir, entry.name);
-		const token = parseTokenContent(await readFile(source, "utf8"));
-		if (!token || seen.has(token)) continue;
-		seen.add(token);
-		tokens.push({ token, source });
-	}
-	return tokens;
-}
-
-async function withGhEnvironment<T>(readOnlyToken: ReadOnlyToken, fn: () => Promise<T>): Promise<T> {
-	let release!: () => void;
-	const previous = ghEnvLock;
-	ghEnvLock = new Promise<void>((resolve) => {
-		release = resolve;
-	});
-	await previous;
-
-	const envPatch: Record<string, string> = {
-		GH_TOKEN: readOnlyToken.token,
-		GH_PROMPT_DISABLED: "1",
-		GH_NO_UPDATE_NOTIFIER: "1",
-		NO_COLOR: "1",
-		CLICOLOR: "0",
-		PAGER: "cat",
-		GH_PAGER: "cat",
-	};
-	const oldValues = new Map<string, string | undefined>();
-	for (const [key, value] of Object.entries(envPatch)) {
-		oldValues.set(key, process.env[key]);
-		process.env[key] = value;
-	}
-
-	try {
-		return await fn();
-	} finally {
-		for (const [key, value] of oldValues) {
-			if (value === undefined) delete process.env[key];
-			else process.env[key] = value;
-		}
-		release();
-	}
-}
-
-function isRetryableNotFound(result: ExecResult): boolean {
-	if (result.code === 0) return false;
-	const output = `${result.stdout}\n${result.stderr}`;
-	return (
-		/\bHTTP\s+404\b/i.test(output) ||
-		/"status"\s*:\s*"?404"?/i.test(output) ||
-		/\bstatus:\s*404\b/i.test(output) ||
-		/\bNot Found \(HTTP 404\)/i.test(output) ||
-		/\bCould not resolve to a Repository with the name\b/i.test(output) ||
-		/\brepository not found\b/i.test(output)
-	);
-}
-
 async function fetchPrInfo(pi: ExtensionAPI, url: string): Promise<PrInfo | null> {
-	const args = ["pr", "view", url, "--json", "number,title"];
-	const runOnce = (token?: ReadOnlyToken): Promise<ExecResult> => {
-		const exec = () => pi.exec("gh", args, { timeout: 15_000 });
-		return token ? withGhEnvironment(token, exec) : exec();
-	};
+	// gh gives environment tokens priority over its OAuth login.
+	if (["GH_TOKEN", "GITHUB_TOKEN", "GH_ENTERPRISE_TOKEN", "GITHUB_ENTERPRISE_TOKEN"].some((name) => process.env[name])) return null;
 
-	let tokens: ReadOnlyToken[] = [];
 	try {
-		tokens = await getReadOnlyTokens();
+		const result = await pi.exec("gh", ["pr", "view", url, "--json", "number,title"], { timeout: 15_000 });
+		if (result.code !== 0) return null;
+		const parsed = JSON.parse(result.stdout) as { number?: unknown; title?: unknown };
+		if (typeof parsed.number !== "number" || typeof parsed.title !== "string") return null;
+		const title = parsed.title.trim();
+		return title ? { number: parsed.number, title } : null;
 	} catch {
-		tokens = [];
+		return null;
 	}
-
-	// If no read-only tokens are configured, fall back to whatever gh finds in its own config.
-	const attempts: (ReadOnlyToken | undefined)[] = tokens.length > 0 ? tokens : [undefined];
-
-	for (let i = 0; i < attempts.length; i++) {
-		let result: ExecResult;
-		try {
-			result = await runOnce(attempts[i]);
-		} catch {
-			return null;
-		}
-
-		if (result.code === 0) {
-			try {
-				const parsed = JSON.parse(result.stdout) as { number?: unknown; title?: unknown };
-				if (typeof parsed.number !== "number" || typeof parsed.title !== "string") return null;
-				const title = parsed.title.trim();
-				if (!title) return null;
-				return { number: parsed.number, title };
-			} catch {
-				return null;
-			}
-		}
-
-		// Only rotate to the next token on 404/not-found style responses.
-		if (!isRetryableNotFound(result) || i === attempts.length - 1) return null;
-	}
-	return null;
 }
 
 function buildPrompt(language: string, url: string): string {
@@ -368,7 +238,7 @@ export default function reviewPr(pi: ExtensionAPI) {
 			if (prInfo) {
 				pi.setSessionName(`PR #${prInfo.number}: ${prInfo.title}`);
 			} else {
-				ctx.ui.notify("Could not fetch PR info via gh; session name unchanged", "warning");
+				ctx.ui.notify("Could not fetch PR info via gh; check your gh OAuth login and unset GH_TOKEN/GITHUB_TOKEN. Session name unchanged", "warning");
 			}
 
 			const language = await pickLanguage(ctx);
