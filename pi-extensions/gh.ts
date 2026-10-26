@@ -1,7 +1,7 @@
-import { mkdtemp, readFile, readdir, writeFile } from "node:fs/promises";
-import { homedir, tmpdir } from "node:os";
+import { mkdtemp, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { ExecResult, ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import {
 	DEFAULT_MAX_BYTES,
 	DEFAULT_MAX_LINES,
@@ -16,18 +16,6 @@ type GhParams = {
 	args?: string[];
 	cwd?: string;
 	timeoutMs?: number;
-};
-
-type ReadOnlyToken = {
-	token: string;
-	source: string;
-};
-
-type TokenAttempt = {
-	source: string;
-	exitCode: number;
-	killed: boolean;
-	notFound: boolean;
 };
 
 type StreamName = "stdout" | "stderr";
@@ -48,22 +36,42 @@ type GhDetails = {
 	exitCode: number;
 	killed: boolean;
 	cwd: string;
-	tokenSource: string;
-	tokenAttempts: TokenAttempt[];
 	stdout: Omit<StreamSummary, "text">;
 	stderr: Omit<StreamSummary, "text">;
 };
 
 const TOOL_NAME = "gh";
-const TOKEN_DIR = "~/.ro-tokens";
 const DEFAULT_TIMEOUT_MS = 60_000;
 const MAX_TIMEOUT_MS = 10 * 60_000;
+
+// Only these built-in gh commands may be run. No aliases, extensions, downloads,
+// local checkouts, auth/config changes, or commands that mutate GitHub state.
+const READ_COMMANDS: Record<string, ReadonlySet<string>> = {
+	gist: new Set(["list", "view"]),
+	issue: new Set(["list", "status", "view"]),
+	label: new Set(["list"]),
+	org: new Set(["list"]),
+	pr: new Set(["checks", "diff", "list", "status", "view"]),
+	project: new Set(["field-list", "item-list", "list", "view"]),
+	release: new Set(["list", "view"]),
+	repo: new Set(["list", "read-dir", "read-file", "view"]),
+	ruleset: new Set(["check", "list", "view"]),
+	run: new Set(["list", "view", "watch"]),
+	search: new Set(["code", "commits", "issues", "prs", "repos"]),
+	workflow: new Set(["list", "view"]),
+};
+
+// gh api silently changes its default method to POST when given fields or input.
+// Accept only options that cannot change the request method, body, or destination.
+const API_VALUE_FLAGS = new Set(["--cache", "--jq", "-q", "--preview", "-p", "--template", "-t"]);
+const API_SWITCH_FLAGS = new Set(["--paginate", "--slurp", "--silent"]);
+const HELP_TOPICS = new Set(["accessibility", "actions", "environment", "exit-codes", "formatting", "reference", "telemetry"]);
 
 const GhToolParameters = Type.Object({
 	args: Type.Optional(
 		Type.Array(Type.String(), {
 			description:
-				"Arguments to pass to gh, excluding the leading 'gh'. Example: ['pr', 'view', '123', '--json', 'title,state,url'].",
+				"Allowlisted read-only gh command arguments (without 'gh'), e.g. ['pr', 'view', '123', '--json', 'title,state,url'].",
 		}),
 	),
 	cwd: Type.Optional(Type.String({ description: "Working directory for commands that read local repo context (defaults to pi cwd)." })),
@@ -72,90 +80,12 @@ const GhToolParameters = Type.Object({
 	),
 });
 
-let ghEnvLock: Promise<void> = Promise.resolve();
-
 function clampTimeout(timeoutMs: number | undefined): number {
 	return Math.min(Math.max(timeoutMs ?? DEFAULT_TIMEOUT_MS, 1), MAX_TIMEOUT_MS);
 }
 
-function expandHome(path: string): string {
-	if (path === "~") return homedir();
-	if (path.startsWith("~/")) return join(homedir(), path.slice(2));
-	return path;
-}
-
-function errorMessage(error: unknown): string {
-	return error instanceof Error ? error.message : String(error);
-}
-
-function errorCode(error: unknown): string | undefined {
-	if (!error || typeof error !== "object") return undefined;
-	const code = (error as { code?: unknown }).code;
-	return typeof code === "string" ? code : undefined;
-}
-
-function parseTokenContent(content: string): string | undefined {
-	return content
-		.split(/\r?\n/)
-		.map((line) => line.trim())
-		.find((line) => line.length > 0 && !line.startsWith("#"));
-}
-
-async function readTokenContent(path: string): Promise<string> {
-	try {
-		return await readFile(path, "utf8");
-	} catch (error) {
-		throw new Error(`Could not read read-only GitHub token file ${path}: ${errorMessage(error)}`);
-	}
-}
-
-async function getDirectoryTokens(): Promise<ReadOnlyToken[]> {
-	const tokenDir = expandHome(TOKEN_DIR);
-	let entries;
-
-	try {
-		entries = await readdir(tokenDir, { withFileTypes: true });
-	} catch (error) {
-		if (errorCode(error) === "ENOENT") return [];
-		throw new Error(`Could not read read-only GitHub token directory ${tokenDir}: ${errorMessage(error)}`);
-	}
-
-	const tokens: ReadOnlyToken[] = [];
-	const seenTokens = new Set<string>();
-	const tokenFiles = entries
-		.filter((entry) => entry.isFile() || entry.isSymbolicLink())
-		.sort((a, b) => a.name.localeCompare(b.name));
-
-	for (const entry of tokenFiles) {
-		const source = join(tokenDir, entry.name);
-		const token = parseTokenContent(await readTokenContent(source));
-		if (!token || seenTokens.has(token)) continue;
-
-		seenTokens.add(token);
-		tokens.push({ token, source });
-	}
-
-	return tokens;
-}
-
-async function getReadOnlyTokens(): Promise<ReadOnlyToken[]> {
-	const directoryTokens = await getDirectoryTokens();
-	if (directoryTokens.length > 0) return directoryTokens;
-
-	throw new Error(`No read-only GitHub tokens found. Add one token per file under ${expandHome(TOKEN_DIR)}.`);
-}
-
 function formatCommand(args: string[]): string {
 	return [TOOL_NAME, ...args].join(" ");
-}
-
-function redactTokens(output: string, tokens: ReadOnlyToken[]): string {
-	let redacted = output;
-	for (const token of [...tokens].sort((a, b) => b.token.length - a.token.length)) {
-		if (token.token.length === 0) continue;
-		redacted = redacted.split(token.token).join("[redacted-gh-token]");
-	}
-	return redacted;
 }
 
 async function saveFullOutput(streamName: StreamName, output: string): Promise<string> {
@@ -203,75 +133,58 @@ function streamDetails(summary: StreamSummary): Omit<StreamSummary, "text"> {
 	return rest;
 }
 
-async function withGhEnvironment<T>(readOnlyToken: ReadOnlyToken, fn: () => Promise<T>): Promise<T> {
-	let release!: () => void;
-	const previous = ghEnvLock;
-	ghEnvLock = new Promise<void>((resolve) => {
-		release = resolve;
-	});
+function assertSafeApiArgs(args: string[]): void {
+	if (args.length === 1 && args[0] === "--help") return;
 
-	await previous;
+	let endpoint: string | undefined;
+	for (let i = 0; i < args.length; i++) {
+		const arg = args[i];
+		const [flag, inlineValue] = arg.startsWith("--") ? arg.split(/=(.*)/s, 2) : [arg, undefined];
 
-	const envPatch: Record<string, string> = {
-		GH_TOKEN: readOnlyToken.token,
-		GH_PROMPT_DISABLED: "1",
-		GH_NO_UPDATE_NOTIFIER: "1",
-		NO_COLOR: "1",
-		CLICOLOR: "0",
-		PAGER: "cat",
-		GH_PAGER: "cat",
-	};
-	const oldValues = new Map<string, string | undefined>();
-
-	for (const [key, value] of Object.entries(envPatch)) {
-		oldValues.set(key, process.env[key]);
-		process.env[key] = value;
+		if (flag === "--method" || flag === "-X") {
+			const method = inlineValue ?? args[++i];
+			if (method !== "GET") throw new Error("gh api only permits --method GET (or -X GET)");
+		} else if (API_VALUE_FLAGS.has(flag)) {
+			if (!(inlineValue ?? args[++i])) throw new Error(`gh api requires a value for ${flag}`);
+		} else if (API_SWITCH_FLAGS.has(arg)) {
+			continue;
+		} else if (!arg.startsWith("-") && !endpoint) {
+			endpoint = arg;
+		} else {
+			throw new Error(`gh api argument not allowed: ${arg}`);
+		}
 	}
 
-	try {
-		return await fn();
-	} finally {
-		for (const [key, value] of oldValues) {
-			if (value === undefined) {
-				delete process.env[key];
-			} else {
-				process.env[key] = value;
-			}
-		}
-		release();
+	// Restrict to relative REST paths. GraphQL is excluded: its queries use POST
+	// and may contain mutations, even when described as read-only.
+	if (!endpoint || !/^\/?[a-zA-Z0-9{][a-zA-Z0-9{}_.\-/?&=%+,:]*$/.test(endpoint) ||
+		endpoint.includes("..") || endpoint.includes("//") || endpoint.split("?")[0].replace(/^\//, "") === "graphql") {
+		throw new Error("gh api requires a relative REST endpoint (not graphql or a URL)");
 	}
 }
 
-function isRetryableNotFound(result: ExecResult): boolean {
-	if (result.code === 0) return false;
-
-	const output = `${result.stdout}\n${result.stderr}`;
-	return (
-		/\bHTTP\s+404\b/i.test(output) ||
-		/"status"\s*:\s*"?404"?/i.test(output) ||
-		/\bstatus:\s*404\b/i.test(output) ||
-		/\bNot Found \(HTTP 404\)/i.test(output) ||
-		/\bCould not resolve to a Repository with the name\b/i.test(output) ||
-		/\brepository not found\b/i.test(output)
-	);
+function readSubcommands(group: string | undefined): ReadonlySet<string> | undefined {
+	return group && Object.hasOwn(READ_COMMANDS, group) ? READ_COMMANDS[group] : undefined;
 }
 
 function assertSafeArgs(args: string[]): void {
 	const [command, subcommand, ...rest] = args;
-	if (command !== "auth") return;
+	if (args.length === 1 && command === "--version") return;
+	if (command === "help" && (args.length === 1 ||
+		(args.length === 2 && (HELP_TOPICS.has(subcommand) || subcommand === "api" || subcommand === "status" || readSubcommands(subcommand))) ||
+		(args.length === 3 && readSubcommands(subcommand)?.has(rest[0])))) return;
+	if (command === "api") return assertSafeApiArgs(args.slice(1));
 
-	const authAction = subcommand ?? "";
-	const showsToken = rest.some((arg) => arg === "--show-token" || arg.startsWith("--show-token="));
-	if (authAction === "status" && !showsToken) return;
-
-	throw new Error(
-		"gh auth commands are blocked by the gh tool so read-only tokens cannot be printed or modified. " +
-			"Use gh args ['api', 'user', '-q', '.login'] to check the authenticated user.",
-	);
-}
-
-function formatAttempt(attempt: TokenAttempt): string {
-	return `${attempt.source}: exit ${attempt.exitCode}${attempt.killed ? " (killed)" : ""}${attempt.notFound ? " (404/not-found)" : ""}`;
+	const allowed = readSubcommands(command);
+	if (allowed && subcommand === "--help" && rest.length === 0) return;
+	if (command !== "status" && !allowed?.has(subcommand)) {
+		throw new Error(`gh command not allowed: ${formatCommand(args)}. Use gh help or a listed read-only command.`);
+	}
+	// Even read-only commands may offer flags that launch a browser or write local files.
+	const options = command === "status" ? args.slice(1) : rest;
+	if (options.some((arg) => ["--web", "-w", "--output", "-O"].some((flag) => arg === flag || arg.startsWith(`${flag}=`)))) {
+		throw new Error(`gh command option not allowed: ${formatCommand(args)}`);
+	}
 }
 
 export default function ghExtension(pi: ExtensionAPI) {
@@ -279,76 +192,43 @@ export default function ghExtension(pi: ExtensionAPI) {
 		name: TOOL_NAME,
 		label: TOOL_NAME,
 		description:
-			"Run the GitHub CLI using read-only tokens from ~/.ro-tokens, one token per file. Pass args as an array excluding the leading 'gh'. " +
-			"Avoid taking write actions on public repos, even if GitHub would allow them. " +
-			"On GitHub 404/not-found responses, the tool retries with the next token. Output is truncated to " +
-			`${DEFAULT_MAX_LINES} lines or ${formatSize(DEFAULT_MAX_BYTES)} per stream; truncated full output is saved to /tmp.`,
-		promptSnippet: "Run GitHub CLI read-only queries with gh using read-only tokens from ~/.ro-tokens",
+			"Run allowlisted read-only GitHub CLI commands using gh's existing login (e.g. OAuth). " +
+			"Pass args without the leading 'gh'. Mutating commands and gh api methods other than GET are blocked. " +
+			`Output is truncated to ${DEFAULT_MAX_LINES} lines or ${formatSize(DEFAULT_MAX_BYTES)} per stream; truncated full output is saved to /tmp.`,
+		promptSnippet: "Run allowlisted read-only GitHub CLI queries with your existing gh login",
 		promptGuidelines: [
-			"Use the gh tool for GitHub read-only tasks instead of bashing out to gh directly: repositories, issues, pull requests, releases, Actions status, and GitHub API reads.",
-			"The gh tool reads read-only GitHub tokens from ~/.ro-tokens, one token per file sorted by filename, and retries with the next token on GitHub 404/not-found responses.",
-			"Treat gh access as read-only: do not use gh for create/edit/delete/comment/merge/upload/workflow-run operations or local clone/checkout/sync operations.",
-			"Pass gh arguments as args excluding the leading gh, for example gh args [\"pr\", \"view\", \"123\", \"--json\", \"title,state,url\"].",
-			"For programmatic reads through gh, prefer structured output such as --json with --jq, or gh api with --method GET and -q/--jq filters.",
-			"For unfamiliar gh operations, discover usage with gh args [\"help\"] or gh args [\"<command>\", \"--help\"] before running the operation.",
-			"Never use gh auth token or commands that print credentials; gh auth commands are blocked except gh auth status without --show-token, and configured-token occurrences are redacted from output.",
+			"Use the gh tool for GitHub reads: repo, pr, issue, release, run, workflow, search, and gh api. Mutating commands are blocked.",
+			"The gh tool uses gh's existing login (e.g. OAuth), not ~/.ro-tokens. Authenticate outside the tool with gh auth login; GH_TOKEN and GITHUB_TOKEN must be unset.",
+			"Pass gh arguments without the leading gh, e.g. gh args [\"pr\", \"view\", \"123\", \"--json\", \"title,state,url\"].",
+			"For programmatic reads, prefer --json and --jq, or gh api with a relative REST endpoint, GET, and -q/--jq. GraphQL, request fields and body options are blocked.",
+			"Discover supported commands with gh args [\"help\"] or gh args [\"pr\", \"--help\"]. Only allowlisted read-only subcommands execute.",
+			"Never request credentials with gh auth token; the gh tool blocks all auth commands. Do not use shell commands to bypass its read-only policy.",
 		],
+		annotations: { readOnlyHint: true, destructiveHint: false },
 		parameters: GhToolParameters,
 		async execute(_toolCallId, params: GhParams, signal, onUpdate, ctx) {
 			const args = [...(params.args ?? [])];
 			assertSafeArgs(args);
+			// gh prioritizes these environment variables over its OAuth login.
+			if (["GH_TOKEN", "GITHUB_TOKEN", "GH_ENTERPRISE_TOKEN", "GITHUB_ENTERPRISE_TOKEN"].some((name) => process.env[name])) {
+				throw new Error("Unset GH_TOKEN/GITHUB_TOKEN (and enterprise equivalents) to use the gh OAuth login.");
+			}
 
 			const timeout = clampTimeout(params.timeoutMs);
 			const cwd = params.cwd ?? ctx.cwd;
 			const command = formatCommand(args);
-			const readOnlyTokens = await getReadOnlyTokens();
-
 			onUpdate?.({
-				content: [{ type: "text", text: `Running ${command} with ${readOnlyTokens.length} read-only GitHub token(s)` }],
-				details: { command, args, cwd, tokenSources: readOnlyTokens.map((token) => token.source) },
+				content: [{ type: "text", text: `Running ${command}` }],
+				details: { command, args, cwd },
 			});
 
-			let result: ExecResult | undefined;
-			let selectedToken: ReadOnlyToken | undefined;
-			const attempts: TokenAttempt[] = [];
-
-			for (const [index, token] of readOnlyTokens.entries()) {
-				result = await withGhEnvironment(token, () => pi.exec(TOOL_NAME, args, { signal, timeout, cwd }));
-				selectedToken = token;
-
-				const notFound = isRetryableNotFound(result);
-				const attempt: TokenAttempt = {
-					source: token.source,
-					exitCode: result.code,
-					killed: result.killed,
-					notFound,
-				};
-				attempts.push(attempt);
-
-				if (result.code === 0 || !notFound || index === readOnlyTokens.length - 1) break;
-
-				onUpdate?.({
-					content: [
-						{
-							type: "text",
-							text: `${command} returned 404/not-found with ${token.source}; trying next token (${index + 2}/${readOnlyTokens.length})`,
-						},
-					],
-					details: { command, args, cwd, attempts: [...attempts], nextTokenSource: readOnlyTokens[index + 1]?.source },
-				});
-			}
-
-			if (!result || !selectedToken) throw new Error(`No read-only GitHub tokens available for ${command}`);
-
-			const redactedStdout = redactTokens(result.stdout, readOnlyTokens);
-			const redactedStderr = redactTokens(result.stderr, readOnlyTokens);
+			const result = await pi.exec(TOOL_NAME, args, { signal, timeout, cwd });
 			const [stdout, stderr] = await Promise.all([
-				summarizeStream("stdout", redactedStdout),
-				summarizeStream("stderr", redactedStderr),
+				summarizeStream("stdout", result.stdout),
+				summarizeStream("stderr", result.stderr),
 			]);
 
 			const sections = [`$ ${command}`, `exit code: ${result.code}${result.killed ? " (killed)" : ""}`];
-			if (attempts.length > 1) sections.push(`token attempts: ${attempts.map(formatAttempt).join("; ")}`);
 			if (stdout.text) sections.push(`\nstdout:\n${stdout.text.trimEnd()}`);
 			if (stderr.text) sections.push(`\nstderr:\n${stderr.text.trimEnd()}`);
 
@@ -358,8 +238,6 @@ export default function ghExtension(pi: ExtensionAPI) {
 				exitCode: result.code,
 				killed: result.killed,
 				cwd,
-				tokenSource: selectedToken.source,
-				tokenAttempts: attempts,
 				stdout: streamDetails(stdout),
 				stderr: streamDetails(stderr),
 			};
