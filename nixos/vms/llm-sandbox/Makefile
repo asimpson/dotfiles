@@ -5,7 +5,7 @@ disk:
 
 #BACKING should be the full /nix path, not just /result.
 install:
-	qemu-img create -f qcow2 -F qcow2 -b "$(BACKING)" /home/adam/llm-sandbox-overlay.qcow2 50G
+	qemu-img create -f qcow2 -F qcow2 -b "$(BACKING)" /home/adam/llm-sandbox-overlay.qcow2 200G
 
 reset:
 	virsh destroy llm-jail

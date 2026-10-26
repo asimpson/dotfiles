@@ -195,6 +195,7 @@ in
     text = ''
       install -d ${extensionPath}
       cp -R ${piExt}/. ${extensionPath}/
+      rm -rf ${extensionPath}/gondolin
       chown -R agent:users ${extensionPath}
     '';
   };
