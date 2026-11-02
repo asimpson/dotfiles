@@ -47,7 +47,6 @@
 
 (setq inhibit-splash-screen t)
 
-
 (setq hunspell-path "")
 (setq hunspell-dicts "")
 
@@ -472,7 +471,6 @@
   :ensure nil
   :mode "\\.json\\'")
 
-
 (use-package flyspell
   :ensure nil
   :hook (markdown-mode . flyspell-mode)
@@ -618,3 +616,5 @@
 (use-package qml-mode
   :mode (("\\.qml?\\'" . qml-mode))
   :hook (qml-mode . eglot-ensure))
+
+(switch-to-buffer (generate-new-buffer "*new*"))
