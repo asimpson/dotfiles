@@ -44,6 +44,7 @@ nixos/*/hosts.nix
 /nixos/fleet-key.nix
 .DS_Store
 /nixos/vms/llm-sandbox/result
+/nixos/vms/general/result
 .codex
 
 #read-only github pat token for gh cli
