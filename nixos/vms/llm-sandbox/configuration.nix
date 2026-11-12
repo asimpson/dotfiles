@@ -17,6 +17,11 @@ let
   claude = pkgs.writeText "CLAUDE.md" md;
   sendPatchSrc = builtins.readFile ./sendPatch.sh;
   sendPatch = pkgs.writeShellScriptBin "sendPatch" sendPatchSrc;
+  unstable = import (builtins.fetchTarball "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz") {
+    config.allowUnfreePredicate = pkg: lib.getName pkg == "amp-cli";
+    system = pkgs.stdenv.hostPlatform.system;
+  };
+  amp = unstable.amp-cli;
   piMailReceiver = pkgs.stdenv.mkDerivation {
     pname = "pi-mail-receiver";
     version = "0.1.0";
@@ -94,6 +99,11 @@ in
 
   services.qemuGuest.enable = true;
 
+  services.tailscale = {
+    enable = true;
+    interfaceName = "userspace-networking";
+  };
+
   users.mutableUsers = false;
   users.users.agent = {
     isNormalUser = true;
@@ -103,6 +113,7 @@ in
       "docker"
     ];
     shell = pkgs.zsh;
+    linger = true;
     openssh.authorizedKeys.keys = [
       "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDJPyPjtPWFcMjjaeW3ts3nfBOYRHnZkyGhgcOUr/gvGv/z1xb2KyrfXgpTIfWU7b5ZHNoS28c/s7gqMAlylROe/N4dYQXeORxuuTO473fdveuUgRoHAu6NlMzKWuELI9KwOyASQibQt9GS0M41bVHHg33JxQhyM5jbif06ynW8qSsT8h7xM+wvq3YD+4IDZcIPOKn4AlRxOc5FHauJMaLwQMMk6RcFKUcxOUDdqMwC2xb5t1OKEM/2A686OopXZY21QuYJoWBrXLxFVpfCdf+2/6+2CnFDaxwv+oLbrZRnsJglIGhMN4T8gj4AnyKniIUMMMHFkwDyLbmjxzrhFNU5MTSKUtx1k4b6+Z2hkMgkf3biyZW1rafxZ4B/6TJxFPxWzF4ayTdf+Yu27n4Z5kx44jiojfDaUSTp0mg3w2Gf1ozcwW4KHMjGPtIUs3U71ZtFsxliZMY5/7osRAwt/kwuLGx9YqWz+bmoPUEcp9YHukw+Pv3hUPxNKVIA42E+J+0= adam@nix-grafana"
     ];
@@ -127,6 +138,7 @@ in
     sendPatch
     piMailReceiver
     gcx
+    amp
   ];
 
   system.activationScripts.gcx = {
@@ -224,6 +236,22 @@ in
     script = "npm install -g ${lib.escapeShellArgs npmGlobals}";
   };
 
+  systemd.user.services.amp = {
+    description = "Amp remote runner";
+    wantedBy = [ "default.target" ];
+    unitConfig.ConditionUser = "agent";
+    environment.HOME = home;
+    path = [
+      npmPrefix
+      "/run/current-system/sw"
+    ];
+    serviceConfig = {
+      ExecStart = "${amp}/bin/amp --no-tui --runner-id llmjail --discover-dirs";
+      Restart = "always";
+      RestartSec = "5s";
+    };
+  };
+
   systemd.services.pi-mail-receiver = {
     description = "Receive reply mail and enqueue prompts into pi sessions";
     wantedBy = [ "multi-user.target" ];
@@ -278,6 +306,7 @@ in
     "L+ ${home}/.claude - - - - /persist/.claude"
     "L+ ${home}/.claude.json - - - - /persist/.claude.json"
     "L+ ${home}/.pi - - - - /persist/.pi"
+    "L+ ${home}/.config - - - - /persist/.config"
     "d /mnt - - - -"
   ];
 

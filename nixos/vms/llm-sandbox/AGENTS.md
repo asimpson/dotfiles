@@ -10,5 +10,5 @@ This is nixOS so feel free to use nix-shell or other nix tools.
 
 1. Make changes.
 2. Git commit changes.
-3. Use the `sendPatch` command (with a cwd of /tmp, not /mnt) to generate the diff and email the patch.
-4. For multi-commit changes, generate one email per commit with `sendPatch`.
+3. Use the `/send-patch` pi extension (with a cwd of /tmp, not /mnt) to generate the diff and email the patch.
+4. For multi-commit changes, generate one email per commit with `/send-patch`.
