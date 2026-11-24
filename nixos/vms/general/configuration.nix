@@ -39,6 +39,8 @@ in
   };
 
   users.mutableUsers = false;
+  # no passwords or ssh keys: log in with tailscale ssh, or qm guest exec as root
+  users.allowNoPasswordLogin = true;
   users.users.agent = {
     isNormalUser = true;
     extraGroups = [
@@ -71,7 +73,6 @@ in
 
   system.activationScripts.zshrc.text = ''
     cat > /home/agent/.zshrc <<'EOF'
-    HISTFILE=/persist/zsh/history
     precmd() {
       PROMPT="%~ %{$fg[cyan]%}=vm=%{$reset_color%} "
       PROMPT+="%D{%I:%M}%{$fg[magenta]%}❯ %{$reset_color%}"
@@ -96,19 +97,6 @@ in
     enable = true;
     autoPrune.enable = true;
   };
-
-  # on the host: qemu-img create -f qcow2 ~/ampvm-persist 1G
-  # attach it to the vm in virtual machine manager
-  # in the vm: mkfs.ext4 -L persist /dev/vdb
-  fileSystems."/persist" = {
-    device = "/dev/disk/by-label/persist";
-    fsType = "ext4";
-    neededForBoot = true;
-  };
-
-  systemd.tmpfiles.rules = [
-    "d /persist/zsh 0700 agent users - -"
-  ];
 
   system.stateVersion = "25.11";
 }

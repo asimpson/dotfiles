@@ -16,11 +16,11 @@ On the Proxmox host (change the VMID `200`, storage `local-lvm`, and bridge `vmb
 
 ```sh
 qm create 200 --name ampvm --ostype l26 --machine q35 \
-  --bios ovmf --efidisk0 vault-vms:1,efitype=4m,pre-enrolled-keys=0 \
-  --cpu host --cores 2 --memory 4000 --agent enabled=1 \
+  --bios ovmf --efidisk0 local-lvm:1,efitype=4m,pre-enrolled-keys=0 \
+  --cpu host --cores 4 --memory 8192 --agent enabled=1 \
   --net0 virtio,bridge=vmbr0 --serial0 socket \
   --scsihw virtio-scsi-single \
-  --scsi0 vault-vms:0,import-from=/root/ampvm.qcow2 \
+  --scsi0 local-lvm:0,import-from=/root/ampvm.qcow2 \
   --boot order=scsi0
 qm disk resize 200 scsi0 200G
 qm start 200
